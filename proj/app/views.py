@@ -87,14 +87,33 @@ def get_foursqure(query, near):
 			pass
 
 	return res
+	
+def get_google_places(query, near):
+	assert query != None
+	assert near != None
+	API_KEY = "AIzaSyA8H80z37hBd_lLpowHKl73l2wP650VUEs"
+	to_parse="https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + query + "+in+" + near +"&sensor=false&key="+API_KEY
+	
+	fields = requests.get(to_parse).content
+	objs - json.loads(fields)
+	res = []
+	for item in obj.get("results"):
+		try:
+			generated = {"name": item.get("name"), "lat": item.get("geometry").get("lat"), "lng": item.get("geometry").get("lng"), "rating": item.get("rating")}
+			res.append(generated)
+		except:
+			pass
+	return res
+
 
 @app.route('/generate', methods=['POST', 'GET'])
 def generate():
 	query = request.args.get('query')
 	near = request.args.get('near')
 
-	places = get_foursqure(query, near)
-
+	placesFoursquare = get_foursqure(query, near)
+	placesGoogle = get_google_places(query, near)
+	places = placesFoursquare + placesGoogle
 	kml = generate_kml(places)
 
 	os.remove("app/static/x.kml")
