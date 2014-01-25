@@ -26,17 +26,24 @@ function getLocation() {
 	}
 }
 
-function fullScreen(){
+function applyKML(path) {
+	google.earth.fetchKml(ge, path, function(kmlObject) {
+		if (kmlObject)
+			ge.getFeatures().appendChild(kmlObject);
+	});
+}
+
+function fullScreen() {
 	var elem = document.getElementById("map3d");
 	elem.focus();
 	if (elem.requestFullscreen) {
-	  elem.requestFullscreen();
+		elem.requestFullscreen();
 	} else if (elem.msRequestFullscreen) {
-	  elem.msRequestFullscreen();
+		elem.msRequestFullscreen();
 	} else if (elem.mozRequestFullScreen) {
-	  elem.mozRequestFullScreen();
+		elem.mozRequestFullScreen();
 	} else if (elem.webkitRequestFullscreen) {
-	  elem.webkitRequestFullscreen();
+		elem.webkitRequestFullscreen();
 	}
 	return false;
 }
