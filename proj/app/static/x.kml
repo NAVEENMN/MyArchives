@@ -10,6 +10,12 @@
       </IconStyle>
     </Style>
     <Placemark>
+      <name>Pizza Antica</name>
+      <Point>
+        <coordinates>-118.494157791,34.0130759557</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
       <name>Pizza Pizza</name>
       <Point>
         <coordinates>-118.474811442,33.9888691029</coordinates>
@@ -28,12 +34,6 @@
       </Point>
     </Placemark>
     <Placemark>
-      <name>N.Y. and C. Pizza</name>
-      <Point>
-        <coordinates>-118.49098,34.02477946</coordinates>
-      </Point>
-    </Placemark>
-    <Placemark>
       <name>Domino's Pizza</name>
       <Point>
         <coordinates>-118.482956886,34.0125779329</coordinates>
@@ -43,12 +43,6 @@
       <name>Pizza Pizza</name>
       <Point>
         <coordinates>-118.409146,33.981508</coordinates>
-      </Point>
-    </Placemark>
-    <Placemark>
-      <name>Pizza Antica</name>
-      <Point>
-        <coordinates>-118.494157791,34.0130759557</coordinates>
       </Point>
     </Placemark>
     <Placemark>
@@ -64,9 +58,9 @@
       </Point>
     </Placemark>
     <Placemark>
-      <name>Ciccero's Pizza</name>
+      <name>N.Y. and C. Pizza</name>
       <Point>
-        <coordinates>-118.445471,34.032018</coordinates>
+        <coordinates>-118.49098,34.02477946</coordinates>
       </Point>
     </Placemark>
     <Placemark>
@@ -88,21 +82,15 @@
       </Point>
     </Placemark>
     <Placemark>
-      <name>Domino's Pizza</name>
-      <Point>
-        <coordinates>-118.410419939,34.0051966254</coordinates>
-      </Point>
-    </Placemark>
-    <Placemark>
       <name>pizza</name>
       <Point>
         <coordinates>-118.318686744,33.863632005</coordinates>
       </Point>
     </Placemark>
     <Placemark>
-      <name>Pizza Pizza</name>
+      <name>Hank's Pizza</name>
       <Point>
-        <coordinates>-118.471515184,34.2014344508</coordinates>
+        <coordinates>-118.41468753,33.930554</coordinates>
       </Point>
     </Placemark>
     <Placemark>
@@ -112,15 +100,9 @@
       </Point>
     </Placemark>
     <Placemark>
-      <name>Vinny's Pizza</name>
+      <name>Tottino's Pizza</name>
       <Point>
-        <coordinates>-118.41998681,33.961595</coordinates>
-      </Point>
-    </Placemark>
-    <Placemark>
-      <name>Domino's Pizza</name>
-      <Point>
-        <coordinates>-118.376333,34.087133</coordinates>
+        <coordinates>-118.35779255,33.9781993167</coordinates>
       </Point>
     </Placemark>
     <Placemark>
@@ -130,27 +112,21 @@
       </Point>
     </Placemark>
     <Placemark>
+      <name>Pizza Pizza</name>
+      <Point>
+        <coordinates>-118.471515184,34.2014344508</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pizza Paul</name>
+      <Point>
+        <coordinates>-118.295190469,34.083452705</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
       <name>Domino's Pizza</name>
       <Point>
         <coordinates>-118.504101,34.159877</coordinates>
-      </Point>
-    </Placemark>
-    <Placemark>
-      <name>Domino's Pizza</name>
-      <Point>
-        <coordinates>-118.344947797,34.0764417967</coordinates>
-      </Point>
-    </Placemark>
-    <Placemark>
-      <name>Tumby's Pizza</name>
-      <Point>
-        <coordinates>-118.309176,34.023238</coordinates>
-      </Point>
-    </Placemark>
-    <Placemark>
-      <name>Tumby's Pizza</name>
-      <Point>
-        <coordinates>-118.308868483,33.9628057466</coordinates>
       </Point>
     </Placemark>
     <Placemark>
@@ -160,21 +136,9 @@
       </Point>
     </Placemark>
     <Placemark>
-      <name>Tumby's Pizza</name>
+      <name>Vito's Pizza</name>
       <Point>
-        <coordinates>-118.37501616,33.96003672</coordinates>
-      </Point>
-    </Placemark>
-    <Placemark>
-      <name>Domino's Pizza</name>
-      <Point>
-        <coordinates>-118.387207389,34.141115</coordinates>
-      </Point>
-    </Placemark>
-    <Placemark>
-      <name>Pizza Paul</name>
-      <Point>
-        <coordinates>-118.295190469,34.083452705</coordinates>
+        <coordinates>-118.376355171,34.0862535234</coordinates>
       </Point>
     </Placemark>
     <Placemark>
@@ -187,6 +151,42 @@
       <name>D'amore's Pizza</name>
       <Point>
         <coordinates>-118.539966,34.170422</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Andre's Pizza</name>
+      <Point>
+        <coordinates>-118.342823,34.10156</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>5$ Pizza</name>
+      <Point>
+        <coordinates>-118.352085,33.890072</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pronto Pizza</name>
+      <Point>
+        <coordinates>-118.281126022,34.0505615701</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Tumby's Pizza</name>
+      <Point>
+        <coordinates>-118.308868483,33.9628057466</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Famous Pizza N Pizza</name>
+      <Point>
+        <coordinates>-118.481034,34.20124</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Domino's Pizza</name>
+      <Point>
+        <coordinates>-118.535772,34.195093</coordinates>
       </Point>
     </Placemark>
   </Document>

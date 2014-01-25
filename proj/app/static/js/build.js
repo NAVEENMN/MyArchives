@@ -27,10 +27,14 @@ function getLocation() {
 }
 
 function applyKML(path) {
-	google.earth.fetchKml(ge, path, function(kmlObject) {
-		if (kmlObject)
-			ge.getFeatures().appendChild(kmlObject);
-	});
+	var link = ge.createLink('');
+	var href = 'http://127.0.0.1:5000/static/x.kml'
+	link.setHref(href);
+
+	var networkLink = ge.createNetworkLink('');
+	networkLink.set(link, true, true); // Sets the link, refreshVisibility, and flyToView
+
+	ge.getFeatures().appendChild(networkLink);
 }
 
 function fullScreen(){
