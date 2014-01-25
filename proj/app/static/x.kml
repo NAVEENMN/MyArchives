@@ -1,0 +1,193 @@
+<kml xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Name>Awesome places</Name>
+    <Style>
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon28.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Placemark>
+      <name>Pizza Pizza</name>
+      <Point>
+        <coordinates>-118.474811442,33.9888691029</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pizza USA</name>
+      <Point>
+        <coordinates>-118.454713519,34.0435529264</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Joes Pizza</name>
+      <Point>
+        <coordinates>-118.494608,34.011724</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>N.Y. and C. Pizza</name>
+      <Point>
+        <coordinates>-118.49098,34.02477946</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Domino's Pizza</name>
+      <Point>
+        <coordinates>-118.482956886,34.0125779329</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pizza Pizza</name>
+      <Point>
+        <coordinates>-118.409146,33.981508</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pizza Antica</name>
+      <Point>
+        <coordinates>-118.494157791,34.0130759557</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Joe's Pizza</name>
+      <Point>
+        <coordinates>-118.496303558,34.0129603435</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Dommino's Pizza</name>
+      <Point>
+        <coordinates>-118.46216325,33.99851807</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Ciccero's Pizza</name>
+      <Point>
+        <coordinates>-118.445471,34.032018</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Vinny's Pizza</name>
+      <Point>
+        <coordinates>-118.423016143,33.9871559024</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Domino's Pizza</name>
+      <Point>
+        <coordinates>-118.42262823,34.0430279055</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Bj's pizza</name>
+      <Point>
+        <coordinates>-118.402615293,33.9933059552</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Domino's Pizza</name>
+      <Point>
+        <coordinates>-118.410419939,34.0051966254</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>pizza</name>
+      <Point>
+        <coordinates>-118.318686744,33.863632005</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pizza Pizza</name>
+      <Point>
+        <coordinates>-118.471515184,34.2014344508</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pizzaz Pizza</name>
+      <Point>
+        <coordinates>-118.310706596,33.9601894107</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Vinny's Pizza</name>
+      <Point>
+        <coordinates>-118.41998681,33.961595</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Domino's Pizza</name>
+      <Point>
+        <coordinates>-118.376333,34.087133</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Vinny's Pizza</name>
+      <Point>
+        <coordinates>-118.413102183,33.919135</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Domino's Pizza</name>
+      <Point>
+        <coordinates>-118.504101,34.159877</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Domino's Pizza</name>
+      <Point>
+        <coordinates>-118.344947797,34.0764417967</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Tumby's Pizza</name>
+      <Point>
+        <coordinates>-118.309176,34.023238</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Tumby's Pizza</name>
+      <Point>
+        <coordinates>-118.308868483,33.9628057466</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Joe's Pizza</name>
+      <Point>
+        <coordinates>-118.436866305,34.156812627</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Tumby's Pizza</name>
+      <Point>
+        <coordinates>-118.37501616,33.96003672</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Domino's Pizza</name>
+      <Point>
+        <coordinates>-118.387207389,34.141115</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Pizza Paul</name>
+      <Point>
+        <coordinates>-118.295190469,34.083452705</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Gabby's Pizza</name>
+      <Point>
+        <coordinates>-118.295372009,34.0579681396</coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>D'amore's Pizza</name>
+      <Point>
+        <coordinates>-118.539966,34.170422</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

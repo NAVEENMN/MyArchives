@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Hacktech</title>
+<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="static/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="static/js/build.js"></script>
+</head>
+<body id="root">
+	<center>
+		<label>What do you want to search for:</label>
+		<input name="query" id="queryId" type="text">
+		<label>near </label>
+		<input name="near" id="nearId" type="text">
+		<button id="submitButton">Submit</button>
+		<script>
+		$("#submitButton").click(function() {
+			fullScreen();	
+		});
+		</script>
+		<div id="map3d" style="height: 600px; border:1px solid grey; width: 1000px;"></div>
+	</center>
+</body>
+</html>
