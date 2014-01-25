@@ -4,18 +4,20 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Hacktech</title>
-<link href="static/bootstrap/css/bootstrap.css" rel="stylesheet" />
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<link href="static/style.css" rel="stylesheet" />
+<link href="static/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="static/js/jquery.js"></script>
 <script type="text/javascript" src="static/bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="static/js/build.js"></script>
 </head>
 <body id="root">
 	<center>
-		<label>What do you want to search for:</label>
-		<input name="query" id="queryId" type="text">
-		<label>near </label>
-		<input name="near" id="nearId" type="text">
-		<button id="submitButton">Submit</button>
+		<h3>What do you want to search for (food, hotels, and more)?</h3>
+		<input name="query" id="queryId" class="custInp" type="text">
+		<h3>Where do you want to find them?</h3>
+		<input name="near" id="nearId" class="custInp" type="text">
+		<br/>
+		<button id="submitButton">Search</button>
 		<script>
 		$("#submitButton").click(function() {
 			fullScreen();	

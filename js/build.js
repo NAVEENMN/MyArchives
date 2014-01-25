@@ -26,11 +26,10 @@ function getLocation() {
 	}
 }
 
-function applyKML(path) {
-	google.earth.fetchKml(ge, path, function(kmlObject) {
-		if (kmlObject)
-			ge.getFeatures().appendChild(kmlObject);
-	});
+function kmlFinishedLoading(kmlObject) {
+  if (kmlObject) {
+    ge.getFeatures().appendChild(kmlObject);
+  }
 }
 
 function fullScreen() {

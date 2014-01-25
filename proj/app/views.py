@@ -13,30 +13,52 @@ from lxml import etree
 
 # Given the dictionaries, describing places, generated the kml file
 def generate_kml(places):
-	doc = KML.kml(
-	    KML.Document(
-	        KML.Name("Awesome places"),
-	        KML.Style(
-	            KML.IconStyle(
-	                KML.scale(1.2),
-	                KML.Icon(
-	                    KML.href("http://maps.google.com/mapfiles/kml/pal4/icon28.png")
-	                ),
-	            )
-	        )
-	    )
-	)
+	#doc = KML.kml(
+	#    KML.Document(
+	#        KML.Name("Awesome places"),
+	#        KML.Style(
+	#            KML.IconStyle(
+	#                KML.scale(1.2),
+	#                KML.Icon(
+	#                    KML.href("http://maps.google.com/mapfiles/kml/pal4/icon28.png")
+	#                ),
+	#            )
+	#        )
+	#    )
+	#)
+
+	#for data in places:
+	#	pm = KML.Placemark(
+   	#		KML.name(data.get("name")),
+   	#		KML.Point(KML.coordinates(str(data.get("lng")) + "," + str(data.get("lat"))))
+  	#	)
+  	#	doc.Document.append(pm)
+
+	#result = etree.tostring(doc, pretty_print=True)
+	#result.replace("placemark", "Placemark")
+	#result.replace("point", "Point")
+
+	result = '''<kml xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Name>Awesome places</Name>
+    <Style>
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon28.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>'''
 
 	for data in places:
-		pm = KML.Placemark(
-   			KML.name(data.get("name")),
-   			KML.Point(KML.coordinates(str(data.get("lng")) + "," + str(data.get("lat"))))
-  		)
-  		doc.Document.append(pm)
+		placement = '''<Placemark><name>%s</name>
+      		<Point>
+        		<coordinates>%f,%f</coordinates>
+      		</Point>
+    	</Placemark>''' % (data.get("name"), data.get("lng"), data.get("lat"))
+		result += placement
 
-	result = etree.tostring(doc, pretty_print=True)
-	result.replace("placemark", "Placemark")
-	result.replace("point", "Point")
+  	result += '''</Document></kml>'''
 
 	return result
 
@@ -52,7 +74,12 @@ def get_foursqure(query, near):
 	obj = json.loads(fields)
 	
 	res = []
-	for item in obj.get("response").get("venues"):
+	venues = obj.get("response").get("venues")
+
+	if not venues:
+		return res
+
+	for item in venues:
 		try:
 			generated = {"name": item.get("name"), "lat": item.get("location").get("lat"), "lng": item.get("location").get("lng"), "checkins": item.get("stats").get("checkinsCount")}
 			res.append(generated)
@@ -69,11 +96,13 @@ def generate():
 	places = get_foursqure(query, near)
 
 	kml = generate_kml(places)
-	f = open('app/static/x.kml', 'w')
+
+	os.remove("app/static/x.kml")
+	f = open('app/static/x.kml', 'w+')
 	f.write(kml)
 	f.close()
 
-	return ("static/x.kml") # OK
+	return "static/x.kml" # OK kml
 
 @app.route('/')
 @app.route('/home')
