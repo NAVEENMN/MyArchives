@@ -4,26 +4,30 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Hacktech</title>
-<link href="../static/style.css" rel="stylesheet" type="text/css"/>
-<link href="../static/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="../static/style.css" rel="stylesheet" type="text/css" />
+<link href="../static/bootstrap.min.css" rel="stylesheet"
+	type="text/css" />
 <script type="text/javascript" src="../static/js/jquery.js"></script>
 <script type="text/javascript" src="../static/bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="../static/js/build.js"></script>
 </head>
-<body id="root">
-	<center>
-		<h3>What do you want to search for (food, hotels, and more)?</h3>
-		<input name="query" id="queryId" class="custInp" type="text">
-		<h3>Where do you want to find them?</h3>
-		<input name="near" id="nearId" class="custInp" type="text">
-		<br/>
-		<button class="btn custom large" id="submitButton">Search</button>
-		<script>
-		$("#submitButton").click(function() {
-			fullScreen();	
-		});
-		</script>
-		<div id="map3d" style="height: 600px; border:1px solid grey; width: 1000px;"></div>
-	</center>
+<body class="root">
+		<div class="top" style="height: 100% !important; padding-top:20%; padding-bottom: 20%;">
+			<center>
+				<h4>What do you want to search for (food, hotels, and more)?</h4>
+				<input name="query" id="queryId" class="custInp" type="text">
+				<h4>Where do you want to find them?</h4>
+				<input name="near" id="nearId" class="custInp" type="text">
+				<br />
+				<button class="btn custom large" id="submitButton">Search</button>
+			</center>
+		</div>
+
+			<script>
+				$("#submitButton").click(function() {
+					fullScreen();
+				});
+			</script>
+			<div id="map3d" style="display:none;border: 1px solid grey; width: 100%;"></div>
 </body>
 </html>

@@ -47,6 +47,7 @@ function fullScreen(){
 
 	var elem = document.getElementById("map3d");
 	elem.focus();
+	elem.style.display = "block";
 	if (elem.requestFullscreen) {
 	  elem.requestFullscreen();
 	} else if (elem.msRequestFullscreen) {
