@@ -28,7 +28,7 @@ public class Push extends Application{
 			PebbleKit.sendDataToPebble( state, uuid, data );
 		}
 	}
-	
+
 	@TargetApi(Build.VERSION_CODES.CUPCAKE)
 	public boolean isConnected () {
 		if ( !isConnected ) {
