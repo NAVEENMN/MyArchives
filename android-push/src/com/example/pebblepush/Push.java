@@ -3,7 +3,6 @@ package com.example.pebblepush;
 import java.util.UUID;
 
 import android.annotation.TargetApi;
-import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.text.format.Time;
@@ -11,20 +10,20 @@ import android.text.format.Time;
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 
-public class Push extends Application {
+public class Push {
 	private boolean isConnected;
 	private Time lastConnectCheck;
 	private UUID uuid;
 	private Context state;
 	
-	public Push () {
+	public Push ( Context passedState ) {
+		lastConnectCheck = new Time();
 		isConnected = checkConnection();
-		state = getApplicationContext();
+		state = passedState;
 		uuid = UUID.randomUUID();
 	}
 	
 	public void sendData ( String str ) {
-		
 		PebbleDictionary data = new PebbleDictionary();
 		data.addString( 3, "test");
 		
