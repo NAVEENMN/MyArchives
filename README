@@ -1,0 +1,103 @@
+Server Client model for ITCS 6166/8166 Spring 2014 Project
+=========================================================
+
+This a Server Clinet model program implemented in python as part of a cerdit requirement in
+ITCS 6166/8166 Spring 2014 Project at UNC Charlotte.
+
+This document explains how to run these files and the proper commands assosiated.
+It also gives insight of what these diffent files and folder does.
+
+Running the files
+--------------
+Run the server.py in a terminal in this format
+
+root@ubuntu:~/networking/client$python server.py [port number]
+
+pick a port number which is sufficiently high and doesn`t disturb existing ports.
+
+example:
+
+naveen@ubuntu:~/networking/server$ python server.py 8000 
+
+This should start the server at port 8000 and it starts to listen to incoming client request.
+
+Now in seperate terminal run client.py in this format
+
+GET request
+--------------
+root@ubuntu:~/networking/client$python client.py [IP address/host name] [port number] GET [filename]
+
+This should make a get request to the server and pull the file requested and display it on the screen.
+
+example:
+
+naveen@ubuntu:~/networking/client$ python client.py 127.0.0.1 8000 GET index.html
+
+or
+
+naveen@ubuntu:~/networking/client$ python client.py localhost 8000 GET index.html
+
+This will get the index.html located in server
+
+naveen@ubuntu:~/networking/client$ python client.py www.google.com 80 GET index.html
+
+This will get the index.html located in google server
+note the default port for http request is 80 so we have used port 80. 
+
+naveen@ubuntu:~/networking/client$ python client.py www.google.com 8000 GET local/newfile.html
+
+This will get the newfile.html located in the local folder of the server.
+
+
+If the file requested from client is not found on the server then the terminal promts 
+
+404 page not found
+
+
+PUT request
+-------------
+Once the server is started it keeps listening to incomming requests, however if the connection breaks run the server again
+naveen@ubuntu:~/networking/server$ python server.py 8000 
+
+This should start the server at port 8000 and it starts to listen to incoming client request.
+
+Now in seperate terminal run client.py in this format
+
+root@ubuntu:~/networking/client$ python client.py [IP] [PORT] PUT [file address]
+
+this should locate the file in your client and PUT the file in server in the server`s local folder
+
+example:
+
+naveen@ubuntu:~/networking/client$ python client.py 127.0.0.1 8000 PUT local/fileclient.html
+
+in response the client prompts 
+
+found file: local/fileclient.html
+200 OK local/newfile.html
+ 
+and server prompts
+
+200 OK local/newfile.html
+File created!!
+
+If the file is not found in your client the terminal prompts error saying 
+No such file exists
+400 Error local/newfile.html
+
+and your server says BAD request
+
+Server folder
+--------------
+
+This folder consists server.py which is the main python code
+index.html which can be requested from client.py
+new folder which holds file.html and this can also be requested by client in GET method by giving path as GET new/file.html
+
+It also holds local folder where all the files that are send from client using PUT method will be held here.
+    
+Client folder
+--------------
+The client folder contains client.py which is the main python code
+local folder where you can send the file stored here to sever by proper command
+PUT local/fileclient.html
