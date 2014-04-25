@@ -1,0 +1,4 @@
+*** AVL tree ** and BST tree implementation **
+This code automatically takes random inputs of the lengths mentioned in the result below
+It feeds the same inputs to both Binary search tree and AVL tree.
+In the total length insertion is done at probablity of 0.3 and deletion at 0.2 and remaining is spent on searching.
