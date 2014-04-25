@@ -1,0 +1,16 @@
+In this project different sorting algorithms have been implemented. It includes Merge sort, Heap sort,
+Quick sort, Modified Quick sort, Insertion sort.
+For Quick sort first element is used as a pivot and for modified quick sort median of three logic is used
+to find the pivot. In case of modified quick sort when size drops below 10 insertion sorting technique is
+implemented.
+INPUT: the program automatically takes input list of random numbers in sizes varying from 100 to
+4000 over a step of 500. So, user has no need to manually enter the input
+The program automatically finds the sorted list and reverse sorted list to find execution time for for
+same input by different algorithms.
+OUTPUT: since list if size 4000 covers up the screen the program doesn't display the sorted list.
+However, the user can uncomment the required print statement to see the result.
+The output is graphically displayed using Three images,
+1) for original input
+2) for sorted input
+3) for reverse sorted input
+
