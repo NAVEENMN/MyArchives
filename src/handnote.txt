@@ -1,0 +1,47 @@
+for all key is interface (make a good interface)
+
+music - animation when music plays (optional)
+movies - 
+games -
+calendaer - 
+watch -
+weather updates -
+news - 
+remainders - 
+facebook
+mails -
+app stores -
+viber -
+camera -
+maps -
+voice recoder -
+.
+.
+.
+///////////////////////////////
+lets slip the app view like this
+one tap entires screen fills with one icon then the user has to slide his fingre
+to move next or just tap once more all icons come in the entire screen.
+we will have a cool live wallpaper in the background (but lets check with the hardware capablity later).
+
+I am going start with home screen first. the start up screen will be done later. first task is a neat user interfce. but now lets keep that a aside and build a backbone. since the system has to hold huge opertaions we need to optimize each and everything. 
+
+I will first start will the music. sice people love music. I will give a neat user interface to give a very neat user expreiunce. 
+
+ the tradinitional user interface the apple nokia and any ipad uses is mundane. the use has to "navigate or type to get music"!!! 
+ 
+ I will introduce "3D" navigation for music!! neatly categoraized.
+ 
+ OK!! let the hack begin!!
+ 
+ /////////////////////////////////////////////////////
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
