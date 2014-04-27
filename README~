@@ -1,0 +1,16 @@
+This is the implementation of Dijkstra`s algorithm for the graph defined in data.txt
+
+----- Data.txt----
+5 9 D
+A B 10
+A C 3
+B C 1
+B D 2
+C B 4
+C D 8
+C E 2
+D E 7
+E D 9
+Here, the first two numbers represent the number of vertices and edges. The letter D stands for
+Directed Acyclic graph. This letter might be U meaning undirected graph. From the second line on we have edges and its weight (e.g. edge(A,B) and its weight is 10. The last line is optional. If given, it represents the source node.
+------------------
