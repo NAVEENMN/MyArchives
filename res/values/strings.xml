@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Metster</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Metster</string>
+    <string name="hello">Metster</string>
+    <string name="SignUp">Sign Up it`s free!</string>
+    <string name="LogIn">Login In</string>
+    <string name="title_activity_sign_up">SignUp</string>
+    <string name="title_activity_user_sign_up">UserSignUpActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="FirstName">First Name</string>
+    <string name="LastName">Last Name</string>
+    <string name="Birthday">Birthday MM/DD/YY</string>
+    <string name="Email">Email</string>
+    <string name="Password">Password</string>
+    <string name="RetypePassword">Retype Password</string>
+    <string name="terms">I agree to all terms and conditions of Metster.</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="dontdisclose">I wish not to tell</string>
+    <string name="desc">User Image</string>
+    <string name="footer">www.Metster.com    CookiePolicy   Terms and Condition   founder:NaveenMysore</string>
+    <string name="title_activity_login">Login</string>
+    <string name="MeetSomeone">Meet Someone!</string>
+
+</resources>

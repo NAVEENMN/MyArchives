@@ -1,0 +1,63 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    tools:context=".HomescreenActivity" >
+    
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal|top"
+    android:background="@drawable/basebg"
+    tools:context=".MainActivity" >
+    
+        
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/loginbg"
+        android:layout_alignParentBottom="true"
+    	android:gravity="bottom"
+        android:orientation="vertical"
+        android:paddingBottom="55dp"
+        android:paddingTop="5dp"
+        android:shadowColor="#333333"
+        android:shadowDx="2.0"
+        android:shadowDy="2.0"
+        android:shadowRadius="3.0" 
+        android:radius="10dip">
+    
+        <Button
+	        android:id="@+id/button1"
+	        style="?android:attr/buttonStyleSmall"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background = "@drawable/buttonclicker"
+	        android:textColor="#819FF7"
+	        android:textSize="12sp"
+	        android:textStyle="bold"
+	        android:text="@string/SignUp" 
+	        android:onClick="Signupaccount"/>
+        <Button
+	        android:id="@+id/button2"
+	        style="?android:attr/buttonStyleSmall"
+	        android:layout_marginTop="5dp"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background = "@drawable/buttonclicker"
+	        android:textColor="#819FF7"
+	        android:textSize="12sp"
+	        android:textStyle="bold"
+	        android:text="@string/LogIn" 
+	        android:onClick="logintoaccount"/>
+        
+    </LinearLayout>
+
+</RelativeLayout>
+
+   
+
+</FrameLayout>
