@@ -23,7 +23,7 @@ class graph():
 			return(distance)
   	
   
-def dijsktra(graph, StartNode, EndNode):
+def dijsktra(graph, StartNode):
 	#----------------------------------------------- Declaration 
 	cost = []
 	path = []
@@ -43,12 +43,14 @@ def dijsktra(graph, StartNode, EndNode):
 	neighborofu = graph.neighbor(u) # neighbors of initial node
 	visited[0] = 1 # first is visted now	#-------------------------------------------------------------------------------------------------------
 	while len(nodelist):
-		#--------------------------
-		if u == EndNode : #found the last node
-			return cost, path
 		#--------------------------- finding minimum costs in neighbors
 		for x in range(0,len(neighborofu)):
-			costofneighbors.append(cost[Q.index(neighborofu[x])])
+			try:
+				c = nodelist.index(neighborofu[x])
+			except ValueError:
+				return finalcost, path
+			if c:
+				costofneighbors.append(cost[Q.index(neighborofu[x])])
 		minimumcost = min(costofneighbors)
 		costofneighbors = [] #once found reset cost of neighbors to zero
 		u = Q[cost.index(minimumcost)]
@@ -68,7 +70,7 @@ def dijsktra(graph, StartNode, EndNode):
 			distance = graph.distance_between(u,neighborofu[x])
 			print "distance between", u, "and", neighborofu[x], ":", distance
 			currentcost = cost[posofu]+distance
-			if currentcost < cost[posofv]:
+			if currentcost < finalcost[posofv]:
 				cost[posofv] = currentcost
 				finalcost[posofv] = currentcost
 				currentcost = 0
@@ -78,7 +80,7 @@ def dijsktra(graph, StartNode, EndNode):
 		print "visited:", visited
 		print "Path:", path
 		print "Cost:", finalcost
-	return cost, path
+	return finalcost, path
 	#----------------------------------------------------------------------------------------------------------
 def main():
 	 edges = []
@@ -100,9 +102,10 @@ def main():
 	 nodes.sort()#final
 	 #-----------------------------------------------> data ready
 	 o = graph(edges, nodes, distances)#initialize
-	 cost, path = dijsktra(o, nodes[0], 'D')
+	 cost, path = dijsktra(o, nodes[0])
 	 #------------------------------------------------------------
-	 print "The path is:", path
+	 print "The final path is:", path
+	 print "The final costs are:", cost
 if __name__ == "__main__":
     main()
     
