@@ -27,16 +27,21 @@ def dijsktra(graph, StartNode, EndNode):
 	#----------------------------------------------- Declaration 
 	cost = []
 	path = []
+	finalcost = []
 	costofneighbors = []
+	visited = []
 	Q = graph.nodes
 	nodelist = list(Q) # a copy of nodes
 	for x in range(0,len(graph.nodes)):
 		cost.append(999) # set up costs to infinity
+		finalcost.append(999) #copy of costs
+		visited.append(0) # initially nothing is visted
 	cost[0] = 0
+	finalcost[0] = 0
 	costofneighbors.append(0)
 	u = StartNode
-	u = Q[cost.index(min(cost))]
-	neighborofu = graph.neighbor(u) # neighbors of initial node	#-------------------------------------------------------------------------------------------------------
+	neighborofu = graph.neighbor(u) # neighbors of initial node
+	visited[0] = 1 # first is visted now	#-------------------------------------------------------------------------------------------------------
 	while len(nodelist):
 		#--------------------------
 		if u == EndNode : #found the last node
@@ -46,30 +51,33 @@ def dijsktra(graph, StartNode, EndNode):
 			costofneighbors.append(cost[Q.index(neighborofu[x])])
 		minimumcost = min(costofneighbors)
 		costofneighbors = [] #once found reset cost of neighbors to zero
-		u = Q[cost.index(minimumcost)] 
-		#--------------------------------------------------------------
-		print "Current node selected:", u
+		u = Q[cost.index(minimumcost)]
 		path.append(u)
+		#--------------------------------------------------------------
 		posofu = Q.index(u) #pos of u
 		neighborofu = graph.neighbor(u)
-		nodelist.remove(u) # removed the accessed node from nodelist
 		print "-----------------------------------"
+		print "Current node selected:", u
 		print "neighbor of", u, ":", neighborofu
 		print "-----------------------------------"
 		for x in range(0,len(neighborofu)):
 			posofv = Q.index(neighborofu[x])
-			print "position of u", posofu
-			print "position of v", posofv
+			visited [posofv] = 1 #the next node visited
+			#print "position of u", posofu
+			#print "position of v", posofv
 			distance = graph.distance_between(u,neighborofu[x])
 			print "distance between", u, "and", neighborofu[x], ":", distance
 			currentcost = cost[posofu]+distance
 			if currentcost < cost[posofv]:
 				cost[posofv] = currentcost
+				finalcost[posofv] = currentcost
 				currentcost = 0
-				print "cost list", cost
 		cost[posofu] = 999 # make the already acceses node unreacheable 
 		print "-----------------------------------"
+		nodelist.remove(u) # removed the accessed node from nodelist
+		print "visited:", visited
 		print "Path:", path
+		print "Cost:", finalcost
 	return cost, path
 	#----------------------------------------------------------------------------------------------------------
 def main():
