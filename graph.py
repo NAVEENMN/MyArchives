@@ -1,3 +1,9 @@
+"""graph.py - A Python code for analysing Dijkstra`s and Kruskal Algorithm."""
+'''
+__name__ = "graph"
+__author1__ = "Naveen Mysore <nmysore@uncc.edu>"
+__author2__ = "Apoorva Katti <akatti@uncc.edu>"
+'''
 import time
 #--------------------------------------------------------------------------
 parent = dict()
@@ -159,7 +165,7 @@ def main():
 	 #--------------------------------------------------------------------
 	 #-----------------------------------------------> Krushkal execution
 	 print "============================================="
-	 print "	Krushkal`s Algorithm analysis  	     "
+	 print "	Kruskal`s Algorithm analysis  	     "
 	 print "============================================="
 	 start_time = time.time()
 	 sptree = krushkal(o, nodes, EdgesKrushkal)
@@ -171,9 +177,9 @@ def main():
 	 print "The final costs are:", cost
 	 print "Total execution time:", end_time, " Seconds"
 	 print "============================================="
-	 print "	Krushkal`s Algorithm Report  	     "
+	 print "	Kruskal`s Algorithm Report  	     "
 	 print "============================================="
-	 print "The minimum spanning tree is a grap contaning", sptree
+	 print "The minimum spanning tree is a graph contaning", sptree
 	 print "Total execution time:", end_time, " Seconds"
 if __name__ == "__main__":
     main()

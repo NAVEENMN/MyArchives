@@ -1,3 +1,5 @@
+
+
 import time
 #--------------------------------------------------------------------------
 parent = dict()
@@ -156,24 +158,24 @@ def main():
 	 print "============================================="
 	 cost, path = dijsktra(o, nodes[0])
 	 end_time = time.time() - start_time
+	 #--------------------------------------------------------------------
+	 #-----------------------------------------------> Krushkal execution
+	 print "============================================="
+	 print "	Kruskal`s Algorithm analysis  	     "
+	 print "============================================="
+	 start_time = time.time()
+	 sptree = krushkal(o, nodes, EdgesKrushkal)
+	 end_time = time.time() - start_time
 	 print "============================================="
 	 print "	Dijkstra`s Algorithm Report  	     "
 	 print "============================================="
 	 print "The final path is:", path
 	 print "The final costs are:", cost
 	 print "Total execution time:", end_time, " Seconds"
-	 #--------------------------------------------------------------------
-	 #-----------------------------------------------> Krushkal execution
 	 print "============================================="
-	 print "	Krushkal`s Algorithm analysis  	     "
+	 print "	Kruskal`s Algorithm Report  	     "
 	 print "============================================="
-	 start_time = time.time()
-	 sptree = krushkal(o, nodes, EdgesKrushkal)
-	 end_time = time.time() - start_time
-	 print "============================================="
-	 print "	Krushkal`s Algorithm Report  	     "
-	 print "============================================="
-	 print "The minimum spanning tree is a grap contaning", sptree
+	 print "The minimum spanning tree is a graph contaning", sptree
 	 print "Total execution time:", end_time, " Seconds"
 if __name__ == "__main__":
     main()
