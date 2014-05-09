@@ -189,13 +189,10 @@ public class Login extends Activity {
 	    			}
 	            });
 	            //-------------------------------------------
-	         // Define a listener that responds to location updates
-	            
-		        
+	         // Define a listener that responds to location updates   
 		        
 		        find = (Button) findViewById(R.id.buttonmeet);
 		        find.setOnClickListener(new View.OnClickListener() {
-					
 					
 						public void onClick(View v) {
 						Firebase baseRef = new Firebase("https://metster.firebaseIO.com/totalusers/User"+ret);
@@ -212,73 +209,7 @@ public class Login extends Activity {
 						Toast.makeText(getApplicationContext(), Double.toString(location.getLatitude()), Toast.LENGTH_SHORT).show();
 						LAT.setValue(Double.toString(location.getLatitude()));
 						LONG.setValue(Double.toString(location.getLongitude()));
-						//------------------------------
-						
-						//-------------------------------------->finding common
-				        int i =0;
-				        final ArrayList<String> lat = new ArrayList<String>();
-				        final ArrayList<String> lon = new ArrayList<String>();
-				        final Location lo2 = new Location("");
-				        for( i =1; i<= 4; i++)
-				        {
-				        	String rett = Integer.toString(i);
-				        	final Firebase dataReff = new Firebase("https://metster.firebaseIO.com/totalusers/User"+rett);
-				        	Firebase Latitude = dataReff.child("Latitude");
-				            Firebase Longitude = dataReff.child("Longitute");
-				            
-				            //---------------------------------------------------------
-				            Latitude.addValueEventListener(new ValueEventListener() {
-				                
-				                public void onDataChange(DataSnapshot snapshot) {
-				                    String lati =  (String) snapshot.getValue();
-				                    lat.add(lati);
-				                    lo2.setLatitude(Double.parseDouble(lati));
-	//			                    Toast.makeText(getApplicationContext(), lati, Toast.LENGTH_SHORT).show();
-				                }
-
-				                
-				    			public void onCancelled(FirebaseError arg0) {
-				    				// TODO Auto-generated method stub
-				    				
-				    			}
-				            });
-				            //-----------------------------------------------------------
-				            Longitude.addValueEventListener(new ValueEventListener() {
-				                
-				                public void onDataChange(DataSnapshot snapshot) {
-				                    String longi =  (String) snapshot.getValue();
-				                    lon.add(longi);
-				                    lo2.setLongitude(Double.parseDouble(longi));
-				                    //Log.w("longitude:",longi);
-				                    //loclon = Double.valueOf(usr).doubleValue();
-				                    //lon2.setLongitude(loclon);
-				                    //Log.w("Lon#",usr);
-				                    //Log.w("loclon",Double.toString(loclon));
-				                    //Location lon1 = new Location("");
-						            //lon1.setLatitude(Mylatitude);
-						            //lon1.setLongitude(MyLongitude);
-						            //Double distance = (double) lon1.distanceTo(lon2);
-						    
-				                }
-				              
-				                
-				    			public void onCancelled(FirebaseError arg0) {
-				    				// TODO Auto-generated method stub
-				    				
-				    			}
-				            });   
-				            
-				            Location lon1 = new Location("");
-					          lon1.setLatitude(Mylatitude);
-					          lon1.setLongitude(MyLongitude);
-					        float dis = lon1.distanceTo(lon2);
-					        Toast.makeText(getApplicationContext(), "Dis: " + dis,
-					        		Toast.LENGTH_SHORT).show();
-			
-				                
-				            //-----------------------------------------------------------
-				     
-				        }// for loop  
+						//------------------------------ 
 				       
 					}//on click
 					
