@@ -8,6 +8,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -209,7 +212,13 @@ public class Login extends Activity {
 						Toast.makeText(getApplicationContext(), Double.toString(location.getLatitude()), Toast.LENGTH_SHORT).show();
 						LAT.setValue(Double.toString(location.getLatitude()));
 						LONG.setValue(Double.toString(location.getLongitude()));
-						//------------------------------ 
+						//------------------------------
+						String googleAPIKey = "AIzaSyBAv6L7bNVokr4rwLgw0493RCRcdD2kT40"; 
+						String requesturl="https://maps.googleapis.com/maps/api/place/search/json?radius=500&sensor=false&key="+googleAPIKey+"&location="+Double.toString(location.getLatitude())+","+Double.toString(location.getLongitude());	
+						DefaultHttpClient client = new DefaultHttpClient();
+						HttpGet req = new HttpGet(requesturl);
+						//------------------------------
+						
 				       
 					}//on click
 					
