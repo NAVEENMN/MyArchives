@@ -37,11 +37,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class SignUpActivity extends Activity {
-
 	String val;
 	int userid;
-	
-	
 	public int imgstat = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

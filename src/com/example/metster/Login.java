@@ -201,32 +201,17 @@ public class Login extends Activity {
 						Firebase baseRef = new Firebase("https://metster.firebaseIO.com/totalusers/User"+ret);
 				        Firebase LAT = baseRef.child("Latitude");
 				        Firebase LONG = baseRef.child("Longitute");
-				        
-				        //LAT.setValue());
-				        //LONG.setValue(Double.toString(LONG));
-				        Mylatitude = -79.099237;
-				        MyLongitude = 36.07337782;
-				        
-				        //------------------------------------------------>
-				        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-				        // Define the criteria how to select the locatioin provider -> use
-				        // default
-				        
+				        LocationManager locationManager;
+				        String provider;
+				        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 				        Criteria criteria = new Criteria();
-				        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-				        String provider = locationManager.getBestProvider(criteria, true);
-						if(location != null ){
-						double latitude = location.getLatitude();
-						Mylatitude = latitude;
-						double longitude = location.getLongitude();
-						MyLongitude = longitude;
-				        //------------------------------------------------>
-				        LAT.setValue(Double.toString(latitude));
-				        LONG.setValue(Double.toString(longitude));
-						}
-						else Log.w("nope","nope");
-						
-						
+				        provider = locationManager.getBestProvider(criteria, false);
+				        Location location = locationManager.getLastKnownLocation(provider);
+						Log.v("latibaby:", Double.toString(location.getLatitude()));
+						Log.v("longibaby:", Double.toString(location.getLongitude()));
+						Toast.makeText(getApplicationContext(), Double.toString(location.getLatitude()), Toast.LENGTH_SHORT).show();
+						LAT.setValue(Double.toString(location.getLatitude()));
+						LONG.setValue(Double.toString(location.getLongitude()));
 						//------------------------------
 						
 						//-------------------------------------->finding common
@@ -310,7 +295,7 @@ public class Login extends Activity {
 	 */
 	private void setupActionBar() {
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		//getActionBar().setDisplayHomeAsUpEnabled(true);
 
 	}
 
