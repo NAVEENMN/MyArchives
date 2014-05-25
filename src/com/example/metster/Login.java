@@ -12,9 +12,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
@@ -39,6 +36,10 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 public class Login extends Activity {
 	private static final long MIN_TIME_BW_UPDATES = 0;
@@ -218,7 +219,20 @@ public class Login extends Activity {
 						Toast.makeText(getApplicationContext(), Double.toString(location.getLatitude())+ ","+Double.toString(location.getLongitude()), Toast.LENGTH_SHORT).show();
 						LAT.setValue(Double.toString(location.getLatitude()));
 						LONG.setValue(Double.toString(location.getLongitude()));
+						Double latival = location.getLatitude();
+						Double Longival = location.getLongitude();
 						//------------------------------
+						//----------------------- put on maps
+					     // Get a handle to the Map Fragment
+					        GoogleMap map = ((MapFragment) getFragmentManager()
+					                .findFragmentById(R.id.map)).getMap();
+
+					        LatLng sydney = new LatLng(latival, Longival);
+
+					        map.setMyLocationEnabled(true);
+					        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+					        
+					        //-----------------------------------------
 						String googleAPIKey = "AIzaSyBAv6L7bNVokr4rwLgw0493RCRcdD2kT40"; 
 						String requesturl="https://maps.googleapis.com/maps/api/place/search/json?radius=500&sensor=false&key=AIzaSyBAv6L7bNVokr4rwLgw0493RCRcdD2kT40&location=35.22130171,-80.94456313";	
 						DefaultHttpClient client = new DefaultHttpClient();
