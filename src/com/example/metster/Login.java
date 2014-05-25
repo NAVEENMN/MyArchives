@@ -8,8 +8,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
@@ -197,6 +202,7 @@ public class Login extends Activity {
 		        find = (Button) findViewById(R.id.buttonmeet);
 		        find.setOnClickListener(new View.OnClickListener() {
 					
+						@SuppressWarnings("null")
 						public void onClick(View v) {
 						Firebase baseRef = new Firebase("https://metster.firebaseIO.com/totalusers/User"+ret);
 				        Firebase LAT = baseRef.child("Latitude");
@@ -209,14 +215,64 @@ public class Login extends Activity {
 				        Location location = locationManager.getLastKnownLocation(provider);
 						Log.v("latibaby:", Double.toString(location.getLatitude()));
 						Log.v("longibaby:", Double.toString(location.getLongitude()));
-						Toast.makeText(getApplicationContext(), Double.toString(location.getLatitude()), Toast.LENGTH_SHORT).show();
+						Toast.makeText(getApplicationContext(), Double.toString(location.getLatitude())+ ","+Double.toString(location.getLongitude()), Toast.LENGTH_SHORT).show();
 						LAT.setValue(Double.toString(location.getLatitude()));
 						LONG.setValue(Double.toString(location.getLongitude()));
 						//------------------------------
 						String googleAPIKey = "AIzaSyBAv6L7bNVokr4rwLgw0493RCRcdD2kT40"; 
-						String requesturl="https://maps.googleapis.com/maps/api/place/search/json?radius=500&sensor=false&key="+googleAPIKey+"&location="+Double.toString(location.getLatitude())+","+Double.toString(location.getLongitude());	
+						String requesturl="https://maps.googleapis.com/maps/api/place/search/json?radius=500&sensor=false&key=AIzaSyBAv6L7bNVokr4rwLgw0493RCRcdD2kT40&location=35.22130171,-80.94456313";	
 						DefaultHttpClient client = new DefaultHttpClient();
 						HttpGet req = new HttpGet(requesturl);
+						req.setHeader("Content-type", "application/json");
+						InputStream inputStream = null;
+						String result = "hello";
+						try {
+						    HttpResponse response = client.execute(req);           
+						    HttpEntity entity = response.getEntity();
+						    inputStream = entity.getContent();
+						    // json is UTF-8 by default
+						    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
+						    StringBuilder sb = new StringBuilder();
+
+						    String line = null;
+						    while ((line = reader.readLine()) != null)
+						    {
+						        sb.append(line + "\n");
+						    }
+						    result = sb.toString();
+						} catch (Exception e) { 
+						    // Oops
+						}
+						finally {
+						    try{if(inputStream != null)inputStream.close();}catch(Exception squish){}
+						}
+						//-------------> Now we have json objects
+						String[] places = null;
+						Log.w("parseresult",result);
+						//----------------
+						/*
+						try {
+							JSONObject jObject = new JSONObject(result);
+							//JSONArray jArray = jObject.getJSONArray("results");
+							for (int i=0; i < jArray.length(); i++)
+							{
+							    try {
+							        JSONObject oneObject = jArray.getJSONObject(i);
+							        // Pulling items from the array
+							        String place = oneObject.getString("name");
+							        places[i]= place;
+							        Log.w("palces:",place);
+							    } catch (JSONException e) {
+							        // Oops
+							    }
+							}
+							
+							
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						*/
 						//------------------------------
 						
 				       
