@@ -28,7 +28,7 @@
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-			android:paddingTop="50dp"
+			android:paddingTop="40dp"
             android:orientation="vertical" >
 
             <TextView
@@ -44,6 +44,27 @@
                 android:textColor="#4E4E4E"
                 android:textSize="25sp"
                 android:text="@string/FirstName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/txtCurrentLocation"
+                android:textColor="#4E4E4E"
+                android:textSize="13sp"
+                android:text="@string/CurrentLocation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/txtCurrentCounty"
+                android:textColor="#4E4E4E"
+                android:textSize="13sp"
+                android:text="@string/CurrentCounty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/txtCurrentCountry"
+                android:textColor="#4E4E4E"
+                android:textSize="13sp"
+                android:text="@string/CurrentCountry"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>

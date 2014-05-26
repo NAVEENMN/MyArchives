@@ -41,8 +41,6 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Login extends Activity {
-	private static final long MIN_TIME_BW_UPDATES = 0;
-	private static final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
 	//----------------------------------------->
 	String usremail;
 	String usrfname;
@@ -56,28 +54,8 @@ public class Login extends Activity {
 	Double loclon;
 	Location lon2 = new Location("");
 	int flag = 0;
-	final ArrayList<String> USERNAME = new ArrayList<String>();
-	//----------------------------------------->
-	
-	//------------------------------------------>
-	
+	final ArrayList<String> USERNAME = new ArrayList<String>();	
 
-	//----------------------------------> Findsomeone   		
-/*	public void findsomeone(View view) {
-		Firebase baseRef = new Firebase("https://metster.firebaseIO.com/totalusers/User"+ret);
-        Firebase LAT = baseRef.child("Latitude");
-        Firebase LONG = baseRef.child("Longitute");
-        //------------------------------------------------>
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE); 
-		Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		double longitude = location.getLongitude();
-		double latitude = location.getLatitude();
-        //------------------------------------------------>
-        LAT.setValue(Double.toString(longitude));
-        LONG.setValue(Double.toString(latitude));
-	}*/
-	//---------------------------------------------------------------
-	//----------------------------------------->
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -230,12 +208,23 @@ public class Login extends Activity {
 				Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
 				List<Address> addresses;
 				String cityName = null;
+				String country = null;
+				String addressline = null;
+				String state = null;
 				try {
 		            addresses = gcd.getFromLocation(latival, Longival, 1);
 		            if (addresses.size() > 0)
 		            	System.out.println(addresses.get(0).getPostalCode());
-		                System.out.println(addresses.get(0).getLocality());
+		            TextView t1 = (TextView)findViewById(R.id.txtCurrentLocation);
+		            TextView t2 = (TextView)findViewById(R.id.txtCurrentCounty);
+		            TextView t3 = (TextView)findViewById(R.id.txtCurrentCountry);
 		            cityName = addresses.get(0).getLocality();
+		            country = addresses.get(0).getCountryCode();
+		            state = addresses.get(0).getAdminArea();
+		            addressline = addresses.get(0).getThoroughfare();
+		            t1.setText((String)addressline);
+		            t2.setText((String)cityName);
+		            t3.setText((String)state+" "+(String)country);
 		        } catch (IOException e) {
 		            e.printStackTrace();
 		        }
@@ -251,6 +240,8 @@ public class Login extends Activity {
 					
 						@SuppressWarnings("null")
 						public void onClick(View v) {
+							
+							
 							       
 					}//on click
 					

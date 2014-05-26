@@ -385,7 +385,7 @@ public class SignUpActivity extends Activity {
 		//SendGrid Integration
 		SendGrid sendgrid = new SendGrid("kaushalp88", "kaushal88");
 		sendgrid.addTo(fEmail);
-		sendgrid.setFrom("siddartha1992@gmail.com");
+		sendgrid.setFrom("navimn1991@gmail.com");
 		sendgrid.setSubject("Welcome to Metster");
 		sendgrid.setText("Welcome to Metser. Thank you for signing up with metster.");
 
