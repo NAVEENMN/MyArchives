@@ -10,12 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -203,6 +197,53 @@ public class Login extends Activity {
 	    			}
 	            });
 	            //-------------------------------------------
+	            
+	            
+	            Firebase baseRef = new Firebase("https://metster.firebaseIO.com/totalusers/User"+ret);
+		        Firebase LAT = baseRef.child("Latitude");
+		        Firebase LONG = baseRef.child("Longitute");
+		        LocationManager locationManager;
+		        String provider;
+		        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		        Criteria criteria = new Criteria();
+		        provider = locationManager.getBestProvider(criteria, false);
+		        Location location = locationManager.getLastKnownLocation(provider);
+				Log.v("latibaby:", Double.toString(location.getLatitude()));
+				Log.v("longibaby:", Double.toString(location.getLongitude()));
+				Toast.makeText(getApplicationContext(), Double.toString(location.getLatitude())+ ","+Double.toString(location.getLongitude()), Toast.LENGTH_SHORT).show();
+				LAT.setValue(Double.toString(location.getLatitude()));
+				LONG.setValue(Double.toString(location.getLongitude()));
+				Double latival = location.getLatitude();
+				Double Longival = location.getLongitude();
+				//------------------------------
+				//----------------------- put on maps
+			     // Get a handle to the Map Fragment
+			        GoogleMap map = ((MapFragment) getFragmentManager()
+			                .findFragmentById(R.id.map)).getMap();
+
+			        LatLng currlocation = new LatLng(latival, Longival);
+
+			        map.setMyLocationEnabled(true);
+			        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 13));
+			        
+			        //-----------------------------------------
+				Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+				List<Address> addresses;
+				String cityName = null;
+				try {
+		            addresses = gcd.getFromLocation(latival, Longival, 1);
+		            if (addresses.size() > 0)
+		            	System.out.println(addresses.get(0).getPostalCode());
+		                System.out.println(addresses.get(0).getLocality());
+		            cityName = addresses.get(0).getLocality();
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+
+		        Log.w("city",cityName);
+				//----------------------------------------------
+	            
+	            //-------------------------------------------
 	         // Define a listener that responds to location updates   
 		        
 		        find = (Button) findViewById(R.id.buttonmeet);
@@ -210,52 +251,13 @@ public class Login extends Activity {
 					
 						@SuppressWarnings("null")
 						public void onClick(View v) {
-						Firebase baseRef = new Firebase("https://metster.firebaseIO.com/totalusers/User"+ret);
-				        Firebase LAT = baseRef.child("Latitude");
-				        Firebase LONG = baseRef.child("Longitute");
-				        LocationManager locationManager;
-				        String provider;
-				        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-				        Criteria criteria = new Criteria();
-				        provider = locationManager.getBestProvider(criteria, false);
-				        Location location = locationManager.getLastKnownLocation(provider);
-						Log.v("latibaby:", Double.toString(location.getLatitude()));
-						Log.v("longibaby:", Double.toString(location.getLongitude()));
-						Toast.makeText(getApplicationContext(), Double.toString(location.getLatitude())+ ","+Double.toString(location.getLongitude()), Toast.LENGTH_SHORT).show();
-						LAT.setValue(Double.toString(location.getLatitude()));
-						LONG.setValue(Double.toString(location.getLongitude()));
-						Double latival = location.getLatitude();
-						Double Longival = location.getLongitude();
-						//------------------------------
-						//----------------------- put on maps
-					     // Get a handle to the Map Fragment
-					        GoogleMap map = ((MapFragment) getFragmentManager()
-					                .findFragmentById(R.id.map)).getMap();
-
-					        LatLng currlocation = new LatLng(latival, Longival);
-
-					        map.setMyLocationEnabled(true);
-					        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 13));
-					        
-					        //-----------------------------------------
-						Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-						List<Address> addresses;
-						String cityName = null;
-						try {
-				            addresses = gcd.getFromLocation(latival, Longival, 1);
-				            if (addresses.size() > 0)
-				                System.out.println(addresses.get(0).getLocality());
-				            cityName = addresses.get(0).getLocality();
-				        } catch (IOException e) {
-				            e.printStackTrace();
-				        }
-
-				        Log.w("city",cityName);
-						//----------------------------------------------	       
+							       
 					}//on click
 					
-					
-				});
+		        		}
+		        
+		        
+		        );
 		      
 	}
 
