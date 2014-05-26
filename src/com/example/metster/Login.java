@@ -7,17 +7,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -227,69 +232,26 @@ public class Login extends Activity {
 					        GoogleMap map = ((MapFragment) getFragmentManager()
 					                .findFragmentById(R.id.map)).getMap();
 
-					        LatLng sydney = new LatLng(latival, Longival);
+					        LatLng currlocation = new LatLng(latival, Longival);
 
 					        map.setMyLocationEnabled(true);
-					        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+					        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 13));
 					        
 					        //-----------------------------------------
-						String googleAPIKey = "AIzaSyBAv6L7bNVokr4rwLgw0493RCRcdD2kT40"; 
-						String requesturl="https://maps.googleapis.com/maps/api/place/search/json?radius=500&sensor=false&key=AIzaSyBAv6L7bNVokr4rwLgw0493RCRcdD2kT40&location=35.22130171,-80.94456313";	
-						DefaultHttpClient client = new DefaultHttpClient();
-						HttpGet req = new HttpGet(requesturl);
-						req.setHeader("Content-type", "application/json");
-						InputStream inputStream = null;
-						String result = "hello";
+						Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+						List<Address> addresses;
+						String cityName = null;
 						try {
-						    HttpResponse response = client.execute(req);           
-						    HttpEntity entity = response.getEntity();
-						    inputStream = entity.getContent();
-						    // json is UTF-8 by default
-						    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
-						    StringBuilder sb = new StringBuilder();
+				            addresses = gcd.getFromLocation(latival, Longival, 1);
+				            if (addresses.size() > 0)
+				                System.out.println(addresses.get(0).getLocality());
+				            cityName = addresses.get(0).getLocality();
+				        } catch (IOException e) {
+				            e.printStackTrace();
+				        }
 
-						    String line = null;
-						    while ((line = reader.readLine()) != null)
-						    {
-						        sb.append(line + "\n");
-						    }
-						    result = sb.toString();
-						} catch (Exception e) { 
-						    // Oops
-						}
-						finally {
-						    try{if(inputStream != null)inputStream.close();}catch(Exception squish){}
-						}
-						//-------------> Now we have json objects
-						String[] places = null;
-						Log.w("parseresult",result);
-						//----------------
-						/*
-						try {
-							JSONObject jObject = new JSONObject(result);
-							//JSONArray jArray = jObject.getJSONArray("results");
-							for (int i=0; i < jArray.length(); i++)
-							{
-							    try {
-							        JSONObject oneObject = jArray.getJSONObject(i);
-							        // Pulling items from the array
-							        String place = oneObject.getString("name");
-							        places[i]= place;
-							        Log.w("palces:",place);
-							    } catch (JSONException e) {
-							        // Oops
-							    }
-							}
-							
-							
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						*/
-						//------------------------------
-						
-				       
+				        Log.w("city",cityName);
+						//----------------------------------------------	       
 					}//on click
 					
 					
