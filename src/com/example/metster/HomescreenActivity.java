@@ -13,49 +13,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-
 
 public class HomescreenActivity extends Activity {
 	
-	
-	//-----------------
-	
-	//------------------
 	String val;
 	int userid;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_homescreen);
-		
-        //-----------------------------------------------
-		Firebase dataRef = new Firebase("https://metster.firebaseIO.com/totalusers/count");
-        dataRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                val =  (String) snapshot.getValue();
-                userid = Integer.parseInt(val);
-                Log.w("count",val);
-            }
-
-            @Override
-			public void onCancelled(FirebaseError arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-        });
-		//------------------------------------------------
-		
 	}
 	
 	/** Called when the user clicks the Sign Up button */
 	public void Signupaccount(View view) {
-		File file = new File("myfile.txt");
-		boolean deleted = file.delete();
+		File file = new File("token.txt");
+	    file.delete();
+		file = new File("accounts.txt");
+		file.delete();
 		Intent intent = new Intent(this, SignUpActivity.class);
 		startActivity(intent);
 	}
@@ -66,7 +40,7 @@ public class HomescreenActivity extends Activity {
 		
 		String ret = "";
         try {
-            FileInputStream inputStream = openFileInput("myfile.txt");
+            FileInputStream inputStream = openFileInput("accounts.txt");
 
             if ( inputStream != null ) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);

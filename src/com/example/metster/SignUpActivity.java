@@ -7,12 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
-
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-import com.github.sendgrid.SendGrid;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,6 +31,12 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.github.sendgrid.SendGrid;
 
 public class SignUpActivity extends Activity {
 	String val;
@@ -274,8 +276,81 @@ public class SignUpActivity extends Activity {
            //--------------------------------------------------------------           
             try {
             	Log.w("here","here");
-            String reply = new RequestTask().execute("http://www.naveenmn.com/metstersignup.php", fFirstName, fLastName, fBirthday,fEmail, fPassword, image_str, gender).get();
-          
+           //-------------------------- matching phpscript variables
+            	String firstname = fFirstName ;
+            	String lastname = fLastName ;
+            	String image = image_str ;
+            	String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";
+                //gender is same
+            	String femail = fEmail;
+            	String fpassword = fPassword;
+            	String reply = null;
+           //--------------------------------------------------------------
+            if(checkemail(fEmail)){
+            reply = new RequestTask().execute("http://www.naveenmn.com/Metster/accountprocess.php", appkey, firstname, lastname,femail,fpassword, image, gender).get();
+            String response = reply.toString();
+            Log.w("serversays",response);
+            String accfail = "no";
+            System.out.println(response.contains(accfail));
+            if(response.contains("no")){
+            	Toast.makeText(getApplicationContext(), "This email seems to already in use!! Please try again.", Toast.LENGTH_SHORT).show();
+            }
+            else{
+            	//-------------------------------------> write usertoken to file
+            	String[] separated = response.split("-");
+            	String filetoken = "token.txt";
+                String token = separated[1];
+                String accountnumber = separated[0];
+              //-------------------------------------- write result to file 
+                String fileaccount = "accounts.txt";
+                String string = token;
+                FileOutputStream outputStream;
+
+                try {
+                  outputStream = openFileOutput(filetoken, Context.MODE_PRIVATE);
+                  outputStream.write(string.getBytes());
+                  outputStream.close();
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
+                
+               catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
+                    if( t instanceof ExecutionException ) {
+                        t = t.getCause();
+                    }
+                }
+              //-------------------------------------- write result to file 
+                string = accountnumber;
+                try {
+                  outputStream = openFileOutput(fileaccount, Context.MODE_PRIVATE);
+                  outputStream.write(string.getBytes());
+                  outputStream.close();
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
+                
+               catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
+                    if( t instanceof ExecutionException ) {
+                        t = t.getCause();
+                    }
+                }
+            	//--------------------------------------------------------------
+            	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Welcome to Metster");
+                builder.setMessage("Your account was sucessfully created.")
+                       .setCancelable(false)
+                       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                           public void onClick(DialogInterface dialog, int id) {
+                        	   finish();
+                           }
+                       });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+            }
+            else{
+            	Toast.makeText(getApplicationContext(), "This email seems to invalid!! Please try again.", Toast.LENGTH_SHORT).show();
+            }
             //---------------------------------------- To fire base
             
          // Setup our Firebase ref
@@ -366,21 +441,20 @@ public class SignUpActivity extends Activity {
  //------------------------------------------------------------------------ 
             //------------------------------------------------------------------------         
             // check box condition
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Welcome to Metster");
-            builder.setMessage("Your account was sucessfully created.")
-                   .setCancelable(false)
-                   .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                       public void onClick(DialogInterface dialog, int id) {
-                    	   finish();
-                       }
-                   });
-            AlertDialog alert = builder.create();
-            alert.show();
+            
             //sendEmail(fEmail);
     	}//Sign up account ends here
     	
 
+	public boolean checkemail(String email)
+	{
+
+	    Pattern pattern = Pattern.compile(".+@.+\\.[a-z]+");
+	    Matcher matcher = pattern.matcher(email);
+	    return matcher.matches();
+
+	}
+	
 	public void sendEmail(String fEmail){
 		//SendGrid Integration
 		SendGrid sendgrid = new SendGrid("kaushalp88", "kaushal88");

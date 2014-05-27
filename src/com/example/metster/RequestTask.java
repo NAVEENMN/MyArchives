@@ -29,21 +29,18 @@ public class RequestTask extends AsyncTask<String, String, String> {
        
         
         
-        try {
-        	
+        try {  	
         	List<NameValuePair> nameValuePairs;
         	nameValuePairs = new ArrayList<NameValuePair>(6);
-            nameValuePairs.add(new BasicNameValuePair("Firstname", uri[1]));
-            nameValuePairs.add(new BasicNameValuePair("Lastname", uri[2]));
-            nameValuePairs.add(new BasicNameValuePair("Birthday", uri[3]));
-            nameValuePairs.add(new BasicNameValuePair("Email", uri[4]));
-            nameValuePairs.add(new BasicNameValuePair("Password", uri[5]));
-            nameValuePairs.add(new BasicNameValuePair("Gender", uri[6]));
-            nameValuePairs.add(new BasicNameValuePair("image", uri[7]));
+            nameValuePairs.add(new BasicNameValuePair("appkey", uri[1]));
+            nameValuePairs.add(new BasicNameValuePair("firstname", uri[2]));
+            nameValuePairs.add(new BasicNameValuePair("lastname", uri[3]));
+            nameValuePairs.add(new BasicNameValuePair("email", uri[4]));
+            nameValuePairs.add(new BasicNameValuePair("password", uri[5]));
+            nameValuePairs.add(new BasicNameValuePair("image", uri[6]));
+            nameValuePairs.add(new BasicNameValuePair("gender", uri[7]));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-      
             response = httpclient.execute(httppost);
-            
             StatusLine statusLine = response.getStatusLine();
             if(statusLine.getStatusCode() == HttpStatus.SC_OK){
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
