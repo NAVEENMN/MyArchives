@@ -22,6 +22,39 @@ public class HomescreenActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_homescreen);
+		//---------------------------------------------------> if account set then login
+		String ret = "";
+        try {
+            FileInputStream inputStream = openFileInput("accounts.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+                
+        		Intent intent = new Intent(this, Login.class);
+        		startActivity(intent);
+        		Log.d("infile",ret);
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+            Toast.makeText(this, "Welcome to Metster", Toast.LENGTH_SHORT)
+            .show();
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+            Toast.makeText(this, "Welcome to Metster", Toast.LENGTH_SHORT)
+            .show();
+        }
+		//------------------------------------------------------------------------------
 	}
 	
 	/** Called when the user clicks the Sign Up button */
