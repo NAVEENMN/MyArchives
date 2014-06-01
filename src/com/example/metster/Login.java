@@ -41,10 +41,10 @@ public class Login extends Activity {
 	String usremail;
 	String usrfname;
 	String usrlname;
-	String usrimg;
 	String ret = "";
 	String accnumber = "";
 	String tokennumber = "";
+	String profileimage = "";
 	private Button find;
 	Double Mylatitude;
 	Double MyLongitude;
@@ -61,6 +61,59 @@ public class Login extends Activity {
 		setContentView(R.layout.activity_login);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		//--------------------------------> Setup location
+		//---------------------------------------
+        LocationManager locationManager;
+        String provider;
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        provider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(provider);
+		Log.v("latibaby:", Double.toString(location.getLatitude()));
+		Log.v("longibaby:", Double.toString(location.getLongitude()));
+		Toast.makeText(getApplicationContext(), Double.toString(location.getLatitude())+ ","+Double.toString(location.getLongitude()), Toast.LENGTH_SHORT).show();
+		Double latival = location.getLatitude();
+		Double Longival = location.getLongitude();
+		//------------------------------
+		//----------------------- put on maps
+	     // Get a handle to the Map Fragment
+	        GoogleMap map = ((MapFragment) getFragmentManager()
+	                .findFragmentById(R.id.map)).getMap();
+
+	        LatLng currlocation = new LatLng(latival, Longival);
+
+	        map.setMyLocationEnabled(true);
+	        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
+	        
+	        //-----------------------------------------
+		Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+		List<Address> addresses;
+		String cityName = null;
+		String country = null;
+		String addressline = null;
+		String state = null;
+		String zip = null;
+		try {
+            addresses = gcd.getFromLocation(latival, Longival, 1);
+            if (addresses.size() > 0)
+            	System.out.println(addresses.get(0).getPostalCode());
+            TextView t1 = (TextView)findViewById(R.id.txtCurrentLocation);
+            TextView t2 = (TextView)findViewById(R.id.txtCurrentCounty);
+            TextView t3 = (TextView)findViewById(R.id.txtCurrentCountry);
+            cityName = addresses.get(0).getLocality();
+            country = addresses.get(0).getCountryCode();
+            state = addresses.get(0).getAdminArea();
+            zip = addresses.get(0).getPostalCode();
+            addressline = addresses.get(0).getThoroughfare();
+            t1.setText((String)addressline);
+            t2.setText((String)cityName);
+            t3.setText((String)state+" "+(String)country);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Log.w("city",cityName);
+		//----------------------------------------------
 		//--------------------------------> Read user ID
 		//-------------------------------------
 				
@@ -121,12 +174,42 @@ public class Login extends Activity {
 				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
 				            .show();
 				        }	
+				        
+				      //--------------------------------> Read image from file
+						//-------------------------------------
+								
+						        try {
+						            FileInputStream inputStream = openFileInput("image.txt");
+
+						            if ( inputStream != null ) {
+						                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+						                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+						                String receiveString = "";
+						                StringBuilder stringBuilder = new StringBuilder();
+
+						                while ( (receiveString = bufferedReader.readLine()) != null ) {
+						                    stringBuilder.append(receiveString);
+						                }
+
+						                inputStream.close();
+						                profileimage = stringBuilder.toString();
+						            }
+						        }
+						        catch (FileNotFoundException e) {
+						            Log.e("login activity", "File not found: " + e.toString());
+						            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+						            .show();
+						        } catch (IOException e) {
+						            Log.e("login activity", "Can not read file: " + e.toString());
+						            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+						            .show();
+						        }
 		        
 				//-------------------------------------> Read data from server
 	            String output = null;
 	            System.out.print("fetching");
 	            try {
-					output = new RequestTask().execute("http://www.naveenmn.com/Metster/fetchprofile.php",accnumber,tokennumber,accnumber,tokennumber,accnumber,tokennumber,accnumber).get();
+					output = new RequestTask().execute("http://www.naveenmn.com/Metster/fetchprofile.php",accnumber,tokennumber,zip,Double.toString(latival),Double.toString(Longival),(String)country,accnumber).get();
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -138,7 +221,6 @@ public class Login extends Activity {
 	            String[] separated = output.split("-");
 	            usrfname = separated[0];
 	            usrlname = separated[1];
-	            usrimg = separated[2];
 	            
 				if(output.contains("null")){
 					Toast.makeText(getApplicationContext(), "Metster is unable to connect to server at this time.", Toast.LENGTH_SHORT).show();
@@ -150,63 +232,12 @@ public class Login extends Activity {
 	            fname.setText((String)usrfname);
                 TextView lname = (TextView)findViewById(R.id.txtLastName); 
 	            lname.setText((String)usrlname);
-	            if (usrimg!=null){
-                    byte[] decodedString = Base64.decode(usrimg, Base64.DEFAULT);
+	            if (profileimage!=null){
+                    byte[] decodedString = Base64.decode(profileimage, Base64.DEFAULT);
    		             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                         ImageView imgg = (ImageView)findViewById(R.id.ImageView01);
                         imgg.setImageBitmap(decodedByte);
                       }
-               
-		        //---------------------------------------
-		        LocationManager locationManager;
-		        String provider;
-		        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		        Criteria criteria = new Criteria();
-		        provider = locationManager.getBestProvider(criteria, false);
-		        Location location = locationManager.getLastKnownLocation(provider);
-				Log.v("latibaby:", Double.toString(location.getLatitude()));
-				Log.v("longibaby:", Double.toString(location.getLongitude()));
-				Toast.makeText(getApplicationContext(), Double.toString(location.getLatitude())+ ","+Double.toString(location.getLongitude()), Toast.LENGTH_SHORT).show();
-				Double latival = location.getLatitude();
-				Double Longival = location.getLongitude();
-				//------------------------------
-				//----------------------- put on maps
-			     // Get a handle to the Map Fragment
-			        GoogleMap map = ((MapFragment) getFragmentManager()
-			                .findFragmentById(R.id.map)).getMap();
-
-			        LatLng currlocation = new LatLng(latival, Longival);
-
-			        map.setMyLocationEnabled(true);
-			        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 13));
-			        
-			        //-----------------------------------------
-				Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-				List<Address> addresses;
-				String cityName = null;
-				String country = null;
-				String addressline = null;
-				String state = null;
-				try {
-		            addresses = gcd.getFromLocation(latival, Longival, 1);
-		            if (addresses.size() > 0)
-		            	System.out.println(addresses.get(0).getPostalCode());
-		            TextView t1 = (TextView)findViewById(R.id.txtCurrentLocation);
-		            TextView t2 = (TextView)findViewById(R.id.txtCurrentCounty);
-		            TextView t3 = (TextView)findViewById(R.id.txtCurrentCountry);
-		            cityName = addresses.get(0).getLocality();
-		            country = addresses.get(0).getCountryCode();
-		            state = addresses.get(0).getAdminArea();
-		            addressline = addresses.get(0).getThoroughfare();
-		            t1.setText((String)addressline);
-		            t2.setText((String)cityName);
-		            t3.setText((String)state+" "+(String)country);
-		        } catch (IOException e) {
-		            e.printStackTrace();
-		        }
-
-		        Log.w("city",cityName);
-				//----------------------------------------------
 	            
 	            //-------------------------------------------
 	         // Define a listener that responds to location updates   

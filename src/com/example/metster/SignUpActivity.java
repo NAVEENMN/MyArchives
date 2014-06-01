@@ -285,6 +285,9 @@ public class SignUpActivity extends Activity {
             	String femail = fEmail;
             	String fpassword = fPassword;
             	String reply = null;
+           //---------------------------------------------------------> write image a local file
+            	String fileimage =  "image.txt";
+            	
            //--------------------------------------------------------------
             if(checkemail(fEmail)){
             reply = new RequestTask().execute("http://www.naveenmn.com/Metster/accountprocess.php", appkey, firstname, lastname,femail,fpassword, image, gender).get();
@@ -323,6 +326,22 @@ public class SignUpActivity extends Activity {
                 string = accountnumber;
                 try {
                   outputStream = openFileOutput(fileaccount, Context.MODE_PRIVATE);
+                  outputStream.write(string.getBytes());
+                  outputStream.close();
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
+                
+               catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
+                    if( t instanceof ExecutionException ) {
+                        t = t.getCause();
+                    }
+                }
+            	//--------------------------------------------------------------
+              //-------------------------------------- write image to file 
+                string = image;
+                try {
+                  outputStream = openFileOutput(fileimage, Context.MODE_PRIVATE);
                   outputStream.write(string.getBytes());
                   outputStream.close();
                 } catch (Exception e) {
