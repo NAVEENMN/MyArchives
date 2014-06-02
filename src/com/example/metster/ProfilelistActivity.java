@@ -116,13 +116,13 @@ public class ProfilelistActivity extends Activity {
 				}
 		//-----------------------------------
 				System.out.println("lists");
-				System.out.println(output.toString());
 				
-				String[] separated = output.split("-");
+				String[] separated = output.split("#%-->");
 				int len = separated.length;
-				for(int i = 1; i< len; i++ ){
-					System.out.println(separated[i]);
+				for(int i = 1; i< len-2 ; i+=3 ){
+				if(!(separated[i+1].isEmpty()))	System.out.println(separated[i+2]);
 				}
+				//i+1 has name i+2 
 		
 		//------------------------------------------------------
 				
@@ -167,14 +167,18 @@ public class ProfilelistActivity extends Activity {
 		        LinearLayout linearlayout = new LinearLayout(this);
 		        linearlayout.setOrientation(LinearLayout.VERTICAL);
 		        scrollview.addView(linearlayout);
-		        for(int i = 1; i< len;i++)
+		        for(int i = 1; i< len-2 ; i+=3)
 		        {
+		        	//--------------------------------------------------------data area
+		        	
+		        	//--------------------------------------------------------
 		            LinearLayout linear1 = new LinearLayout(this);
 		            linear1.setPaddingRelative(10, 50, 60, 70);
 		            linear1.setOrientation(LinearLayout.HORIZONTAL);
 		            linearlayout.addView(linear1);
 		            b = new Button(this);
-		            b.setText(separated[i]);
+		            b.setText(separated[i+1]);
+		            b.setTextAlignment(getWallpaperDesiredMinimumWidth());
 		            b.setWidth(10);
 		            b.setBackground(d);
 		            b.setId(i);
