@@ -43,6 +43,7 @@ public class HomescreenActivity extends Activity {
         		Intent intent = new Intent(this, Login.class);
         		startActivity(intent);
         		Log.d("infile",ret);
+        		
             }
         }
         catch (FileNotFoundException e) {

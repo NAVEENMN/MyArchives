@@ -104,8 +104,10 @@ int id txtLastName 0x7f05000a
 int integer google_play_services_version 0x7f070000
 int layout activity_homescreen 0x7f030000
 int layout activity_login 0x7f030001
-int layout activity_sign_up 0x7f030002
+int layout activity_profilelist 0x7f030002
+int layout activity_sign_up 0x7f030003
 int menu login 0x7f0a0000
+int menu profilelist 0x7f0a0001
 int string Birthday 0x7f060029
 int string CurrentCountry 0x7f060028
 int string CurrentCounty 0x7f060027
@@ -157,6 +159,7 @@ int string hello_world 0x7f06001c
 int string male 0x7f06002e
 int string terms 0x7f06002d
 int string title_activity_login 0x7f060033
+int string title_activity_profilelist 0x7f060035
 int string title_activity_sign_up 0x7f060020
 int string title_activity_user_sign_up 0x7f060021
 int style AppBaseTheme 0x7f090000

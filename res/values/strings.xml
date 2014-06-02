@@ -28,5 +28,6 @@
     <string name="footer">www.Metster.com    CookiePolicy   Terms and Condition   founder:NaveenMysore</string>
     <string name="title_activity_login">Login</string>
     <string name="MeetSomeone">Meet Someone!</string>
+    <string name="title_activity_profilelist">ProfilelistActivity</string>
 
 </resources>

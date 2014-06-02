@@ -277,10 +277,12 @@ containing a value of this type.
     public static final class layout {
         public static final int activity_homescreen=0x7f030000;
         public static final int activity_login=0x7f030001;
-        public static final int activity_sign_up=0x7f030002;
+        public static final int activity_profilelist=0x7f030002;
+        public static final int activity_sign_up=0x7f030003;
     }
     public static final class menu {
         public static final int login=0x7f0a0000;
+        public static final int profilelist=0x7f0a0001;
     }
     public static final class string {
         public static final int Birthday=0x7f060029;
@@ -402,6 +404,7 @@ containing a value of this type.
         public static final int male=0x7f06002e;
         public static final int terms=0x7f06002d;
         public static final int title_activity_login=0x7f060033;
+        public static final int title_activity_profilelist=0x7f060035;
         public static final int title_activity_sign_up=0x7f060020;
         public static final int title_activity_user_sign_up=0x7f060021;
     }

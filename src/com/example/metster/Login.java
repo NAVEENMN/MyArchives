@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
@@ -248,7 +249,8 @@ public class Login extends Activity {
 						
 						public void onClick(View v) {
 							
-							
+							Intent intent1 = new Intent( Login.this, ProfilelistActivity.class);
+			        		startActivity(intent1);
 							       
 					}//on click
 					
