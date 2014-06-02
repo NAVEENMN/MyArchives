@@ -49,6 +49,8 @@ public class Login extends Activity {
 	private Button find;
 	Double Mylatitude;
 	Double MyLongitude;
+	Double gpsMylatitude;
+	Double gpsMyLongitude;
 	Double loclat;
 	Double loclon;
 	Location lon2 = new Location("");
@@ -63,13 +65,24 @@ public class Login extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		//--------------------------------> Setup location
+		System.out.println("comes here");
 		//---------------------------------------
         LocationManager locationManager;
         String provider;
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location currentLocation = locationManager.getLastKnownLocation("gps");
+        if (currentLocation != null)
+        {
+        	gpsMylatitude = currentLocation.getLatitude();
+        	gpsMyLongitude = currentLocation.getLongitude();
+        }
+        System.out.println(gpsMylatitude);
         Criteria criteria = new Criteria();
         provider = locationManager.getBestProvider(criteria, false);
         Location location = locationManager.getLastKnownLocation(provider);
+        System.out.println("latvalues:");
+        System.out.println(location.getLatitude());
+        System.out.println("will it come here?");
 		Log.v("latibaby:", Double.toString(location.getLatitude()));
 		Log.v("longibaby:", Double.toString(location.getLongitude()));
 		Toast.makeText(getApplicationContext(), Double.toString(location.getLatitude())+ ","+Double.toString(location.getLongitude()), Toast.LENGTH_SHORT).show();

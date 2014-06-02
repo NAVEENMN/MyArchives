@@ -40,8 +40,8 @@ public class HomescreenActivity extends Activity {
                 inputStream.close();
                 ret = stringBuilder.toString();
                 
-        		Intent intent = new Intent(this, Login.class);
-        		startActivity(intent);
+        		//Intent intent = new Intent(this, Login.class);
+        		//startActivity(intent);
         		Log.d("infile",ret);
         		
             }
