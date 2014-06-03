@@ -11,10 +11,9 @@ import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Criteria;
@@ -29,11 +28,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
-import com.google.android.gms.appstate.b;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 public class ProfilelistActivity extends Activity {
 	
@@ -43,6 +45,8 @@ public class ProfilelistActivity extends Activity {
     ScrollView scrollview;
     String profileimage;
     Bitmap decodedByte ;
+    Drawable y[];
+    int prfcounter =0 ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,6 @@ public class ProfilelistActivity extends Activity {
 		
 		//-----------------------------------
 		
-		
 		//--------------------------------> Setup location
 				//---------------------------------------
 		        LocationManager locationManager;
@@ -62,8 +65,8 @@ public class ProfilelistActivity extends Activity {
 		        Criteria criteria = new Criteria();
 		        provider = locationManager.getBestProvider(criteria, false);
 		        Location location = locationManager.getLastKnownLocation(provider);
-				Double latival = location.getLatitude();
-				Double Longival = location.getLongitude();
+				final Double latival = location.getLatitude();
+				final Double Longival = location.getLongitude();
 				String output = null;
 				String zip = null;
 				Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
@@ -74,6 +77,8 @@ public class ProfilelistActivity extends Activity {
 		        } catch (IOException e) {
 		            e.printStackTrace();
 		        }
+				
+		        //----------------------------------------
 		//-----------------------------------
 				//--------------------------------> Read user ID
 				//-------------------------------------
@@ -114,94 +119,78 @@ public class ProfilelistActivity extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-		//-----------------------------------
-				System.out.println("lists");
-				
-				String[] separated = output.split("#%-->");
-				int len = separated.length;
-				for(int i = 1; i< len-2 ; i+=3 ){
-				if(!(separated[i+1].isEmpty()))	System.out.println(separated[i+2]);
+		//----------------------------------
+				final String[] separated = output.split("#%-->");
+				final int len = separated.length;	
+				prfcounter += 3;
+				if (separated[prfcounter]!=null ){
+					
+					
+					
+					try {
+						displayprofile(separated[prfcounter], latival, Longival );
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		            
+		         
 				}
-				//i+1 has name i+2 
-		
-		//------------------------------------------------------
-				
-				//--------------------------------> Read image from file
-				//-------------------------------------
+		//----------------------------------
+				Button find = (Button) findViewById(R.id.visitorbuttonmeet);
+		        find.setOnClickListener(new View.OnClickListener() {
+					
 						
-				        try {
-				            FileInputStream inputStream = openFileInput("image.txt");
-
-				            if ( inputStream != null ) {
-				                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-				                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-				                String receiveString = "";
-				                StringBuilder stringBuilder = new StringBuilder();
-
-				                while ( (receiveString = bufferedReader.readLine()) != null ) {
-				                    stringBuilder.append(receiveString);
-				                }
-
-				                inputStream.close();
-				                profileimage = stringBuilder.toString();
-				            }
-				        }
-				        catch (FileNotFoundException e) {
-				            Log.e("login activity", "File not found: " + e.toString());
-				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-				            .show();
-				        } catch (IOException e) {
-				            Log.e("login activity", "Can not read file: " + e.toString());
-				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-				            .show();
-				        }
-				
-				        if (profileimage!=null){
-		                    byte[] decodedString = Base64.decode(profileimage, Base64.DEFAULT);
-		   		              decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-		                      }
-				        Drawable d = new BitmapDrawable(getResources(),Bitmap.createScaledBitmap(decodedByte, 450, 500, true));
-		//--------------------------------> display resuts
-				
-				scrollview = new ScrollView(this);
-		        LinearLayout linearlayout = new LinearLayout(this);
-		        linearlayout.setOrientation(LinearLayout.VERTICAL);
-		        scrollview.addView(linearlayout);
-		        for(int i = 1; i< len-2 ; i+=3)
-		        {
-		        	//--------------------------------------------------------data area
-		        	
-		        	//--------------------------------------------------------
-		            LinearLayout linear1 = new LinearLayout(this);
-		            linear1.setPaddingRelative(10, 50, 60, 70);
-		            linear1.setOrientation(LinearLayout.HORIZONTAL);
-		            linearlayout.addView(linear1);
-		            b = new Button(this);
-		            b.setText(separated[i+1]);
-		            b.setTextAlignment(getWallpaperDesiredMinimumWidth());
-		            b.setWidth(10);
-		            b.setBackground(d);
-		            b.setId(i);
-		            b.setTextSize(10);
-		            b.setTypeface(Typeface.SERIF,Typeface.BOLD_ITALIC);
-		            b.setPaddingRelative(10, 10, 10, 10);
-		            //b.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
-		           
-		            linear1.addView(b);
-		           
-		           
-		            b.setOnClickListener(new View.OnClickListener() {
-		                       
-		                        @Override
-		                        public void onClick(View v) {
-		                              // TODO Auto-generated method stub
-		                              Toast.makeText(getApplicationContext(), "Yipee.."+ v.getId(), Toast.LENGTH_SHORT).show();
-		                        }
-		                  });
-		        }
-		        this.setContentView(scrollview);
-		//-------------------------------------------------		
+						public void onClick(View v) {
+							
+							prfcounter += 3;
+							if ( prfcounter > len ) prfcounter = 3 ;
+							if (separated[prfcounter]!=null){
+							System.out.println("lenght");
+							System.out.println(len);
+							System.out.println("prfcounter");
+							System.out.println(prfcounter);
+							System.out.println("prfid");
+							System.out.println(separated[prfcounter-1]);
+							try {
+								if(! (prfcounter == 12)){
+								displayprofile(separated[prfcounter], latival, Longival );
+								}
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							}
+					       }//on click
+					
+					
+		        		});
+		//----------------------------------		
+				        
 		
+	}
+	
+	public void displayprofile(String image ,double latival, double Longival) throws InterruptedException, ExecutionException
+	{
+	
+		//-----------------------> put vis on map
+        GoogleMap map = ((MapFragment) getFragmentManager()
+                .findFragmentById(R.id.visitormap)).getMap();
+
+        LatLng currlocation = new LatLng(latival, Longival);
+
+        map.setMyLocationEnabled(true);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
+        byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
+		    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        ImageView imgg = (ImageView)findViewById(R.id.ImagevisitorView01);
+        imgg.setImageBitmap(decodedByte);
 		
 	}
 
