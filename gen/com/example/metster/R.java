@@ -240,40 +240,39 @@ containing a value of this type.
         public static final int shape=0x7f020026;
     }
     public static final class id {
-        public static final int Email=0x7f050018;
-        public static final int FirstName=0x7f050016;
-        public static final int ImageButton01=0x7f050015;
+        public static final int Email=0x7f050017;
+        public static final int FirstName=0x7f050015;
+        public static final int ImageButton01=0x7f050014;
         public static final int ImageView01=0x7f050008;
-        public static final int ImagevisitorView01=0x7f050010;
-        public static final int LastName=0x7f050017;
-        public static final int Password=0x7f050019;
-        public static final int RetypePassword=0x7f05001a;
-        public static final int action_settings=0x7f050021;
+        public static final int ImagevisitorView01=0x7f05000e;
+        public static final int LastName=0x7f050016;
+        public static final int Password=0x7f050018;
+        public static final int RetypePassword=0x7f050019;
+        public static final int action_settings=0x7f050020;
         public static final int button1=0x7f050006;
         public static final int button2=0x7f050007;
-        public static final int button3=0x7f050020;
-        public static final int buttonmeet=0x7f05000f;
-        public static final int checkBox1=0x7f05001f;
+        public static final int button3=0x7f05001f;
+        public static final int buttonmeet=0x7f05000d;
+        public static final int buttonpin=0x7f05000b;
+        public static final int checkBox1=0x7f05001e;
         public static final int hybrid=0x7f050004;
         public static final int linearLayout2=0x7f050005;
-        public static final int linearLayout3=0x7f050014;
-        public static final int linearLayout4=0x7f05001b;
-        public static final int map=0x7f05000e;
+        public static final int linearLayout3=0x7f050013;
+        public static final int linearLayout4=0x7f05001a;
+        public static final int map=0x7f05000c;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
-        public static final int radioButton1=0x7f05001c;
-        public static final int radioButton2=0x7f05001d;
-        public static final int radioButton3=0x7f05001e;
+        public static final int radioButton1=0x7f05001b;
+        public static final int radioButton2=0x7f05001c;
+        public static final int radioButton3=0x7f05001d;
         public static final int satellite=0x7f050002;
         public static final int terrain=0x7f050003;
-        public static final int txtCurrentCountry=0x7f05000d;
-        public static final int txtCurrentCounty=0x7f05000c;
-        public static final int txtCurrentLocation=0x7f05000b;
         public static final int txtFirstName=0x7f050009;
         public static final int txtLastName=0x7f05000a;
-        public static final int txtvisitorLastName=0x7f050011;
-        public static final int visitorbuttonmeet=0x7f050013;
-        public static final int visitormap=0x7f050012;
+        public static final int txtvisitorFirstName=0x7f05000f;
+        public static final int txtvisitorLastName=0x7f050010;
+        public static final int visitorbuttonnext=0x7f050012;
+        public static final int visitormap=0x7f050011;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f070000;
@@ -298,9 +297,13 @@ containing a value of this type.
         public static final int LastName=0x7f060025;
         public static final int LogIn=0x7f06001f;
         public static final int MeetSomeone=0x7f060034;
+        public static final int Next=0x7f060037;
         public static final int Password=0x7f06002b;
+        public static final int PinMe=0x7f060035;
+        public static final int Previous=0x7f060038;
         public static final int RetypePassword=0x7f06002c;
         public static final int SignUp=0x7f06001e;
+        public static final int ViewProfile=0x7f060036;
         public static final int action_settings=0x7f06001b;
         public static final int app_name=0x7f06001a;
         /**   Title for notification shown when GooglePlayServices needs to be
@@ -408,7 +411,7 @@ containing a value of this type.
         public static final int male=0x7f06002e;
         public static final int terms=0x7f06002d;
         public static final int title_activity_login=0x7f060033;
-        public static final int title_activity_profilelist=0x7f060035;
+        public static final int title_activity_profilelist=0x7f060039;
         public static final int title_activity_sign_up=0x7f060020;
         public static final int title_activity_user_sign_up=0x7f060021;
     }

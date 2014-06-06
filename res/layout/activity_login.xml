@@ -46,27 +46,17 @@
                 android:text="@string/FirstName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-            <TextView
-                android:id="@+id/txtCurrentLocation"
-                android:textColor="#4E4E4E"
-                android:textSize="13sp"
-                android:text="@string/CurrentLocation"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <TextView
-                android:id="@+id/txtCurrentCounty"
-                android:textColor="#4E4E4E"
-                android:textSize="13sp"
-                android:text="@string/CurrentCounty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <TextView
-                android:id="@+id/txtCurrentCountry"
-                android:textColor="#4E4E4E"
-                android:textSize="13sp"
-                android:text="@string/CurrentCountry"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+            
+            <Button
+	        android:id="@+id/buttonpin"
+	        android:layout_marginTop="5dp"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background = "@drawable/buttonclicker"
+	        android:textColor="#819FF7"
+	        android:textSize="12sp"
+	        android:textStyle="bold"
+	        android:text="@string/PinMe" />
         </LinearLayout>
     </LinearLayout>
     

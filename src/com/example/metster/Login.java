@@ -19,8 +19,10 @@ import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.NavUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -36,23 +38,25 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Login extends Activity {
 	//----------------------------------------->
+	GoogleMap mMap;
 	String usremail;
 	String usrfname;
+	String provider;
+	LocationManager locationManager;
+	LocationListener locationListener;
+	Location pos = null ;
 	String usrlname;
 	String ret = "";
 	String accnumber = "";
 	String tokennumber = "";
 	String profileimage = "";
 	private Button find;
-	Double Mylatitude;
-	Double MyLongitude;
-	Double gpsMylatitude;
-	Double gpsMyLongitude;
-	Double loclat;
-	Double loclon;
+	Double latival = 0.0 ;
+	Double Longival = 0.0 ;
 	Location lon2 = new Location("");
 	int flag = 0;
 	final ArrayList<String> USERNAME = new ArrayList<String>();	
@@ -65,30 +69,55 @@ public class Login extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		//--------------------------------> Setup location
-		System.out.println("comes here");
 		//---------------------------------------
-        LocationManager locationManager;
-        String provider;
+// Acquire a reference to the system Location Manager
+	locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+// Define a listener that responds to location updates
+   locationListener = new LocationListener() {
+    public void onLocationChanged(Location location) {
+    	
+    	latival = location.getLatitude();
+    	Longival = location.getLongitude();
+    }
+
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+    public void onProviderEnabled(String provider) {}
+
+    public void onProviderDisabled(String provider) {}
+  };
+
+// Register the listener with the Location Manager to receive location updates
+  		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		//---------------------------------------
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Location currentLocation = locationManager.getLastKnownLocation("gps");
-        if (currentLocation != null)
-        {
-        	gpsMylatitude = currentLocation.getLatitude();
-        	gpsMyLongitude = currentLocation.getLongitude();
-        }
-        System.out.println(gpsMylatitude);
         Criteria criteria = new Criteria();
-        provider = locationManager.getBestProvider(criteria, false);
-        Location location = locationManager.getLastKnownLocation(provider);
-        System.out.println("latvalues:");
-        System.out.println(location.getLatitude());
-        System.out.println("will it come here?");
-		Log.v("latibaby:", Double.toString(location.getLatitude()));
-		Log.v("longibaby:", Double.toString(location.getLongitude()));
-		Toast.makeText(getApplicationContext(), Double.toString(location.getLatitude())+ ","+Double.toString(location.getLongitude()), Toast.LENGTH_SHORT).show();
-		Double latival = location.getLatitude();
-		Double Longival = location.getLongitude();
+        pos = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if( pos == null ) 
+        	{
+        	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        	pos = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        	provider = locationManager.getBestProvider(criteria, false);
+        	Location location = locationManager.getLastKnownLocation(provider);
+        	latival = location.getLatitude();
+        	Longival = location.getLongitude();
+        	}
+        else{
+        	latival = pos.getLatitude();
+        	Longival = pos.getLongitude();
+        	}		
 		//------------------------------
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            //Do something after 100ms
+        	  locationManager.removeUpdates(locationListener);
+        	  doafter();
+        	  
+          }
+        }, 1000 * 60 * 15  );
 		//----------------------- put on maps
 	     // Get a handle to the Map Fragment
 	        GoogleMap map = ((MapFragment) getFragmentManager()
@@ -98,6 +127,7 @@ public class Login extends Activity {
 
 	        map.setMyLocationEnabled(true);
 	        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
+	       
 	        
 	        //-----------------------------------------
 		Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
@@ -111,17 +141,12 @@ public class Login extends Activity {
             addresses = gcd.getFromLocation(latival, Longival, 1);
             if (addresses.size() > 0)
             	System.out.println(addresses.get(0).getPostalCode());
-            TextView t1 = (TextView)findViewById(R.id.txtCurrentLocation);
-            TextView t2 = (TextView)findViewById(R.id.txtCurrentCounty);
-            TextView t3 = (TextView)findViewById(R.id.txtCurrentCountry);
             cityName = addresses.get(0).getLocality();
             country = addresses.get(0).getCountryCode();
             state = addresses.get(0).getAdminArea();
             zip = addresses.get(0).getPostalCode();
             addressline = addresses.get(0).getThoroughfare();
-            t1.setText((String)addressline);
-            t2.setText((String)cityName);
-            t3.setText((String)state+" "+(String)country);
+           
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -272,11 +297,50 @@ public class Login extends Activity {
 		        
 		        
 		        );
+		        
+		        Button findpin = (Button) findViewById(R.id.buttonpin);
+		        findpin.setOnClickListener(new View.OnClickListener() {
+					
+						
+						public void onClick(View v) {
+							
+							Toast.makeText(getApplicationContext(), "you are pinned.", Toast.LENGTH_SHORT).show();
+							pinonmap(latival, Longival);
+							       
+					}//on click
+					
+					
+		        		}
+		        
+		        
+		        );
+		        
+		        
+		        
 				} // else ends here
+				
+				
 	}
 
+		
+	public void pinonmap(double llatival, double lLongival)
+	{
+		
+        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(llatival, lLongival))
+                .title("me")).showInfoWindow();
+     // Remove the listener you previously added
+        
+	}
 	
-	
+	public void doafter()
+	{
+		//unpin the location
+		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		mMap.clear();
+	}
 	
 	/**
 	 * Set up the {@link android.app.ActionBar}.

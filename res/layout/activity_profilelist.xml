@@ -31,7 +31,7 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/txtFirstName"
+                android:id="@+id/txtvisitorFirstName"
                 android:textColor="#4E4E4E"
                 android:textSize="25sp"
                 android:text="@string/FirstName"
@@ -68,7 +68,7 @@
         android:background="@drawable/loginbg"
         android:layout_alignParentBottom="true"
     	android:gravity="bottom"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:paddingBottom="15dp"
         android:paddingTop="5dp"
         android:shadowColor="#333333"
@@ -76,8 +76,9 @@
         android:shadowDy="2.0"
         android:shadowRadius="3.0" 
         android:radius="10dip">
+  
     <Button
-	        android:id="@+id/visitorbuttonmeet"
+	        android:id="@+id/visitorbuttonnext"
 	        android:layout_marginTop="5dp"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
@@ -86,6 +87,8 @@
 	        android:textSize="12sp"
 	        android:textStyle="bold"
 	        android:text="@string/MeetSomeone" />
+    
+    
     </LinearLayout>
 
 </RelativeLayout>

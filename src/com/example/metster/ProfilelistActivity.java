@@ -11,7 +11,6 @@ import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -19,6 +18,7 @@ import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -30,12 +30,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ProfilelistActivity extends Activity {
 	
@@ -47,7 +49,9 @@ public class ProfilelistActivity extends Activity {
     Bitmap decodedByte ;
     Drawable y[];
     int prfcounter =0 ;
-
+    Double latival = 0.0;
+    Double Longival = 0.0;
+    Location pos = null ;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,14 +63,45 @@ public class ProfilelistActivity extends Activity {
 		
 		//--------------------------------> Setup location
 				//---------------------------------------
-		        LocationManager locationManager;
+		// Acquire a reference to the system Location Manager
+		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+		// Define a listener that responds to location updates
+		LocationListener locationListener = new LocationListener() {
+		    public void onLocationChanged(Location location) {
+		      // Called when a new location is found by the network location provider.
+		      //makeUseOfNewLocation(location);
+		    	latival = location.getLatitude();
+		    	Longival = location.getLongitude();
+		    }
+
+		    public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+		    public void onProviderEnabled(String provider) {}
+
+		    public void onProviderDisabled(String provider) {}
+		  };
+
+		// Register the listener with the Location Manager to receive location updates
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+				//---------------------------------------
 		        String provider;
 		        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		        Criteria criteria = new Criteria();
-		        provider = locationManager.getBestProvider(criteria, false);
-		        Location location = locationManager.getLastKnownLocation(provider);
-				final Double latival = location.getLatitude();
-				final Double Longival = location.getLongitude();
+		        pos = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		        if( pos == null ) 
+		        	{
+		        	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		        	pos = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		        	provider = locationManager.getBestProvider(criteria, false);
+		        	Location location = locationManager.getLastKnownLocation(provider);
+		        	latival = location.getLatitude();
+		        	Longival = location.getLongitude();
+		        	}
+		        else{
+		        	latival = pos.getLatitude();
+		        	Longival = pos.getLongitude();
+		        	}
 				String output = null;
 				String zip = null;
 				Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
@@ -120,6 +155,11 @@ public class ProfilelistActivity extends Activity {
 					e.printStackTrace();
 				}
 		//----------------------------------
+				if(output.isEmpty()) 
+				{
+					Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
+				}
+				else {
 				final String[] separated = output.split("#%-->");
 				final int len = separated.length;	
 				prfcounter += 3;
@@ -128,7 +168,7 @@ public class ProfilelistActivity extends Activity {
 					
 					
 					try {
-						displayprofile(separated[prfcounter], latival, Longival );
+						displayprofile(separated[prfcounter],separated[prfcounter-1], latival, Longival );
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -140,7 +180,7 @@ public class ProfilelistActivity extends Activity {
 		         
 				}
 		//----------------------------------
-				Button find = (Button) findViewById(R.id.visitorbuttonmeet);
+				Button find = (Button) findViewById(R.id.visitorbuttonnext);
 		        find.setOnClickListener(new View.OnClickListener() {
 					
 						
@@ -157,7 +197,7 @@ public class ProfilelistActivity extends Activity {
 							System.out.println(separated[prfcounter-1]);
 							try {
 								if(! (prfcounter == 12)){
-								displayprofile(separated[prfcounter], latival, Longival );
+								displayprofile(separated[prfcounter],separated[prfcounter-1], latival, Longival );
 								}
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
@@ -171,14 +211,19 @@ public class ProfilelistActivity extends Activity {
 					
 					
 		        		});
-		//----------------------------------		
+		//----------------------------------
+				} // else ends here
 				        
 		
 	}
 	
-	public void displayprofile(String image ,double latival, double Longival) throws InterruptedException, ExecutionException
+	public void displayprofile(String image, String visfname ,double latival, double Longival) throws InterruptedException, ExecutionException
 	{
-	
+		//-----------------------> display name
+		TextView fname = (TextView)findViewById(R.id.txtvisitorFirstName); 
+        fname.setText((String)visfname);
+        //TextView lname = (TextView)findViewById(R.id.txtLastName); 
+        //lname.setText((String)usrlname);
 		//-----------------------> put vis on map
         GoogleMap map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.visitormap)).getMap();
@@ -187,6 +232,15 @@ public class ProfilelistActivity extends Activity {
 
         map.setMyLocationEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
+        
+        GoogleMap mMap;
+        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latival, Longival))
+                .title("Me")).showInfoWindow();
+        
+        
         byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
 		    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         ImageView imgg = (ImageView)findViewById(R.id.ImagevisitorView01);
