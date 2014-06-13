@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,6 +58,20 @@ public class HomescreenActivity extends Activity {
             .show();
         }
 		//------------------------------------------------------------------------------
+	}
+	
+	@Override
+	public void onBackPressed() {
+	    new AlertDialog.Builder(this)
+	           .setMessage("Are you sure you want to exit?")
+	           .setCancelable(false)
+	           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	               public void onClick(DialogInterface dialog, int id) {
+	                   HomescreenActivity.this.finish();
+	               }
+	           })
+	           .setNegativeButton("No", null)
+	           .show();
 	}
 	
 	/** Called when the user clicks the Sign Up button */

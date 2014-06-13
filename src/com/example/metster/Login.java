@@ -11,7 +11,9 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -108,6 +110,7 @@ public class Login extends Activity {
         	Longival = pos.getLongitude();
         	}		
 		//------------------------------
+        /*
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
           @Override
@@ -118,6 +121,7 @@ public class Login extends Activity {
         	  
           }
         }, 1000 * 60 * 15  );
+        */
 		//----------------------- put on maps
 	     // Get a handle to the Map Fragment
 	        GoogleMap map = ((MapFragment) getFragmentManager()
@@ -321,6 +325,16 @@ public class Login extends Activity {
 				
 				
 	}
+	
+	@Override
+	public void onBackPressed() {
+	 
+		locationManager.removeUpdates(locationListener);
+		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		mMap.clear();
+		Login.this.finish();
+		
+	}
 
 		
 	public void pinonmap(double llatival, double lLongival)
@@ -335,12 +349,7 @@ public class Login extends Activity {
         
 	}
 	
-	public void doafter()
-	{
-		//unpin the location
-		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-		mMap.clear();
-	}
+	
 	
 	/**
 	 * Set up the {@link android.app.ActionBar}.
