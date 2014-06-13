@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -146,7 +147,9 @@ public class ProfilelistActivity extends Activity {
 				        }	
 		//-----------------------------------
 				try {
+					
 					output = new RequestTask().execute("http://www.naveenmn.com/Metster/profilelist.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber).get();
+				   
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

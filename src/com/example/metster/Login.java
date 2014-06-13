@@ -11,9 +11,8 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -70,6 +69,7 @@ public class Login extends Activity {
 		setContentView(R.layout.activity_login);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		
 		//--------------------------------> Setup location
 		//---------------------------------------
 // Acquire a reference to the system Location Manager
@@ -110,18 +110,18 @@ public class Login extends Activity {
         	Longival = pos.getLongitude();
         	}		
 		//------------------------------
-        /*
+        
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
           @Override
           public void run() {
             //Do something after 100ms
         	  locationManager.removeUpdates(locationListener);
-        	  doafter();
+        	 // doafter();
         	  
           }
         }, 1000 * 60 * 15  );
-        */
+        
 		//----------------------- put on maps
 	     // Get a handle to the Map Fragment
 	        GoogleMap map = ((MapFragment) getFragmentManager()
@@ -252,8 +252,12 @@ public class Login extends Activity {
 	            String output = null;
 	            System.out.print("fetching");
 	            try {
+	            	ProgressDialog dialog = new ProgressDialog(Login.this);
+	                dialog.setMessage("Fetching Profile..");
+	                dialog.show();
 					output = new RequestTask().execute("http://www.naveenmn.com/Metster/fetchprofile.php",accnumber,tokennumber,zip,Double.toString(latival),Double.toString(Longival),(String)country,accnumber).get();
-				} catch (InterruptedException e1) {
+					dialog.dismiss();
+	            } catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (ExecutionException e1) {

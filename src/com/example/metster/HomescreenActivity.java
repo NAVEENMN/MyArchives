@@ -63,7 +63,8 @@ public class HomescreenActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 	    new AlertDialog.Builder(this)
-	           .setMessage("Are you sure you want to exit?")
+	           .setMessage("Do you want to exit?")
+	           .setTitle("Metster")
 	           .setCancelable(false)
 	           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 	               public void onClick(DialogInterface dialog, int id) {

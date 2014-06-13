@@ -22,6 +22,7 @@
 			android:background = "@drawable/loginbg"
 			android:scaleType="centerCrop"
             android:contentDescription="@string/desc" />
+        
 
         <LinearLayout
             android:layout_weight="1"
@@ -60,19 +61,40 @@
         </LinearLayout>
     </LinearLayout>
     
+    
+    <LinearLayout
+            
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+			android:paddingTop="175dp"
+			android:paddingBottom="45dp"
+            android:orientation="vertical" >
+        
+        <View
+		    android:layout_width="fill_parent"
+		    android:layout_height="2dp"
+		    android:paddingBottom="75dp"
+		    android:background="#585858"/>
+        
+    </LinearLayout>
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
         android:paddingBottom="65dp"
-        android:paddingTop="185dp" >
+        android:paddingTop="185dp" >    
     <fragment 
           android:id="@+id/map"
+          android:paddingTop="15dp"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:name="com.google.android.gms.maps.MapFragment"/>
 	</LinearLayout>
+	
+  
+    
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
@@ -90,7 +112,7 @@
         android:radius="10dip">
     <Button
 	        android:id="@+id/buttonmeet"
-	        android:layout_marginTop="5dp"
+	        android:layout_marginTop="10dp"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:background = "@drawable/buttonclicker"

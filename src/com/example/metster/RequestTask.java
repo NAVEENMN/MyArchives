@@ -16,17 +16,23 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 
 public class RequestTask extends AsyncTask<String, String, String> {
+		
+	
 	
 	@Override
     protected String doInBackground(String... uri) {
+		
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost(uri[0]);
         HttpResponse response;
         String responseString = null;
        
+        
         
         
         try {  	
@@ -63,6 +69,7 @@ public class RequestTask extends AsyncTask<String, String, String> {
 	
     @Override
     protected void onPostExecute(String result) {
+    	
         super.onPostExecute(result);
     }
     

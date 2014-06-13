@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="#B3B0B0"
     tools:context=".SignUpActivity" >
 
      <RelativeLayout
@@ -154,7 +154,7 @@
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:background = "@drawable/buttonclicker"
-		        android:textColor="#819FF7"
+		        android:textColor="#4E4E4E"
 		        android:textSize="12sp"
 		        android:textStyle="bold"
 		        android:text="@string/SignUp" 
