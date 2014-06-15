@@ -61,6 +61,8 @@ public class ProfilelistActivity extends Activity {
 		setupActionBar();
 		
 		//-----------------------------------
+		//--------------------------------< title
+	    setTitle("Hello!! I am new to Metster"); // user status here
 		
 		//--------------------------------> Setup location
 				//---------------------------------------
@@ -182,7 +184,7 @@ public class ProfilelistActivity extends Activity {
 		            
 		         
 				}
-		//----------------------------------
+		//---------------------------------- Button next
 				Button find = (Button) findViewById(R.id.visitorbuttonnext);
 		        find.setOnClickListener(new View.OnClickListener() {
 					
@@ -190,7 +192,55 @@ public class ProfilelistActivity extends Activity {
 						public void onClick(View v) {
 							
 							prfcounter += 3;
-							if ( prfcounter > len ) prfcounter = 3 ;
+							if ( prfcounter >= len ) prfcounter = 3 ;
+							if (separated[prfcounter]!=null){
+							System.out.println("lenght");
+							System.out.println(len);
+							System.out.println("prfcounter");
+							System.out.println(prfcounter);
+							System.out.println("prfid");
+							System.out.println(separated[prfcounter-1]);
+							try {
+								if(! (prfcounter == 12)){
+								displayprofile(separated[prfcounter],separated[prfcounter-1], latival, Longival );
+								}
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							}
+					       }//on click
+					
+					
+		        		});
+		//----------------------------------
+		      //---------------------------------- Button view profile
+				Button findviewprofile = (Button) findViewById(R.id.visitorbuttonviewprofile);
+				findviewprofile.setOnClickListener(new View.OnClickListener() {
+					
+						
+						public void onClick(View v) { // yet to be implemented
+							
+							Toast.makeText(getApplicationContext(), "View profile - to be implemented.", Toast.LENGTH_SHORT).show();
+							
+					       }//on click
+					
+					
+		        		});
+		//----------------------------------
+		        
+		      //---------------------------------- Button next
+				Button findprev = (Button) findViewById(R.id.visitorbuttonprev);
+				findprev.setOnClickListener(new View.OnClickListener() {
+					
+						
+						public void onClick(View v) {
+							
+							prfcounter -= 3;
+							if ( prfcounter <= 3 ) prfcounter = 3 ; // you have to fix it to last profile
 							if (separated[prfcounter]!=null){
 							System.out.println("lenght");
 							System.out.println(len);

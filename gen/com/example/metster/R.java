@@ -272,10 +272,10 @@ containing a value of this type.
         public static final int txtFirstName=0x7f05000c;
         public static final int txtLastName=0x7f05000d;
         public static final int txtvisitorFirstName=0x7f050012;
-        public static final int txtvisitorLastName=0x7f050013;
-        public static final int visitorbuttonnext=0x7f050015;
-        public static final int visitorbuttonprev=0x7f050016;
-        public static final int visitormap=0x7f050014;
+        public static final int visitorbuttonnext=0x7f050016;
+        public static final int visitorbuttonprev=0x7f050014;
+        public static final int visitorbuttonviewprofile=0x7f050015;
+        public static final int visitormap=0x7f050013;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f070000;

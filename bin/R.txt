@@ -103,10 +103,10 @@ int id terrain 0x7f050003
 int id txtFirstName 0x7f05000c
 int id txtLastName 0x7f05000d
 int id txtvisitorFirstName 0x7f050012
-int id txtvisitorLastName 0x7f050013
-int id visitorbuttonnext 0x7f050015
-int id visitorbuttonprev 0x7f050016
-int id visitormap 0x7f050014
+int id visitorbuttonnext 0x7f050016
+int id visitorbuttonprev 0x7f050014
+int id visitorbuttonviewprofile 0x7f050015
+int id visitormap 0x7f050013
 int integer google_play_services_version 0x7f070000
 int layout activity_homescreen 0x7f030000
 int layout activity_login 0x7f030001

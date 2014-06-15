@@ -22,6 +22,7 @@
 			android:background = "@drawable/loginbg"
 			android:scaleType="centerCrop"
             android:contentDescription="@string/desc" />
+        
 
         <LinearLayout
             android:layout_weight="1"
@@ -33,15 +34,7 @@
 
             <TextView
                 android:id="@+id/txtvisitorFirstName"
-                android:textColor="#4E4E4E"
-                android:textSize="25sp"
-                android:text="@string/FirstName"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-            <TextView
-                android:id="@+id/txtvisitorLastName"
-                android:textColor="#4E4E4E"
+                android:textColor="#3A01DF" 
                 android:textSize="25sp"
                 android:text="@string/FirstName"
                 android:layout_width="match_parent"
@@ -50,19 +43,20 @@
     </LinearLayout>
    
    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingBottom="65dp"
-        android:paddingTop="185dp" >    
-    <fragment 
-          android:id="@+id/map"
-          android:paddingTop="15dp"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:name="com.google.android.gms.maps.MapFragment"/>
-	</LinearLayout>
+            
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+			android:paddingTop="175dp"
+			android:paddingBottom="45dp"
+            android:orientation="vertical" >
+        
+        <View
+		    android:layout_width="fill_parent"
+		    android:layout_height="2dp"
+		    android:paddingBottom="75dp"
+		    android:background="#585858"/>
+        
+    </LinearLayout>
    
     <LinearLayout
         android:layout_width="match_parent"
@@ -87,7 +81,7 @@
         android:layout_alignParentBottom="true"
     	android:gravity="bottom"
         android:orientation="horizontal"
-        android:paddingBottom="15dp"
+        android:paddingBottom="5dp"
         android:paddingTop="5dp"
         android:shadowColor="#333333"
         android:shadowDx="2.0"
@@ -96,27 +90,38 @@
         android:radius="10dip">
   
     <Button
-	        android:id="@+id/visitorbuttonnext"
-	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_marginTop="5dp"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:background = "@drawable/buttonclicker"
-	        android:textColor="#4E4E4E"
-	        android:textSize="12sp"
-	        android:textStyle="bold"
-	        android:text="@string/MeetSomeone" />
-    <Button
 	        android:id="@+id/visitorbuttonprev"
 	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_marginTop="5dp"
+	        android:layout_marginTop="10dp"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:background = "@drawable/buttonclicker"
-	        android:textColor="#4E4E4E"
+	        android:textColor="#3A01DF"
 	        android:textSize="12sp"
 	        android:textStyle="bold"
-	        android:text="@string/MeetSomeone" />
+	        android:text="@string/Previous" />
+    <Button
+	        android:id="@+id/visitorbuttonviewprofile"
+	        style="?android:attr/buttonBarButtonStyle"
+	        android:layout_marginTop="10dp"
+	        android:layout_width="200dp"
+	        android:layout_height="wrap_content"
+	        android:background = "@drawable/buttonclicker"
+	        android:textColor="#3A01DF"
+	        android:textSize="12sp"
+	        android:textStyle="bold"
+	        android:text="@string/ViewProfile" />
+    <Button
+	        android:id="@+id/visitorbuttonnext"
+	        style="?android:attr/buttonBarButtonStyle"
+	        android:layout_marginTop="10dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:background = "@drawable/buttonclicker"
+	        android:textColor="#3A01DF"
+	        android:textSize="12sp"
+	        android:textStyle="bold"
+	        android:text="@string/Next" />
     
     
     </LinearLayout>

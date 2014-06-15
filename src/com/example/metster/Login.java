@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -30,6 +31,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -70,6 +72,8 @@ public class Login extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
+		//--------------------------------< title
+	    setTitle("About Me");
 		//--------------------------------> Setup location
 		//---------------------------------------
 // Acquire a reference to the system Location Manager
