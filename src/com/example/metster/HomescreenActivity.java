@@ -8,8 +8,11 @@ import java.io.InputStreamReader;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -77,16 +80,52 @@ public class HomescreenActivity extends Activity {
 	
 	/** Called when the user clicks the Sign Up button */
 	public void Signupaccount(View view) {
+		
+		boolean stat = haveNetworkConnection();
+		
+		if(stat){
+		
 		File file = new File("token.txt");
 	    file.delete();
 		file = new File("accounts.txt");
 		file.delete();
 		Intent intent = new Intent(this, SignUpActivity.class);
 		startActivity(intent);
+		}
+		else{
+			Toast.makeText(getApplicationContext(), "Unable to connect to Internet.", Toast.LENGTH_SHORT).show();
+		}
 	}
+	
+	
+	
+	private boolean haveNetworkConnection() {
+	    boolean haveConnectedWifi = false;
+	    boolean haveConnectedMobile = false;
+
+	    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+	    for (NetworkInfo ni : netInfo) {
+	        if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+	            if (ni.isConnected())
+	                haveConnectedWifi = true;
+	        if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+	            if (ni.isConnected())
+	                haveConnectedMobile = true;
+	    }
+	    return haveConnectedWifi || haveConnectedMobile;
+	}
+	
+	
+	
+	
 	/** Called when the user clicks the Login button */
 	public void logintoaccount(View view) {
 		
+		//------------------------------------->
+boolean stat = haveNetworkConnection();
+		
+		if(stat){
 		//------------------------------------->
 		
 		String ret = "";
@@ -121,6 +160,10 @@ public class HomescreenActivity extends Activity {
             .show();
         }
 	
+		}
+		else{
+			Toast.makeText(getApplicationContext(), "Unable to connect to Internet.", Toast.LENGTH_SHORT).show();
+		}
 		
 		//-------------------------------------->
 		 

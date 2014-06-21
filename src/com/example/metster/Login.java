@@ -72,8 +72,6 @@ public class Login extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		//--------------------------------< title
-	    setTitle("About Me");
 		//--------------------------------> Setup location
 		//---------------------------------------
 // Acquire a reference to the system Location Manager
@@ -126,18 +124,6 @@ public class Login extends Activity {
           }
         }, 1000 * 60 * 15  );
         
-		//----------------------- put on maps
-	     // Get a handle to the Map Fragment
-	        GoogleMap map = ((MapFragment) getFragmentManager()
-	                .findFragmentById(R.id.map)).getMap();
-
-	        LatLng currlocation = new LatLng(latival, Longival);
-
-	        map.setMyLocationEnabled(true);
-	        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
-	       
-	        
-	        //-----------------------------------------
 		Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
 		List<Address> addresses;
 		String cityName = null;
@@ -273,16 +259,18 @@ public class Login extends Activity {
 	            usrfname = separated[0];
 	            usrlname = separated[1];
 	            
+	            setTitle(usrfname + " " + usrlname);
+	            
 				if(output.contains("null")){
 					Toast.makeText(getApplicationContext(), "Metster is unable to connect to server at this time.", Toast.LENGTH_SHORT).show();
 				}
 				else{
 		        //-----------------------------------------------------------
 		        //---------------------------------------
-		        TextView fname = (TextView)findViewById(R.id.txtFirstName); 
-	            fname.setText((String)usrfname);
-                TextView lname = (TextView)findViewById(R.id.txtLastName); 
-	            lname.setText((String)usrlname);
+		        TextView fname = (TextView)findViewById(R.id.Location); 
+	            fname.setText((String)addressline);
+                TextView lname = (TextView)findViewById(R.id.City); 
+	            lname.setText((String)cityName);
 	            if (profileimage!=null){
                     byte[] decodedString = Base64.decode(profileimage, Base64.DEFAULT);
    		             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -310,22 +298,6 @@ public class Login extends Activity {
 		        
 		        );
 		        
-		        Button findpin = (Button) findViewById(R.id.buttonpin);
-		        findpin.setOnClickListener(new View.OnClickListener() {
-					
-						
-						public void onClick(View v) {
-							
-							Toast.makeText(getApplicationContext(), "you are pinned.", Toast.LENGTH_SHORT).show();
-							pinonmap(latival, Longival);
-							       
-					}//on click
-					
-					
-		        		}
-		        
-		        
-		        );
 		        
 		        
 		        
@@ -337,26 +309,10 @@ public class Login extends Activity {
 	@Override
 	public void onBackPressed() {
 	 
-		locationManager.removeUpdates(locationListener);
-		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-		mMap.clear();
 		Login.this.finish();
 		
 	}
 
-		
-	public void pinonmap(double llatival, double lLongival)
-	{
-		
-        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        mMap.clear();
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(llatival, lLongival))
-                .title("me")).showInfoWindow();
-     // Remove the listener you previously added
-        
-	}
-	
 	
 	
 	/**

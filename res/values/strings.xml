@@ -3,6 +3,11 @@
 
     <string name="app_name">Metster</string>
     <string name="email_hint">Email</string>
+    <string name="Tellusmore">Ex: Student lounge</string>
+    <string name="Tellus">I am near :</string>
+    <string name="updateprofile">update profile</string>
+    <string name="findbestloc">find location</string>
+    <string name="footnote">Metster alpha ver 1.0</string>
     <string name="Password_hint">Password</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Metster</string>

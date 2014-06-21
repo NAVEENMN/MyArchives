@@ -168,12 +168,13 @@ public class ProfilelistActivity extends Activity {
 				final String[] separated = output.split("#%-->");
 				final int len = separated.length;	
 				prfcounter += 3;
+				Log.w("Latt", separated[prfcounter+1]);
+				Log.w("Latt", separated[prfcounter+2]);
+				// dummy #%--> usrid #%--> fname lname #%--> image #%--> lat #%--> long
 				if (separated[prfcounter]!=null ){
 					
-					
-					
 					try {
-						displayprofile(separated[prfcounter],separated[prfcounter-1], latival, Longival );
+						displayprofile(separated[prfcounter],separated[prfcounter-1],  Double.parseDouble(separated[prfcounter+1]), Double.parseDouble(separated[prfcounter+2]) );
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -191,7 +192,7 @@ public class ProfilelistActivity extends Activity {
 						
 						public void onClick(View v) {
 							
-							prfcounter += 3;
+							prfcounter += 5;
 							if ( prfcounter >= len ) prfcounter = 3 ;
 							if (separated[prfcounter]!=null){
 							System.out.println("lenght");
@@ -202,7 +203,7 @@ public class ProfilelistActivity extends Activity {
 							System.out.println(separated[prfcounter-1]);
 							try {
 								if(! (prfcounter == 12)){
-								displayprofile(separated[prfcounter],separated[prfcounter-1], latival, Longival );
+								displayprofile(separated[prfcounter],separated[prfcounter-1], Double.parseDouble(separated[prfcounter+1]), Double.parseDouble(separated[prfcounter+2]) );
 								}
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
@@ -239,7 +240,7 @@ public class ProfilelistActivity extends Activity {
 						
 						public void onClick(View v) {
 							
-							prfcounter -= 3;
+							prfcounter -= 5;
 							if ( prfcounter <= 3 ) prfcounter = 3 ; // you have to fix it to last profile
 							if (separated[prfcounter]!=null){
 							System.out.println("lenght");
@@ -270,8 +271,10 @@ public class ProfilelistActivity extends Activity {
 		
 	}
 	
-	public void displayprofile(String image, String visfname ,double latival, double Longival) throws InterruptedException, ExecutionException
+	public void displayprofile(String image, String visfname ,double lativale , double Longivale ) throws InterruptedException, ExecutionException
 	{
+		Log.w("Latt", Double.toString(lativale));
+		Log.w("Latt", Double.toString(Longivale));
 		//-----------------------> display name
 		TextView fname = (TextView)findViewById(R.id.txtvisitorFirstName); 
         fname.setText((String)visfname);
@@ -281,7 +284,7 @@ public class ProfilelistActivity extends Activity {
         GoogleMap map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.visitormap)).getMap();
 
-        LatLng currlocation = new LatLng(latival, Longival);
+        LatLng currlocation = new LatLng(latival, Longival);// yours
 
         map.setMyLocationEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
@@ -290,8 +293,8 @@ public class ProfilelistActivity extends Activity {
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
         mMap.clear();
         mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latival, Longival))
-                .title("Me")).showInfoWindow();
+                .position(new LatLng(lativale, Longivale))
+                .title("Hi")).showInfoWindow();
         
         
         byte[] decodedString = Base64.decode(image, Base64.DEFAULT);

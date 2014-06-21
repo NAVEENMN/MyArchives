@@ -29,35 +29,40 @@
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-			android:paddingTop="40dp"
+			android:paddingTop="10dp"
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/txtFirstName"
+                android:id="@+id/Location"
                 android:textColor="#3A01DF"
-                android:textSize="25sp"
-                android:text="@string/FirstName"
+                android:textSize="18sp"
+                android:text="@string/CurrentLocation"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
             <TextView
-                android:id="@+id/txtLastName"
+                android:id="@+id/City"
                 android:textColor="#3A01DF"
-                android:textSize="25sp"
-                android:text="@string/FirstName"
+                android:textSize="18sp"
+                android:text="@string/CurrentCounty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-            
-            <Button
-	        android:id="@+id/buttonpin"
-	        android:layout_marginTop="5dp"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:background = "@drawable/buttonclicker"
-	        android:textColor="#4E4E4E"
-	        android:textSize="12sp"
-	        android:textStyle="bold"
-	        android:text="@string/PinMe" />
+            <TextView
+                android:id="@+id/tellus"
+                android:textColor="#3A01DF"
+                android:textSize="15sp"
+                android:paddingTop="35dp"
+                android:text="@string/Tellus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <EditText
+		       android:id="@+id/TellUsMore"
+		       android:textColor="#3A01DF"
+                android:textSize="12sp"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:hint="@string/Tellusmore"
+		       android:inputType="text" />
         </LinearLayout>
     </LinearLayout>
     
@@ -77,26 +82,63 @@
 		    android:background="#585858"/>
         
     </LinearLayout>
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingBottom="65dp"
-        android:paddingTop="185dp" >    
-    <fragment 
-          android:id="@+id/map"
-          android:paddingTop="15dp"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:name="com.google.android.gms.maps.MapFragment"/>
-	</LinearLayout>
-	
-  
+      
     
     <LinearLayout
         android:id="@+id/linearLayout2"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/loginbg"
+        android:orientation="horizontal"
+        android:paddingTop="185dp"
+        android:shadowColor="#333333"
+        android:shadowDx="2.0"
+        android:shadowDy="2.0"
+        android:shadowRadius="3.0" 
+        android:radius="10dip">
+  
+    <Button
+	        android:id="@+id/updateprofile"
+	        style="?android:attr/buttonBarButtonStyle"
+	        android:layout_marginTop="8dp"
+	        android:layout_width="108dp"
+	        android:layout_height="wrap_content"
+	        android:background = "@drawable/buttonclicker"
+	        android:textColor="#3A01DF"
+	        android:textSize="12sp"
+	        android:textStyle="bold"
+	        android:text="@string/updateprofile" />
+    <Button
+	        android:id="@+id/buttonmeet"
+	        style="?android:attr/buttonBarButtonStyle"
+	        android:layout_marginTop="8dp"
+	        android:layout_width="108dp"
+	        android:layout_height="wrap_content"
+	        android:background = "@drawable/buttonclicker"
+	        android:textColor="#3A01DF"
+	        android:textSize="12sp"
+	        android:textStyle="bold"
+	        android:text="@string/MeetSomeone" />
+    <Button
+	        android:id="@+id/findbestloc"
+	        style="?android:attr/buttonBarButtonStyle"
+	        android:layout_marginTop="8dp"
+	        android:layout_width="108dp"
+	        android:layout_height="wrap_content"
+	        android:background = "@drawable/buttonclicker"
+	        android:textColor="#3A01DF"
+	        android:textSize="12sp"
+	        android:textStyle="bold"
+	        android:text="@string/findbestloc" />
+    
+    
+    </LinearLayout>
+    
+    
+    
+    <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/loginbg"
@@ -110,16 +152,15 @@
         android:shadowDy="2.0"
         android:shadowRadius="3.0" 
         android:radius="10dip">
-    <Button
-	        android:id="@+id/buttonmeet"
-	        android:layout_marginTop="10dp"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:background = "@drawable/buttonclicker"
-	        android:textColor="#3A01DF"
-	        android:textSize="12sp"
-	        android:textStyle="bold"
-	        android:text="@string/MeetSomeone" />
+    <TextView
+                android:id="@+id/footnote"
+                android:textColor="#3A01DF"
+                android:textSize="12sp"
+                android:paddingTop="35dp"
+                android:gravity="center"
+                android:text="@string/footnote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </RelativeLayout>
