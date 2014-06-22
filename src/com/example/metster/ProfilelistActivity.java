@@ -10,7 +10,6 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -53,6 +52,8 @@ public class ProfilelistActivity extends Activity {
     Double latival = 0.0;
     Double Longival = 0.0;
     Location pos = null ;
+    LocationListener locationListener;
+    LocationManager locationManager;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,10 +68,10 @@ public class ProfilelistActivity extends Activity {
 		//--------------------------------> Setup location
 				//---------------------------------------
 		// Acquire a reference to the system Location Manager
-		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+	    locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
 		// Define a listener that responds to location updates
-		LocationListener locationListener = new LocationListener() {
+		    locationListener = new LocationListener() {
 		    public void onLocationChanged(Location location) {
 		      // Called when a new location is found by the network location provider.
 		      //makeUseOfNewLocation(location);
@@ -304,6 +305,16 @@ public class ProfilelistActivity extends Activity {
 		
 	}
 
+	//---------------------
+	@Override
+	public void onBackPressed() {
+	 
+		locationManager.removeUpdates(locationListener);
+		ProfilelistActivity.this.finish();
+		
+	}
+	//---------------------
+	
 	/**
 	 * Set up the {@link android.app.ActionBar}.
 	 */

@@ -115,7 +115,7 @@ public class Login extends Activity {
         	 // doafter();
         	  
           }
-        }, 1000 * 60 * 15  );
+        }, 1000 * 60 * 5  );
         
 		Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
 		List<Address> addresses;
@@ -304,6 +304,7 @@ public class Login extends Activity {
 	@Override
 	public void onBackPressed() {
 	 
+		locationManager.removeUpdates(locationListener);
 		Login.this.finish();
 		
 	}
