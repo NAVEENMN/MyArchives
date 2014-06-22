@@ -11,12 +11,10 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -31,17 +29,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Login extends Activity {
 	//----------------------------------------->
@@ -242,11 +235,13 @@ public class Login extends Activity {
 	            String output = null;
 	            System.out.print("fetching");
 	            try {
-	            	ProgressDialog dialog = new ProgressDialog(Login.this);
-	                dialog.setMessage("Fetching Profile..");
-	                dialog.show();
+	            	//ProgressDialog dialog = new ProgressDialog(Login.this);
+	                //dialog.setMessage("Fetching Profile..");
+	                //dialog.show();
 					output = new RequestTask().execute("http://www.naveenmn.com/Metster/fetchprofile.php",accnumber,tokennumber,zip,Double.toString(latival),Double.toString(Longival),(String)country,accnumber).get();
-					dialog.dismiss();
+					//if (! output.isEmpty()){
+					//dialog.dismiss();
+					//}
 	            } catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
