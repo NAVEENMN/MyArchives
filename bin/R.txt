@@ -114,7 +114,7 @@ int id Location 0x7f06001b
 int id Password 0x7f06002d
 int id RetypePassword 0x7f06002e
 int id TellUsMore 0x7f06001e
-int id action_settings 0x7f060035
+int id action_settings 0x7f060036
 int id book_now 0x7f060010
 int id button1 0x7f060019
 int id button2 0x7f060017
@@ -125,6 +125,7 @@ int id buy_now 0x7f06000f
 int id buy_with_google 0x7f06000e
 int id checkBox1 0x7f060033
 int id classic 0x7f060011
+int id container 0x7f060035
 int id email_login 0x7f060015
 int id findbestloc 0x7f060021
 int id footnote 0x7f060022
@@ -162,8 +163,11 @@ int layout activity_homescreen 0x7f030000
 int layout activity_login 0x7f030001
 int layout activity_profilelist 0x7f030002
 int layout activity_sign_up 0x7f030003
+int layout activity_update_profile 0x7f030004
+int layout fragment_update_profile 0x7f030005
 int menu login 0x7f0a0000
 int menu profilelist 0x7f0a0001
+int menu update_profile 0x7f0a0002
 int string Birthday 0x7f040036
 int string CurrentCountry 0x7f040035
 int string CurrentCounty 0x7f040034
@@ -232,6 +236,7 @@ int string terms 0x7f04003a
 int string title_activity_login 0x7f040040
 int string title_activity_profilelist 0x7f040046
 int string title_activity_sign_up 0x7f04002d
+int string title_activity_update_profile 0x7f040047
 int string title_activity_user_sign_up 0x7f04002e
 int string updateprofile 0x7f040024
 int string wallet_buy_button_place_holder 0x7f04001f

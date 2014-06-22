@@ -276,6 +276,7 @@ public class Login extends Activity {
 	            //-------------------------------------------
 	         // Define a listener that responds to location updates   
 		        
+	            //------------------------------------- meet someone
 		        find = (Button) findViewById(R.id.buttonmeet);
 		        find.setOnClickListener(new View.OnClickListener() {
 					
@@ -284,6 +285,24 @@ public class Login extends Activity {
 							
 							Intent intent1 = new Intent( Login.this, ProfilelistActivity.class);
 			        		startActivity(intent1);
+							       
+					}//on click
+					
+					
+		        		}
+		        
+		        
+		        );
+		        
+		      //------------------------------------- update profile
+		        find = (Button) findViewById(R.id.updateprofile);
+		        find.setOnClickListener(new View.OnClickListener() {
+					
+						
+						public void onClick(View v) {
+							
+							Intent intent2 = new Intent( Login.this, UpdateProfile.class);
+			        		startActivity(intent2);
 							       
 					}//on click
 					

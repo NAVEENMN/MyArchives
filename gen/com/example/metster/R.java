@@ -374,6 +374,11 @@ containing a value of this type.
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
 
+         Example customization of dimensions originally defined in res/values/dimens.xml
+         (such as screen margins) for screens with more than 820dp of available width. This
+         would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
+    
+
          Customize dimensions originally defined in res/values/dimens.xml (such as
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
@@ -436,7 +441,7 @@ containing a value of this type.
         public static final int Password=0x7f06002d;
         public static final int RetypePassword=0x7f06002e;
         public static final int TellUsMore=0x7f06001e;
-        public static final int action_settings=0x7f060035;
+        public static final int action_settings=0x7f060036;
         public static final int book_now=0x7f060010;
         public static final int button1=0x7f060019;
         public static final int button2=0x7f060017;
@@ -447,6 +452,7 @@ containing a value of this type.
         public static final int buy_with_google=0x7f06000e;
         public static final int checkBox1=0x7f060033;
         public static final int classic=0x7f060011;
+        public static final int container=0x7f060035;
         public static final int email_login=0x7f060015;
         public static final int findbestloc=0x7f060021;
         public static final int footnote=0x7f060022;
@@ -488,10 +494,13 @@ containing a value of this type.
         public static final int activity_login=0x7f030001;
         public static final int activity_profilelist=0x7f030002;
         public static final int activity_sign_up=0x7f030003;
+        public static final int activity_update_profile=0x7f030004;
+        public static final int fragment_update_profile=0x7f030005;
     }
     public static final class menu {
         public static final int login=0x7f0a0000;
         public static final int profilelist=0x7f0a0001;
+        public static final int update_profile=0x7f0a0002;
     }
     public static final class string {
         public static final int Birthday=0x7f040036;
@@ -626,6 +635,7 @@ containing a value of this type.
         public static final int title_activity_login=0x7f040040;
         public static final int title_activity_profilelist=0x7f040046;
         public static final int title_activity_sign_up=0x7f04002d;
+        public static final int title_activity_update_profile=0x7f040047;
         public static final int title_activity_user_sign_up=0x7f04002e;
         public static final int updateprofile=0x7f040024;
         /**  Text on a placeholder buy button when Google Play services is not
