@@ -32,12 +32,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-import com.github.sendgrid.SendGrid;
-
 public class SignUpActivity extends Activity {
 	String val;
 	int userid;
@@ -46,24 +40,6 @@ public class SignUpActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sign_up);
-		
-		//-----------------------------------------------
-				Firebase dataRef = new Firebase("https://metster.firebaseIO.com/totalusers/count");
-		        dataRef.addValueEventListener(new ValueEventListener() {
-		            @Override
-		            public void onDataChange(DataSnapshot snapshot) {
-		                val =  (String) snapshot.getValue();
-		                userid = Integer.parseInt(val);
-		                Log.w("count",val);
-		            }
-
-		            @Override
-					public void onCancelled(FirebaseError arg0) {
-						// TODO Auto-generated method stub
-						
-					}
-		        });
-				//------------------------------------------------
 		
 	}
 	
@@ -153,7 +129,7 @@ public class SignUpActivity extends Activity {
         intent.setType("image/*");
         startActivityForResult(intent, 0);
 	}
-	//------------------------------ signup -------------------------------------
+	//------------------------------ Sign up Profile -------------------------------------
 	public void Signupaccount(View view) {
 		
 		
@@ -290,7 +266,8 @@ public class SignUpActivity extends Activity {
             	
            //--------------------------------------------------------------
             if(checkemail(fEmail)){
-            reply = new RequestTask().execute("http://www.naveenmn.com/Metster/accountprocess.php", appkey, firstname, lastname,femail,fpassword, image, gender).get();
+            reply = new RequestTask().execute("http://www.naveenmn.com/Metster/accountprocess.php", appkey, firstname, lastname,femail,fpassword, image, gender
+            		, firstname, firstname, firstname, firstname, firstname, firstname ).get();
             String response = reply.toString();
             Log.w("serversays",response);
             String accfail = "no";
@@ -370,99 +347,14 @@ public class SignUpActivity extends Activity {
             else{
             	Toast.makeText(getApplicationContext(), "This email seems to invalid!! Please try again.", Toast.LENGTH_SHORT).show();
             }
-            //---------------------------------------- To fire base
             
-         // Setup our Firebase ref
-            Firebase baseroot = new Firebase("https://metster.firebaseIO.com/");
-    	    // Do something in response to button
-            Firebase uroot = baseroot.child("totalusers");
-            Firebase count = uroot.child("count");
-            //-------------------------------------------
-            
-            Firebase dataRef = new Firebase("https://metster.firebaseIO.com/totalusers/count");
-            dataRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    val =  (String) snapshot.getValue();
-                    userid = Integer.parseInt(val);
-                    Log.w("count",val);
-                }
-
-                @Override
-    			public void onCancelled(FirebaseError arg0) {
-    				// TODO Auto-generated method stub
-    				
-    			}
-            });
-            //-------------------------------------------
-            
-            userid +=1;
-            reply = Integer.toString(userid);
-            count.setValue(Integer.toString(userid));
-            Firebase user = uroot.child("User"+Integer.toString(userid));
-            	Firebase fname = user.child("First Name");
-            	Firebase lname = user.child("Last Name");
-            	Firebase email = user.child("Email");
-            	Firebase password = user.child("Password");
-            	Firebase usrimage = user.child("Image");
-            	Firebase usrgender = user.child("Gender");
-            	fname.setValue(fFirstName);
-            	lname.setValue(fLastName);
-            	email.setValue(fEmail);
-            	password.setValue(fPassword);
-            	usrimage.setValue(image_str);
-            	usrgender.setValue(gender);
-            
-            //-------------------------------------- write result to file 
-            String filename = "myfile.txt";
-            String string = reply;
-            FileOutputStream outputStream;
-
-            try {
-              outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-              outputStream.write(string.getBytes());
-              outputStream.close();
-            } catch (Exception e) {
-              e.printStackTrace();
+           }
+            catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
+                
             }
-            }catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
-                if( t instanceof ExecutionException ) {
-                    t = t.getCause();
-                }
-            }
-            //------------------- read from file
-            String ret = "";
-            try {
-                InputStream inputStream = openFileInput("myfile.txt");
-
-                if ( inputStream != null ) {
-                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    String receiveString = "";
-                    StringBuilder stringBuilder = new StringBuilder();
-
-                    while ( (receiveString = bufferedReader.readLine()) != null ) {
-                        stringBuilder.append(receiveString);
-                    }
-
-                    inputStream.close();
-                    ret = stringBuilder.toString();
-                    Log.d("infile",ret);
-                }
-            }
-            catch (FileNotFoundException e) {
-                Log.e("login activity", "File not found: " + e.toString());
-            } catch (IOException e) {
-                Log.e("login activity", "Can not read file: " + e.toString());
-            }
-           
-           //--------------------------------------------------------------
- //------------------------------------------------------------------------ 
-            //------------------------------------------------------------------------         
-            // check box condition
             
-            //sendEmail(fEmail);
-    	}//Sign up account ends here
+           //sendEmail(fEmail);
+    	}//Update profile account ends here
     	
 
 	public boolean checkemail(String email)
@@ -474,7 +366,7 @@ public class SignUpActivity extends Activity {
 
 	}
 	
-	public void sendEmail(String fEmail){
+/*	public void sendEmail(String fEmail){
 		//SendGrid Integration
 		SendGrid sendgrid = new SendGrid("kaushalp88", "kaushal88");
 		sendgrid.addTo(fEmail);
@@ -483,5 +375,5 @@ public class SignUpActivity extends Activity {
 		sendgrid.setText("Welcome to Metser. Thank you for signing up with metster.");
 
 		sendgrid.send();
-	}
+	} */
     }

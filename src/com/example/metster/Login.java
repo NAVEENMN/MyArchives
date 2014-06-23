@@ -238,7 +238,8 @@ public class Login extends Activity {
 	            	//ProgressDialog dialog = new ProgressDialog(Login.this);
 	                //dialog.setMessage("Fetching Profile..");
 	                //dialog.show();
-					output = new RequestTask().execute("http://www.naveenmn.com/Metster/fetchprofile.php",accnumber,tokennumber,zip,Double.toString(latival),Double.toString(Longival),(String)country,accnumber).get();
+					output = new RequestTask().execute("http://www.naveenmn.com/Metster/fetchprofile.php",accnumber,tokennumber,zip,Double.toString(latival),Double.toString(Longival),(String)country,accnumber
+							, accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
 					//if (! output.isEmpty()){
 					//dialog.dismiss();
 					//}

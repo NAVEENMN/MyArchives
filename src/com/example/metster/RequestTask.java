@@ -35,14 +35,20 @@ public class RequestTask extends AsyncTask<String, String, String> {
         
         try {  	
         	List<NameValuePair> nameValuePairs;
-        	nameValuePairs = new ArrayList<NameValuePair>(6);
+        	nameValuePairs = new ArrayList<NameValuePair>(14);
             nameValuePairs.add(new BasicNameValuePair("appkey", uri[1]));
-            nameValuePairs.add(new BasicNameValuePair("firstname", uri[2]));
-            nameValuePairs.add(new BasicNameValuePair("lastname", uri[3]));
-            nameValuePairs.add(new BasicNameValuePair("email", uri[4]));
-            nameValuePairs.add(new BasicNameValuePair("password", uri[5]));
-            nameValuePairs.add(new BasicNameValuePair("image", uri[6]));
-            nameValuePairs.add(new BasicNameValuePair("gender", uri[7]));
+            nameValuePairs.add(new BasicNameValuePair("param2", uri[2]));
+            nameValuePairs.add(new BasicNameValuePair("param3", uri[3]));
+            nameValuePairs.add(new BasicNameValuePair("param4", uri[4]));
+            nameValuePairs.add(new BasicNameValuePair("param5", uri[5]));
+            nameValuePairs.add(new BasicNameValuePair("param6", uri[6]));
+            nameValuePairs.add(new BasicNameValuePair("param7", uri[7]));
+            nameValuePairs.add(new BasicNameValuePair("param8", uri[8]));
+            nameValuePairs.add(new BasicNameValuePair("param9", uri[9]));
+            nameValuePairs.add(new BasicNameValuePair("param10", uri[10]));
+            nameValuePairs.add(new BasicNameValuePair("param11", uri[11]));
+            nameValuePairs.add(new BasicNameValuePair("param12", uri[12]));
+            nameValuePairs.add(new BasicNameValuePair("param13", uri[13]));
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
             response = httpclient.execute(httppost);
             StatusLine statusLine = response.getStatusLine();

@@ -1,7 +1,188 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:id="@+id/container"
+    android:layout_height="match_parent"
+    android:background="#B3B0B0"
+    tools:context=".UpdateProfile" >
+
+     <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.metster.UpdateProfile"
-    tools:ignore="MergeRootFrame" />
+    android:gravity="center_horizontal|top"
+    android:background="@drawable/basebg" >
+    
+         
+   
+     <LinearLayout
+	        android:id="@+id/linearLayout2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@drawable/loginbg"
+	        android:layout_alignParentBottom="true"
+	    	android:gravity="bottom"
+	        android:orientation="vertical"
+	        android:paddingBottom="5dp"
+	        android:paddingTop="5dp"
+	        android:shadowColor="#333333"
+	        android:shadowDx="2.0"
+	        android:shadowDy="2.0"
+	        android:shadowRadius="3.0" 
+	        android:radius="10dip">
+	        
+         <!-- ******************************************************* -->
+             <LinearLayout
+		        android:id="@+id/linearLayout3"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:background="@drawable/imageborder"
+		        android:orientation="horizontal"
+		        android:paddingBottom="0dp"
+		        android:paddingTop="0dp"
+		        android:shadowColor="#333333"
+		        android:shadowDx="2.0"
+		        android:shadowDy="2.0"
+		        android:shadowRadius="3.0" 
+		        android:radius="10dip">
+	   			<ImageButton
+		            android:contentDescription="@string/desc"
+				    android:id="@+id/ImageButton01"
+				    android:layout_width="180dp"
+				    android:layout_height="170dp"
+				    android:src="@drawable/defaultprofile"
+				    android:background = "@drawable/loginbg"
+				    android:scaleType="centerCrop"
+				    android:onClick="pickimage" />
+	   			
+	   			<LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+			android:paddingTop="5dp"
+            android:orientation="vertical" >
+
+            <EditText
+                android:id="@+id/iamfrom"
+                android:textColor="#3A01DF"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/Tellusmore"
+		       android:inputType="text"/>
+
+            <EditText
+                android:id="@+id/iamlivingin"
+                android:textColor="#3A01DF"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/Tellusmore"
+		       android:inputType="text"/>
+            
+            <EditText
+		       android:id="@+id/myprofession"
+		       android:textColor="#3A01DF"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:hint="@string/Tellusmore"
+		       android:inputType="text" />
+            <EditText
+		       android:id="@+id/iworkat"
+		       android:textColor="#3A01DF"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:hint="@string/Tellusmore"
+		       android:inputType="text" />
+        </LinearLayout>
+	   			
+   </LinearLayout>
+   			<!-- ******************************************************* -->
+   			<EditText
+			       android:id="@+id/hobbies"
+			       android:layout_width="match_parent"
+			       android:layout_height="wrap_content"
+			       android:ems="10"
+			       android:hint="@string/FirstName"
+			       android:inputType="text" > 
+	   			</EditText>
+	   			<EditText
+			       android:id="@+id/music"
+			       android:layout_width="match_parent"
+			       android:layout_height="wrap_content"
+			       android:ems="10"
+			       android:hint="@string/LastName"
+			       android:inputType="text" > 
+	   			</EditText>
+
+		   <EditText
+		       android:id="@+id/movies"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:ems="10"
+		       android:hint="@string/Email"
+		       android:inputType="text" />
+
+		   <EditText
+		       android:id="@+id/books"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:ems="10"
+		       android:hint="@string/Password"
+		       android:inputType="text" />
+		   
+		   <EditText
+                android:id="@+id/age"
+                android:textColor="#3A01DF"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/Tellusmore"
+		       android:inputType="text"/>
+
+		   <EditText
+		       android:id="@+id/status"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:ems="10"
+		       android:hint="@string/RetypePassword"
+		       android:inputType="text" />
+		   <LinearLayout
+		        android:id="@+id/linearLayout4"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:background="@drawable/loginbg"
+		    	android:gravity="bottom"
+		        android:orientation="horizontal"
+		        android:paddingBottom="5dp"
+		        android:paddingTop="5dp"
+		        android:shadowColor="#333333"
+		        android:shadowDx="2.0"
+		        android:shadowDy="2.0"
+		        android:shadowRadius="3.0" 
+		        android:radius="10dip">
+   			</LinearLayout> 
+   			<CheckBox
+		       android:id="@+id/checkBox1"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:layout_marginTop="25dp"
+		       android:textColor="#848484"
+		       android:textSize="12sp"
+		       android:textStyle="bold"
+		       android:text="@string/terms" />
+    
+	        <Button
+		        android:id="@+id/button3"
+		        style="?android:attr/buttonStyleSmall"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background = "@drawable/buttonclicker"
+		        android:textColor="#4E4E4E"
+		        android:textSize="12sp"
+		        android:textStyle="bold"
+		        android:text="@string/SignUp" 
+		        android:onClick="UpdateUserProfile"/>
+              
+         </LinearLayout>   
+
+    </RelativeLayout>
+
+</FrameLayout>

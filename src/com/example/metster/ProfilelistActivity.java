@@ -151,7 +151,8 @@ public class ProfilelistActivity extends Activity {
 		//-----------------------------------
 				try {
 					
-					output = new RequestTask().execute("http://www.naveenmn.com/Metster/profilelist.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber).get();
+					output = new RequestTask().execute("http://www.naveenmn.com/Metster/profilelist.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
+							accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
 				   
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
