@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -227,7 +228,8 @@ public class ProfilelistActivity extends Activity {
 						
 						public void onClick(View v) { // yet to be implemented
 							
-							Toast.makeText(getApplicationContext(), "View profile - to be implemented.", Toast.LENGTH_SHORT).show();
+							Intent intent = new Intent(ProfilelistActivity.this, VisitorProfile.class);
+			        		startActivity(intent);
 							
 					       }//on click
 					

@@ -42,5 +42,6 @@
     <string name="Previous">Previous</string>
     <string name="title_activity_profilelist">ProfilelistActivity</string>
     <string name="title_activity_update_profile">UpdateProfile</string>
+    <string name="title_activity_visitor_profile">VisitorProfile</string>
 
 </resources>

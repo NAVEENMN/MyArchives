@@ -505,12 +505,15 @@ containing a value of this type.
         public static final int activity_profilelist=0x7f030002;
         public static final int activity_sign_up=0x7f030003;
         public static final int activity_update_profile=0x7f030004;
-        public static final int fragment_update_profile=0x7f030005;
+        public static final int activity_visitor_profile=0x7f030005;
+        public static final int fragment_update_profile=0x7f030006;
+        public static final int fragment_visitor_profile=0x7f030007;
     }
     public static final class menu {
         public static final int login=0x7f0a0000;
         public static final int profilelist=0x7f0a0001;
         public static final int update_profile=0x7f0a0002;
+        public static final int visitor_profile=0x7f0a0003;
     }
     public static final class string {
         public static final int Birthday=0x7f040037;
@@ -648,6 +651,7 @@ containing a value of this type.
         public static final int title_activity_sign_up=0x7f04002e;
         public static final int title_activity_update_profile=0x7f040048;
         public static final int title_activity_user_sign_up=0x7f04002f;
+        public static final int title_activity_visitor_profile=0x7f040049;
         public static final int updateprofile=0x7f040025;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 

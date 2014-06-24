@@ -84,6 +84,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.metster.Login" />
         </activity>
+        <activity
+            android:name="com.example.metster.VisitorProfile"
+            android:label="@string/title_activity_visitor_profile"
+            android:parentActivityName="com.example.metster.ProfilelistActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.metster.ProfilelistActivity" />
+        </activity>
     </application>
 
 </manifest>
