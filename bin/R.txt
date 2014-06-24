@@ -114,7 +114,8 @@ int id Location 0x7f06001b
 int id Password 0x7f06002d
 int id RetypePassword 0x7f06002e
 int id TellUsMore 0x7f06001e
-int id action_settings 0x7f060042
+int id VisitorImage 0x7f060040
+int id action_settings 0x7f060043
 int id age 0x7f06003e
 int id book_now 0x7f060010
 int id books 0x7f06003d
@@ -130,7 +131,7 @@ int id classic 0x7f060011
 int id container 0x7f060035
 int id email_login 0x7f060015
 int id findbestloc 0x7f060021
-int id firstname 0x7f060040
+int id firstname 0x7f060041
 int id footnote 0x7f060022
 int id grayscale 0x7f060012
 int id hobbies 0x7f06003a
@@ -140,7 +141,7 @@ int id hybrid 0x7f060004
 int id iamfrom 0x7f060036
 int id iamlivingin 0x7f060037
 int id iworkat 0x7f060039
-int id lastname 0x7f060041
+int id lastname 0x7f060042
 int id linearLayout2 0x7f060018
 int id linearLayout3 0x7f060014
 int id linearLayout4 0x7f06002f

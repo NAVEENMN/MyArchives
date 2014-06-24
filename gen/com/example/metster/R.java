@@ -441,7 +441,8 @@ containing a value of this type.
         public static final int Password=0x7f06002d;
         public static final int RetypePassword=0x7f06002e;
         public static final int TellUsMore=0x7f06001e;
-        public static final int action_settings=0x7f060042;
+        public static final int VisitorImage=0x7f060040;
+        public static final int action_settings=0x7f060043;
         public static final int age=0x7f06003e;
         public static final int book_now=0x7f060010;
         public static final int books=0x7f06003d;
@@ -457,7 +458,7 @@ containing a value of this type.
         public static final int container=0x7f060035;
         public static final int email_login=0x7f060015;
         public static final int findbestloc=0x7f060021;
-        public static final int firstname=0x7f060040;
+        public static final int firstname=0x7f060041;
         public static final int footnote=0x7f060022;
         public static final int grayscale=0x7f060012;
         public static final int hobbies=0x7f06003a;
@@ -467,7 +468,7 @@ containing a value of this type.
         public static final int iamfrom=0x7f060036;
         public static final int iamlivingin=0x7f060037;
         public static final int iworkat=0x7f060039;
-        public static final int lastname=0x7f060041;
+        public static final int lastname=0x7f060042;
         public static final int linearLayout2=0x7f060018;
         public static final int linearLayout3=0x7f060014;
         public static final int linearLayout4=0x7f06002f;

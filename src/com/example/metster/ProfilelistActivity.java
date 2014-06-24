@@ -47,7 +47,9 @@ public class ProfilelistActivity extends Activity {
 	Button b;
     ScrollView scrollview;
     String profileimage;
+    String visitorimage;
     Bitmap decodedByte ;
+    String visitorid = null;
     Drawable y[];
     int prfcounter =0 ;
     Double latival = 0.0;
@@ -178,6 +180,8 @@ public class ProfilelistActivity extends Activity {
 					
 					try {
 						displayprofile(separated[prfcounter],separated[prfcounter-1],  Double.parseDouble(separated[prfcounter+1]), Double.parseDouble(separated[prfcounter+2]) );
+						visitorid = separated[prfcounter-2];
+						visitorimage = separated[prfcounter];
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -205,9 +209,11 @@ public class ProfilelistActivity extends Activity {
 							System.out.println("prfid");
 							System.out.println(separated[prfcounter-1]);
 							try {
-								if(! (prfcounter == 12)){
+								
 								displayprofile(separated[prfcounter],separated[prfcounter-1], Double.parseDouble(separated[prfcounter+1]), Double.parseDouble(separated[prfcounter+2]) );
-								}
+								visitorid = separated[prfcounter-2];
+								visitorimage = separated[prfcounter];
+								
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -229,6 +235,8 @@ public class ProfilelistActivity extends Activity {
 						public void onClick(View v) { // yet to be implemented
 							
 							Intent intent = new Intent(ProfilelistActivity.this, VisitorProfile.class);
+							intent.putExtra("VisitorId",visitorid);
+							intent.putExtra("VisitorImage",visitorimage);
 			        		startActivity(intent);
 							
 					       }//on click
@@ -254,9 +262,10 @@ public class ProfilelistActivity extends Activity {
 							System.out.println("prfid");
 							System.out.println(separated[prfcounter-1]);
 							try {
-								if(! (prfcounter == 12)){
+								
 								displayprofile(separated[prfcounter],separated[prfcounter-1], latival, Longival );
-								}
+								visitorid = separated[prfcounter-2];
+								visitorimage = separated[prfcounter];
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
