@@ -441,7 +441,7 @@ containing a value of this type.
         public static final int Password=0x7f06002d;
         public static final int RetypePassword=0x7f06002e;
         public static final int TellUsMore=0x7f06001e;
-        public static final int action_settings=0x7f060040;
+        public static final int action_settings=0x7f060042;
         public static final int age=0x7f06003e;
         public static final int book_now=0x7f060010;
         public static final int books=0x7f06003d;
@@ -457,6 +457,7 @@ containing a value of this type.
         public static final int container=0x7f060035;
         public static final int email_login=0x7f060015;
         public static final int findbestloc=0x7f060021;
+        public static final int firstname=0x7f060040;
         public static final int footnote=0x7f060022;
         public static final int grayscale=0x7f060012;
         public static final int hobbies=0x7f06003a;
@@ -466,6 +467,7 @@ containing a value of this type.
         public static final int iamfrom=0x7f060036;
         public static final int iamlivingin=0x7f060037;
         public static final int iworkat=0x7f060039;
+        public static final int lastname=0x7f060041;
         public static final int linearLayout2=0x7f060018;
         public static final int linearLayout3=0x7f060014;
         public static final int linearLayout4=0x7f06002f;
@@ -516,27 +518,28 @@ containing a value of this type.
         public static final int visitor_profile=0x7f0a0003;
     }
     public static final class string {
-        public static final int Birthday=0x7f040037;
-        public static final int CurrentCountry=0x7f040036;
-        public static final int CurrentCounty=0x7f040035;
-        public static final int CurrentLocation=0x7f040034;
-        public static final int Email=0x7f040038;
-        public static final int FirstName=0x7f040032;
-        public static final int LastName=0x7f040033;
-        public static final int LogIn=0x7f04002d;
-        public static final int MeetSomeone=0x7f040042;
-        public static final int Next=0x7f040045;
-        public static final int Password=0x7f040039;
-        public static final int Password_hint=0x7f040028;
-        public static final int PinMe=0x7f040043;
-        public static final int Previous=0x7f040046;
-        public static final int RetypePassword=0x7f04003a;
-        public static final int SignUp=0x7f04002c;
+        public static final int Age=0x7f040025;
+        public static final int Birthday=0x7f040038;
+        public static final int CurrentCountry=0x7f040037;
+        public static final int CurrentCounty=0x7f040036;
+        public static final int CurrentLocation=0x7f040035;
+        public static final int Email=0x7f040039;
+        public static final int FirstName=0x7f040033;
+        public static final int LastName=0x7f040034;
+        public static final int LogIn=0x7f04002e;
+        public static final int MeetSomeone=0x7f040043;
+        public static final int Next=0x7f040046;
+        public static final int Password=0x7f04003a;
+        public static final int Password_hint=0x7f040029;
+        public static final int PinMe=0x7f040044;
+        public static final int Previous=0x7f040047;
+        public static final int RetypePassword=0x7f04003b;
+        public static final int SignUp=0x7f04002d;
         public static final int Tellus=0x7f040024;
         public static final int Tellusmore=0x7f040023;
         public static final int Thingsilike=0x7f040022;
-        public static final int ViewProfile=0x7f040044;
-        public static final int action_settings=0x7f040029;
+        public static final int ViewProfile=0x7f040045;
+        public static final int action_settings=0x7f04002a;
         public static final int app_name=0x7f040020;
         public static final int auth_client_needs_enabling_title=0x7f040001;
         public static final int auth_client_needs_installation_title=0x7f040002;
@@ -633,26 +636,26 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f04001e;
-        public static final int desc=0x7f04003f;
-        public static final int dontdisclose=0x7f04003e;
-        public static final int dummy_button=0x7f040030;
-        public static final int dummy_content=0x7f040031;
+        public static final int desc=0x7f040040;
+        public static final int dontdisclose=0x7f04003f;
+        public static final int dummy_button=0x7f040031;
+        public static final int dummy_content=0x7f040032;
         public static final int email_hint=0x7f040021;
-        public static final int female=0x7f04003d;
-        public static final int findbestloc=0x7f040026;
-        public static final int footer=0x7f040040;
-        public static final int footnote=0x7f040027;
-        public static final int hello=0x7f04002b;
-        public static final int hello_world=0x7f04002a;
-        public static final int male=0x7f04003c;
-        public static final int terms=0x7f04003b;
-        public static final int title_activity_login=0x7f040041;
-        public static final int title_activity_profilelist=0x7f040047;
-        public static final int title_activity_sign_up=0x7f04002e;
-        public static final int title_activity_update_profile=0x7f040048;
-        public static final int title_activity_user_sign_up=0x7f04002f;
-        public static final int title_activity_visitor_profile=0x7f040049;
-        public static final int updateprofile=0x7f040025;
+        public static final int female=0x7f04003e;
+        public static final int findbestloc=0x7f040027;
+        public static final int footer=0x7f040041;
+        public static final int footnote=0x7f040028;
+        public static final int hello=0x7f04002c;
+        public static final int hello_world=0x7f04002b;
+        public static final int male=0x7f04003d;
+        public static final int terms=0x7f04003c;
+        public static final int title_activity_login=0x7f040042;
+        public static final int title_activity_profilelist=0x7f040048;
+        public static final int title_activity_sign_up=0x7f04002f;
+        public static final int title_activity_update_profile=0x7f040049;
+        public static final int title_activity_user_sign_up=0x7f040030;
+        public static final int title_activity_visitor_profile=0x7f04004a;
+        public static final int updateprofile=0x7f040026;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
