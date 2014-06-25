@@ -1,19 +1,16 @@
 package com.example.metster;
 
+import java.util.concurrent.ExecutionException;
+
 import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 public class VisitorProfile extends Activity {
 	
@@ -24,16 +21,24 @@ public class VisitorProfile extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_visitor_profile);
 		
+		String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";
+    	String reply = null;
+    	String visitorid = getIntent().getStringExtra("VisitorId");
+    	Log.w("visitorid", visitorid);
+        try {
+			reply = new RequestTask().execute("http://www.naveenmn.com/Metster/visitorprofile.php", appkey, visitorid, visitorid,visitorid,visitorid, visitorid, visitorid
+					, visitorid, visitorid, visitorid, visitorid, visitorid, visitorid ).get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		new LongOperation().execute("");
+		 Log.w("profileresponse",reply);
+		
 		//-------------------------------------------
-				
-				
-				//--------- put image
-				
-				 
-				
-				//-------------------
 		
 
 		if (savedInstanceState == null) {
@@ -84,44 +89,19 @@ public class VisitorProfile extends Activity {
 		}
 	}
 	
+	//---------------------
+		@Override
+		public void onBackPressed() {
+		 
+			getIntent().removeExtra("VisitorImage");
+			getIntent().removeExtra("VisitorId");
+			VisitorProfile.this.finish();
+			
+		}
+		//---------------------
+	
 	
 	//--------------------------------
-	
-	
-	private class LongOperation extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            for(int i=0;i<5;i++) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            String visitorid = getIntent().getStringExtra("VisitorId");
-			String visitorimage = getIntent().getStringExtra("VisitorImage");
-			Log.w("visitorid", visitorid);
-			Log.w("visitorimage", visitorimage);
-            byte[] decodedString = Base64.decode(visitorimage, Base64.DEFAULT);
-		    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-		    ImageView imgg = (ImageView)findViewById(R.id.VisitorImage);
-		    imgg.setImageBitmap(decodedByte);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-        }
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
-	}
 	//--------------------------------
 	
 	

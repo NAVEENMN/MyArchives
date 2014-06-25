@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Base64;
@@ -55,8 +57,10 @@ public class ProfilelistActivity extends Activity {
     Double latival = 0.0;
     Double Longival = 0.0;
     Location pos = null ;
+    String zip = null;
     LocationListener locationListener;
     LocationManager locationManager;
+    String output = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -109,8 +113,8 @@ public class ProfilelistActivity extends Activity {
 		        	latival = pos.getLatitude();
 		        	Longival = pos.getLongitude();
 		        	}
-				String output = null;
-				String zip = null;
+				
+				
 				Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
 				List<Address> addresses;
 				try {
@@ -151,19 +155,19 @@ public class ProfilelistActivity extends Activity {
 				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
 				            .show();
 				        }	
-		//-----------------------------------
-				try {
-					
-					output = new RequestTask().execute("http://www.naveenmn.com/Metster/profilelist.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
-							accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
-				   
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		//-----------------------------------> post here
+				        new LongOperation().execute("");
+				        try {
+				        	output = new RequestTask().execute("http://www.naveenmn.com/Metster/profilelist.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
+									accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
+				            
+				        	} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 		//----------------------------------
 				if(output.isEmpty()) 
 				{
@@ -359,5 +363,32 @@ public class ProfilelistActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	//------------- async
+	private class LongOperation extends AsyncTask<String, Void, String> {
+		ProgressDialog dialog = new ProgressDialog(ProfilelistActivity.this);
+		@Override
+        protected String doInBackground(String... params) {
+        	//while( output.isEmpty());
+        	return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+        	dialog.dismiss();
+        }
+
+        @Override
+        protected void onPreExecute() {
+        	
+            dialog.setMessage("Fetching Profile..");
+            dialog.show();
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+	}
+	//--------------------
 
 }

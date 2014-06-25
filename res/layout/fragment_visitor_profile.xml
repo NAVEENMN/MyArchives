@@ -83,9 +83,29 @@
                 android:layout_height="match_parent"
                 android:text="@string/LastName"/>
         </LinearLayout>
+        
+	   			
+	  
+	  
 	   			
    </LinearLayout>
    			<!-- ******************************************************* -->
+   			
+   			<!--*************************************************************** divider-->  			
+	   <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+			android:paddingTop="15dp"
+			android:paddingBottom="20dp"
+            android:orientation="vertical" >
+        
+        <View
+		    android:layout_width="fill_parent"
+		    android:layout_height="2dp"
+		    android:paddingBottom="75dp"
+		    android:background="#585858"/>
+        
+    </LinearLayout>
    			<TextView
                 android:id="@+id/hobbies"
                 android:textColor="#3A01DF"
