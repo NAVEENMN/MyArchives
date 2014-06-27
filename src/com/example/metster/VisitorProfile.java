@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class VisitorProfile extends Activity {
 	
@@ -36,10 +37,33 @@ public class VisitorProfile extends Activity {
 			e.printStackTrace();
 		}
 		
-		 Log.w("profileresponse",reply);
+		 
 		
 		//-------------------------------------------
-		
+		 
+		 final String[] separated = reply.split("#%-->");
+		 String userprofession = separated[0];
+		 String userworksat = separated[1];
+		 Log.w("userprofession",userprofession);
+		 Log.w("userworksat",userworksat);
+		// String userhometown = separated[2];
+		 //String userhobbies = separated[3];
+		 //String usermusic = separated[4];
+		 //String usermovies = separated[5];
+		 //String userbooks = separated[6];
+		 //String userstatus = separated[7];
+		 //String age = separated[8];
+		 TextView uprofession = (TextView)findViewById(R.id.userprofession); 
+	        uprofession.setText((String)userprofession);
+		// TextView fname = (TextView)findViewById(R.id.userprofession); 
+         //fname.setText((String)userprofession);
+         //fname = (TextView)findViewById(R.id.userworksat); 
+         //fname.setText((String)userworksat);
+         //fname = (TextView)findViewById(R.id.userhometown); 
+         //fname.setText((String)userhometown);
+		 
+		 
+		//-------------------------------------------
 
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()

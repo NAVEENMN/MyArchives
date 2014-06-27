@@ -71,13 +71,13 @@
                 android:text="@string/LastName"/>
            
             <TextView
-                android:id="@+id/myprofession"
+                android:id="@+id/userprofession"
                 android:textColor="#3A01DF"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/LastName"/>
             <TextView
-                android:id="@+id/iworkat"
+                android:id="@+id/userworksat"
                 android:textColor="#3A01DF"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -106,28 +106,34 @@
 		    android:background="#585858"/>
         
     </LinearLayout>
+           <TextView
+                android:id="@+id/userhometown"
+                android:textColor="#3A01DF"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/LastName"/>
    			<TextView
-                android:id="@+id/hobbies"
+                android:id="@+id/userhobbies"
                 android:textColor="#3A01DF"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/LastName"/>
 	   			<TextView
-                android:id="@+id/music"
+                android:id="@+id/usermusic"
                 android:textColor="#3A01DF"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/LastName"/>
 
 		   <TextView
-                android:id="@+id/movies"
+                android:id="@+id/usermovies"
                 android:textColor="#3A01DF"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/LastName"/>
 
 		   <TextView
-                android:id="@+id/books"
+                android:id="@+id/userbooks"
                 android:textColor="#3A01DF"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
