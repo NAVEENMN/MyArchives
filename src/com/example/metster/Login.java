@@ -34,44 +34,42 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 public class Login extends Activity {
 	
 	//----------------------------------------->
-
-		
 		Geocoder gcd ;
+		GoogleMap mMap;
+		LocationManager locationManager;
+		LocationListener locationListener;
+		Location location;
+		Location pos = null ;
+		String provider;	
+		String usremail;
+		String usrfname;
 		List<Address> addresses;
 		String cityName = null;
 		String country = null;
 		String addressline = null;
 		String state = null;
 		String zip = null;
-		
-	
-	
 	//----------------------------------------->
-	GoogleMap mMap;
-	LocationManager locationManager;
-	LocationListener locationListener;
-	Location location;
-	String provider;	
-	String usremail;
-	String usrfname;
-	Location pos = null ;//
-	String usrlname;
-	String ret = "";
-	String accnumber = "";
-	String tokennumber = "";
-	String profileimage = "";
-	private Button find;
-	Double latival = 0.0 ;
-	Double Longival = 0.0 ;
-	Location lon2 = new Location("");
-	int flag = 0;
-	final ArrayList<String> USERNAME = new ArrayList<String>();	
-
+		String usrlname;
+		String ret = "";
+		String accnumber = "";
+		String tokennumber = "";
+		String profileimage = "";
+		private Button find;
+		Double latival = 0.0 ;
+		Double Longival = 0.0 ;
+		Location lon2 = new Location("");
+		int flag = 0;
+		final ArrayList<String> USERNAME = new ArrayList<String>();	
+    //---------------------------------------->
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,30 +77,22 @@ public class Login extends Activity {
 		setContentView(R.layout.activity_login);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
 		//--------------------------------> Setup location
-		//---------------------------------------
 // Acquire a reference to the system Location Manager
 	locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
 // Define a listener that responds to location updates
    locationListener = new LocationListener() {
-    public void onLocationChanged(Location location) {
-    	
+    public void onLocationChanged(Location location) {	
     	latival = location.getLatitude();
     	Longival = location.getLongitude();
     }
-
     public void onStatusChanged(String provider, int status, Bundle extras) {}
-
     public void onProviderEnabled(String provider) {}
-
     public void onProviderDisabled(String provider) {}
   };
-
+      //------------------------------------------------------------------------
 // Register the listener with the Location Manager to receive location updates
   		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-		//---------------------------------------
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         pos = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -119,7 +109,7 @@ public class Login extends Activity {
         	latival = pos.getLatitude();
         	Longival = pos.getLongitude();
         	}		
-		//--------------------------------------------------------------> Turn off location listener after 5 mins
+//--------------------------------------------------------------> Turn off location listener after 5 mins
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
           @Override
@@ -130,8 +120,9 @@ public class Login extends Activity {
         	  
           }
         }, 1000 * 60 * 5  );
-        //----------------------------------------------------------------
-        
+//--------------------------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------> Fetch the location details
 		gcd = new Geocoder(getBaseContext(), Locale.getDefault());
 		List<Address> addresses;
 		String cityName = null;
@@ -151,11 +142,9 @@ public class Login extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+//-------------------------------------------------------------------------------------------------------
 
-        Log.w("city",cityName);
-		//----------------------------------------------
-		//--------------------------------> Read user ID
-		//-------------------------------------
+//--------------------------------> Read user ID
 				
 		        try {
 		            FileInputStream inputStream = openFileInput("accounts.txt");
@@ -184,8 +173,7 @@ public class Login extends Activity {
 		            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
 		            .show();
 		        }	
-		      //--------------------------------> Read token
-				//-------------------------------------
+//--------------------------------> Read token
 						
 				        try {
 				            FileInputStream inputStream = openFileInput("token.txt");
@@ -215,9 +203,7 @@ public class Login extends Activity {
 				            .show();
 				        }	
 				        
-				      //--------------------------------> Read image from file
-						//-------------------------------------
-								
+//--------------------------------> Read image from file
 						        try {
 						            FileInputStream inputStream = openFileInput("image.txt");
 
@@ -245,7 +231,7 @@ public class Login extends Activity {
 						            .show();
 						        }
 		        
-				//-------------------------------------> Read data from server
+//-------------------------------------> Read data from server
 	            String output = null;
 	            System.out.print("fetching");
 	            try {
@@ -275,28 +261,36 @@ public class Login extends Activity {
 					Toast.makeText(getApplicationContext(), "Metster is unable to connect to server at this time.", Toast.LENGTH_SHORT).show();
 				}
 				else{
-		        //-----------------------------------------------------------
-					
-		        //---------------------------------------
+		        
+//-----------------------------------------------------------> Setup the GUI with data acquired
+				//----------- Section 1
 				TextView fname = (TextView)findViewById(R.id.FirstName); 
 		        fname.setText((String)usrfname);
 		        TextView lname = (TextView)findViewById(R.id.LastName); 
 		        lname.setText((String)usrlname);
+		        //----------- Section 2
 		        TextView loca = (TextView)findViewById(R.id.Location); 
 	            loca.setText((String)addressline);
                 TextView cit = (TextView)findViewById(R.id.City); 
 	            cit.setText((String)cityName);
-	            //------------------------------------------
+	            //----------- Section Profile Image
 	            if (profileimage!=null){
                     byte[] decodedString = Base64.decode(profileimage, Base64.DEFAULT);
    		             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                         ImageView imgg = (ImageView)findViewById(R.id.ProfileImage);
                         imgg.setImageBitmap(decodedByte);
                       }
-	            
-	            //-------------------------------------------
-	         // Define a listener that responds to location updates   
+	            //----------- Section Maps
+	            GoogleMap map = ((MapFragment) getFragmentManager()
+	                    .findFragmentById(R.id.visitormap)).getMap();
+
+	            LatLng currlocation = new LatLng(latival, Longival);// yours
+
+	            map.setMyLocationEnabled(true);
+	            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
+//--------------------------------------------------------------------------------------------  
 		        
+//-----------------------------------------------------------------------> Button Actions	            
 	            //------------------------------------- meet someone
 		        find = (Button) findViewById(R.id.buttonmeet);
 		        find.setOnClickListener(new View.OnClickListener() {	
@@ -321,8 +315,9 @@ public class Login extends Activity {
 					}//on click
 		        		}
 		        );
+//------------------------------------------------------------------------------------------------		        
 		        
-				} // else ends here
+} // else ends here
 				
 				
 	}

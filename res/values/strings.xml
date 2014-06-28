@@ -45,7 +45,7 @@
     <string name="CurrentCountry">Country</string>
     <string name="updateprofile">update profile</string> <!-- button update profile -->
     <string name="MeetSomeone">Meet Someone!</string> <!-- button meet someone -->
-    <string name="findbestloc">find location</string><!-- button find mean location -->
+    <string name="MyPins">My Pins</string><!-- button find mean location -->
     <!--********************************************************-->
     
     
@@ -56,6 +56,7 @@
     <string name="Tellusmore">Ex: Student lounge</string>
     <string name="Tellus">I am near :</string>
     <string name="Age">age</string>
+    <string name="Update">Update</string> <!-- Button Update -->
     <!--********************************************************-->
     
     
