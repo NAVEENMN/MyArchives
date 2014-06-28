@@ -27,7 +27,7 @@
             android:orientation="vertical" >
                
         <ImageView
-            android:id="@+id/ImageView01"
+            android:id="@+id/ProfileImage"
             android:layout_width="150dp"
 			android:layout_height="140dp"
 			android:src="@drawable/defaultprofile"
@@ -46,18 +46,46 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/Name"
+                android:id="@+id/FirstName"
                 android:textColor="#F2F2F2"
-                android:textSize="19sp"
-                android:text="@string/CurrentLocation"
+                android:textSize="20sp"
+                android:text="@string/Name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/LastName"
+                android:textColor="#F2F2F2"
+                android:textSize="20sp"
+                android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
             <TextView
-                android:id="@+id/Affil"
+                android:id="@+id/StudentType"
                 android:textColor="#F2F2F2"
-                android:textSize="13sp"
-                android:text="@string/CurrentCounty"
+                android:textSize="12sp"
+                android:text="@string/StudentType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/Major"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/Major"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/University"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/University"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/AgeAndGender"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/Gender"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             
@@ -66,10 +94,20 @@
     </LinearLayout>
     
     <!--  ******************************************************************  User Basic Profile data -->
-    <!-- 
-    <TextView
+    
+     <!--  ****************************************************************** Information area        -->
+    <LinearLayout
+        android:id="@+id/Information"
+        android:baselineAligned="false"
+        android:layout_below="@+id/Profiledata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E6E6E6"
+        android:gravity="top"
+        android:orientation="horizontal" >
+    		<TextView
                 android:id="@+id/Location"
-                android:textColor="#F2F2F2"
+                android:textColor="#5F04B4"
                 android:textSize="18sp"
                 android:text="@string/CurrentLocation"
                 android:layout_width="match_parent"
@@ -77,27 +115,28 @@
 
             <TextView
                 android:id="@+id/City"
-                android:textColor="#F2F2F2"
+                android:textColor="#5F04B4"
                 android:textSize="18sp"
                 android:text="@string/CurrentCounty"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/> -->
-
+                android:layout_height="match_parent"/> 
+      </LinearLayout>          
+    <!-- ******************************************************************** Action Buttons          -->
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/ActionButtons"
         style="?android:attr/buttonBarStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Profiledata"
+        android:layout_below="@+id/Information"
         android:background="@drawable/loginbg"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/updateprofile"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="108dp"
+            android:layout_width="0dip"
+			android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:background="@drawable/buttonclicker"
             android:text="@string/updateprofile"
             android:textColor="#3A01DF"
@@ -107,9 +146,9 @@
         <Button
             android:id="@+id/buttonmeet"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="108dp"
+            android:layout_width="0dip"
+			android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:background="@drawable/buttonclicker"
             android:text="@string/MeetSomeone"
             android:textColor="#3A01DF"
@@ -119,9 +158,9 @@
         <Button
             android:id="@+id/findbestloc"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="108dp"
+            android:layout_width="0dip"
+			android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:background="@drawable/buttonclicker"
             android:text="@string/findbestloc"
             android:textColor="#3A01DF"

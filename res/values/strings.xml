@@ -35,6 +35,11 @@
     
     <!--                  My Profile Home                       -->
     
+    <string name="Name">Name</string>
+    <string name="StudentType">Graduate</string>
+    <string name="Major">Major</string>
+    <string name="Gender">M</string>
+    <string name="University">University</string>
     <string name="CurrentLocation">Location</string>
     <string name="CurrentCounty">County</string>
     <string name="CurrentCountry">Country</string>
@@ -62,15 +67,11 @@
     
     <!--********************************************************-->
     
+    <!--                  Others                                -->
     <string name="footnote">Metster alpha ver 1.0</string>
-    
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Metster</string>
-    
+    <string name="hello_world">Metster</string> 
     <string name="desc">User Image</string>
-    
-    
-    
-    
+    <!--********************************************************-->
 
 </resources>

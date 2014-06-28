@@ -276,21 +276,21 @@ public class Login extends Activity {
 				}
 				else{
 		        //-----------------------------------------------------------
-					String v = "Naveen Mysore";
-					String affiliation = "Graduate Student | Computer Science";
-					TextView name = (TextView)findViewById(R.id.Name); 
-		            name.setText((String)v);
-	                TextView affil = (TextView)findViewById(R.id.Affil); 
-		            affil.setText((String)affiliation);
+					
 		        //---------------------------------------
-		       // TextView fname = (TextView)findViewById(R.id.Location); 
-	           // fname.setText((String)addressline);
-               // TextView lname = (TextView)findViewById(R.id.City); 
-	           // lname.setText((String)cityName);
+				TextView fname = (TextView)findViewById(R.id.FirstName); 
+		        fname.setText((String)usrfname);
+		        TextView lname = (TextView)findViewById(R.id.LastName); 
+		        lname.setText((String)usrlname);
+		        TextView loca = (TextView)findViewById(R.id.Location); 
+	            loca.setText((String)addressline);
+                TextView cit = (TextView)findViewById(R.id.City); 
+	            cit.setText((String)cityName);
+	            //------------------------------------------
 	            if (profileimage!=null){
                     byte[] decodedString = Base64.decode(profileimage, Base64.DEFAULT);
    		             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                        ImageView imgg = (ImageView)findViewById(R.id.ImageView01);
+                        ImageView imgg = (ImageView)findViewById(R.id.ProfileImage);
                         imgg.setImageBitmap(decodedByte);
                       }
 	            
@@ -299,9 +299,7 @@ public class Login extends Activity {
 		        
 	            //------------------------------------- meet someone
 		        find = (Button) findViewById(R.id.buttonmeet);
-		        find.setOnClickListener(new View.OnClickListener() {
-					
-						
+		        find.setOnClickListener(new View.OnClickListener() {	
 						public void onClick(View v) {
 							
 							Intent intent1 = new Intent( Login.this, ProfilelistActivity.class);
@@ -309,32 +307,20 @@ public class Login extends Activity {
 							       
 					}//on click
 					
-					
 		        		}
-		        
-		        
 		        );
 		        
 		      //------------------------------------- update profile
 		        find = (Button) findViewById(R.id.updateprofile);
-		        find.setOnClickListener(new View.OnClickListener() {
-					
-						
+		        find.setOnClickListener(new View.OnClickListener() {	
 						public void onClick(View v) {
 							
 							Intent intent2 = new Intent( Login.this, UpdateProfile.class);
 			        		startActivity(intent2);
 							       
 					}//on click
-					
-					
 		        		}
-		        
-		        
 		        );
-		        
-		        
-		        
 		        
 				} // else ends here
 				

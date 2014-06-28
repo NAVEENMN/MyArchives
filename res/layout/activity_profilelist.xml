@@ -2,129 +2,162 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B3B0B0"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#F2F2F2"
     tools:context=".ProfilelistActivity" >
+    
+    
+    <!--  ******************************************************************  User Basic Profile data -->
 
-   <LinearLayout
+    <LinearLayout
+        android:id="@+id/Profiledata"
+        android:baselineAligned="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#5F04B4"
+        android:gravity="top"
         android:orientation="horizontal" >
-
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#424242"
+            android:paddingLeft="5dp"
+            android:layout_weight="0.08"
+            android:orientation="vertical" >
+               
         <ImageView
             android:id="@+id/ImagevisitorView01"
-            android:layout_width="180dp"
-			android:layout_height="170dp"
+            android:layout_width="150dp"
+			android:layout_height="140dp"
 			android:src="@drawable/defaultprofile"
 			android:background = "@drawable/loginbg"
 			android:scaleType="centerCrop"
             android:contentDescription="@string/desc" />
-        
+        </LinearLayout>
+                
 
         <LinearLayout
             android:layout_weight="1"
-            android:layout_width="0px"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-			android:paddingTop="40dp"
+			android:paddingTop="10dp"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/txtvisitorFirstName"
-                android:textColor="#3A01DF" 
-                android:textSize="25sp"
-                android:text="@string/FirstName"
+                android:textColor="#F2F2F2"
+                android:textSize="20sp"
+                android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-        </LinearLayout>
-    </LinearLayout>
-   
-   <LinearLayout
+            <TextView
+                android:id="@+id/LastName"
+                android:textColor="#F2F2F2"
+                android:textSize="20sp"
+                android:text="@string/Name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:id="@+id/StudentType"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/StudentType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/Major"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/Major"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/University"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/University"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/AgeAndGender"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/Gender"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
             
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-			android:paddingTop="175dp"
-			android:paddingBottom="45dp"
-            android:orientation="vertical" >
-        
-        <View
-		    android:layout_width="fill_parent"
-		    android:layout_height="2dp"
-		    android:paddingBottom="75dp"
-		    android:background="#585858"/>
-        
+        </LinearLayout>
+         
     </LinearLayout>
-   
+    
+    <!--  ******************************************************************  User Basic Profile data -->
+    <!-- ******************************************************************* Options region           -->
+
     <LinearLayout
+        android:id="@+id/Options"
+        style="?android:attr/buttonBarStyle"
+        android:layout_below="@+id/Profiledata"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingBottom="65dp"
-        android:paddingTop="185dp" >
-    <fragment 
-          android:id="@+id/visitormap"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:name="com.google.android.gms.maps.MapFragment"/>
-	</LinearLayout>
-	   
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:background="@drawable/loginbg"
-        android:layout_alignParentBottom="true"
-    	android:gravity="bottom"
-        android:orientation="horizontal"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:shadowColor="#333333"
-        android:shadowDx="2.0"
-        android:shadowDy="2.0"
-        android:shadowRadius="3.0" 
-        android:radius="10dip">
+        android:gravity="bottom"
+        android:orientation="horizontal" >
   
     <Button
 	        android:id="@+id/visitorbuttonprev"
 	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_marginTop="10dp"
-	        android:layout_width="wrap_content"
+	        android:layout_width="0dip"
+			android:layout_weight="1"
 	        android:layout_height="wrap_content"
-	        android:background = "@drawable/buttonclicker"
-	        android:textColor="#3A01DF"
+	        android:background = "@drawable/buttonhandler"
+	        android:textColor="#F2F2F2"
 	        android:textSize="12sp"
 	        android:textStyle="bold"
 	        android:text="@string/Previous" />
     <Button
 	        android:id="@+id/visitorbuttonviewprofile"
 	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_marginTop="10dp"
-	        android:layout_width="200dp"
+	        android:layout_width="0dip"
+			android:layout_weight="1"
 	        android:layout_height="wrap_content"
-	        android:background = "@drawable/buttonclicker"
-	        android:textColor="#3A01DF"
+	        android:background = "@drawable/buttonhandler"
+	        android:textColor="#F2F2F2"
 	        android:textSize="12sp"
 	        android:textStyle="bold"
 	        android:text="@string/ViewProfile" />
     <Button
 	        android:id="@+id/visitorbuttonnext"
 	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_marginTop="10dp"
-	        android:layout_width="wrap_content"
+	        android:layout_width="0dip"
+			android:layout_weight="1"
 	        android:layout_height="wrap_content"
-	        android:background = "@drawable/buttonclicker"
-	        android:textColor="#3A01DF"
+	        android:background = "@drawable/buttonhandler"
+	        android:textColor="#F2F2F2"
 	        android:textSize="12sp"
 	        android:textStyle="bold"
 	        android:text="@string/Next" />
-    
-    
     </LinearLayout>
+<!-- ******************************************************************* Options region           -->
+
+    <!-- ******************************************************************* Map region               -->
+    <LinearLayout
+        android:id="@+id/MapsRegion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Options"
+        android:gravity="center"
+        android:orientation="vertical" >
+    <fragment 
+          android:id="@+id/visitormap"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:name="com.google.android.gms.maps.MapFragment"/>
+	</LinearLayout>
+	<!-- ******************************************************************* Map region               --> 
+	
+	    
 
 </RelativeLayout>
 
