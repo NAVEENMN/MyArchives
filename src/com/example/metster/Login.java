@@ -37,14 +37,29 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 
 public class Login extends Activity {
+	
+	//----------------------------------------->
+
+		
+		Geocoder gcd ;
+		List<Address> addresses;
+		String cityName = null;
+		String country = null;
+		String addressline = null;
+		String state = null;
+		String zip = null;
+		
+	
+	
 	//----------------------------------------->
 	GoogleMap mMap;
-	String usremail;
-	String usrfname;
-	String provider;
 	LocationManager locationManager;
 	LocationListener locationListener;
-	Location pos = null ;
+	Location location;
+	String provider;	
+	String usremail;
+	String usrfname;
+	Location pos = null ;//
 	String usrlname;
 	String ret = "";
 	String accnumber = "";
@@ -96,7 +111,7 @@ public class Login extends Activity {
         	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         	pos = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         	provider = locationManager.getBestProvider(criteria, false);
-        	Location location = locationManager.getLastKnownLocation(provider);
+        	location = locationManager.getLastKnownLocation(provider);
         	latival = location.getLatitude();
         	Longival = location.getLongitude();
         	}
@@ -104,8 +119,7 @@ public class Login extends Activity {
         	latival = pos.getLatitude();
         	Longival = pos.getLongitude();
         	}		
-		//------------------------------
-        
+		//--------------------------------------------------------------> Turn off location listener after 5 mins
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
           @Override
@@ -116,8 +130,9 @@ public class Login extends Activity {
         	  
           }
         }, 1000 * 60 * 5  );
+        //----------------------------------------------------------------
         
-		Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+		gcd = new Geocoder(getBaseContext(), Locale.getDefault());
 		List<Address> addresses;
 		String cityName = null;
 		String country = null;
@@ -127,7 +142,6 @@ public class Login extends Activity {
 		try {
             addresses = gcd.getFromLocation(latival, Longival, 1);
             if (addresses.size() > 0)
-            	System.out.println(addresses.get(0).getPostalCode());
             cityName = addresses.get(0).getLocality();
             country = addresses.get(0).getCountryCode();
             state = addresses.get(0).getAdminArea();
@@ -262,11 +276,17 @@ public class Login extends Activity {
 				}
 				else{
 		        //-----------------------------------------------------------
+					String v = "Naveen Mysore";
+					String affiliation = "Graduate Student | Computer Science";
+					TextView name = (TextView)findViewById(R.id.Name); 
+		            name.setText((String)v);
+	                TextView affil = (TextView)findViewById(R.id.Affil); 
+		            affil.setText((String)affiliation);
 		        //---------------------------------------
-		        TextView fname = (TextView)findViewById(R.id.Location); 
-	            fname.setText((String)addressline);
-                TextView lname = (TextView)findViewById(R.id.City); 
-	            lname.setText((String)cityName);
+		       // TextView fname = (TextView)findViewById(R.id.Location); 
+	           // fname.setText((String)addressline);
+               // TextView lname = (TextView)findViewById(R.id.City); 
+	           // lname.setText((String)cityName);
 	            if (profileimage!=null){
                     byte[] decodedString = Base64.decode(profileimage, Base64.DEFAULT);
    		             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);

@@ -12,20 +12,23 @@
     android:gravity="bottom"
     android:background="@drawable/basebg">
     
+    
         <LinearLayout
                 tools:context=".MainActivity"
 		        android:id="@+id/linearLayout2"
+		        android:gravity="bottom"
 		        android:layout_width="fill_parent"
-		        android:background="#5882FA"
-		        android:layout_height="180dp"
+		        android:background="#5F04B4"
+		        android:layout_height="140dp"
 		        android:orientation="vertical">
+		
 		<TextView
-			    android:id="@+id/line"
+			    android:id="@+id/line1"
 			    style="?android:attr/listSeparatorTextViewStyle"
-			    android:background="#FF0000"
-			    android:gravity="bottom"
+			    android:background="#08088A"
 			    android:layout_width="match_parent"
 			    android:layout_height="2dp" />
+		
         
        <LinearLayout
 		        android:id="@+id/linearLayout3"
@@ -40,7 +43,7 @@
 			        android:layout_weight="1"
 			        android:layout_height="60dp"
 			        android:background = "@drawable/buttonclicker"
-			        android:textColor="#F5D0A9"
+			        android:textColor="#5F04B4"
 			        android:textSize="15sp"
 			        android:textStyle="bold"
 			        android:text="@string/LogIn" 
@@ -53,14 +56,16 @@
 			        android:layout_weight="1"
 			        android:layout_height="60dp"
 			        android:background = "@drawable/buttonclicker"
-			        android:textColor="#F5D0A9"
+			        android:textColor="#5F04B4"
 			        android:textSize="15sp"
 			        android:textStyle="bold"
 			        android:text="@string/SignUp" 
 			        android:onClick="Signupaccount"/>
 			        
         </LinearLayout>
-        </LinearLayout>
+        
+        </LinearLayout> 
+        
         
 
 </RelativeLayout>
