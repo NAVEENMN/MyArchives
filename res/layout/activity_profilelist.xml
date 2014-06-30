@@ -45,7 +45,7 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/txtvisitorFirstName"
+                android:id="@+id/FirstName"
                 android:textColor="#F2F2F2"
                 android:textSize="20sp"
                 android:text="@string/Name"

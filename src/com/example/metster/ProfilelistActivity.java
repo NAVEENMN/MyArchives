@@ -61,6 +61,7 @@ public class ProfilelistActivity extends Activity {
     LocationListener locationListener;
     LocationManager locationManager;
     String output = null;
+    String[] vsname = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -293,10 +294,11 @@ public class ProfilelistActivity extends Activity {
 		Log.w("Latt", Double.toString(lativale));
 		Log.w("Latt", Double.toString(Longivale));
 		//-----------------------> display name
-		TextView fname = (TextView)findViewById(R.id.txtvisitorFirstName); 
-        fname.setText((String)visfname);
-        //TextView lname = (TextView)findViewById(R.id.txtLastName); 
-        //lname.setText((String)usrlname);
+		vsname = visfname.split(" ");
+		TextView fname = (TextView)findViewById(R.id.FirstName); 
+        fname.setText(vsname[0]);
+        TextView lname = (TextView)findViewById(R.id.LastName); 
+        lname.setText(vsname[1]);
 		//-----------------------> put vis on map
         GoogleMap map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.visitormap)).getMap();
