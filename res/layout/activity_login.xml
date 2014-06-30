@@ -131,7 +131,7 @@
     		<TextView
                 android:id="@+id/YourLocationLable"
                 android:paddingTop="10dp"
-                android:textColor="#5F04B4"
+                android:textColor="#424242"
                 android:textSize="12sp"
                 android:text="@string/YourLocation"
                 android:layout_width="match_parent"
@@ -148,7 +148,7 @@
             <TextView
                 android:id="@+id/NumberofUsersLable"
                 android:paddingTop="10dp"
-                android:textColor="#5F04B4"
+                android:textColor="#424242"
                 android:textSize="12sp"
                 android:text="@string/MetsterUsers"
                 android:layout_width="match_parent"
@@ -163,7 +163,7 @@
             <TextView
                 android:id="@+id/InvisibleinLable"
                 android:paddingTop="10dp"
-                android:textColor="#5F04B4"
+                android:textColor="#424242"
                 android:textSize="12sp"
                 android:text="@string/InvisibleIn"
                 android:layout_width="match_parent"
@@ -175,6 +175,25 @@
                 android:text="@string/InvisibleIn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+            <EditText
+                android:id="@+id/MyStatus"
+                android:paddingTop="10dp"
+                android:textSize="12sp"
+                android:textColor="#3A01DF"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/MyStatus"
+		        android:inputType="text"/>
+            <Button
+	            android:id="@+id/SetStatus"
+	            style="?android:attr/buttonBarButtonStyle"
+	            android:layout_width="168dip"
+	            android:layout_height="38dip"
+	            android:background="@drawable/buttonhandler"
+	            android:text="@string/SetYourStatus"
+	            android:textColor="#F2F2F2"
+	            android:textSize="12sp"
+	            android:textStyle="bold" />
             
        </LinearLayout>
       </LinearLayout>          

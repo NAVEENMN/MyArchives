@@ -80,6 +80,7 @@ public class Login extends Activity {
 		setContentView(R.layout.activity_login);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		setTitle("Metster");
 		//--------------------------------> Setup location
 // Acquire a reference to the system Location Manager
 	locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -260,7 +261,7 @@ public class Login extends Activity {
 	            usrfname = separated[0];
 	            usrlname = separated[1];
 	            
-	            setTitle(usrfname + " " + usrlname);
+	            
 	            
 				if(output.contains("null")){
 					Toast.makeText(getApplicationContext(), "Metster is unable to connect to server at this time.", Toast.LENGTH_SHORT).show();
