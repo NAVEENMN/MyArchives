@@ -3,8 +3,13 @@ package com.example.metster;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Profiles extends Activity {
@@ -33,24 +38,44 @@ public class Profiles extends Activity {
 		 final String[] separated = reply.split("#%-->");
 		 String FirstName = separated[0];
 		 String LastName = separated[1];
-		 String Image = separated[3];
-		 String Gender = separated[4];
-		 String Age = separated[5];
-		 String Status = separated[6];
-		 String Profession = separated[7];
-		 String worksat = separated[8];
-		 String CurrentCity = separated[9];
-		 String hometown = separated[10];
-		 String hobbies = separated[11];
-		 String music = separated[12];
-		 String movies = separated[13];
-		 String books = separated[14];
-		 String aboutstatus = separated[15];
+		 String Image = separated[2];
+		 String Gender = separated[3];
+		 String Age = separated[4];
+		 String Status = separated[5];
+		 String Profession = separated[6];
+		 String worksat = separated[7];
+		 String CurrentCity = separated[8];
+		 String hometown = separated[9];
+		 String hobbies = separated[10];
+		 String music = separated[11];
+		 String movies = separated[12];
+		 String books = separated[13];
+		 String aboutstatus = separated[14];
+		 String usrageandgender = Gender + " | " + Age ;
 		
+		 setTitle(Status);
+		 //------------------------------------------------------
 		 TextView fname = (TextView)findViewById(R.id.FirstName); 
 	     fname.setText((String)FirstName);
 	     TextView lname = (TextView)findViewById(R.id.LastName); 
 	     lname.setText((String)LastName);
+	     TextView prof = (TextView)findViewById(R.id.Profession); 
+	     prof.setText((String)Profession);
+	     TextView wat = (TextView)findViewById(R.id.Worksat); 
+	     wat.setText((String)worksat);
+	     TextView ag = (TextView)findViewById(R.id.AgeandGender); 
+	     ag.setText((String)usrageandgender);
+	     TextView cc = (TextView)findViewById(R.id.CurrentCity); 
+	     cc.setText((String)CurrentCity);
+	     
+	     if (Image!=null){
+             byte[] decodedString = Base64.decode(Image, Base64.DEFAULT);
+	             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+	             	ImageView image =(ImageView)findViewById(R.id.ProfileImage);
+	                image.setImageBitmap(decodedByte);
+               }
+	     
+	     //-------------------------------------------------------
 		
 	}
 }

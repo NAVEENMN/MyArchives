@@ -303,6 +303,7 @@ public class Login extends Activity {
 			else {
 			final String[] accountnumbers = numb.split("#%-->");
 		     len = accountnumbers.length;
+		     len --;
 			}
 			//------
             Time now = new Time();
@@ -372,8 +373,14 @@ public class Login extends Activity {
 		        find.setOnClickListener(new View.OnClickListener() {	
 						public void onClick(View v) {
 							
+							if(len > 0){
+							
 							Intent intent1 = new Intent( Login.this, ProfilelistActivity.class);
 			        		startActivity(intent1);
+							}
+							else{
+								//Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT).show();
+							}
 							       
 					}//on click
 					
