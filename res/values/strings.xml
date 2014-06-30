@@ -46,9 +46,9 @@
     <string name="CurrentLocation">Location</string>
     <string name="CurrentCounty">County</string>
     <string name="CurrentCountry">Country</string>
-    <string name="updateprofile">update profile</string> <!-- button update profile -->
+    <string name="updateprofile">update profile</string> 
     <string name="MeetSomeone">Meet Someone!</string> <!-- button meet someone -->
-    <string name="MyPins">My Pins</string><!-- button find mean location -->
+    <string name="footer">Metster</string>
     <!--********************************************************-->
     
     

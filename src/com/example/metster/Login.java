@@ -339,6 +339,10 @@ public class Login extends Activity {
 
 	            map.setMyLocationEnabled(true);
 	            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
+	            //-------------- Section Footer
+	            String footertext = "Metster \u00a9 2014, Apha Ver1.1";
+	            TextView foot = (TextView)findViewById(R.id.footer);
+	            foot.setText(footertext);
 //--------------------------------------------------------------------------------------------  
 		        
 //-----------------------------------------------------------------------> Button Actions	            
@@ -355,29 +359,13 @@ public class Login extends Activity {
 		        		}
 		        );
 		        
-		      //------------------------------------- update profile
-		        
-		        
-		      /*  find = (Button) findViewById(R.id.ProfileImage);
-		        find.setOnClickListener(new View.OnClickListener() {	
-						public void onClick(View v) {
-							
-							Intent intent2 = new Intent( Login.this, UpdateProfile.class);
-			        		startActivity(intent2);
-							       
-					}//on click
-					
-		        		}
-		        );
-		                
-		       */
 //------------------------------------------------------------------------------------------------		        
 		        
 } // else ends here
 				
 				
 	}
-	
+	//------------------------------------- update profile
 	public void updateprofile(View view){
     	Intent intent2 = new Intent( Login.this, UpdateProfile.class);
 		startActivity(intent2);

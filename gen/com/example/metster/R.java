@@ -466,15 +466,16 @@ containing a value of this type.
         public static final int button1=0x7f060018;
         public static final int button2=0x7f060017;
         public static final int button3=0x7f06003e;
-        public static final int buttonmeet=0x7f06002d;
+        public static final int buttonmeet=0x7f06002c;
         public static final int buyButton=0x7f06000a;
         public static final int buy_now=0x7f06000f;
         public static final int buy_with_google=0x7f06000e;
         public static final int checkBox1=0x7f06003d;
         public static final int classic=0x7f060011;
         public static final int container=0x7f06003f;
-        public static final int findbestloc=0x7f06002e;
         public static final int firstname=0x7f06004b;
+        public static final int footer=0x7f06002e;
+        public static final int footersection=0x7f06002d;
         public static final int grayscale=0x7f060012;
         public static final int hobbies=0x7f060044;
         public static final int holo_dark=0x7f060005;
@@ -506,7 +507,6 @@ containing a value of this type.
         public static final int strict_sandbox=0x7f060009;
         public static final int terrain=0x7f060003;
         public static final int txtvisitorFirstName=0x7f060030;
-        public static final int updateprofile=0x7f06002c;
         public static final int userbooks=0x7f060053;
         public static final int userhobbies=0x7f060050;
         public static final int userhometown=0x7f06004f;
@@ -557,13 +557,8 @@ containing a value of this type.
          */
         public static final int LogIn=0x7f040028;
         public static final int Major=0x7f040036;
-        /**  button update profile 
-         */
         public static final int MeetSomeone=0x7f040040;
         public static final int MetsterUsers=0x7f040039;
-        /**  button meet someone 
-         */
-        public static final int MyPins=0x7f040041;
         /** ********************************************************
                   My Profile Home                       
          */
@@ -577,8 +572,7 @@ containing a value of this type.
         public static final int StudentType=0x7f040035;
         public static final int Tellus=0x7f040044;
         public static final int Tellusmore=0x7f040043;
-        /**  button find mean location 
-********************************************************
+        /** ********************************************************
                   Update Profile                        
          */
         public static final int Thingsilike=0x7f040042;
@@ -694,6 +688,9 @@ containing a value of this type.
         public static final int dontdisclose=0x7f040032;
         public static final int email_hint=0x7f04002c;
         public static final int female=0x7f040031;
+        /**  button meet someone 
+         */
+        public static final int footer=0x7f040041;
         /** ********************************************************
                   Others                                
          */
