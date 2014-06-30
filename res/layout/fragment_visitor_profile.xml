@@ -8,156 +8,137 @@
     android:gravity="center_horizontal|top"
     android:background="@drawable/basebg" >
     
-         
-   
-  <LinearLayout
-	        android:id="@+id/linearLayout2"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:background="@drawable/loginbg"
-	    	android:gravity="bottom"
-	        android:orientation="vertical"
-	        android:paddingBottom="5dp"
-	        android:paddingTop="5dp"
-	        android:shadowColor="#333333"
-	        android:shadowDx="2.0"
-	        android:shadowDy="2.0"
-	        android:shadowRadius="3.0" 
-	        android:radius="10dip">
-	        
-         <!-- ******************************************************* -->
-             <LinearLayout
-		        android:id="@+id/linearLayout3"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:background="@drawable/imageborder"
-		        android:orientation="horizontal"
-		        android:paddingBottom="0dp"
-		        android:paddingTop="0dp"
-		        android:shadowColor="#333333"
-		        android:shadowDx="2.0"
-		        android:shadowDy="2.0"
-		        android:shadowRadius="3.0" 
-		        android:radius="10dip">
-	   			<ImageView
-		            android:contentDescription="@string/desc"
-				    android:id="@+id/VisitorImage"
-				    android:layout_width="180dp"
-				    android:layout_height="170dp"
-				    android:src="@drawable/defaultprofile"
-				    android:background = "@drawable/loginbg"
-				    android:scaleType="centerCrop" />
-	   			
-	   			<LinearLayout
-            android:layout_weight="1"
-            android:layout_width="0px"
+ <!--  ******************************************************************  User Basic Profile data -->
+
+    <LinearLayout
+        android:id="@+id/Profiledata"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#5F04B4"
+        android:gravity="top"
+        android:orientation="horizontal" >
+        
+        <LinearLayout
+            android:layout_width="0dip"
+			android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="#424242"
+            android:paddingLeft="5dp"
+            android:orientation="vertical" >
+               
+        <ImageView
+            android:id="@+id/ProfileImage"
+            android:layout_width="150dp"
+			android:layout_height="140dp"
+			android:gravity="center"
+			android:src="@drawable/defaultprofile"
+			android:background = "@drawable/loginbg"
+			android:scaleType="centerCrop"
+            android:contentDescription="@string/desc" />
+        </LinearLayout>
+                
+
+        <LinearLayout
+            android:layout_width="0dip"
+			android:layout_weight="1"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-			android:paddingTop="5dp"
+			android:paddingTop="10dp"
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/firstname"
-                android:textColor="#3A01DF"
+                android:id="@+id/FirstName"
+                android:textColor="#F2F2F2"
+                android:textSize="20sp"
+                android:text="@string/Name"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/FirstName"/>
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/LastName"
+                android:textColor="#F2F2F2"
+                android:textSize="20sp"
+                android:text="@string/Name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
             <TextView
-                android:id="@+id/lastname"
-                android:textColor="#3A01DF"
+                android:id="@+id/Profession"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/StudentType"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/LastName"/>
-           
+                android:layout_height="match_parent"/>
             <TextView
-                android:id="@+id/userprofession"
-                android:textColor="#3A01DF"
+                android:id="@+id/Worksat"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/Major"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/LastName"/>
+                android:layout_height="match_parent"/>
             <TextView
-                android:id="@+id/userworksat"
-                android:textColor="#3A01DF"
+                android:id="@+id/AgeandGender"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/Gender"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/LastName"/>
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/CurrentCity"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/Gender"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            
         </LinearLayout>
-        
-	   			
-	  
-	  
-	   			
-   </LinearLayout>
-   			<!-- ******************************************************* -->
-   			
-   			<!--*************************************************************** divider-->  			
-	   <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-			android:paddingTop="15dp"
-			android:paddingBottom="20dp"
-            android:orientation="vertical" >
-        
-        <View
-		    android:layout_width="fill_parent"
-		    android:layout_height="2dp"
-		    android:paddingBottom="75dp"
-		    android:background="#585858"/>
-        
+         
     </LinearLayout>
-           <TextView
-                android:id="@+id/userhometown"
-                android:textColor="#3A01DF"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/LastName"/>
-   			<TextView
-                android:id="@+id/userhobbies"
-                android:textColor="#3A01DF"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/LastName"/>
-	   			<TextView
-                android:id="@+id/usermusic"
-                android:textColor="#3A01DF"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/LastName"/>
+    
+    <!--  ******************************************************************  User Basic Profile data -->         
+    <!-- ******************************************************************** Action Buttons          -->
+    <LinearLayout
+        android:id="@+id/ActionButtons"
+        style="?android:attr/buttonBarStyle"
+        android:background="#5F04B4"
+        android:paddingTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Profiledata"
+        android:orientation="horizontal" >
 
-		   <TextView
-                android:id="@+id/usermovies"
-                android:textColor="#3A01DF"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/LastName"/>
+        <TextView
+            android:id="@+id/data"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/footer"
+            android:textColor="#5F04B4"
+            android:textSize="12sp" />
+      
+    </LinearLayout>
 
-		   <TextView
-                android:id="@+id/userbooks"
-                android:textColor="#3A01DF"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/LastName"/>
-		  
-		 
-		   <LinearLayout
-		        android:id="@+id/linearLayout4"
-		        android:layout_width="match_parent"
-		        android:layout_height="match_parent"
-		        android:background="@drawable/loginbg"
-		    	android:gravity="bottom"
-		        android:orientation="horizontal"
-		        android:paddingBottom="5dp"
-		        android:paddingTop="5dp"
-		        android:shadowColor="#333333"
-		        android:shadowDx="2.0"
-		        android:shadowDy="2.0"
-		        android:shadowRadius="3.0" 
-		        android:radius="10dip">
-   			</LinearLayout> 
-   			
-              
-         </LinearLayout>   
+    <LinearLayout
+        android:id="@+id/footersection"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="14dp"
+        android:background="@drawable/loginbg"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/footer"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/footer"
+            android:textColor="#5F04B4"
+            android:textSize="12sp" />
+    </LinearLayout>
+
 
     </RelativeLayout> 
 

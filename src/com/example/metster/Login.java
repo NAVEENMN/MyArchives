@@ -52,7 +52,7 @@ public class Login extends Activity {
 		Location pos = null ;
 		String provider;	
 		String usremail;
-		String usrfname;
+		
 		List<Address> addresses;
 		String cityName = null;
 		String country = null;
@@ -60,7 +60,14 @@ public class Login extends Activity {
 		String state = null;
 		String zip = null;
 	//----------------------------------------->
+		String usrfname;
 		String usrlname;
+		String usrgender;
+		String usrage;
+		String usrageandgender;
+		String usrprofession;
+		String usrworksat;
+		String usrcurrentcity;
 		String ret = "";
 		String accnumber = "";
 		String tokennumber = "";
@@ -260,7 +267,12 @@ public class Login extends Activity {
 	            String[] separated = output.split("-");
 	            usrfname = separated[0];
 	            usrlname = separated[1];
-	            
+	            usrgender = separated[2];
+	            usrage = separated[3];
+	            usrprofession = separated[4];
+	            usrworksat = separated[5];
+	            usrcurrentcity = separated[6];
+	            usrageandgender = usrgender + " | "+usrage;
 	            
 	            
 				if(output.contains("null")){
@@ -316,6 +328,14 @@ public class Login extends Activity {
 		        fname.setText((String)usrfname);
 		        TextView lname = (TextView)findViewById(R.id.LastName); 
 		        lname.setText((String)usrlname);
+		        TextView prof = (TextView)findViewById(R.id.Profession); 
+		        prof.setText((String)usrprofession);
+		        TextView wat = (TextView)findViewById(R.id.Worksat); 
+		        wat.setText((String)usrworksat);
+		        TextView ag = (TextView)findViewById(R.id.AgeandGender); 
+		        ag.setText((String)usrageandgender);
+		        TextView cc = (TextView)findViewById(R.id.CurrentCity); 
+		        cc.setText((String)usrcurrentcity);
 		        //----------- Section 2
 		        TextView loca = (TextView)findViewById(R.id.YourLocation); 
 	            loca.setText((String)myloc);

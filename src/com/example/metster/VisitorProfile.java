@@ -27,7 +27,7 @@ public class VisitorProfile extends Activity {
     	String visitorid = getIntent().getStringExtra("VisitorId");
     	Log.w("visitorid", visitorid);
         try {
-			reply = new RequestTask().execute("http://www.naveenmn.com/Metster/visitorprofile.php", appkey, visitorid, visitorid,visitorid,visitorid, visitorid, visitorid
+			reply = new RequestTask().execute("http://www.naveenmn.com/Metster/getprofiledata.php", appkey, visitorid, visitorid,visitorid,visitorid, visitorid, visitorid
 					, visitorid, visitorid, visitorid, visitorid, visitorid, visitorid ).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -42,10 +42,10 @@ public class VisitorProfile extends Activity {
 		//-------------------------------------------
 		 
 		 final String[] separated = reply.split("#%-->");
-		 String userprofession = separated[0];
-		 String userworksat = separated[1];
-		 Log.w("userprofession",userprofession);
-		 Log.w("userworksat",userworksat);
+		 String FirstName = separated[0];
+		 String LastName = separated[1];
+		 //Log.w("userprofession",userprofession);
+		 //Log.w("userworksat",userworksat);
 		// String userhometown = separated[2];
 		 //String userhobbies = separated[3];
 		 //String usermusic = separated[4];
@@ -53,8 +53,8 @@ public class VisitorProfile extends Activity {
 		 //String userbooks = separated[6];
 		 //String userstatus = separated[7];
 		 //String age = separated[8];
-		 TextView uprofession = (TextView)findViewById(R.id.userprofession); 
-	        uprofession.setText((String)userprofession);
+		 //TextView fname = (TextView)findViewById(R.id.FirstName); 
+	      //  fname.setText((String)FirstName);
 		// TextView fname = (TextView)findViewById(R.id.userprofession); 
          //fname.setText((String)userprofession);
          //fname = (TextView)findViewById(R.id.userworksat); 
