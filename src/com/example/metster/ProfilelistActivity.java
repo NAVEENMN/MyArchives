@@ -239,7 +239,7 @@ public class ProfilelistActivity extends Activity {
 						
 						public void onClick(View v) { // yet to be implemented
 							
-							Intent intent = new Intent(ProfilelistActivity.this, VisitorProfile.class);
+							Intent intent = new Intent(ProfilelistActivity.this, Profiles.class);
 							intent.putExtra("VisitorId",visitorid);
 							intent.putExtra("VisitorImage",visitorimage);
 			        		startActivity(intent);

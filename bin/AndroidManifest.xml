@@ -41,9 +41,9 @@
         </activity>
         <activity
             android:name="com.example.metster.SignUpActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_sign_up"
             android:parentActivityName="com.example.metster.HomescreenActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -51,9 +51,9 @@
         </activity>
         <activity
             android:name="com.example.metster.Login"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_login"
-            android:parentActivityName="com.example.metster.HomescreenActivity" >
+            android:parentActivityName="com.example.metster.HomescreenActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.metster.HomescreenActivity" />
@@ -68,9 +68,9 @@
 
         <activity
             android:name="com.example.metster.ProfilelistActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_profilelist"
-            android:parentActivityName="com.example.metster.Login" >
+            android:parentActivityName="com.example.metster.Login"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.metster.Login" />
@@ -80,21 +80,25 @@
 
         <activity
             android:name="com.example.metster.UpdateProfile"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_update_profile"
-            android:parentActivityName="com.example.metster.Login" >
+            android:parentActivityName="com.example.metster.Login"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.metster.Login" />
         </activity>
         <activity
             android:name="com.example.metster.VisitorProfile"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_visitor_profile"
-            android:parentActivityName="com.example.metster.ProfilelistActivity" >
+            android:parentActivityName="com.example.metster.ProfilelistActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.metster.ProfilelistActivity" />
+        </activity>
+        <activity
+            android:name="com.example.metster.Profiles"
+            android:label="@string/title_activity_profiles" >
         </activity>
     </application>
 

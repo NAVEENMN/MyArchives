@@ -438,9 +438,9 @@ containing a value of this type.
         public static final int AgeAndGender=0x7f060035;
         public static final int AgeandGender=0x7f06001f;
         public static final int CurrentCity=0x7f060020;
-        public static final int Email=0x7f06003b;
+        public static final int Email=0x7f06003c;
         public static final int FirstName=0x7f06001b;
-        public static final int ImageButton01=0x7f06003a;
+        public static final int ImageButton01=0x7f06003b;
         public static final int ImagevisitorView01=0x7f060031;
         public static final int Information=0x7f060021;
         public static final int Invisiblein=0x7f06002a;
@@ -453,11 +453,11 @@ containing a value of this type.
         public static final int NumberofUsers=0x7f060028;
         public static final int NumberofUsersLable=0x7f060027;
         public static final int Options=0x7f060036;
-        public static final int Password=0x7f06003c;
+        public static final int Password=0x7f06003d;
         public static final int Profession=0x7f06001d;
         public static final int ProfileImage=0x7f06001a;
         public static final int Profiledata=0x7f060019;
-        public static final int RetypePassword=0x7f06003d;
+        public static final int RetypePassword=0x7f06003e;
         public static final int SetStatus=0x7f06002c;
         public static final int StudentType=0x7f060032;
         public static final int University=0x7f060034;
@@ -465,49 +465,49 @@ containing a value of this type.
         public static final int YourLocation=0x7f060026;
         public static final int YourLocationLable=0x7f060025;
         public static final int action_settings=0x7f060050;
-        public static final int age=0x7f06004d;
+        public static final int age=0x7f06004e;
         public static final int book_now=0x7f060010;
-        public static final int books=0x7f06004c;
+        public static final int books=0x7f06004d;
         public static final int button1=0x7f060018;
         public static final int button2=0x7f060017;
-        public static final int button3=0x7f060043;
+        public static final int button3=0x7f060044;
         public static final int buttonmeet=0x7f06002e;
         public static final int buyButton=0x7f06000a;
         public static final int buy_now=0x7f06000f;
         public static final int buy_with_google=0x7f06000e;
-        public static final int checkBox1=0x7f060042;
+        public static final int checkBox1=0x7f060043;
         public static final int classic=0x7f060011;
-        public static final int container=0x7f060044;
-        public static final int data=0x7f06004f;
+        public static final int container=0x7f060045;
+        public static final int data=0x7f06003a;
         public static final int footer=0x7f060030;
         public static final int footersection=0x7f06002f;
         public static final int grayscale=0x7f060012;
-        public static final int hobbies=0x7f060049;
+        public static final int hobbies=0x7f06004a;
         public static final int holo_dark=0x7f060005;
         public static final int holo_light=0x7f060006;
         public static final int hybrid=0x7f060004;
-        public static final int iamfrom=0x7f060045;
-        public static final int iamlivingin=0x7f060046;
-        public static final int iworkat=0x7f060048;
+        public static final int iamfrom=0x7f060046;
+        public static final int iamlivingin=0x7f060047;
+        public static final int iworkat=0x7f060049;
         public static final int line1=0x7f060015;
         public static final int linearLayout2=0x7f060014;
         public static final int linearLayout3=0x7f060016;
-        public static final int linearLayout4=0x7f06003e;
+        public static final int linearLayout4=0x7f06003f;
         public static final int match_parent=0x7f06000c;
         public static final int monochrome=0x7f060013;
-        public static final int movies=0x7f06004b;
-        public static final int music=0x7f06004a;
-        public static final int myprofession=0x7f060047;
+        public static final int movies=0x7f06004c;
+        public static final int music=0x7f06004b;
+        public static final int myprofession=0x7f060048;
         public static final int none=0x7f060000;
         public static final int normal=0x7f060001;
         public static final int production=0x7f060007;
-        public static final int radioButton1=0x7f06003f;
-        public static final int radioButton2=0x7f060040;
-        public static final int radioButton3=0x7f060041;
+        public static final int radioButton1=0x7f060040;
+        public static final int radioButton2=0x7f060041;
+        public static final int radioButton3=0x7f060042;
         public static final int sandbox=0x7f060008;
         public static final int satellite=0x7f060002;
         public static final int selectionDetails=0x7f06000b;
-        public static final int status=0x7f06004e;
+        public static final int status=0x7f06004f;
         public static final int strict_sandbox=0x7f060009;
         public static final int terrain=0x7f060003;
         public static final int visitorbuttonnext=0x7f060039;
@@ -523,11 +523,10 @@ containing a value of this type.
         public static final int activity_homescreen=0x7f030000;
         public static final int activity_login=0x7f030001;
         public static final int activity_profilelist=0x7f030002;
-        public static final int activity_sign_up=0x7f030003;
-        public static final int activity_update_profile=0x7f030004;
-        public static final int activity_visitor_profile=0x7f030005;
+        public static final int activity_profiles=0x7f030003;
+        public static final int activity_sign_up=0x7f030004;
+        public static final int activity_update_profile=0x7f030005;
         public static final int fragment_update_profile=0x7f030006;
-        public static final int fragment_visitor_profile=0x7f030007;
     }
     public static final class menu {
         public static final int login=0x7f0a0000;
@@ -541,9 +540,9 @@ containing a value of this type.
         public static final int CurrentCounty=0x7f04003d;
         public static final int CurrentLocation=0x7f04003c;
         public static final int Email=0x7f04002b;
-        /**  Button Login   
-********************************************************
-                  Sign Up                               
+        /**  Button Login 
+ ******************************************************** 
+ Sign Up 
          */
         public static final int FirstName=0x7f040029;
         public static final int Gender=0x7f040037;
@@ -556,8 +555,8 @@ containing a value of this type.
         public static final int MeetSomeone=0x7f040042;
         public static final int MetsterUsers=0x7f040039;
         public static final int MyStatus=0x7f040040;
-        /** ********************************************************
-                  My Profile Home                       
+        /**  ******************************************************** 
+ My Profile Home 
          */
         public static final int Name=0x7f040034;
         public static final int Next=0x7f04004a;
@@ -570,21 +569,21 @@ containing a value of this type.
         public static final int StudentType=0x7f040035;
         public static final int Tellus=0x7f040046;
         public static final int Tellusmore=0x7f040045;
-        /** ********************************************************
-                  Update Profile                        
+        /**  ******************************************************** 
+ Update Profile 
          */
         public static final int Thingsilike=0x7f040044;
         public static final int University=0x7f040038;
         public static final int Update=0x7f040048;
         /**  Button Update 
-********************************************************
-                  View Students Profile                 
+ ******************************************************** 
+ View Students Profile 
          */
         public static final int ViewProfile=0x7f040049;
         public static final int YourLocation=0x7f04003a;
         public static final int action_settings=0x7f04004d;
-        /** ********************************************************
-                  Home screen                           
+        /**  ******************************************************** 
+ Home screen 
          */
         public static final int app_name=0x7f040026;
         public static final int auth_client_needs_enabling_title=0x7f040001;
@@ -689,17 +688,20 @@ containing a value of this type.
         /**  button meet someone 
          */
         public static final int footer=0x7f040043;
-        /** ********************************************************
-                  Others                                
+        /**  ******************************************************** 
+ Others 
          */
         public static final int footnote=0x7f04004c;
         public static final int hello_world=0x7f04004e;
         public static final int male=0x7f040030;
         public static final int terms=0x7f040033;
         public static final int title_activity_login=0x7f040025;
-        /**                   Titles                                
+        /**  Titles 
          */
         public static final int title_activity_profilelist=0x7f040020;
+        /**  ******************************************************** 
+         */
+        public static final int title_activity_profiles=0x7f040050;
         public static final int title_activity_sign_up=0x7f040023;
         public static final int title_activity_update_profile=0x7f040021;
         public static final int title_activity_user_sign_up=0x7f040024;

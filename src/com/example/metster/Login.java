@@ -139,7 +139,7 @@ public class Login extends Activity {
 		String cityName = null;
 		String country = null;
 		String addressline = null;
-		String state = null;
+		//String state = null;
 		String zip = null;
 		String myloc = null;
 		try {
