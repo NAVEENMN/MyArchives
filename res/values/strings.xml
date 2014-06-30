@@ -40,6 +40,9 @@
     <string name="Major">Major</string>
     <string name="Gender">M</string>
     <string name="University">University</string>
+    <string name="MetsterUsers">Metster users around you</string>
+    <string name="YourLocation">Your Location</string>
+    <string name="InvisibleIn">Your profile will go invisible at</string>
     <string name="CurrentLocation">Location</string>
     <string name="CurrentCounty">County</string>
     <string name="CurrentCountry">Country</string>

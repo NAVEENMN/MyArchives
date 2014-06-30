@@ -24,6 +24,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NavUtils;
+import android.text.format.Time;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -42,6 +43,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class Login extends Activity {
 	
 	//----------------------------------------->
+		String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";
 		Geocoder gcd ;
 		GoogleMap mMap;
 		LocationManager locationManager;
@@ -68,7 +70,8 @@ public class Login extends Activity {
 		Double Longival = 0.0 ;
 		Location lon2 = new Location("");
 		int flag = 0;
-		final ArrayList<String> USERNAME = new ArrayList<String>();	
+		final ArrayList<String> USERNAME = new ArrayList<String>();
+		int len = 0;
     //---------------------------------------->
 
 	@Override
@@ -130,6 +133,7 @@ public class Login extends Activity {
 		String addressline = null;
 		String state = null;
 		String zip = null;
+		String myloc = null;
 		try {
             addresses = gcd.getFromLocation(latival, Longival, 1);
             if (addresses.size() > 0)
@@ -138,6 +142,7 @@ public class Login extends Activity {
             state = addresses.get(0).getAdminArea();
             zip = addresses.get(0).getPostalCode();
             addressline = addresses.get(0).getThoroughfare();
+            myloc = addressline+", "+cityName;
            
         } catch (IOException e) {
             e.printStackTrace();
@@ -261,7 +266,49 @@ public class Login extends Activity {
 					Toast.makeText(getApplicationContext(), "Metster is unable to connect to server at this time.", Toast.LENGTH_SHORT).show();
 				}
 				else{
-		        
+					
+//------------------------------
+					//-----------------------------------> post here
+					
+					String numb = null;
+			        try {
+			        	numb = new RequestTask().execute("http://www.naveenmn.com/Metster/numberofusers.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
+								accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
+			            
+			        	} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	//----------------------------------
+			if(numb.isEmpty()) 
+			{
+				Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
+			}
+			else {
+			final String[] accountnumbers = numb.split("#%-->");
+		     len = accountnumbers.length;
+			}
+			//------
+            Time now = new Time();
+            String ampm= "am";
+            int offset = 15;
+            now.setToNow(); 
+            int hour = now.hour;
+            int minute = now.minute;
+            minute = minute + offset;
+            if(minute >= 60){
+            	hour++;
+            	minute = minute - 60;
+            	
+            }
+            if(hour > 12){ 
+        		hour = hour - 12;
+        		ampm = "pm"; // still need to fix
+        	}
+            //------
 //-----------------------------------------------------------> Setup the GUI with data acquired
 				//----------- Section 1
 				TextView fname = (TextView)findViewById(R.id.FirstName); 
@@ -269,10 +316,13 @@ public class Login extends Activity {
 		        TextView lname = (TextView)findViewById(R.id.LastName); 
 		        lname.setText((String)usrlname);
 		        //----------- Section 2
-		        TextView loca = (TextView)findViewById(R.id.Location); 
-	            loca.setText((String)addressline);
-                TextView cit = (TextView)findViewById(R.id.City); 
-	            cit.setText((String)cityName);
+		        TextView loca = (TextView)findViewById(R.id.YourLocation); 
+	            loca.setText((String)myloc);
+	            TextView num = (TextView)findViewById(R.id.NumberofUsers); 
+	            num.setText(Integer.toString(len));
+	            TextView tim = (TextView)findViewById(R.id.Invisiblein);
+	            String time = hour+":"+minute+" "+ampm;
+	            tim.setText(time);
 	            //----------- Section Profile Image
 	            if (profileimage!=null){
                     byte[] decodedString = Base64.decode(profileimage, Base64.DEFAULT);

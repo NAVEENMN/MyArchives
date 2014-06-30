@@ -18,17 +18,18 @@
         android:orientation="horizontal" >
         
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dip"
+			android:layout_weight="1"
             android:layout_height="wrap_content"
             android:background="#424242"
             android:paddingLeft="5dp"
-            android:layout_weight="0.08"
             android:orientation="vertical" >
                
         <ImageView
             android:id="@+id/ProfileImage"
             android:layout_width="150dp"
 			android:layout_height="140dp"
+			android:gravity="center"
 			android:src="@drawable/defaultprofile"
 			android:background = "@drawable/loginbg"
 			android:scaleType="centerCrop"
@@ -37,8 +38,8 @@
                 
 
         <LinearLayout
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dip"
+			android:layout_weight="1"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
 			android:paddingTop="10dp"
@@ -121,25 +122,59 @@
 	<!-- ******************************************************************* Map region               -->
 	<LinearLayout
         android:id="@+id/MetsterInformation"
+        android:paddingLeft="10dp"
         android:layout_width="0dip"
 	    android:layout_weight="1"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
     		<TextView
-                android:id="@+id/Location"
+                android:id="@+id/YourLocationLable"
+                android:paddingTop="10dp"
                 android:textColor="#5F04B4"
-                android:textSize="18sp"
-                android:text="@string/CurrentLocation"
+                android:textSize="12sp"
+                android:text="@string/YourLocation"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
             <TextView
-                android:id="@+id/City"
+                android:id="@+id/YourLocation"
                 android:textColor="#5F04B4"
-                android:textSize="18sp"
+                android:textSize="12sp"
                 android:text="@string/CurrentCounty"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/> 
+                android:layout_height="match_parent"/>
+            
+            <TextView
+                android:id="@+id/NumberofUsersLable"
+                android:paddingTop="10dp"
+                android:textColor="#5F04B4"
+                android:textSize="12sp"
+                android:text="@string/MetsterUsers"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/NumberofUsers"
+                android:textColor="#5F04B4"
+                android:textSize="12sp"
+                android:text="@string/MetsterUsers"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/InvisibleinLable"
+                android:paddingTop="10dp"
+                android:textColor="#5F04B4"
+                android:textSize="12sp"
+                android:text="@string/InvisibleIn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/Invisiblein"
+                android:textColor="#5F04B4"
+                android:textSize="12sp"
+                android:text="@string/InvisibleIn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            
        </LinearLayout>
       </LinearLayout>          
     <!-- ******************************************************************** Action Buttons          -->
