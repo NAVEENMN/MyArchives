@@ -31,7 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -324,11 +324,12 @@ public class Login extends Activity {
 	            String time = hour+":"+minute+" "+ampm;
 	            tim.setText(time);
 	            //----------- Section Profile Image
+	            
 	            if (profileimage!=null){
                     byte[] decodedString = Base64.decode(profileimage, Base64.DEFAULT);
    		             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                        ImageView imgg = (ImageView)findViewById(R.id.ProfileImage);
-                        imgg.setImageBitmap(decodedByte);
+   		             	ImageButton imageButton =(ImageButton)findViewById(R.id.ProfileImage);
+   		                imageButton.setImageBitmap(decodedByte);
                       }
 	            //----------- Section Maps
 	            GoogleMap map = ((MapFragment) getFragmentManager()
@@ -355,7 +356,9 @@ public class Login extends Activity {
 		        );
 		        
 		      //------------------------------------- update profile
-		        find = (Button) findViewById(R.id.updateprofile);
+		        
+		        
+		      /*  find = (Button) findViewById(R.id.ProfileImage);
 		        find.setOnClickListener(new View.OnClickListener() {	
 						public void onClick(View v) {
 							
@@ -363,14 +366,22 @@ public class Login extends Activity {
 			        		startActivity(intent2);
 							       
 					}//on click
+					
 		        		}
 		        );
+		                
+		       */
 //------------------------------------------------------------------------------------------------		        
 		        
 } // else ends here
 				
 				
 	}
+	
+	public void updateprofile(View view){
+    	Intent intent2 = new Intent( Login.this, UpdateProfile.class);
+		startActivity(intent2);
+    }
 	
 	@Override
 	public void onBackPressed() {
