@@ -434,6 +434,7 @@ containing a value of this type.
         public static final int shape=0x7f02002c;
     }
     public static final class id {
+        public static final int AboutMe=0x7f06004f;
         public static final int ActionButtons=0x7f06002d;
         public static final int AgeAndGender=0x7f060035;
         public static final int AgeandGender=0x7f06001f;
@@ -507,7 +508,6 @@ containing a value of this type.
         public static final int sandbox=0x7f060008;
         public static final int satellite=0x7f060002;
         public static final int selectionDetails=0x7f06000b;
-        public static final int status=0x7f06004f;
         public static final int strict_sandbox=0x7f060009;
         public static final int terrain=0x7f060003;
         public static final int visitorbuttonnext=0x7f060039;

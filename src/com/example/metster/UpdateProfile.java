@@ -96,7 +96,7 @@ public class UpdateProfile extends Activity {
 				EditText music = (EditText)  findViewById(R.id.music) ;
 				EditText movies = (EditText)  findViewById(R.id.movies) ;
 				EditText books = (EditText)  findViewById(R.id.books) ;
-				EditText status = (EditText)  findViewById(R.id.status) ;
+				EditText status = (EditText)  findViewById(R.id.AboutMe) ;
 				
 				iamfrom.setHint("My Hometown");
 				age.setHint("My age");
@@ -107,7 +107,7 @@ public class UpdateProfile extends Activity {
 				music.setHint("Musics I like");
 				movies.setHint("Movies I like");
 			    books.setHint("Books I like");
-			    status.setHint("Set your status here.");
+			    status.setHint("Tell us about yourself.");
 		//----------------------------------------        
 		
 	}
@@ -183,7 +183,7 @@ public class UpdateProfile extends Activity {
 		EditText music = (EditText)  findViewById(R.id.music) ;
 		EditText movies = (EditText)  findViewById(R.id.movies) ;
 		EditText books = (EditText)  findViewById(R.id.books) ;
-		EditText status = (EditText)  findViewById(R.id.status) ;
+		EditText status = (EditText)  findViewById(R.id.AboutMe) ;
 		
      //--------------------------------------------------------------
 		//-----------------------------------------------------------
