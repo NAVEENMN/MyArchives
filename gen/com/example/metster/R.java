@@ -450,6 +450,7 @@ containing a value of this type.
         public static final int Major=0x7f060033;
         public static final int MapsRegion=0x7f060022;
         public static final int MetsterInformation=0x7f060024;
+        public static final int MyPassion=0x7f06004e;
         public static final int MyStatus=0x7f06002b;
         public static final int NumberofUsers=0x7f060028;
         public static final int NumberofUsersLable=0x7f060027;
@@ -466,7 +467,6 @@ containing a value of this type.
         public static final int YourLocation=0x7f060026;
         public static final int YourLocationLable=0x7f060025;
         public static final int action_settings=0x7f060050;
-        public static final int age=0x7f06004e;
         public static final int book_now=0x7f060010;
         public static final int books=0x7f06004d;
         public static final int button1=0x7f060018;
@@ -535,10 +535,12 @@ containing a value of this type.
         public static final int visitor_profile=0x7f0a0003;
     }
     public static final class string {
-        public static final int Age=0x7f040047;
-        public static final int CurrentCountry=0x7f04003e;
-        public static final int CurrentCounty=0x7f04003d;
-        public static final int CurrentLocation=0x7f04003c;
+        public static final int AboutMe=0x7f04004e;
+        public static final int Age=0x7f040038;
+        public static final int Books=0x7f04004c;
+        public static final int CurrentCountry=0x7f04003f;
+        public static final int CurrentCounty=0x7f04003e;
+        public static final int CurrentLocation=0x7f04003d;
         public static final int Email=0x7f04002b;
         /**  Button Login 
  ******************************************************** 
@@ -546,42 +548,47 @@ containing a value of this type.
          */
         public static final int FirstName=0x7f040029;
         public static final int Gender=0x7f040037;
-        public static final int InvisibleIn=0x7f04003b;
+        public static final int Hobbies=0x7f040049;
+        public static final int IWorkAt=0x7f040048;
+        public static final int InvisibleIn=0x7f04003c;
         public static final int LastName=0x7f04002a;
         /**  Button Sign Up 
          */
         public static final int LogIn=0x7f040028;
         public static final int Major=0x7f040036;
-        public static final int MeetSomeone=0x7f040042;
-        public static final int MetsterUsers=0x7f040039;
-        public static final int MyStatus=0x7f040040;
+        public static final int MeetSomeone=0x7f040043;
+        public static final int MetsterUsers=0x7f04003a;
+        public static final int Movies=0x7f04004b;
+        public static final int Music=0x7f04004a;
+        public static final int MyCurrentCity=0x7f040046;
+        /**  ******************************************************** 
+ Update Profile 
+         */
+        public static final int MyHomeTown=0x7f040045;
+        public static final int MyPassion=0x7f04004d;
+        public static final int MyProfession=0x7f040047;
+        public static final int MyStatus=0x7f040041;
         /**  ******************************************************** 
  My Profile Home 
          */
         public static final int Name=0x7f040034;
-        public static final int Next=0x7f04004a;
+        public static final int Next=0x7f040051;
         public static final int Password=0x7f04002d;
         public static final int Password_hint=0x7f04002f;
-        public static final int Previous=0x7f04004b;
+        public static final int Previous=0x7f040052;
         public static final int RetypePassword=0x7f04002e;
-        public static final int SetYourStatus=0x7f040041;
+        public static final int SetYourStatus=0x7f040042;
         public static final int SignUp=0x7f040027;
         public static final int StudentType=0x7f040035;
-        public static final int Tellus=0x7f040046;
-        public static final int Tellusmore=0x7f040045;
-        /**  ******************************************************** 
- Update Profile 
-         */
-        public static final int Thingsilike=0x7f040044;
-        public static final int University=0x7f040038;
-        public static final int Update=0x7f040048;
+        public static final int University=0x7f040039;
+        public static final int Update=0x7f04004f;
         /**  Button Update 
  ******************************************************** 
  View Students Profile 
          */
-        public static final int ViewProfile=0x7f040049;
-        public static final int YourLocation=0x7f04003a;
-        public static final int action_settings=0x7f04004d;
+        public static final int ViewProfile=0x7f040050;
+        public static final int YourLocation=0x7f04003b;
+        public static final int action_settings=0x7f040054;
         /**  ******************************************************** 
  Home screen 
          */
@@ -681,18 +688,18 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f04001e;
-        public static final int desc=0x7f04004f;
+        public static final int desc=0x7f040056;
         public static final int dontdisclose=0x7f040032;
         public static final int email_hint=0x7f04002c;
         public static final int female=0x7f040031;
         /**  button meet someone 
          */
-        public static final int footer=0x7f040043;
+        public static final int footer=0x7f040044;
         /**  ******************************************************** 
  Others 
          */
-        public static final int footnote=0x7f04004c;
-        public static final int hello_world=0x7f04004e;
+        public static final int footnote=0x7f040053;
+        public static final int hello_world=0x7f040055;
         public static final int male=0x7f040030;
         public static final int terms=0x7f040033;
         public static final int title_activity_login=0x7f040025;
@@ -701,12 +708,12 @@ containing a value of this type.
         public static final int title_activity_profilelist=0x7f040020;
         /**  ******************************************************** 
          */
-        public static final int title_activity_profiles=0x7f040050;
+        public static final int title_activity_profiles=0x7f040057;
         public static final int title_activity_sign_up=0x7f040023;
         public static final int title_activity_update_profile=0x7f040021;
         public static final int title_activity_user_sign_up=0x7f040024;
         public static final int title_activity_visitor_profile=0x7f040022;
-        public static final int updateprofile=0x7f04003f;
+        public static final int updateprofile=0x7f040040;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */

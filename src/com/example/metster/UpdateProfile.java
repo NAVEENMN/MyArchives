@@ -84,31 +84,7 @@ public class UpdateProfile extends Activity {
                     byte[] decodedString = Base64.decode(profileimage, Base64.DEFAULT);
    		             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
    		              imageButton.setImageBitmap(decodedByte);
-                      }
-		//--------------------------------------- Set up fields
-		        
-		        EditText iamfrom = (EditText)  findViewById(R.id.iamfrom) ;
-		        EditText age = (EditText)  findViewById(R.id.age) ;
-				EditText iamlivingin = (EditText)  findViewById(R.id.iamlivingin) ;
-				EditText myprofession = (EditText)  findViewById(R.id.myprofession) ;
-				EditText iworkat = (EditText)  findViewById(R.id.iworkat) ;
-				EditText hobbies = (EditText)  findViewById(R.id.hobbies) ;
-				EditText music = (EditText)  findViewById(R.id.music) ;
-				EditText movies = (EditText)  findViewById(R.id.movies) ;
-				EditText books = (EditText)  findViewById(R.id.books) ;
-				EditText status = (EditText)  findViewById(R.id.AboutMe) ;
-				
-				iamfrom.setHint("My Hometown");
-				age.setHint("My age");
-				iamlivingin.setHint("My current city");
-				myprofession.setHint("My Profession");
-				iworkat.setHint("I work at");
-				hobbies.setHint("My hobbies are");
-				music.setHint("Musics I like");
-				movies.setHint("Movies I like");
-			    books.setHint("Books I like");
-			    status.setHint("Tell us about yourself.");
-		//----------------------------------------        
+                      }       
 		
 	}
 	
@@ -175,7 +151,7 @@ public class UpdateProfile extends Activity {
 			
 		//--------------------------------Data from fields-----------------------
 		EditText iamfrom = (EditText)  findViewById(R.id.iamfrom) ;
-        EditText age = (EditText)  findViewById(R.id.age) ;
+        EditText age = (EditText)  findViewById(R.id.MyPassion) ;
 		EditText iamlivingin = (EditText)  findViewById(R.id.iamlivingin) ;
 		EditText myprofession = (EditText)  findViewById(R.id.myprofession) ;
 		EditText iworkat = (EditText)  findViewById(R.id.iworkat) ;

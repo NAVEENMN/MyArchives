@@ -1,7 +1,12 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+<RelativeLayout 
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="${packageName}.${activityClass}" >
 
     <!--  ******************************************************************  User Basic Profile data -->
@@ -98,7 +103,7 @@
     <LinearLayout
         android:id="@+id/ActionButtons"
         style="?android:attr/buttonBarStyle"
-        android:background="#5F04B4"
+        android:background="#F2F2F2"
         android:paddingTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -138,3 +143,4 @@
     </LinearLayout>
 
 </RelativeLayout>
+</ScrollView>
