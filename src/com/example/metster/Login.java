@@ -142,8 +142,7 @@ public class Login extends Activity {
                 updatelocation();
             }
         };
-       
-        updatelocation();
+     
 //--------------------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------> Fetch the location details
@@ -289,7 +288,7 @@ public class Login extends Activity {
 	            usrcurrentcity = separated[6];
 	            usrageandgender = usrgender + " | "+usrage;
 	            
-	            
+	            updatelocation();
 				if(output.contains("null")){
 					Toast.makeText(getApplicationContext(), "Metster is unable to connect to server at this time.", Toast.LENGTH_SHORT).show();
 				}
