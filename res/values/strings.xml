@@ -89,5 +89,8 @@
     <!-- ******************************************************** -->
 
     <string name="title_activity_profiles">Profiles</string>
+    <string name="title_activity_load_home">LoadHome</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>

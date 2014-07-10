@@ -59,6 +59,7 @@ public class Login extends Activity {
 		String addressline = null;
 		String state = null;
 		String zip = null;
+		String numb = null;
 	//----------------------------------------->
 		String usrfname;
 		String usrlname;
@@ -79,6 +80,11 @@ public class Login extends Activity {
 		int flag = 0;
 		final ArrayList<String> USERNAME = new ArrayList<String>();
 		int len = 0;
+		//-------
+		private final Handler _handler = new Handler();
+		private static int DATA_INTERVAL = 5000;
+		Runnable getData;
+        Criteria criteria = new Criteria();
     //---------------------------------------->
 
 	@Override
@@ -97,15 +103,20 @@ public class Login extends Activity {
     	latival = location.getLatitude();
     	Longival = location.getLongitude();
     }
-    public void onStatusChanged(String provider, int status, Bundle extras) {}
-    public void onProviderEnabled(String provider) {}
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    	latival = location.getLatitude();
+    	Longival = location.getLongitude();
+    }
+    public void onProviderEnabled(String provider) {
+    	latival = location.getLatitude();
+    	Longival = location.getLongitude();
+    }
     public void onProviderDisabled(String provider) {}
   };
       //------------------------------------------------------------------------
 // Register the listener with the Location Manager to receive location updates
   		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
         pos = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if( pos == null ) 
         	{
@@ -121,16 +132,18 @@ public class Login extends Activity {
         	Longival = pos.getLongitude();
         	}		
 //--------------------------------------------------------------> Turn off location listener after 5 mins
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-          @Override
-          public void run() {
-            //Do something after 100ms
-        	  locationManager.removeUpdates(locationListener);
-        	 // doafter();
-        	  
-          }
-        }, 1000 * 60 * 5  );
+        
+
+         getData = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                updatelocation();
+            }
+        };
+       
+        updatelocation();
 //--------------------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------> Fetch the location details
@@ -156,6 +169,8 @@ public class Login extends Activity {
             e.printStackTrace();
         }
 //-------------------------------------------------------------------------------------------------------
+		
+		//mHandlerTask.run();
 
 //--------------------------------> Read user ID
 				
@@ -251,7 +266,7 @@ public class Login extends Activity {
 	            	//ProgressDialog dialog = new ProgressDialog(Login.this);
 	                //dialog.setMessage("Fetching Profile..");
 	                //dialog.show();
-					output = new RequestTask().execute("http://www.naveenmn.com/Metster/fetchprofile.php",accnumber,tokennumber,zip,Double.toString(latival),Double.toString(Longival),(String)country,accnumber
+					output = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",accnumber,tokennumber,zip,Double.toString(latival),Double.toString(Longival),(String)country,accnumber
 							, accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
 					//if (! output.isEmpty()){
 					//dialog.dismiss();
@@ -283,9 +298,9 @@ public class Login extends Activity {
 //------------------------------
 					//-----------------------------------> post here
 					
-					String numb = null;
+					
 			        try {
-			        	numb = new RequestTask().execute("http://www.naveenmn.com/Metster/numberofusers.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
+			        	numb = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
 								accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
 			            
 			        	} catch (InterruptedException e) {
@@ -374,7 +389,7 @@ public class Login extends Activity {
 						public void onClick(View v) {
 							
 							if(len > 0){
-							
+							stopRepeatingTask();
 							Intent intent1 = new Intent( Login.this, ProfilelistActivity.class);
 			        		startActivity(intent1);
 							}
@@ -394,7 +409,50 @@ public class Login extends Activity {
 				
 	}
 	//------------------------------------- update profile
+	
+	public void updatelocation()
+	{
+		
+		Log.w("called","gaina");
+		
+		_handler.postDelayed(getData, DATA_INTERVAL);
+
+		pos = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+    	provider = locationManager.getBestProvider(criteria, false);
+    	location = locationManager.getLastKnownLocation(provider);
+    	latival = location.getLatitude();
+    	Longival = location.getLongitude();
+    	
+    	String nu = null;
+        try {
+        	 nu = new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
+					accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
+        	numb = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
+					accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
+        	final String[] accountnumbers = numb.split("#%-->");
+		     len = accountnumbers.length;
+        	TextView num = (TextView)findViewById(R.id.NumberofUsers); 
+            num.setText(Integer.toString(len));
+            
+        	} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	
+	}
+	
+	 
+
+     public void stopRepeatingTask()
+     {
+    	 _handler.removeCallbacks(getData);
+     }
+	
 	public void updateprofile(View view){
+		stopRepeatingTask();
     	Intent intent2 = new Intent( Login.this, UpdateProfile.class);
 		startActivity(intent2);
     }
@@ -402,6 +460,7 @@ public class Login extends Activity {
 	@Override
 	public void onBackPressed() {
 	 
+		stopRepeatingTask();
 		locationManager.removeUpdates(locationListener);
 		Login.this.finish();
 		

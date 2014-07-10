@@ -159,7 +159,7 @@ public class ProfilelistActivity extends Activity {
 		//-----------------------------------> post here
 				        new LongOperation().execute("");
 				        try {
-				        	output = new RequestTask().execute("http://www.naveenmn.com/Metster/profilelist.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
+				        	output = new RequestTask().execute("http://54.183.113.236/metster/profilelist.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
 									accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
 				            
 				        	} catch (InterruptedException e) {

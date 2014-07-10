@@ -261,7 +261,7 @@ public class UpdateProfile extends Activity {
             	String fileimage =  "image.txt";
            //--------------------------------------------------------------
             if(true){
-            reply = new RequestTask().execute("http://www.naveenmn.com/Metster/profiledataupdate.php", appkey, accnumber, userhometown, userstayingin, userprofession, userworksat, userhobbies,
+            reply = new RequestTask().execute("http://54.183.113.236/metster/profiledataupdate.php", appkey, accnumber, userhometown, userstayingin, userprofession, userworksat, userhobbies,
             		usermusic, usermovies, userbooks, userstatus, image, userage).get();
             String response = reply.toString();
             Log.w("serversays",response);

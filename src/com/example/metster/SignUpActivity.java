@@ -266,7 +266,7 @@ public class SignUpActivity extends Activity {
             	
            //--------------------------------------------------------------
             if(checkemail(fEmail)){
-            reply = new RequestTask().execute("http://www.naveenmn.com/Metster/accountprocess.php", appkey, firstname, lastname,femail,fpassword, image, gender
+            reply = new RequestTask().execute("http://54.183.113.236/metster/accountprocess.php", appkey, firstname, lastname,femail,fpassword, image, gender
             		, firstname, firstname, firstname, firstname, firstname, firstname ).get();
             String response = reply.toString();
             Log.w("serversays",response);

@@ -1,10 +1,6 @@
-<ScrollView
+<RelativeLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-
-<RelativeLayout 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context="${packageName}.${activityClass}" >
@@ -51,14 +47,14 @@
             <TextView
                 android:id="@+id/FirstName"
                 android:textColor="#F2F2F2"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/LastName"
                 android:textColor="#F2F2F2"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -100,47 +96,129 @@
     
      
     <!-- ******************************************************************** Action Buttons          -->
+    <ScrollView
+    android:id="@+id/Scroll"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_below="@+id/Profiledata">
     <LinearLayout
         android:id="@+id/ActionButtons"
         style="?android:attr/buttonBarStyle"
         android:background="#F2F2F2"
-        android:paddingTop="40dp"
-        android:layout_width="match_parent"
+        android:paddingTop="5dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Profiledata"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
+        <!-- About Me -->
         <TextView
-            android:id="@+id/data"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/footer"
-            android:textColor="#5F04B4"
-            android:textSize="12sp" />
-      
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/footersection"
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="14dp"
-        android:background="@drawable/loginbg"
-        android:gravity="center"
-        android:orientation="horizontal" >
-
+                android:id="@+id/AboutMeLable"
+                android:textColor="#424242"
+                android:textSize="16sp"
+                android:text="@string/AboutMe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/footer"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/footer"
-            android:textColor="#5F04B4"
-            android:textSize="12sp" />
-    </LinearLayout>
+                android:id="@+id/AboutMe"
+                android:textColor="#5F04B4"
+                android:paddingTop="2dp"
+                android:textSize="14sp"
+                android:text="@string/AboutMe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+       <!-- *************************************** -->
+       <!-- Hobbies -->
+       <TextView
+                android:id="@+id/HobbiesLable"
+                android:textColor="#424242"
+                android:textSize="16sp"
+                android:paddingTop="7dp"
+                android:text="@string/Hobbies"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        <TextView
+                android:id="@+id/Hobbies"
+                android:textColor="#5F04B4"
+                android:paddingTop="2dp"
+                android:textSize="14sp"
+                android:text="@string/Hobbies"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+       <!-- *************************************** -->
+       <!-- Music -->
+       <TextView
+                android:id="@+id/MusicLable"
+                android:textColor="#424242"
+                android:textSize="16sp"
+                android:paddingTop="7dp"
+                android:text="@string/Music"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        <TextView
+                android:id="@+id/Music"
+                android:textColor="#5F04B4"
+                android:paddingTop="2dp"
+                android:textSize="14sp"
+                android:text="@string/Music"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+       <!-- *************************************** -->
+       <!-- Movies -->
+       <TextView
+                android:id="@+id/MoviesLable"
+                android:textColor="#424242"
+                android:textSize="16sp"
+                android:paddingTop="7dp"
+                android:text="@string/Movies"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        <TextView
+                android:id="@+id/Movies"
+                android:textColor="#5F04B4"
+                android:paddingTop="2dp"
+                android:textSize="14sp"
+                android:text="@string/Movies"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+       <!-- *************************************** -->
+       <!-- Books -->
+       <TextView
+                android:id="@+id/BooksLable"
+                android:textColor="#424242"
+                android:textSize="16sp"
+                android:paddingTop="7dp"
+                android:text="@string/Hobbies"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        <TextView
+                android:id="@+id/Books"
+                android:textColor="#5F04B4"
+                android:paddingTop="2dp"
+                android:textSize="14sp"
+                android:text="@string/Books"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+       <!-- *************************************** -->
+       <!-- Hobbies -->
+       <TextView
+                android:id="@+id/MyPassionLable"
+                android:textColor="#424242"
+                android:textSize="16sp"
+                android:paddingTop="7dp"
+                android:text="@string/MyPassion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        <TextView
+                android:id="@+id/MyPassion"
+                android:paddingTop="2dp"
+                android:textColor="#5F04B4"
+                android:textSize="14sp"
+                android:text="@string/MyPassion"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+       <!-- *************************************** -->
+       </LinearLayout>
+       </ScrollView>
 
 </RelativeLayout>
-</ScrollView>
+

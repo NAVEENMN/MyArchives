@@ -100,6 +100,16 @@
             android:name="com.example.metster.Profiles"
             android:label="@string/title_activity_profiles" >
         </activity>
+        <activity
+            android:name="com.example.metster.LoadHome"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_load_home"
+            android:parentActivityName="com.example.metster.HomescreenActivity"
+            android:theme="@style/FullscreenTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.metster.HomescreenActivity" />
+        </activity>
     </application>
 
 </manifest>

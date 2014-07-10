@@ -24,7 +24,7 @@ public class Profiles extends Activity {
     	String visitorid = getIntent().getStringExtra("VisitorId");
     	Log.w("visitorid", visitorid);
         try {
-			reply = new RequestTask().execute("http://www.naveenmn.com/Metster/getprofiledata.php", appkey, visitorid, visitorid,visitorid,visitorid, visitorid, visitorid
+			reply = new RequestTask().execute("http://54.183.113.236/metster/getprofiledata.php", appkey, visitorid, visitorid,visitorid,visitorid, visitorid, visitorid
 					, visitorid, visitorid, visitorid, visitorid, visitorid, visitorid ).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -50,8 +50,13 @@ public class Profiles extends Activity {
 		 String music = separated[11];
 		 String movies = separated[12];
 		 String books = separated[13];
-		 String aboutstatus = separated[14];
+		 String AboutMe = separated[14];
+		 String Passion = separated[15];
+		 
 		 String usrageandgender = Gender + " | " + Age ;
+		 
+		 Log.w("aboutme",AboutMe);
+		 Log.w("passion",Passion);
 		
 		 setTitle(Status);
 		 //------------------------------------------------------
@@ -67,6 +72,18 @@ public class Profiles extends Activity {
 	     ag.setText((String)usrageandgender);
 	     TextView cc = (TextView)findViewById(R.id.CurrentCity); 
 	     cc.setText((String)CurrentCity);
+	     TextView hob = (TextView)findViewById(R.id.Hobbies); 
+	     hob.setText((String)hobbies);
+	     TextView mus = (TextView)findViewById(R.id.Music); 
+	     mus.setText((String)music);
+	     TextView mov = (TextView)findViewById(R.id.Movies); 
+	     mov.setText((String)movies);
+	     TextView book = (TextView)findViewById(R.id.Books); 
+	     book.setText((String)books);
+	     TextView abo = (TextView)findViewById(R.id.AboutMe); 
+	     abo.setText((String)AboutMe);
+	     TextView pas = (TextView)findViewById(R.id.MyPassion); 
+	     pas.setText((String)Passion);
 	     
 	     if (Image!=null){
              byte[] decodedString = Base64.decode(Image, Base64.DEFAULT);
