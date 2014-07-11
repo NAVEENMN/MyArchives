@@ -50,7 +50,7 @@
     <string name="CurrentCountry">Country</string>
     <string name="updateprofile">update profile</string>
     <string name="MyStatus">Hello there!!</string>
-    <string name="SetYourStatus">Set your status</string>
+    <string name="MyStatusLabel">Set your status</string>
     <string name="MeetSomeone">Meet Someone!</string> <!-- button meet someone -->
     <string name="footer">Metster</string>
     <!-- ******************************************************** -->

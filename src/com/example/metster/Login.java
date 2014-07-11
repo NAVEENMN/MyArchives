@@ -153,7 +153,6 @@ public class Login extends Activity {
 		String addressline = null;
 		//String state = null;
 		String zip = null;
-		String myloc = null;
 		try {
             addresses = gcd.getFromLocation(latival, Longival, 1);
             if (addresses.size() > 0)
@@ -162,7 +161,6 @@ public class Login extends Activity {
             state = addresses.get(0).getAdminArea();
             zip = addresses.get(0).getPostalCode();
             addressline = addresses.get(0).getThoroughfare();
-            myloc = addressline+", "+cityName;
            
         } catch (IOException e) {
             e.printStackTrace();
@@ -353,7 +351,9 @@ public class Login extends Activity {
 		        cc.setText((String)usrcurrentcity);
 		        //----------- Section 2
 		        TextView loca = (TextView)findViewById(R.id.YourLocation); 
-	            loca.setText((String)myloc);
+	            loca.setText((String)addressline);
+	            TextView locacity = (TextView)findViewById(R.id.YourLocationcity); 
+	            locacity.setText((String)cityName);
 	            TextView num = (TextView)findViewById(R.id.NumberofUsers); 
 	            num.setText(Integer.toString(len));
 	            TextView tim = (TextView)findViewById(R.id.Invisiblein);
