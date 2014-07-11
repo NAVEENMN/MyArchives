@@ -106,7 +106,7 @@
         style="?android:attr/buttonBarStyle"
         android:background="#F2F2F2"
         android:paddingTop="5dp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 

@@ -428,8 +428,16 @@ public class Login extends Activity {
 					accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
         	numb = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
 					accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
-        	final String[] accountnumbers = numb.split("#%-->");
-		     len = accountnumbers.length;
+		     
+		     if(numb.isEmpty()) 
+				{
+					//Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
+				}
+				else {
+				final String[] accountnumb = numb.split("#%-->");
+			     len = accountnumb.length;
+			     len --;
+				}
         	TextView num = (TextView)findViewById(R.id.NumberofUsers); 
             num.setText(Integer.toString(len));
             
@@ -454,6 +462,7 @@ public class Login extends Activity {
 		stopRepeatingTask();
     	Intent intent2 = new Intent( Login.this, UpdateProfile.class);
 		startActivity(intent2);
+		finish();
     }
 	
 	@Override
