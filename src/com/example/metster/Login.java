@@ -1,10 +1,6 @@
 package com.example.metster;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -23,7 +19,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NavUtils;
-import android.text.format.Time;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -78,6 +73,7 @@ public class Login extends Activity {
 	};
 	
 	public static class Userslist{
+		static String server_response;
 		static String numberofusers;
 		static int user_count;
 	};
@@ -91,30 +87,21 @@ public class Login extends Activity {
 	Location position;
 	String provider;	
 	List<Address> addresses;
-	
-	String server_response = null;
 	private Button find;
-		
-		//-------
-		private final Handler _handler = new Handler();
-		private static int DATA_INTERVAL = 5000;
-		Runnable getData;
-        Criteria criteria = new Criteria();
+	private final Handler _handler = new Handler();
+	Runnable getData;
+    Criteria criteria = new Criteria();
     //---------------------------------------->
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		// Show the Up button in the action bar.
-		setupActionBar();
+		setupActionBar();// Show the Up button in the action bar.
 		setTitle("Metster");
 		//--------------------------------> Setup location
-// Acquire a reference to the system Location Manager
-		
 	locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-// Define a listener that responds to location updates
-   locationListener = new LocationListener() {
+    locationListener = new LocationListener() {
     public void onLocationChanged(Location location) {	
     	Map.latival = location.getLatitude();
     	Map.Longival = location.getLongitude();
@@ -128,28 +115,25 @@ public class Login extends Activity {
     	Map.Longival = location.getLongitude();
     }
     public void onProviderDisabled(String provider) {}
-  };
-      //------------------------------------------------------------------------
-// Register the listener with the Location Manager to receive location updates
-  		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        position = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if( position == null ) 
-        	{
-        	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        	position = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        	provider = locationManager.getBestProvider(criteria, false);
-        	location = locationManager.getLastKnownLocation(provider);
-        	Map.latival = location.getLatitude();
-        	Map.Longival = location.getLongitude();
-        	}
-        else{
-        	Map.latival = position.getLatitude();
-        	Map.Longival = position.getLongitude();
-        	}		
-//--------------------------------------------------------------> Turn off location listener after 5 mins
+    };
+  	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);// Register the listener with the Location Manager to receive location updates
+    locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    position = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    if( position == null ){
+    	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        position = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        provider = locationManager.getBestProvider(criteria, false);
+        location = locationManager.getLastKnownLocation(provider);
+        Map.latival = location.getLatitude();
+        Map.Longival = location.getLongitude();
+    }
+    else{
+    	provider = locationManager.getBestProvider(criteria, false);
+        location = locationManager.getLastKnownLocation(provider);
+        Map.latival = location.getLatitude();
+        Map.Longival = location.getLongitude();
+    }		
         
-
          getData = new Runnable()
         {
             @Override
@@ -159,12 +143,9 @@ public class Login extends Activity {
             }
         };
      
-//--------------------------------------------------------------------------------------------------------
-
 //------------------------------------------------------------------> Fetch the location details
 		gcd = new Geocoder(getBaseContext(), Locale.getDefault());
 		List<Address> addresses;
-		//String state = null;
 		
 		try {
             addresses = gcd.getFromLocation(Map.latival, Map.Longival, 1);
@@ -177,116 +158,28 @@ public class Login extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//-------------------------------------------------------------------------------------------------------
+
+//--------------------------------> Read Bundle
 		
-		//mHandlerTask.run();
-
-//--------------------------------> Read user ID
-				
-		        try {
-		            FileInputStream inputStream = openFileInput("accounts.txt");
-
-		            if ( inputStream != null ) {
-		                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-		                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-		                String receiveString = "";
-		                StringBuilder stringBuilder = new StringBuilder();
-
-		                while ( (receiveString = bufferedReader.readLine()) != null ) {
-		                    stringBuilder.append(receiveString);
-		                }
-
-		                inputStream.close();
-		                account.accnumber = stringBuilder.toString();
-		            }
-		        }
-		        catch (FileNotFoundException e) {
-		            Log.e("login activity", "File not found: " + e.toString());
-		            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-		            .show();
-		        } catch (IOException e) {
-		            Log.e("login activity", "Can not read file: " + e.toString());
-		            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-		            .show();
-		        }	
-//--------------------------------> Read token
-						
-				        try {
-				            FileInputStream inputStream = openFileInput("token.txt");
-
-				            if ( inputStream != null ) {
-				                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-				                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-				                String receiveString = "";
-				                StringBuilder stringBuilder = new StringBuilder();
-
-				                while ( (receiveString = bufferedReader.readLine()) != null ) {
-				                    stringBuilder.append(receiveString);
-				                }
-
-				                inputStream.close();
-				                account.tokennumber = stringBuilder.toString();
-				                Log.w("servertoken",account.tokennumber);
-				            }
-				        }
-				        catch (FileNotFoundException e) {
-				            Log.e("login activity", "File not found: " + e.toString());
-				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-				            .show();
-				        } catch (IOException e) {
-				            Log.e("login activity", "Can not read file: " + e.toString());
-				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-				            .show();
-				        }	
-				        
-//--------------------------------> Read image from file
-						        try {
-						            FileInputStream inputStream = openFileInput("image.txt");
-
-						            if ( inputStream != null ) {
-						                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-						                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-						                String receiveString = "";
-						                StringBuilder stringBuilder = new StringBuilder();
-
-						                while ( (receiveString = bufferedReader.readLine()) != null ) {
-						                    stringBuilder.append(receiveString);
-						                }
-
-						                inputStream.close();
-						                User.profileimage = stringBuilder.toString();
-						            }
-						        }
-						        catch (FileNotFoundException e) {
-						            Log.e("login activity", "File not found: " + e.toString());
-						            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-						            .show();
-						        } catch (IOException e) {
-						            Log.e("login activity", "Can not read file: " + e.toString());
-						            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-						            .show();
-						        }
-		        
+		Bundle b = getIntent().getExtras();
+		if( b != null ){
+			account.accnumber = b.getString("accountnumber");
+			account.tokennumber = b.getString("tokennumber");
+			User.profileimage = b.getString("userimage");
+		}
 //-------------------------------------> Read data from server
-	            
-	           
-
-				    	try {
-				    		server_response = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",account.accnumber,account.tokennumber,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival),(String)addrs.country,"1"
-									, "1", "1", "1", "1", "1", "1").get();
-						} catch (InterruptedException e) {
+	    try {
+	    	Userslist.server_response = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",account.accnumber,account.tokennumber,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival),(String)addrs.country,"1"
+			, "1", "1", "1", "1", "1", "1").get();
+			} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (ExecutionException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-
-				    
-         
+				e.printStackTrace();
+			}
 	            //System.out.println(output);
-	            String[] separated = server_response.split("-");
+	            String[] separated = Userslist.server_response.split("-");
 	            User.usrfname = separated[0];
 	            User.usrlname = separated[1];
 	            User.usrgender = separated[2];
@@ -297,16 +190,10 @@ public class Login extends Activity {
 	            User.usrageandgender = User.usrgender + " | "+User.usrage;
 	            
 	            updatelocation();
-				if(server_response.contains("null")){
+				if(Userslist.server_response.contains("null")){
 					Toast.makeText(getApplicationContext(), "Metster is unable to connect to server at this time.", Toast.LENGTH_SHORT).show();
 				}
 				else{
-					
-//------------------------------
-					//-----------------------------------> post here
-					
-					// To dismiss the dialog
-					
 					
 			        try {
 			        	Userslist.numberofusers = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
@@ -330,24 +217,7 @@ public class Login extends Activity {
 		     Userslist.user_count = accountnumbers.length;
 		     Userslist.user_count --;
 			}
-			//------
-            Time now = new Time();
-            String ampm= "am";
-            int offset = 15;
-            now.setToNow(); 
-            int hour = now.hour;
-            int minute = now.minute;
-            minute = minute + offset;
-            if(minute >= 60){
-            	hour++;
-            	minute = minute - 60;
-            	
-            }
-            if(hour > 12){ 
-        		hour = hour - 12;
-        		ampm = "pm"; // still need to fix
-        	}
-            //------
+			
 //-----------------------------------------------------------> Setup the GUI with data acquired
 				//----------- Section 1
 				TextView fname = (TextView)findViewById(R.id.FirstName); 
@@ -369,9 +239,6 @@ public class Login extends Activity {
 	            locacity.setText((String)addrs.cityName);
 	            TextView num = (TextView)findViewById(R.id.NumberofUsers); 
 	            num.setText(Integer.toString(Userslist.user_count));
-	            TextView tim = (TextView)findViewById(R.id.Invisiblein);
-	            String time = hour+":"+minute+" "+ampm;
-	            tim.setText(time);
 	            //----------- Section Profile Image
 	            
 	            if (User.profileimage!=null){
@@ -427,7 +294,7 @@ public class Login extends Activity {
 		
 		Log.w("called","gaina");
 		
-		_handler.postDelayed(getData, DATA_INTERVAL);
+		_handler.postDelayed(getData, 3000);
 
 		position = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
     	provider = locationManager.getBestProvider(criteria, false);

@@ -1,5 +1,11 @@
 package com.example.metster;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -12,59 +18,39 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.metster.util.SystemUiHider;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- * 
- * @see SystemUiHider
- */
 public class LoadHome extends Activity {
-	/**
-	 * Whether or not the system UI should be auto-hidden after
-	 * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-	 */
 	private static final boolean AUTO_HIDE = true;
-
-	/**
-	 * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-	 * user interaction before hiding the system UI.
-	 */
 	private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-
-	/**
-	 * If set, will toggle the system UI visibility upon interaction. Otherwise,
-	 * will show the system UI visibility upon interaction.
-	 */
 	private static final boolean TOGGLE_ON_CLICK = true;
-
-	/**
-	 * The flags to pass to {@link SystemUiHider#getInstance}.
-	 */
 	private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
-
-	/**
-	 * The instance of the {@link SystemUiHider} for this activity.
-	 */
 	private SystemUiHider mSystemUiHider;
+	Bundle data = new Bundle();	
+	
+	public static class gpslocation{
+		
+		static double latival;
+		static double Longival;
+		
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
-		setTitle("Because, meeting people is fun!!");
+		setTitle("Meet, Connect and Socialize");
 		
 		final LocationManager locationManager;
 		final LocationListener locationListener;
-		final Location location;
+		Location location = null;
 		Location pos = null ;
 		String provider;
-		double latival = 0.0;
-		double Longival = 0.0;
 		
 		super.onCreate(savedInstanceState);
 
@@ -76,11 +62,9 @@ public class LoadHome extends Activity {
 
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.
-		mSystemUiHider = SystemUiHider.getInstance(this, contentView,
-				HIDER_FLAGS);
+		mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
 		mSystemUiHider.setup();
-		mSystemUiHider
-				.setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
+		mSystemUiHider.setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
 					// Cached values.
 					int mControlsHeight;
 					int mShortAnimTime;
@@ -137,7 +121,7 @@ public class LoadHome extends Activity {
 		//findViewById(R.id.dummy_button).setOnTouchListener(
 		//		mDelayHideTouchListener);
 		
-		//----------------------------------------------------------  Setup GPS reader here!!
+//----------------------------------------------------------  Setup GPS reader here!!
 		
 		
 		//--------------------------------> Setup location
@@ -147,20 +131,40 @@ public class LoadHome extends Activity {
 		// Define a listener that responds to location updates
 		   locationListener = new LocationListener() {
 		    public void onLocationChanged(Location location) {	
+		    	gpslocation.latival = location.getLatitude();
+	        	gpslocation.Longival = location.getLongitude();
 		    	
 		    }
-		    public void onStatusChanged(String provider, int status, Bundle extras) {
-		    	
+		    
+			@SuppressWarnings("unused")
+			public void onStatusChanged(Location location) {
+		    	gpslocation.latival = location.getLatitude();
+	        	gpslocation.Longival = location.getLongitude();
 		    }
-		    public void onProviderEnabled(String provider) {
-		    	
+		  
+			@SuppressWarnings("unused")
+			public void onProviderEnabled(Location location) {
+		    	gpslocation.latival = location.getLatitude();
+	        	gpslocation.Longival = location.getLongitude();
 		    }
 		    public void onProviderDisabled(String provider) {}
+
+			@Override
+			public void onProviderEnabled(String provider) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onStatusChanged(String provider, int status,
+					Bundle extras) {
+				// TODO Auto-generated method stub
+				
+			}
 		  };
 		      //------------------------------------------------------------------------
 		// Register the listener with the Location Manager to receive location updates
 		  		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-		        //locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		        Criteria criteria = new Criteria();
 		        pos = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		        if( pos == null ) 
@@ -169,14 +173,100 @@ public class LoadHome extends Activity {
 		        	pos = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		        	provider = locationManager.getBestProvider(criteria, false);
 		        	location = locationManager.getLastKnownLocation(provider);
-		        	latival = location.getLatitude();
-		        	Longival = location.getLongitude();
+		        	gpslocation.latival = location.getLatitude();
+		        	gpslocation.Longival = location.getLongitude();
 		        	}
 		        else{
-		        	latival = pos.getLatitude();
-		        	Longival = pos.getLongitude();
+		        	gpslocation.latival = pos.getLatitude();
+		        	gpslocation.Longival = pos.getLongitude();
 		        	}
+		        
+		       //---------------------------------------------------------------------
+		        
+//--------------------------------> Read user ID
+		       			
+		        try {
+		            FileInputStream inputStream = openFileInput("accounts.txt");
+
+		            if ( inputStream != null ) {
+		                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+		                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+		                String receiveString = "";
+		                StringBuilder stringBuilder = new StringBuilder();
+
+		                while ( (receiveString = bufferedReader.readLine()) != null ) {
+		                    stringBuilder.append(receiveString);
+		                }
+
+		                inputStream.close();
+		                data.putString("accountnumber", stringBuilder.toString()); 
+		            }
+		        }
+		        catch (FileNotFoundException e) {
+		            Log.e("login activity", "File not found: " + e.toString());
+		            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+		            .show();
+		        } catch (IOException e) {
+		            Log.e("login activity", "Can not read file: " + e.toString());
+		            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+		            .show();
+		        }	
+//--------------------------------> Read token			
+				try {
+					FileInputStream inputStream = openFileInput("token.txt");
+
+				    if ( inputStream != null ) {
+				    	InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+				        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+				        String receiveString = "";
+				        StringBuilder stringBuilder = new StringBuilder();
+
+				        while ( (receiveString = bufferedReader.readLine()) != null ) {
+				                    stringBuilder.append(receiveString);
+				        }
+				                inputStream.close();
+				                data.putString("tokennumber", stringBuilder.toString());
+				        }
+				    }
+				 catch (FileNotFoundException e) {
+				            Log.e("login activity", "File not found: " + e.toString());
+				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+				            .show();
+				    } catch (IOException e) {
+				            Log.e("login activity", "Can not read file: " + e.toString());
+				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+				            .show();
+				  }	
+				        
+//--------------------------------> Read image from file
+				try {
+					FileInputStream inputStream = openFileInput("image.txt");
+
+					if ( inputStream != null ) {
+						InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+						BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+						String receiveString = "";
+						StringBuilder stringBuilder = new StringBuilder();
+						
+		                while ( (receiveString = bufferedReader.readLine()) != null ) {
+		                	stringBuilder.append(receiveString);
+						}
+		                inputStream.close();
+						                data.putString("userimage", stringBuilder.toString());
+						}
+					}
+				catch (FileNotFoundException e) {
+						Log.e("login activity", "File not found: " + e.toString());
+						Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+						            .show();
+						} catch (IOException e) {
+						            Log.e("login activity", "Can not read file: " + e.toString());
+						            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+						            .show();
+			    }
 		      //-----------------------------------------------------------------------
+				
+				
 		        
 		        Runnable mRunnable;
 		        Handler mHandler = new Handler();
@@ -185,6 +275,7 @@ public class LoadHome extends Activity {
 		            public void run() {
 		            	locationManager.removeUpdates(locationListener);
 		                Intent serviceIntent = new Intent(LoadHome.this, Login.class);
+		                serviceIntent.putExtras(data);
 		                //LoadHome.this.startService(serviceIntent);
 		                startActivity(serviceIntent);
 		                finish();

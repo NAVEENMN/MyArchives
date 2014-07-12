@@ -175,21 +175,7 @@
                 android:text="@string/MetsterUsers"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-            <TextView
-                android:id="@+id/InvisibleinLable"
-                android:paddingTop="10dp"
-                android:textColor="#424242"
-                android:textSize="12sp"
-                android:text="@string/InvisibleIn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <TextView
-                android:id="@+id/Invisiblein"
-                android:textColor="#5F04B4"
-                android:textSize="12sp"
-                android:text="@string/InvisibleIn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+            
             
             <TextView
                 android:id="@+id/MyStatuslabel"
