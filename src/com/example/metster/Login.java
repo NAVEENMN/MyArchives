@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -41,45 +40,61 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Login extends Activity {
-	
-	//----------------------------------------->
-		String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";
-		Geocoder gcd ;
-		GoogleMap mMap;
-		LocationManager locationManager;
-		LocationListener locationListener;
-		Location location;
-		Location pos = null ;
-		String provider;	
-		String usremail;
 		
-		List<Address> addresses;
-		String cityName = null;
-		String country = null;
-		String addressline = null;
-		String state = null;
-		String zip = null;
-		String numb = null;
+	public static class addrs{
+	
+		static String zip;
+		static String cityName;
+		static String country;
+		static String addressline;
+		
+	};
+	
+	public static class User{
+		
+		static String profileimage;
+		static String usrfname;
+		static String usrlname;
+		static String usrgender;
+		static String usrage;
+		static String usrageandgender;
+		static String usrprofession;
+		static String usrworksat;
+		static String usrcurrentcity;
+		
+	};
+	
+	public static class account{
+		static String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";
+		static String accnumber;
+		static String tokennumber;
+	};
+	
+	public static class Map{
+		
+		static Double latival;
+		static Double Longival;
+		
+	};
+	
+	public static class Userslist{
+		static String numberofusers;
+		static int user_count;
+	};
 	//----------------------------------------->
-		String usrfname;
-		String usrlname;
-		String usrgender;
-		String usrage;
-		String usrageandgender;
-		String usrprofession;
-		String usrworksat;
-		String usrcurrentcity;
-		String ret = "";
-		String accnumber = "";
-		String tokennumber = "";
-		String profileimage = "";
-		private Button find;
-		Double latival = 0.0 ;
-		Double Longival = 0.0 ;
-		Location lon2 = new Location("");
-		int flag = 0;
-		final ArrayList<String> USERNAME = new ArrayList<String>();
-		int len = 0;
+		
+	Geocoder gcd ;
+	GoogleMap mMap;
+	LocationManager locationManager;
+	LocationListener locationListener;
+	Location location;
+	Location position;
+	String provider;	
+	List<Address> addresses;
+	
+	String server_response = null;
+	private Button find;
+		
 		//-------
 		private final Handler _handler = new Handler();
 		private static int DATA_INTERVAL = 5000;
@@ -96,20 +111,21 @@ public class Login extends Activity {
 		setTitle("Metster");
 		//--------------------------------> Setup location
 // Acquire a reference to the system Location Manager
+		
 	locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 // Define a listener that responds to location updates
    locationListener = new LocationListener() {
     public void onLocationChanged(Location location) {	
-    	latival = location.getLatitude();
-    	Longival = location.getLongitude();
+    	Map.latival = location.getLatitude();
+    	Map.Longival = location.getLongitude();
     }
     public void onStatusChanged(String provider, int status, Bundle extras) {
-    	latival = location.getLatitude();
-    	Longival = location.getLongitude();
+    	Map.latival = location.getLatitude();
+    	Map.Longival = location.getLongitude();
     }
     public void onProviderEnabled(String provider) {
-    	latival = location.getLatitude();
-    	Longival = location.getLongitude();
+    	Map.latival = location.getLatitude();
+    	Map.Longival = location.getLongitude();
     }
     public void onProviderDisabled(String provider) {}
   };
@@ -117,19 +133,19 @@ public class Login extends Activity {
 // Register the listener with the Location Manager to receive location updates
   		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        pos = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if( pos == null ) 
+        position = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if( position == null ) 
         	{
         	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        	pos = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        	position = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         	provider = locationManager.getBestProvider(criteria, false);
         	location = locationManager.getLastKnownLocation(provider);
-        	latival = location.getLatitude();
-        	Longival = location.getLongitude();
+        	Map.latival = location.getLatitude();
+        	Map.Longival = location.getLongitude();
         	}
         else{
-        	latival = pos.getLatitude();
-        	Longival = pos.getLongitude();
+        	Map.latival = position.getLatitude();
+        	Map.Longival = position.getLongitude();
         	}		
 //--------------------------------------------------------------> Turn off location listener after 5 mins
         
@@ -148,19 +164,15 @@ public class Login extends Activity {
 //------------------------------------------------------------------> Fetch the location details
 		gcd = new Geocoder(getBaseContext(), Locale.getDefault());
 		List<Address> addresses;
-		String cityName = null;
-		String country = null;
-		String addressline = null;
 		//String state = null;
-		String zip = null;
+		
 		try {
-            addresses = gcd.getFromLocation(latival, Longival, 1);
+            addresses = gcd.getFromLocation(Map.latival, Map.Longival, 1);
             if (addresses.size() > 0)
-            cityName = addresses.get(0).getLocality();
-            country = addresses.get(0).getCountryCode();
-            state = addresses.get(0).getAdminArea();
-            zip = addresses.get(0).getPostalCode();
-            addressline = addresses.get(0).getThoroughfare();
+            addrs.cityName = addresses.get(0).getLocality();
+            addrs.country = addresses.get(0).getCountryCode();
+            addrs.zip = addresses.get(0).getPostalCode();
+            addrs.addressline = addresses.get(0).getThoroughfare();
            
         } catch (IOException e) {
             e.printStackTrace();
@@ -185,8 +197,7 @@ public class Login extends Activity {
 		                }
 
 		                inputStream.close();
-		                accnumber = stringBuilder.toString();
-		                Log.w("serveraccnumber",accnumber);
+		                account.accnumber = stringBuilder.toString();
 		            }
 		        }
 		        catch (FileNotFoundException e) {
@@ -214,8 +225,8 @@ public class Login extends Activity {
 				                }
 
 				                inputStream.close();
-				                tokennumber = stringBuilder.toString();
-				                Log.w("servertoken",tokennumber);
+				                account.tokennumber = stringBuilder.toString();
+				                Log.w("servertoken",account.tokennumber);
 				            }
 				        }
 				        catch (FileNotFoundException e) {
@@ -243,7 +254,7 @@ public class Login extends Activity {
 						                }
 
 						                inputStream.close();
-						                profileimage = stringBuilder.toString();
+						                User.profileimage = stringBuilder.toString();
 						            }
 						        }
 						        catch (FileNotFoundException e) {
@@ -257,37 +268,36 @@ public class Login extends Activity {
 						        }
 		        
 //-------------------------------------> Read data from server
-	            String output = null;
-	            System.out.print("fetching");
-	            try {
-	            	//ProgressDialog dialog = new ProgressDialog(Login.this);
-	                //dialog.setMessage("Fetching Profile..");
-	                //dialog.show();
-					output = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",accnumber,tokennumber,zip,Double.toString(latival),Double.toString(Longival),(String)country,accnumber
-							, accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
-					//if (! output.isEmpty()){
-					//dialog.dismiss();
-					//}
-	            } catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ExecutionException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+	            
+	           
+
+				    	try {
+				    		server_response = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",account.accnumber,account.tokennumber,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival),(String)addrs.country,"1"
+									, "1", "1", "1", "1", "1", "1").get();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+
+				    
+         
 	            //System.out.println(output);
-	            String[] separated = output.split("-");
-	            usrfname = separated[0];
-	            usrlname = separated[1];
-	            usrgender = separated[2];
-	            usrage = separated[3];
-	            usrprofession = separated[4];
-	            usrworksat = separated[5];
-	            usrcurrentcity = separated[6];
-	            usrageandgender = usrgender + " | "+usrage;
+	            String[] separated = server_response.split("-");
+	            User.usrfname = separated[0];
+	            User.usrlname = separated[1];
+	            User.usrgender = separated[2];
+	            User.usrage = separated[3];
+	            User.usrprofession = separated[4];
+	            User.usrworksat = separated[5];
+	            User.usrcurrentcity = separated[6];
+	            User.usrageandgender = User.usrgender + " | "+User.usrage;
 	            
 	            updatelocation();
-				if(output.contains("null")){
+				if(server_response.contains("null")){
 					Toast.makeText(getApplicationContext(), "Metster is unable to connect to server at this time.", Toast.LENGTH_SHORT).show();
 				}
 				else{
@@ -295,10 +305,12 @@ public class Login extends Activity {
 //------------------------------
 					//-----------------------------------> post here
 					
+					// To dismiss the dialog
+					
 					
 			        try {
-			        	numb = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
-								accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
+			        	Userslist.numberofusers = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
+								"1", "1", "1", "1", "1", "1").get();
 			            
 			        	} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
@@ -307,15 +319,16 @@ public class Login extends Activity {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+
 	//----------------------------------
-			if(numb.isEmpty()) 
+			if(Userslist.numberofusers.isEmpty()) 
 			{
 				Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
 			}
 			else {
-			final String[] accountnumbers = numb.split("#%-->");
-		     len = accountnumbers.length;
-		     len --;
+			final String[] accountnumbers = Userslist.numberofusers.split("#%-->");
+		     Userslist.user_count = accountnumbers.length;
+		     Userslist.user_count --;
 			}
 			//------
             Time now = new Time();
@@ -338,31 +351,31 @@ public class Login extends Activity {
 //-----------------------------------------------------------> Setup the GUI with data acquired
 				//----------- Section 1
 				TextView fname = (TextView)findViewById(R.id.FirstName); 
-		        fname.setText((String)usrfname);
+		        fname.setText((String)User.usrfname);
 		        TextView lname = (TextView)findViewById(R.id.LastName); 
-		        lname.setText((String)usrlname);
+		        lname.setText((String)User.usrlname);
 		        TextView prof = (TextView)findViewById(R.id.Profession); 
-		        prof.setText((String)usrprofession);
+		        prof.setText((String)User.usrprofession);
 		        TextView wat = (TextView)findViewById(R.id.Worksat); 
-		        wat.setText((String)usrworksat);
+		        wat.setText((String)User.usrworksat);
 		        TextView ag = (TextView)findViewById(R.id.AgeandGender); 
-		        ag.setText((String)usrageandgender);
+		        ag.setText((String)User.usrageandgender);
 		        TextView cc = (TextView)findViewById(R.id.CurrentCity); 
-		        cc.setText((String)usrcurrentcity);
+		        cc.setText((String)User.usrcurrentcity);
 		        //----------- Section 2
 		        TextView loca = (TextView)findViewById(R.id.YourLocation); 
-	            loca.setText((String)addressline);
+	            loca.setText((String)addrs.addressline);
 	            TextView locacity = (TextView)findViewById(R.id.YourLocationcity); 
-	            locacity.setText((String)cityName);
+	            locacity.setText((String)addrs.cityName);
 	            TextView num = (TextView)findViewById(R.id.NumberofUsers); 
-	            num.setText(Integer.toString(len));
+	            num.setText(Integer.toString(Userslist.user_count));
 	            TextView tim = (TextView)findViewById(R.id.Invisiblein);
 	            String time = hour+":"+minute+" "+ampm;
 	            tim.setText(time);
 	            //----------- Section Profile Image
 	            
-	            if (profileimage!=null){
-                    byte[] decodedString = Base64.decode(profileimage, Base64.DEFAULT);
+	            if (User.profileimage!=null){
+                    byte[] decodedString = Base64.decode(User.profileimage, Base64.DEFAULT);
    		             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
    		             	ImageButton imageButton =(ImageButton)findViewById(R.id.ProfileImage);
    		                imageButton.setImageBitmap(decodedByte);
@@ -371,7 +384,7 @@ public class Login extends Activity {
 	            GoogleMap map = ((MapFragment) getFragmentManager()
 	                    .findFragmentById(R.id.visitormap)).getMap();
 
-	            LatLng currlocation = new LatLng(latival, Longival);// yours
+	            LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
 
 	            map.setMyLocationEnabled(true);
 	            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
@@ -387,7 +400,7 @@ public class Login extends Activity {
 		        find.setOnClickListener(new View.OnClickListener() {	
 						public void onClick(View v) {
 							
-							if(len > 0){
+							if(Userslist.user_count > 0){
 							stopRepeatingTask();
 							Intent intent1 = new Intent( Login.this, ProfilelistActivity.class);
 			        		startActivity(intent1);
@@ -416,30 +429,30 @@ public class Login extends Activity {
 		
 		_handler.postDelayed(getData, DATA_INTERVAL);
 
-		pos = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		position = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
     	provider = locationManager.getBestProvider(criteria, false);
     	location = locationManager.getLastKnownLocation(provider);
-    	latival = location.getLatitude();
-    	Longival = location.getLongitude();
+    	Map.latival = location.getLatitude();
+    	Map.Longival = location.getLongitude();
     	
     	String nu = null;
         try {
-        	 nu = new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
-					accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
-        	numb = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
-					accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
+        	 nu = new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
+					"1", "1", "1", "1", "1", "1").get();
+        	 Userslist.numberofusers = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
+					"1", "1", "1", "1", "1", "1").get();
 		     
-		     if(numb.isEmpty()) 
+		     if(Userslist.numberofusers.isEmpty()) 
 				{
 					//Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
 				}
 				else {
-				final String[] accountnumb = numb.split("#%-->");
-			     len = accountnumb.length;
-			     len --;
+				final String[] accountnumb = Userslist.numberofusers.split("#%-->");
+				Userslist.user_count = accountnumb.length;
+				Userslist.user_count --;
 				}
         	TextView num = (TextView)findViewById(R.id.NumberofUsers); 
-            num.setText(Integer.toString(len));
+            num.setText(Integer.toString(Userslist.user_count));
             
         	} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

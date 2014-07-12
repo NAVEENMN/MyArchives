@@ -158,6 +158,11 @@ public class ProfilelistActivity extends Activity {
 				        }	
 		//-----------------------------------> post here
 				        new LongOperation().execute("");
+				        ProgressDialog progress = new ProgressDialog(this);
+						progress.setTitle("Loading");
+						progress.setMessage("Wait while loading...");
+						progress.show();
+				        
 				        try {
 				        	output = new RequestTask().execute("http://54.183.113.236/metster/profilelist.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
 									accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
@@ -169,6 +174,7 @@ public class ProfilelistActivity extends Activity {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
+				        progress.dismiss();
 		//----------------------------------
 				if(output.isEmpty()) 
 				{
