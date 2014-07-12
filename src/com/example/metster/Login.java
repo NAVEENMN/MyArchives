@@ -178,89 +178,34 @@ public class Login extends Activity {
 							// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	            //System.out.println(output);
-	            String[] separated = Userslist.server_response.split("-");
-	            User.usrfname = separated[0];
-	            User.usrlname = separated[1];
-	            User.usrgender = separated[2];
-	            User.usrage = separated[3];
-	            User.usrprofession = separated[4];
-	            User.usrworksat = separated[5];
-	            User.usrcurrentcity = separated[6];
-	            User.usrageandgender = User.usrgender + " | "+User.usrage;
-	            
+	              
 	            updatelocation();
-				if(Userslist.server_response.contains("null")){
+	    if(Userslist.server_response.contains("null")){
 					Toast.makeText(getApplicationContext(), "Metster is unable to connect to server at this time.", Toast.LENGTH_SHORT).show();
-				}
-				else{
+		}
+		else{			
+					String[] separated = Userslist.server_response.split("-");
+		            User.usrfname = separated[0];
+		            User.usrlname = separated[1];
+		            User.usrgender = separated[2];
+		            User.usrage = separated[3];
+		            User.usrprofession = separated[4];
+		            User.usrworksat = separated[5];
+		            User.usrcurrentcity = separated[6];
+		            User.usrageandgender = User.usrgender + " | "+User.usrage;
 					
-			        try {
-			        	Userslist.numberofusers = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
-								"1", "1", "1", "1", "1", "1").get();
-			            
-			        	} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (ExecutionException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
+		            SetupUIdata();
 	//----------------------------------
 			if(Userslist.numberofusers.isEmpty()) 
 			{
 				Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
 			}
 			else {
-			final String[] accountnumbers = Userslist.numberofusers.split("#%-->");
-		     Userslist.user_count = accountnumbers.length;
-		     Userslist.user_count --;
+				final String[] accountnumbers = Userslist.numberofusers.split("#%-->");
+				Userslist.user_count = accountnumbers.length;
+				Userslist.user_count --;
 			}
-			
-//-----------------------------------------------------------> Setup the GUI with data acquired
-				//----------- Section 1
-				TextView fname = (TextView)findViewById(R.id.FirstName); 
-		        fname.setText((String)User.usrfname);
-		        TextView lname = (TextView)findViewById(R.id.LastName); 
-		        lname.setText((String)User.usrlname);
-		        TextView prof = (TextView)findViewById(R.id.Profession); 
-		        prof.setText((String)User.usrprofession);
-		        TextView wat = (TextView)findViewById(R.id.Worksat); 
-		        wat.setText((String)User.usrworksat);
-		        TextView ag = (TextView)findViewById(R.id.AgeandGender); 
-		        ag.setText((String)User.usrageandgender);
-		        TextView cc = (TextView)findViewById(R.id.CurrentCity); 
-		        cc.setText((String)User.usrcurrentcity);
-		        //----------- Section 2
-		        TextView loca = (TextView)findViewById(R.id.YourLocation); 
-	            loca.setText((String)addrs.addressline);
-	            TextView locacity = (TextView)findViewById(R.id.YourLocationcity); 
-	            locacity.setText((String)addrs.cityName);
-	            TextView num = (TextView)findViewById(R.id.NumberofUsers); 
-	            num.setText(Integer.toString(Userslist.user_count));
-	            //----------- Section Profile Image
-	            
-	            if (User.profileimage!=null){
-                    byte[] decodedString = Base64.decode(User.profileimage, Base64.DEFAULT);
-   		             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-   		             	ImageButton imageButton =(ImageButton)findViewById(R.id.ProfileImage);
-   		                imageButton.setImageBitmap(decodedByte);
-                      }
-	            //----------- Section Maps
-	            GoogleMap map = ((MapFragment) getFragmentManager()
-	                    .findFragmentById(R.id.visitormap)).getMap();
-
-	            LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
-
-	            map.setMyLocationEnabled(true);
-	            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
-	            //-------------- Section Footer
-	            String footertext = "Metster \u00a9 2014, Apha Ver1.1";
-	            TextView foot = (TextView)findViewById(R.id.footer);
-	            foot.setText(footertext);
-//--------------------------------------------------------------------------------------------  
-		        
+					        
 //-----------------------------------------------------------------------> Button Actions	            
 	            //------------------------------------- meet someone
 		        find = (Button) findViewById(R.id.buttonmeet);
@@ -289,6 +234,50 @@ public class Login extends Activity {
 	}
 	//------------------------------------- update profile
 	
+	public void SetupUIdata(){
+		
+//-----------------------------------------------------------> Setup the GUI with data acquired
+		//----------- Section 1
+		TextView fname = (TextView)findViewById(R.id.FirstName); 
+        fname.setText((String)User.usrfname);
+        TextView lname = (TextView)findViewById(R.id.LastName); 
+        lname.setText((String)User.usrlname);
+        TextView prof = (TextView)findViewById(R.id.Profession); 
+        prof.setText((String)User.usrprofession);
+        TextView wat = (TextView)findViewById(R.id.Worksat); 
+        wat.setText((String)User.usrworksat);
+        TextView ag = (TextView)findViewById(R.id.AgeandGender); 
+        ag.setText((String)User.usrageandgender);
+        TextView cc = (TextView)findViewById(R.id.CurrentCity); 
+        cc.setText((String)User.usrcurrentcity);
+        //----------- Section 2
+        TextView loca = (TextView)findViewById(R.id.YourLocation); 
+        loca.setText((String)addrs.addressline);
+        TextView locacity = (TextView)findViewById(R.id.YourLocationcity); 
+        locacity.setText((String)addrs.cityName);
+        //----------- Section Profile Image
+        if (User.profileimage!=null){
+            byte[] decodedString = Base64.decode(User.profileimage, Base64.DEFAULT);
+	             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+	             	ImageButton imageButton =(ImageButton)findViewById(R.id.ProfileImage);
+	                imageButton.setImageBitmap(decodedByte);
+              }
+        //----------- Section Maps
+        GoogleMap map = ((MapFragment) getFragmentManager()
+                .findFragmentById(R.id.visitormap)).getMap();
+
+        LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
+
+        map.setMyLocationEnabled(true);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
+        //-------------- Section Footer
+        String footertext = "Metster \u00a9 2014, Apha Ver1.1";
+        TextView foot = (TextView)findViewById(R.id.footer);
+        foot.setText(footertext);
+//-------------------------------------------------------------------------------------------- 
+		
+	}
+	
 	public void updatelocation()
 	{
 		
@@ -302,9 +291,8 @@ public class Login extends Activity {
     	Map.latival = location.getLatitude();
     	Map.Longival = location.getLongitude();
     	
-    	String nu = null;
         try {
-        	 nu = new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
+        	 new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
 					"1", "1", "1", "1", "1", "1").get();
         	 Userslist.numberofusers = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
 					"1", "1", "1", "1", "1", "1").get();
@@ -314,9 +302,9 @@ public class Login extends Activity {
 					//Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
 				}
 				else {
-				final String[] accountnumb = Userslist.numberofusers.split("#%-->");
-				Userslist.user_count = accountnumb.length;
-				Userslist.user_count --;
+					final String[] accountnumb = Userslist.numberofusers.split("#%-->");
+					Userslist.user_count = accountnumb.length;
+					Userslist.user_count --;
 				}
         	TextView num = (TextView)findViewById(R.id.NumberofUsers); 
             num.setText(Integer.toString(Userslist.user_count));
