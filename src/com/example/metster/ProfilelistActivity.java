@@ -1,40 +1,21 @@
 package com.example.metster;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,165 +25,93 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class ProfilelistActivity extends Activity {
 	
-	String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";
-	String accnumber = null;
+	public static class Map{
+		
+		static Double latival;
+		static Double Longival;
+		
+	};
+	
+	public static class account{
+		static String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";
+		static String accnumber;
+		static String tokennumber;
+	};
+	
+	public static class addrs{
+		
+		static String zip;
+	};
+	
+	public static class visitorinfo{
+		
+		static int profileid;
+		static String FirstName;
+		static String LastName;
+		static String Image;
+		static String Gender;
+		static String Age;
+		static String Status;
+		static String Profession;
+		static String worksat;
+		static String CurrentCity;
+		static String hometown;
+		static String hobbies;
+		static String music;
+		static String movies;
+		static String books;
+		static String AboutMe;
+		static String Passion;
+		static String usrageandgender;
+		static Double latitude;
+		static Double longitude;
+		
+	};
+	
+	
+	
 	Button b;
-    ScrollView scrollview;
-    String profileimage;
-    String visitorimage;
     Bitmap decodedByte ;
     String visitorid = null;
     Drawable y[];
-    int prfcounter =0 ;
-    Double latival = 0.0;
-    Double Longival = 0.0;
-    Location pos = null ;
-    String zip = null;
-    LocationListener locationListener;
-    LocationManager locationManager;
+    int prfcounter = 1 ;
     String output = null;
-    String[] vsname = null;
+    String[] navigate_account_numbers = null;
+    String server_response = null;
+    int number_of_profiles = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profilelist);
-		// Show the Up button in the action bar.
-		setupActionBar();
-		
-		//-----------------------------------
-		//--------------------------------< title
+		setupActionBar();// Show the Up button in the action bar.
 	    setTitle("Hello!! I am new to Metster"); // user status here
 		
-		//--------------------------------> Setup location
-				//---------------------------------------
-		// Acquire a reference to the system Location Manager
-	    locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-		// Define a listener that responds to location updates
-		    locationListener = new LocationListener() {
-		    public void onLocationChanged(Location location) {
-		      // Called when a new location is found by the network location provider.
-		      //makeUseOfNewLocation(location);
-		    	latival = location.getLatitude();
-		    	Longival = location.getLongitude();
-		    }
-
-		    public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-		    public void onProviderEnabled(String provider) {}
-
-		    public void onProviderDisabled(String provider) {}
-		  };
-
-		// Register the listener with the Location Manager to receive location updates
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-				//---------------------------------------
-		        String provider;
-		        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		        Criteria criteria = new Criteria();
-		        pos = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		        if( pos == null ) 
-		        	{
-		        	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-		        	pos = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		        	provider = locationManager.getBestProvider(criteria, false);
-		        	Location location = locationManager.getLastKnownLocation(provider);
-		        	latival = location.getLatitude();
-		        	Longival = location.getLongitude();
-		        	}
-		        else{
-		        	latival = pos.getLatitude();
-		        	Longival = pos.getLongitude();
-		        	}
-				
-				
-				Geocoder gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-				List<Address> addresses;
-				try {
-		            addresses = gcd.getFromLocation(latival, Longival, 1);
-		            zip = addresses.get(0).getPostalCode();
-		        } catch (IOException e) {
-		            e.printStackTrace();
-		        }
-				
-		        //----------------------------------------
-		//-----------------------------------
-				//--------------------------------> Read user ID
-				//-------------------------------------
-						
-				        try {
-				            FileInputStream inputStream = openFileInput("accounts.txt");
-
-				            if ( inputStream != null ) {
-				                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-				                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-				                String receiveString = "";
-				                StringBuilder stringBuilder = new StringBuilder();
-
-				                while ( (receiveString = bufferedReader.readLine()) != null ) {
-				                    stringBuilder.append(receiveString);
-				                }
-
-				                inputStream.close();
-				                accnumber = stringBuilder.toString();
-				            }
-				        }
-				        catch (FileNotFoundException e) {
-				            Log.e("login activity", "File not found: " + e.toString());
-				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-				            .show();
-				        } catch (IOException e) {
-				            Log.e("login activity", "Can not read file: " + e.toString());
-				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-				            .show();
-				        }	
-		//-----------------------------------> post here
-				        new LongOperation().execute("");
-				        ProgressDialog progress = new ProgressDialog(this);
-						progress.setTitle("Loading");
-						progress.setMessage("Wait while loading...");
-						progress.show();
-				        
-				        try {
-				        	output = new RequestTask().execute("http://54.183.113.236/metster/profilelist.php",accnumber,appkey,zip,Double.toString(latival),Double.toString(Longival), accnumber,accnumber,
-									accnumber, accnumber, accnumber, accnumber, accnumber, accnumber).get();
-				            
-				        	} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (ExecutionException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-				        progress.dismiss();
-		//----------------------------------
-				if(output.isEmpty()) 
-				{
-					Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
-				}
-				else {
-				final String[] separated = output.split("#%-->");
-				final int len = separated.length;	
-				prfcounter += 3;
-				Log.w("Latt", separated[prfcounter+1]);
-				Log.w("Latt", separated[prfcounter+2]);
-				// dummy #%--> usrid #%--> fname lname #%--> image #%--> lat #%--> long
-				if (separated[prfcounter]!=null ){
-					
-					try {
-						displayprofile(separated[prfcounter],separated[prfcounter-1],  Double.parseDouble(separated[prfcounter+1]), Double.parseDouble(separated[prfcounter+2]) );
-						visitorid = separated[prfcounter-2];
-						visitorimage = separated[prfcounter];
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ExecutionException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-		            
-		         
-				}
+	    Bundle listdata = getIntent().getExtras();
+	    if(listdata != null){
+	    	Map.latival = listdata.getDouble("latitude");
+	    	Map.Longival = listdata.getDouble("longitude");
+	    	account.accnumber = listdata.getString("accountnumber");
+	    	addrs.zip = listdata.getString("zip");
+	    	navigate_account_numbers = listdata.getString("accountnumberlist").split("#%-->");
+	    	number_of_profiles = navigate_account_numbers.length;
+            number_of_profiles --;
+	    	visitorinfo.profileid = Integer.parseInt(navigate_account_numbers[1]);
+	    	
+	    }
+	    		
+	    
+	    try {
+			current_visitor(visitorinfo.profileid );
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ExecutionException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    
+		
 		//---------------------------------- Button next
 				Button find = (Button) findViewById(R.id.visitorbuttonnext);
 		        find.setOnClickListener(new View.OnClickListener() {
@@ -210,21 +119,11 @@ public class ProfilelistActivity extends Activity {
 						
 						public void onClick(View v) {
 							
-							prfcounter += 5;
-							if ( prfcounter >= len ) prfcounter = 3 ;
-							if (separated[prfcounter]!=null){
-							System.out.println("lenght");
-							System.out.println(len);
-							System.out.println("prfcounter");
-							System.out.println(prfcounter);
-							System.out.println("prfid");
-							System.out.println(separated[prfcounter-1]);
+							if( prfcounter >= number_of_profiles ) prfcounter = 0 ;
+							prfcounter++;
+							visitorinfo.profileid = Integer.parseInt(navigate_account_numbers[prfcounter]);
 							try {
-								
-								displayprofile(separated[prfcounter],separated[prfcounter-1], Double.parseDouble(separated[prfcounter+1]), Double.parseDouble(separated[prfcounter+2]) );
-								visitorid = separated[prfcounter-2];
-								visitorimage = separated[prfcounter];
-								
+								current_visitor(visitorinfo.profileid );
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -232,8 +131,8 @@ public class ProfilelistActivity extends Activity {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-							}
-					       }//on click
+					       
+						}//on click
 					
 					
 		        		});
@@ -246,8 +145,8 @@ public class ProfilelistActivity extends Activity {
 						public void onClick(View v) { // yet to be implemented
 							
 							Intent intent = new Intent(ProfilelistActivity.this, Profiles.class);
-							intent.putExtra("VisitorId",visitorid);
-							intent.putExtra("VisitorImage",visitorimage);
+							intent.putExtra("VisitorId",visitorinfo.profileid);
+							intent.putExtra("VisitorImage",visitorinfo.Image);
 			        		startActivity(intent);
 							
 					       }//on click
@@ -256,27 +155,18 @@ public class ProfilelistActivity extends Activity {
 		        		});
 		//----------------------------------
 		        
-		      //---------------------------------- Button next
+		      //---------------------------------- Button previous
 				Button findprev = (Button) findViewById(R.id.visitorbuttonprev);
 				findprev.setOnClickListener(new View.OnClickListener() {
 					
 						
 						public void onClick(View v) {
 							
-							prfcounter -= 5;
-							if ( prfcounter <= 3 ) prfcounter = 3 ; // you have to fix it to last profile
-							if (separated[prfcounter]!=null){
-							System.out.println("lenght");
-							System.out.println(len);
-							System.out.println("prfcounter");
-							System.out.println(prfcounter);
-							System.out.println("prfid");
-							System.out.println(separated[prfcounter-1]);
+							if( prfcounter <= 1 ) prfcounter = number_of_profiles + 1  ;
+							prfcounter--;
+							visitorinfo.profileid = Integer.parseInt(navigate_account_numbers[prfcounter]);
 							try {
-								
-								displayprofile(separated[prfcounter],separated[prfcounter-1], latival, Longival );
-								visitorid = separated[prfcounter-2];
-								visitorimage = separated[prfcounter];
+								current_visitor(visitorinfo.profileid );
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -284,32 +174,77 @@ public class ProfilelistActivity extends Activity {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-							}
 					       }//on click
 					
 					
 		        		});
 		//----------------------------------
-				} // else ends here
+				
 				        
 		
 	}
 	
-	public void displayprofile(String image, String visfname ,double lativale , double Longivale ) throws InterruptedException, ExecutionException
+	public void current_visitor(int account_number) throws InterruptedException, ExecutionException{
+		
+		 try {
+		    	server_response = new RequestTask().execute("http://54.183.113.236/metster/getprofiledata.php", account.appkey, Integer.toString(account_number), "1","1","1", "1", "1"
+						, "1", "1", "1", "1", "1", "1" ).get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			 final String[] separated = server_response.split("#%-->");
+			 visitorinfo.FirstName = separated[0];
+			 visitorinfo.LastName = separated[1];
+			 visitorinfo.Image = separated[2];
+			 visitorinfo.Gender = separated[3];
+			 visitorinfo.Age = separated[4];
+			 visitorinfo.Status = separated[5];
+			 visitorinfo.Profession = separated[6];
+			 visitorinfo.worksat = separated[7];
+			 visitorinfo.CurrentCity = separated[8];
+			 visitorinfo.hometown = separated[9];
+			 visitorinfo.hobbies = separated[10];
+			 visitorinfo.music = separated[11];
+			 visitorinfo.movies = separated[12];
+			 visitorinfo.books = separated[13];
+			 visitorinfo.AboutMe = separated[14];
+			 visitorinfo.Passion = separated[15];
+			 visitorinfo.latitude = Double.parseDouble(separated[16]);
+			 visitorinfo.longitude = Double.parseDouble(separated[17]);
+			 visitorinfo.usrageandgender = visitorinfo.Gender + " | " + visitorinfo.Age ;
+			 
+			 displayprofile(visitorinfo.Image, visitorinfo.FirstName, visitorinfo.LastName, visitorinfo.latitude, visitorinfo.longitude, visitorinfo.Gender,
+					        visitorinfo.Age, visitorinfo.Profession, visitorinfo.worksat, visitorinfo.CurrentCity);
+		
+	}
+	
+	public void displayprofile(String image, String visfname, String vislname ,double lativale , double Longivale, String gender, String age, String profession,
+			                   String worksat, String currentcity)
 	{
-		Log.w("Latt", Double.toString(lativale));
-		Log.w("Latt", Double.toString(Longivale));
-		//-----------------------> display name
-		vsname = visfname.split(" ");
+		//-----------------------> display contents
 		TextView fname = (TextView)findViewById(R.id.FirstName); 
-        fname.setText(vsname[0]);
+        fname.setText(visfname);
         TextView lname = (TextView)findViewById(R.id.LastName); 
-        lname.setText(vsname[1]);
+        lname.setText(vislname);
+        TextView prof = (TextView)findViewById(R.id.Profession); 
+        prof.setText(profession);
+        TextView workat = (TextView)findViewById(R.id.Worksat); 
+        workat.setText(worksat);
+        TextView currcity = (TextView)findViewById(R.id.CurrentCity); 
+        currcity.setText(currentcity);
+        TextView ag = (TextView)findViewById(R.id.AgeandGender); 
+        String agegen = gender + " | " + age ;
+        ag.setText(agegen);
 		//-----------------------> put vis on map
         GoogleMap map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.visitormap)).getMap();
 
-        LatLng currlocation = new LatLng(latival, Longival);// yours
+        LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
 
         map.setMyLocationEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
@@ -318,7 +253,7 @@ public class ProfilelistActivity extends Activity {
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
         mMap.clear();
         mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(lativale, Longivale))
+                .position(new LatLng(lativale, Longivale)) // visitor
                 .title("Hi")).showInfoWindow();
         
         
@@ -332,8 +267,7 @@ public class ProfilelistActivity extends Activity {
 	//---------------------
 	@Override
 	public void onBackPressed() {
-	 
-		locationManager.removeUpdates(locationListener);
+
 		ProfilelistActivity.this.finish();
 		
 	}
@@ -371,32 +305,5 @@ public class ProfilelistActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	//------------- async
-	private class LongOperation extends AsyncTask<String, Void, String> {
-		ProgressDialog dialog = new ProgressDialog(ProfilelistActivity.this);
-		@Override
-        protected String doInBackground(String... params) {
-        	//while( output.isEmpty());
-        	return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-        	dialog.dismiss();
-        }
-
-        @Override
-        protected void onPreExecute() {
-        	
-            dialog.setMessage("Fetching Profile..");
-            dialog.show();
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
-	}
-	//--------------------
 
 }

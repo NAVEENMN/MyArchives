@@ -59,29 +59,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-            <TextView
-                android:id="@+id/StudentType"
+             <TextView
+                android:id="@+id/Profession"
                 android:textColor="#F2F2F2"
                 android:textSize="12sp"
                 android:text="@string/StudentType"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
-                android:id="@+id/Major"
+                android:id="@+id/Worksat"
                 android:textColor="#F2F2F2"
                 android:textSize="12sp"
                 android:text="@string/Major"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
-                android:id="@+id/University"
+                android:id="@+id/AgeandGender"
                 android:textColor="#F2F2F2"
                 android:textSize="12sp"
-                android:text="@string/University"
+                android:text="@string/Gender"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
-                android:id="@+id/AgeAndGender"
+                android:id="@+id/CurrentCity"
                 android:textColor="#F2F2F2"
                 android:textSize="12sp"
                 android:text="@string/Gender"

@@ -91,15 +91,15 @@ public class Login extends Activity {
 	private final Handler _handler = new Handler();
 	Runnable getData;
     Criteria criteria = new Criteria();
+    Bundle profilelistactdata = new Bundle();
     //---------------------------------------->
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		setupActionBar();// Show the Up button in the action bar.
 		setTitle("Metster");
-		//--------------------------------> Setup location
+	//--------------------------------> Setup location
 	locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
     locationListener = new LocationListener() {
     public void onLocationChanged(Location location) {	
@@ -132,16 +132,16 @@ public class Login extends Activity {
         location = locationManager.getLastKnownLocation(provider);
         Map.latival = location.getLatitude();
         Map.Longival = location.getLongitude();
-    }		
-        
-         getData = new Runnable()
-        {
+    }
+    
+    getData = new Runnable()
+    {
             @Override
             public void run()
             {
                 updatelocation();
             }
-        };
+    };
      
 //------------------------------------------------------------------> Fetch the location details
 		gcd = new Geocoder(getBaseContext(), Locale.getDefault());
@@ -153,6 +153,7 @@ public class Login extends Activity {
             addrs.cityName = addresses.get(0).getLocality();
             addrs.country = addresses.get(0).getCountryCode();
             addrs.zip = addresses.get(0).getPostalCode();
+            profilelistactdata.putString("zip", addrs.zip);
             addrs.addressline = addresses.get(0).getThoroughfare();
            
         } catch (IOException e) {
@@ -164,6 +165,7 @@ public class Login extends Activity {
 		Bundle b = getIntent().getExtras();
 		if( b != null ){
 			account.accnumber = b.getString("accountnumber");
+			profilelistactdata.putString("accountnumber", account.accnumber);
 			account.tokennumber = b.getString("tokennumber");
 			User.profileimage = b.getString("userimage");
 		}
@@ -214,8 +216,10 @@ public class Login extends Activity {
 							
 							if(Userslist.user_count > 0){
 							stopRepeatingTask();
-							Intent intent1 = new Intent( Login.this, ProfilelistActivity.class);
-			        		startActivity(intent1);
+							locationManager.removeUpdates(locationListener);
+							Intent intentprofilelist = new Intent( Login.this, ProfilelistActivity.class);
+							intentprofilelist.putExtras(profilelistactdata);
+			        		startActivity(intentprofilelist);
 							}
 							else{
 								//Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT).show();
@@ -224,10 +228,7 @@ public class Login extends Activity {
 					}//on click
 					
 		        		}
-		        );
-		        
-//------------------------------------------------------------------------------------------------		        
-		        
+		        );	        
 } // else ends here
 				
 				
@@ -290,13 +291,15 @@ public class Login extends Activity {
     	location = locationManager.getLastKnownLocation(provider);
     	Map.latival = location.getLatitude();
     	Map.Longival = location.getLongitude();
+    	profilelistactdata.putDouble("latitude",Map.latival);
+    	profilelistactdata.putDouble("longitude", Map.Longival);
     	
         try {
         	 new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
 					"1", "1", "1", "1", "1", "1").get();
         	 Userslist.numberofusers = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
 					"1", "1", "1", "1", "1", "1").get();
-		     
+        	 profilelistactdata.putString("accountnumberlist", Userslist.numberofusers);
 		     if(Userslist.numberofusers.isEmpty()) 
 				{
 					//Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
