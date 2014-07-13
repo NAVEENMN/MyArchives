@@ -24,6 +24,7 @@
     <string name="LastName">Last Name</string>
     <string name="Email">Email</string>
     <string name="email_hint">Email</string>
+    <string name="DateofBirthLable">Date of Birth</string>
     <string name="Password">Password</string>
     <string name="RetypePassword">Retype Password</string>
     <string name="Password_hint">Password</string>

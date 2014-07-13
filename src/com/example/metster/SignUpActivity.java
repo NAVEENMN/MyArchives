@@ -36,11 +36,17 @@ public class SignUpActivity extends Activity {
 	String val;
 	int userid;
 	public int imgstat = 0;
+	
+	public static class userinfo{
+		
+	};
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sign_up);
-		
+		getActionBar().hide();
 	}
 	
 	//--------------------------------Image to button  and Image path -----------------------
@@ -93,34 +99,19 @@ public class SignUpActivity extends Activity {
 	        
 	    }
 		
-	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
 	public void radio1_onClick(View v)
 	{
 	    CompoundButton b1=(CompoundButton)findViewById(R.id.radioButton1);
 	    CompoundButton b2=(CompoundButton)findViewById(R.id.radioButton2);
-	    CompoundButton b3=(CompoundButton)findViewById(R.id.radioButton3);
 	    b1.setChecked(true); /* light the button */
 	    b2.setChecked(false); /* unlight the button */
-	    b3.setChecked(false); /* unlight the button */
 	}
 	public void radio2_onClick(View v)
 	{
 	    CompoundButton b1=(CompoundButton)findViewById(R.id.radioButton1);
 	    CompoundButton b2=(CompoundButton)findViewById(R.id.radioButton2);
-	    CompoundButton b3=(CompoundButton)findViewById(R.id.radioButton3);
 	    b1.setChecked(false); /* light the button */
 	    b2.setChecked(true); /* unlight the button */
-	    b3.setChecked(false); /* unlight the button */
-	}
-	public void radio3_onClick(View v)
-	{
-	    CompoundButton b1=(CompoundButton)findViewById(R.id.radioButton1);
-	    CompoundButton b2=(CompoundButton)findViewById(R.id.radioButton2);
-	    CompoundButton b3=(CompoundButton)findViewById(R.id.radioButton3);
-	    b1.setChecked(false); /* light the button */
-	    b2.setChecked(false); /* unlight the button */
-	    b3.setChecked(true); /* unlight the button */
 	}
 	//--------------------------------------------------------------------------
 	
@@ -138,7 +129,6 @@ public class SignUpActivity extends Activity {
 		final CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox1);
 		CompoundButton b1=(CompoundButton)findViewById(R.id.radioButton1);
 	    CompoundButton b2=(CompoundButton)findViewById(R.id.radioButton2);
-	    CompoundButton b3=(CompoundButton)findViewById(R.id.radioButton3);
 		//--------------------------------Data from fields-----------------------
     	EditText FirstName = (EditText)  findViewById(R.id.FirstName) ;
 		EditText LastName = (EditText)  findViewById(R.id.LastName) ;
@@ -202,7 +192,7 @@ public class SignUpActivity extends Activity {
         		gender = "Unknow";
         	}
         }
-        if(!(b1.isChecked()) && !(b2.isChecked()) && !(b3.isChecked()) ){
+        if(!(b1.isChecked()) && !(b2.isChecked()) ){
         	Toast.makeText(this, "Please pick up a gender", Toast.LENGTH_SHORT).show();
             return;
         }

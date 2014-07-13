@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Base64;
@@ -68,14 +67,8 @@ public class ProfilelistActivity extends Activity {
 		
 	};
 	
-	
-	
-	Button b;
-    Bitmap decodedByte ;
-    String visitorid = null;
-    Drawable y[];
+
     int prfcounter = 1 ;
-    String output = null;
     String[] navigate_account_numbers = null;
     String server_response = null;
     int number_of_profiles = 0;
@@ -240,6 +233,7 @@ public class ProfilelistActivity extends Activity {
         TextView ag = (TextView)findViewById(R.id.AgeandGender); 
         String agegen = gender + " | " + age ;
         ag.setText(agegen);
+        setTitle(visitorinfo.Status); // user status here
 		//-----------------------> put vis on map
         GoogleMap map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.visitormap)).getMap();

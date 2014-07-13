@@ -6,7 +6,9 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -339,10 +341,20 @@ public class Login extends Activity {
 	@Override
 	public void onBackPressed() {
 	 
-		stopRepeatingTask();
-		locationManager.removeUpdates(locationListener);
-		Login.this.finish();
 		
+		new AlertDialog.Builder(this)
+        .setMessage("You will go invisible, Do you wish to exit?")
+        .setTitle("Metster")
+        .setCancelable(false)
+        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            	stopRepeatingTask();
+        		locationManager.removeUpdates(locationListener);
+        		Login.this.finish();
+            }
+        })
+        .setNegativeButton("No", null)
+        .show();	
 	}
 
 	

@@ -47,7 +47,7 @@ public class HomescreenActivity extends Activity {
                 
         		Intent intent = new Intent(this, LoadHome.class);
         		startActivity(intent);
-        		Log.d("infile",ret);
+        		finish();
         		
             }
         }
@@ -123,7 +123,7 @@ public class HomescreenActivity extends Activity {
 	public void logintoaccount(View view) {
 		
 		//------------------------------------->
-boolean stat = haveNetworkConnection();
+        boolean stat = haveNetworkConnection();
 		
 		if(stat){
 		//------------------------------------->
