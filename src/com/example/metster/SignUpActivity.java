@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -36,6 +37,11 @@ public class SignUpActivity extends Activity {
 	String val;
 	int userid;
 	public int imgstat = 0;
+	
+	private DatePicker dpResult;
+	public int year;
+	private int month;
+	private int day;
 	
 	public static class userinfo{
 		
@@ -120,6 +126,9 @@ public class SignUpActivity extends Activity {
         intent.setType("image/*");
         startActivityForResult(intent, 0);
 	}
+	
+	
+
 	//------------------------------ Sign up Profile -------------------------------------
 	public void Signupaccount(View view) {
 		
@@ -198,6 +207,10 @@ public class SignUpActivity extends Activity {
         }
         
         //-----------------------------------------------------------------------
+        
+        dpResult = (DatePicker)findViewById(R.id.DateofBirth);
+        year = dpResult.getYear();
+        Log.w("year",Integer.toString(year));
     	  //------------------- read from file
             String imgpthu = "";
             try {

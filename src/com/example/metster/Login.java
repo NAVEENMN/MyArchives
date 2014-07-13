@@ -24,6 +24,7 @@ import android.support.v4.app.NavUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -370,8 +371,13 @@ public class Login extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.login, menu);
-		return true;
+		//getMenuInflater().inflate(R.menu.login, menu);
+		//return true;
+		
+		
+		MenuInflater mif = getMenuInflater();
+		mif.inflate(R.menu.main_activity_action, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
@@ -380,6 +386,10 @@ public class Login extends Activity {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
+		case R.id.logout_icon:
+			Log.w("this","toad");
+			return true;
+			
 		}
 		return super.onOptionsItemSelected(item);
 	}
