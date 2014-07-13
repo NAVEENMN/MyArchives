@@ -1,5 +1,6 @@
 package com.example.metster;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -341,7 +342,11 @@ public class Login extends Activity {
 	
 	public void logout(){
 		stopRepeatingTask();
+		locationManager.removeUpdates(locationListener);
 		Intent intent2 = new Intent( Login.this, HomescreenActivity.class);
+		File dir = getFilesDir();
+		File file = new File(dir, "accounts.txt");
+		boolean deleted = file.delete();
 		startActivity(intent2);
 		finish();
 	}

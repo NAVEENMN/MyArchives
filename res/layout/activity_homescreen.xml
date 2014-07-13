@@ -29,6 +29,20 @@
 			    android:layout_width="match_parent"
 			    android:layout_height="2dp" />
 		
+		<EditText
+		       android:id="@+id/Email"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:hint="@string/Email"
+		       android:inputType="textEmailAddress" />
+
+		   <EditText
+		       android:id="@+id/Password"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:hint="@string/Password"
+		       android:inputType="textPassword" />
+		
         
        <LinearLayout
 		        android:id="@+id/linearLayout3"

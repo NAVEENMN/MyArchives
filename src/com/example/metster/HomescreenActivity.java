@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.ExecutionException;
+
+import com.example.metster.ProfilelistActivity.account;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,7 +19,10 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
+
+
 
 
 public class HomescreenActivity extends Activity {
@@ -49,6 +55,11 @@ public class HomescreenActivity extends Activity {
         		startActivity(intent);
         		finish();
         		
+            }
+            
+            else{
+            	Toast.makeText(this, "Login using your Metster account", Toast.LENGTH_SHORT)
+                .show();
             }
         }
         catch (FileNotFoundException e) {
@@ -117,6 +128,39 @@ public class HomescreenActivity extends Activity {
 	}
 	
 	
+	public void loginprocess(String Email, String Password){
+		Log.w("lgin","good to login");
+		String server_response = "hello";
+		String appkey = "n1a1v2e3e5n8m13y21s34o55r89e"; 
+		
+		 try {
+		    	server_response = new RequestTask().execute("http://54.183.113.236/metster/loginprocess.php", appkey, Email, Password,"1","1", "1", "1"
+						, "1", "1", "1", "1", "1", "1" ).get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 
+		 Log.w("reponse",server_response);
+		 
+		 if(server_response.contentEquals("noemail")){
+			 Toast.makeText(getApplicationContext(), "Please check your email and try again", Toast.LENGTH_SHORT).show();
+		 }
+		 else{
+			 if(server_response.contentEquals("invalidpassword")){
+				 Toast.makeText(getApplicationContext(), "Please check your password and try again", Toast.LENGTH_SHORT).show();
+			 }
+			 else{
+				 Toast.makeText(getApplicationContext(), "Login ok", Toast.LENGTH_SHORT).show();
+			 }
+		 }
+		 
+		 
+	}
+	
 	
 	
 	/** Called when the user clicks the Login button */
@@ -124,9 +168,28 @@ public class HomescreenActivity extends Activity {
 		
 		//------------------------------------->
         boolean stat = haveNetworkConnection();
-		
+      		
 		if(stat){
 		//------------------------------------->
+			
+		EditText email = (EditText)  findViewById(R.id.Email) ;
+		EditText password = (EditText)  findViewById(R.id.Password) ;
+		final String Email = email.getText().toString();
+		final String Password = password.getText().toString();
+		Log.w("email",Email);
+		Log.w("password",Password);
+		
+		if(Email.isEmpty()){
+			Toast.makeText(getApplicationContext(), "Please enter your email", Toast.LENGTH_SHORT).show();
+		}
+		else{
+			if(Password.isEmpty()){
+				Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
+			}
+			else{
+				loginprocess( Email, Password);
+			}
+		}
 		
 		String ret = "";
         try {
