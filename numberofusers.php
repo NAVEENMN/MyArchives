@@ -1,4 +1,4 @@
-w<?php
+<?php
 
 include 'databaseauth.php';
 include 'keys.php';
@@ -19,8 +19,6 @@ while($ziprow = mysql_fetch_array($zipresult)) {
   $diffperlati = $perlati - $latitude ;
   $diffperlongi = $perlongi - $longitude ;
   $distance = sqrt(pow($diffperlati, 2)+ pow($diffperlongi, 2));
-  //echo $distance*1000 ;
-  //array_push($stack,$ziprow['UsrID']);
   if($distance < 0.0005 && $ziprow['UsrID'] != $accountnumber ){
   //---------------------------------fetch that user profile
   $ud = $ziprow['UsrID'] ;
@@ -35,14 +33,6 @@ while($ziprow = mysql_fetch_array($zipresult)) {
   //-------------------------------------------------------
   echo "#%-->";
   echo $ziprow['UsrID'];
-  echo "#%-->";
-  echo $rowprfi ['UserFirstName']." ". $rowprfi ['UserLastName'];
-  echo "#%-->";
-  echo $rowprfi ['image'];
-  echo "#%-->";
-  echo  $rowgps['Latitude'];
-  echo "#%-->";
-  echo $rowgps['Longitude'];
   }
 }//while
 

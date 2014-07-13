@@ -7,7 +7,6 @@ $latitude = $_POST['param4'];
 $longitude = $_POST['param5'];
 $country = $_POST['param6'];
 $pinpoint = $_POST['param7'];
-$Status = "Hello there!!";
 //----------------------------------------------------------
 $result = mysql_query("SELECT * FROM Accounts
  WHERE UserId ='$accountnumber'") or die(mysql_error()); 
@@ -21,32 +20,32 @@ $prf = mysql_query("SELECT * FROM profiledata
  WHERE usrid ='$accountnumber'") or die(mysql_error()); 
 $prfdata = mysql_fetch_array( $prf );
 
-//--------
 
-$Gender = $row['UserGender'];
-$Age = $prfdata['age'];
-$Profession = $prfdata['usrprofession'];
-$WorksAt = $prfdata['usrworksat'] ;
-$CurrentyCity = $prfdata['usrstayingat'] ;
 
 //-----------------------------------------------------------
 if($locat){ //location already exists
 //delete old now and add new one
-mysql_query("DELETE FROM Location WHERE UsrID ='$accountnumber'");
-mysql_query("INSERT INTO Location 
-(Latitude, Longitude, Zipcode, UsrID, Country, Status) VALUES('$latitude', '$longitude','$zip','$accountnumber','$country','$Status') ") 
+
+$result = mysql_query("UPDATE Location SET Latitude='$latitude' WHERE UsrID='$accountnumber'") 
 or die(mysql_error());
+
+$result = mysql_query("UPDATE Location SET Longitude='$longitude' WHERE UsrID='$accountnumber'") 
+or die(mysql_error());
+
 }
 else{ //location doesn`t exist add new one
 
 // Insert a row of information into the table "example"
-mysql_query("INSERT INTO Location 
-(Latitude, Longitude, Zipcode, UsrID, Country, Status ) VALUES('$latitude', '$longitude','$zip','$accountnumber','$country','$Status' ) ") 
+$result = mysql_query("UPDATE Location SET Latitude='$latitude' WHERE UsrID='$accountnumber'") 
 or die(mysql_error());
+
+$result = mysql_query("UPDATE Location SET Longitude='$longitude' WHERE UsrID='$accountnumber'") 
+or die(mysql_error());
+
 }
 
 if ($row){
-echo $row['UserFirstName']."-".$row['UserLastName']."-".$Gender."-".$Age."-".$Profession."-".$WorksAt."-".$CurrentyCity;
+echo $row['UserFirstName'];
 }
 else{
 echo "no";
