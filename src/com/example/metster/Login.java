@@ -339,6 +339,13 @@ public class Login extends Activity {
 		finish();
     }
 	
+	public void logout(){
+		stopRepeatingTask();
+		Intent intent2 = new Intent( Login.this, HomescreenActivity.class);
+		startActivity(intent2);
+		finish();
+	}
+	
 	@Override
 	public void onBackPressed() {
 	 
@@ -373,8 +380,6 @@ public class Login extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		//getMenuInflater().inflate(R.menu.login, menu);
 		//return true;
-		
-		
 		MenuInflater mif = getMenuInflater();
 		mif.inflate(R.menu.main_activity_action, menu);
 		return super.onCreateOptionsMenu(menu);
@@ -388,6 +393,7 @@ public class Login extends Activity {
 			return true;
 		case R.id.logout_icon:
 			Log.w("this","toad");
+			logout();
 			return true;
 			
 		}
