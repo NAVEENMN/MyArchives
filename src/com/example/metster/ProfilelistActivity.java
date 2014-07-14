@@ -230,9 +230,6 @@ public class ProfilelistActivity extends Activity {
         workat.setText(worksat);
         TextView currcity = (TextView)findViewById(R.id.CurrentCity); 
         currcity.setText(currentcity);
-        TextView ag = (TextView)findViewById(R.id.AgeandGender); 
-        String agegen = gender + " | " + age ;
-        ag.setText(agegen);
         setTitle(visitorinfo.Status); // user status here
 		//-----------------------> put vis on map
         GoogleMap map = ((MapFragment) getFragmentManager()

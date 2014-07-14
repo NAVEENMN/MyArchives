@@ -40,6 +40,7 @@ public class UpdateProfile extends Activity {
 	String profileimage;
 	public int imgstat = 0;
 	String accnumber;
+	String imagepthu = "";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -106,8 +107,6 @@ public class UpdateProfile extends Activity {
 	    			ParcelFileDescriptor fd;
 	    	        try {
 	    	            fd = getContentResolver().openFileDescriptor(data.getData(), "r");
-	    	            
-	    	          //----------------------------------------
 	    	          //-------------------------------------- write result to file 
 	    	            String filename = "path.txt";
 	    	            String string = picturePath;
@@ -138,8 +137,7 @@ public class UpdateProfile extends Activity {
 	    }
 		
 	//-------------------------------------------------------------------------
-	//-------------------------------------------------------------------------
-	//--------------------------------------------------------------------------
+
 	
 	public void pickimage(View view) {
 		Intent intent = new Intent(Intent.ACTION_PICK);
@@ -187,13 +185,18 @@ public class UpdateProfile extends Activity {
 
                     while ( (receiveString = bufferedReader.readLine()) != null ) {
                         stringBuilder.append(receiveString);
+                        
+                        inputStream.close();
+                        imgpthu = stringBuilder.toString();
+                        Log.w("path:-",imgpthu);
+                        imgstat = 1;
                     }
-
-                    inputStream.close();
-                    imgpthu = stringBuilder.toString();
-                    Log.w("path:-",imgpthu);
-                    imgstat = 1;
                 }
+                
+                else{
+                	imagepthu = "defaultprofile.png";
+                }
+                
             }
             catch (FileNotFoundException e) {
                 Log.e("login activity", "File not found: " + e.toString());
@@ -205,7 +208,7 @@ public class UpdateProfile extends Activity {
             
             //---------------------------------- image base64 compression      	
               //-----------------------------------------------------------
-              String imagepthu = "";
+              
               if(imgstat == 1){imagepthu = imgpthu ;}
               else{imagepthu = "defaultprofile.png";}
               Bitmap bitmapOrg= BitmapFactory.decodeFile(imagepthu);
@@ -320,6 +323,16 @@ public class UpdateProfile extends Activity {
             //sendEmail(fEmail);
     	}//Update Profile account ends here
     	
+	
+	@Override
+	public void onBackPressed() {
+	 
+		Intent I = new Intent(UpdateProfile.this, Login.class);
+        startActivity(I);
+        finish();
+			
+	}
+	
 
 	public boolean checkemail(String email)
 	{

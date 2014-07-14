@@ -251,8 +251,6 @@ public class Login extends Activity {
         prof.setText((String)User.usrprofession);
         TextView wat = (TextView)findViewById(R.id.Worksat); 
         wat.setText((String)User.usrworksat);
-        TextView ag = (TextView)findViewById(R.id.AgeandGender); 
-        ag.setText((String)User.usrageandgender);
         TextView cc = (TextView)findViewById(R.id.CurrentCity); 
         cc.setText((String)User.usrcurrentcity);
         //----------- Section 2

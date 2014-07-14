@@ -49,14 +49,14 @@
             <TextView
                 android:id="@+id/FirstName"
                 android:textColor="#F2F2F2"
-                android:textSize="20sp"
+                android:textSize="21sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/LastName"
                 android:textColor="#F2F2F2"
-                android:textSize="20sp"
+                android:textSize="21sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -75,13 +75,7 @@
                 android:text="@string/Major"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-            <TextView
-                android:id="@+id/AgeandGender"
-                android:textColor="#F2F2F2"
-                android:textSize="12sp"
-                android:text="@string/Gender"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+ 
             <TextView
                 android:id="@+id/CurrentCity"
                 android:textColor="#F2F2F2"

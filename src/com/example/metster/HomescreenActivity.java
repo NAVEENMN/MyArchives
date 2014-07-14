@@ -3,11 +3,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
-
-import com.example.metster.ProfilelistActivity.account;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -154,6 +153,11 @@ public class HomescreenActivity extends Activity {
 				 Toast.makeText(getApplicationContext(), "Please check your password and try again", Toast.LENGTH_SHORT).show();
 			 }
 			 else{
+				 String[] separated = server_response.split("#%-->");
+				 String accountnumber = separated[0];
+			     String token = separated[1];
+			     String image = separated[2];
+			     setuplogin(accountnumber, token,image);
 				 Toast.makeText(getApplicationContext(), "Login ok", Toast.LENGTH_SHORT).show();
 			 }
 		 }
@@ -161,6 +165,58 @@ public class HomescreenActivity extends Activity {
 		 
 	}
 	
+	
+	public void setuplogin(String accountnumber, String token, String image){
+		
+		
+    	String filetoken = "token.txt";
+    	String fileaccount = "accounts.txt";
+    	String fileimage = "image.txt";
+        FileOutputStream outputStream;
+		
+        //-------------------------------------- write token to file
+        try {
+          outputStream = openFileOutput(fileaccount, Context.MODE_PRIVATE);
+          outputStream.write(accountnumber.getBytes());
+          outputStream.close();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        
+       catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
+            if( t instanceof ExecutionException ) {
+                t = t.getCause();
+            }
+        }
+      //-------------------------------------- write account to file 
+        try {
+          outputStream = openFileOutput(filetoken, Context.MODE_PRIVATE);
+          outputStream.write(token.getBytes());
+          outputStream.close();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        
+       catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
+            if( t instanceof ExecutionException ) {
+                t = t.getCause();
+            }
+        }
+      //-------------------------------------- write image to file 
+        try {
+          outputStream = openFileOutput(fileimage, Context.MODE_PRIVATE);
+          outputStream.write(image.getBytes());
+          outputStream.close();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        
+       catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
+            if( t instanceof ExecutionException ) {
+                t = t.getCause();
+            }
+        }
+	}
 	
 	
 	/** Called when the user clicks the Login button */
@@ -208,9 +264,9 @@ public class HomescreenActivity extends Activity {
                 inputStream.close();
                 ret = stringBuilder.toString();
                 
-        		Intent intent = new Intent(this, Login.class);
+        		Intent intent = new Intent(this, LoadHome.class);
         		startActivity(intent);
-        		Log.d("infile",ret);
+        		finish();
             }
         }
         catch (FileNotFoundException e) {
