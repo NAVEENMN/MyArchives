@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     
-<item
-    
-    android:id="@+id/logout_icon"
-    android:icon="@drawable/ic_action_cancel"
-    android:title="@string/title_activity_log_out"
-    android:showAsAction="always"
-    />
-    
+    <item  
+    android:id="@+id/person_icon"
+    android:icon="@drawable/ic_action_person"
+    android:title="@string/title_activity_person"
+    android:showAsAction="always"/>
+    <item  
+    android:id="@+id/refresh_icon"
+    android:icon="@drawable/ic_action_refresh"
+    android:title="@string/title_activity_refresh"
+    android:showAsAction="always"/>
+    <item  
+    android:id="@+id/settings_icon"
+    android:icon="@drawable/ic_action_settings"
+    android:title="@string/title_activity_settings"
+    android:showAsAction="always"/>
 
     
     

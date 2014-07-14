@@ -335,7 +335,6 @@ public class Login extends Activity {
 		stopRepeatingTask();
     	Intent intent2 = new Intent( Login.this, UpdateProfile.class);
 		startActivity(intent2);
-		finish();
     }
 	
 	public void logout(){
@@ -394,10 +393,19 @@ public class Login extends Activity {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
-		case R.id.logout_icon:
-			Log.w("this","toad");
-			logout();
+			
+		case R.id.person_icon:
+			updateprofile(null);
 			return true;
+		case R.id.refresh_icon:
+			locationManager.removeUpdates(locationListener);
+            Intent serviceIntent = new Intent(Login.this, LoadHome.class);
+            startActivity(serviceIntent);
+            finish();
+			return true;	
+		case R.id.settings_icon:
+			Log.w("this","toad");
+			return true;	
 			
 		}
 		return super.onOptionsItemSelected(item);

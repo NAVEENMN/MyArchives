@@ -419,22 +419,24 @@ containing a value of this type.
         public static final int curvedbuttonbefore=0x7f02001d;
         public static final int curvedbuttonhandler=0x7f02001e;
         public static final int defaultprofile=0x7f02001f;
-        public static final int ic_action_cancel=0x7f020020;
-        public static final int ic_launcher=0x7f020021;
-        public static final int ic_plusone_medium_off_client=0x7f020022;
-        public static final int ic_plusone_small_off_client=0x7f020023;
-        public static final int ic_plusone_standard_off_client=0x7f020024;
-        public static final int ic_plusone_tall_off_client=0x7f020025;
-        public static final int imageborder=0x7f020026;
-        public static final int loginbg=0x7f020027;
-        public static final int logo=0x7f020028;
-        public static final int powered_by_google_dark=0x7f020029;
-        public static final int powered_by_google_light=0x7f02002a;
-        public static final int rectbuttonafterclicked=0x7f02002b;
-        public static final int rectbuttonbeforeclicked=0x7f02002c;
-        public static final int roundedbutton=0x7f02002d;
-        public static final int roundedbuttonclicked=0x7f02002e;
-        public static final int shape=0x7f02002f;
+        public static final int ic_action_person=0x7f020020;
+        public static final int ic_action_refresh=0x7f020021;
+        public static final int ic_action_settings=0x7f020022;
+        public static final int ic_launcher=0x7f020023;
+        public static final int ic_plusone_medium_off_client=0x7f020024;
+        public static final int ic_plusone_small_off_client=0x7f020025;
+        public static final int ic_plusone_standard_off_client=0x7f020026;
+        public static final int ic_plusone_tall_off_client=0x7f020027;
+        public static final int imageborder=0x7f020028;
+        public static final int loginbg=0x7f020029;
+        public static final int logo=0x7f02002a;
+        public static final int powered_by_google_dark=0x7f02002b;
+        public static final int powered_by_google_light=0x7f02002c;
+        public static final int rectbuttonafterclicked=0x7f02002d;
+        public static final int rectbuttonbeforeclicked=0x7f02002e;
+        public static final int roundedbutton=0x7f02002f;
+        public static final int roundedbuttonclicked=0x7f020030;
+        public static final int shape=0x7f020031;
     }
     public static final class id {
         public static final int AboutMe=0x7f06003c;
@@ -507,7 +509,6 @@ containing a value of this type.
         public static final int linearLayout2=0x7f060014;
         public static final int linearLayout3=0x7f060018;
         public static final int linearLayout4=0x7f06004c;
-        public static final int logout_icon=0x7f06005b;
         public static final int match_parent=0x7f06000c;
         public static final int monochrome=0x7f060013;
         public static final int movies=0x7f060058;
@@ -515,13 +516,16 @@ containing a value of this type.
         public static final int myprofession=0x7f060054;
         public static final int none=0x7f060000;
         public static final int normal=0x7f060001;
+        public static final int person_icon=0x7f06005b;
         public static final int production=0x7f060007;
         public static final int radioButton1=0x7f06004d;
         public static final int radioButton2=0x7f06004e;
+        public static final int refresh_icon=0x7f06005c;
         public static final int sandbox=0x7f060008;
         public static final int satellite=0x7f060002;
         public static final int scrollsection=0x7f060049;
         public static final int selectionDetails=0x7f06000b;
+        public static final int settings_icon=0x7f06005d;
         public static final int strict_sandbox=0x7f060009;
         public static final int terrain=0x7f060003;
         public static final int visitorbuttonnext=0x7f060038;
@@ -551,65 +555,65 @@ containing a value of this type.
         public static final int visitor_profile=0x7f0a0004;
     }
     public static final class string {
-        public static final int AboutMe=0x7f040050;
-        public static final int Age=0x7f04003a;
-        public static final int Books=0x7f04004e;
-        public static final int CurrentCountry=0x7f040041;
-        public static final int CurrentCounty=0x7f040040;
-        public static final int CurrentLocation=0x7f04003f;
-        public static final int DateofBirthLable=0x7f04002e;
-        public static final int Email=0x7f04002c;
+        public static final int AboutMe=0x7f040053;
+        public static final int Age=0x7f04003d;
+        public static final int Books=0x7f040051;
+        public static final int CurrentCountry=0x7f040044;
+        public static final int CurrentCounty=0x7f040043;
+        public static final int CurrentLocation=0x7f040042;
+        public static final int DateofBirthLable=0x7f040031;
+        public static final int Email=0x7f04002f;
         /**  Button Login 
  ******************************************************** 
  Sign Up 
          */
-        public static final int FirstName=0x7f04002a;
-        public static final int Gender=0x7f040039;
-        public static final int Hobbies=0x7f04004b;
-        public static final int IWorkAt=0x7f04004a;
-        public static final int InvisibleIn=0x7f04003e;
-        public static final int LastName=0x7f04002b;
+        public static final int FirstName=0x7f04002d;
+        public static final int Gender=0x7f04003c;
+        public static final int Hobbies=0x7f04004e;
+        public static final int IWorkAt=0x7f04004d;
+        public static final int InvisibleIn=0x7f040041;
+        public static final int LastName=0x7f04002e;
         /**  Button Sign Up 
          */
-        public static final int LogIn=0x7f040029;
-        public static final int Major=0x7f040038;
-        public static final int MeetSomeone=0x7f040045;
-        public static final int MetsterUsers=0x7f04003c;
-        public static final int Movies=0x7f04004d;
-        public static final int Music=0x7f04004c;
-        public static final int MyCurrentCity=0x7f040048;
+        public static final int LogIn=0x7f04002c;
+        public static final int Major=0x7f04003b;
+        public static final int MeetSomeone=0x7f040048;
+        public static final int MetsterUsers=0x7f04003f;
+        public static final int Movies=0x7f040050;
+        public static final int Music=0x7f04004f;
+        public static final int MyCurrentCity=0x7f04004b;
         /**  ******************************************************** 
  Update Profile 
          */
-        public static final int MyHomeTown=0x7f040047;
-        public static final int MyPassion=0x7f04004f;
-        public static final int MyProfession=0x7f040049;
-        public static final int MyStatus=0x7f040043;
-        public static final int MyStatusLabel=0x7f040044;
+        public static final int MyHomeTown=0x7f04004a;
+        public static final int MyPassion=0x7f040052;
+        public static final int MyProfession=0x7f04004c;
+        public static final int MyStatus=0x7f040046;
+        public static final int MyStatusLabel=0x7f040047;
         /**  ******************************************************** 
  My Profile Home 
          */
-        public static final int Name=0x7f040036;
-        public static final int Next=0x7f040053;
-        public static final int Password=0x7f04002f;
-        public static final int Password_hint=0x7f040031;
-        public static final int Previous=0x7f040054;
-        public static final int RetypePassword=0x7f040030;
-        public static final int SignUp=0x7f040028;
-        public static final int StudentType=0x7f040037;
-        public static final int University=0x7f04003b;
-        public static final int Update=0x7f040051;
+        public static final int Name=0x7f040039;
+        public static final int Next=0x7f040056;
+        public static final int Password=0x7f040032;
+        public static final int Password_hint=0x7f040034;
+        public static final int Previous=0x7f040057;
+        public static final int RetypePassword=0x7f040033;
+        public static final int SignUp=0x7f04002b;
+        public static final int StudentType=0x7f04003a;
+        public static final int University=0x7f04003e;
+        public static final int Update=0x7f040054;
         /**  Button Update 
  ******************************************************** 
  View Students Profile 
          */
-        public static final int ViewProfile=0x7f040052;
-        public static final int YourLocation=0x7f04003d;
-        public static final int action_settings=0x7f040056;
+        public static final int ViewProfile=0x7f040055;
+        public static final int YourLocation=0x7f040040;
+        public static final int action_settings=0x7f040059;
         /**  ******************************************************** 
  Home screen 
          */
-        public static final int app_name=0x7f040027;
+        public static final int app_name=0x7f04002a;
         public static final int auth_client_needs_enabling_title=0x7f040001;
         public static final int auth_client_needs_installation_title=0x7f040002;
         public static final int auth_client_needs_update_title=0x7f040003;
@@ -705,36 +709,39 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f04001e;
-        public static final int desc=0x7f040058;
-        public static final int dontdisclose=0x7f040034;
-        public static final int dummy_button=0x7f04005b;
-        public static final int dummy_content=0x7f04005c;
-        public static final int email_hint=0x7f04002d;
-        public static final int female=0x7f040033;
+        public static final int desc=0x7f04005b;
+        public static final int dontdisclose=0x7f040037;
+        public static final int dummy_button=0x7f04005e;
+        public static final int dummy_content=0x7f04005f;
+        public static final int email_hint=0x7f040030;
+        public static final int female=0x7f040036;
         /**  button meet someone 
          */
-        public static final int footer=0x7f040046;
+        public static final int footer=0x7f040049;
         /**  ******************************************************** 
  Others 
          */
-        public static final int footnote=0x7f040055;
-        public static final int hello_world=0x7f040057;
-        public static final int male=0x7f040032;
-        public static final int terms=0x7f040035;
-        public static final int title_activity_load_home=0x7f04005a;
+        public static final int footnote=0x7f040058;
+        public static final int hello_world=0x7f04005a;
+        public static final int male=0x7f040035;
+        public static final int terms=0x7f040038;
+        public static final int title_activity_load_home=0x7f04005d;
         public static final int title_activity_log_out=0x7f040026;
         public static final int title_activity_login=0x7f040025;
+        public static final int title_activity_person=0x7f040027;
         /**  Titles 
          */
         public static final int title_activity_profilelist=0x7f040020;
         /**  ******************************************************** 
          */
-        public static final int title_activity_profiles=0x7f040059;
+        public static final int title_activity_profiles=0x7f04005c;
+        public static final int title_activity_refresh=0x7f040028;
+        public static final int title_activity_settings=0x7f040029;
         public static final int title_activity_sign_up=0x7f040023;
         public static final int title_activity_update_profile=0x7f040021;
         public static final int title_activity_user_sign_up=0x7f040024;
         public static final int title_activity_visitor_profile=0x7f040022;
-        public static final int updateprofile=0x7f040042;
+        public static final int updateprofile=0x7f040045;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */
