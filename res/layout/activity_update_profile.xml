@@ -46,6 +46,7 @@
 				    android:layout_height="170dp"
 				    android:src="@drawable/defaultprofile"
 				    android:background = "@drawable/loginbg"
+				    android:drawableTop="@drawable/ic_action_new_picture"
 				    android:scaleType="centerCrop"
 				    android:onClick="pickimage" />
 	   			

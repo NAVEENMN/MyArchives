@@ -104,34 +104,37 @@
 	        style="?android:attr/buttonBarButtonStyle"
 	        android:layout_width="0dip"
 			android:layout_weight="1"
+			android:gravity="center"
 	        android:layout_height="wrap_content"
 	        android:background = "@drawable/buttonhandler"
+	        android:drawableTop="@drawable/ic_action_back"
 	        android:textColor="#F2F2F2"
 	        android:textSize="12sp"
-	        android:textStyle="bold"
-	        android:text="@string/Previous" />
+	        android:textStyle="bold" />
     <Button
 	        android:id="@+id/visitorbuttonviewprofile"
 	        style="?android:attr/buttonBarButtonStyle"
 	        android:layout_width="0dip"
 			android:layout_weight="1"
+			android:gravity="center"
 	        android:layout_height="wrap_content"
 	        android:background = "@drawable/buttonhandler"
+	        android:drawableTop="@drawable/ic_action_person"
 	        android:textColor="#F2F2F2"
 	        android:textSize="12sp"
-	        android:textStyle="bold"
-	        android:text="@string/ViewProfile" />
+	        android:textStyle="bold" />
     <Button
 	        android:id="@+id/visitorbuttonnext"
 	        style="?android:attr/buttonBarButtonStyle"
 	        android:layout_width="0dip"
 			android:layout_weight="1"
+			android:gravity="center"
 	        android:layout_height="wrap_content"
 	        android:background = "@drawable/buttonhandler"
+	        android:drawableTop="@drawable/ic_action_forward"
 	        android:textColor="#F2F2F2"
 	        android:textSize="12sp"
-	        android:textStyle="bold"
-	        android:text="@string/Next" />
+	        android:textStyle="bold" />
     </LinearLayout>
 <!-- ******************************************************************* Options region           -->
 
