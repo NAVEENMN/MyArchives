@@ -2,11 +2,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="${packageName}.${activityClass}" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+    
+    <Button
+            android:id="@+id/AboutMetster"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="55dip"
+            android:background="@drawable/curvedbuttonhandler"
+            android:text="@string/AboutMetster"
+            android:textColor="#5882FA"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/Support"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="55dip"
+        android:layout_above="@+id/DeleteAccount"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/curvedbuttonhandler"
+        android:gravity="center"
+        android:text="@string/Support"
+        android:textColor="#5882FA"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/Privacy"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="55dip"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/AboutMetster"
+        android:background="@drawable/curvedbuttonhandler"
+        android:gravity="center"
+        android:text="@string/Privacy"
+        android:textColor="#5882FA"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/FAQ"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="55dip"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Privacy"
+        android:background="@drawable/curvedbuttonhandler"
+        android:gravity="center"
+        android:text="@string/FAQ"
+        android:textColor="#5882FA"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/Logout"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="55dip"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/FAQ"
+        android:background="@drawable/curvedbuttonhandler"
+        android:gravity="center"
+        android:text="@string/Logout"
+        android:textColor="#5882FA"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/DeleteAccount"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="55dip"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Logout"
+        android:background="@drawable/curvedbuttonhandler"
+        android:gravity="center"
+        android:text="@string/DeleteAccount"
+        android:textColor="#5882FA"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+ 
 </RelativeLayout>

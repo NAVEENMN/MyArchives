@@ -84,6 +84,17 @@
     <string name="Previous">Previous</string>
 
     <!-- ******************************************************** -->
+    
+    <!-- Settings -->
+
+    <string name="AboutMetster">About Metster</string>
+    <string name="Support">Support</string>
+    <string name="Privacy">Privacy</string>
+    <string name="FAQ">FAQ</string>
+    <string name="Logout">Logout</string>
+    <string name="DeleteAccount">Delete Account</string>
+
+    <!-- ******************************************************** -->
 
 
     <!-- Others -->
