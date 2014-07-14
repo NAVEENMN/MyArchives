@@ -110,6 +110,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.metster.HomescreenActivity" />
         </activity>
+        <activity
+            android:name="com.example.metster.Settings"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

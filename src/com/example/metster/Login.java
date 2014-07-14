@@ -399,12 +399,14 @@ public class Login extends Activity {
 			return true;
 		case R.id.refresh_icon:
 			locationManager.removeUpdates(locationListener);
-            Intent serviceIntent = new Intent(Login.this, LoadHome.class);
+            Intent serviceIntent = new Intent(Login.this, Login.class);
             startActivity(serviceIntent);
             finish();
 			return true;	
 		case R.id.settings_icon:
-			Log.w("this","toad");
+			locationManager.removeUpdates(locationListener);
+            Intent settingsIntent = new Intent(Login.this, Settings.class);
+            startActivity(settingsIntent);
 			return true;	
 			
 		}
