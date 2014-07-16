@@ -49,7 +49,6 @@ public class HomescreenActivity extends Activity {
 
                 inputStream.close();
                 ret = stringBuilder.toString();
-                
         		Intent intent = new Intent(this, LoadHome.class);
         		startActivity(intent);
         		finish();

@@ -45,7 +45,6 @@ public class LoadHome extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		setTitle("Meet, Connect and Socialize");
-		
 		final LocationManager locationManager;
 		final LocationListener locationListener;
 		Location location = null;
@@ -123,7 +122,7 @@ public class LoadHome extends Activity {
 		
 //----------------------------------------------------------  Setup GPS reader here!!
 		
-		
+		Log.w("befofe","fg");
 		//--------------------------------> Setup location
 		super.onCreate(savedInstanceState);
 		// Acquire a reference to the system Location Manager
@@ -184,7 +183,7 @@ public class LoadHome extends Activity {
 		       //---------------------------------------------------------------------
 		        
 //--------------------------------> Read user ID
-		       			
+		        
 		        try {
 		            FileInputStream inputStream = openFileInput("accounts.txt");
 

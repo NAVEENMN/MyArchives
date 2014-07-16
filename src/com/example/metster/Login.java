@@ -54,7 +54,7 @@ public class Login extends Activity {
 		static String usrfname;
 		static String usrlname;
 		static String usrgender;
-		static String usrage;
+		static String usrabout;
 		static String usrageandgender;
 		static String usrprofession;
 		static String usrworksat;
@@ -174,6 +174,7 @@ public class Login extends Activity {
 			profilelistactdata.putString("userimage",User.profileimage);
 		}
 //-------------------------------------> Read data from server
+		
 	    try {
 	    	Userslist.server_response = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",account.accnumber,account.tokennumber,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival),(String)addrs.country,"1"
 			, "1", "1", "1", "1", "1", "1").get();
@@ -194,7 +195,7 @@ public class Login extends Activity {
 		            User.usrfname = separated[0];
 		            User.usrlname = separated[1];
 		            User.usrgender = separated[2];
-		            User.usrage = separated[3];
+		            User.usrabout = separated[3];
 		            User.usrprofession = separated[4];
 		            User.usrworksat = separated[5];
 		            User.usrcurrentcity = separated[6];

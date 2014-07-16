@@ -38,7 +38,7 @@ public class UpdateProfile extends Activity {
         static String userworksat;
         static String userfacebook;
         static String userlinkedin;
-        static String userstatus; 
+        static String userabout; 
 	};
 
 	String val;
@@ -134,7 +134,7 @@ public class UpdateProfile extends Activity {
         info.userworksat = iworkat.getText().toString();
         info.userfacebook = facebook.getText().toString();
         info.userlinkedin = linkedin.getText().toString();
-        info.userstatus = status.getText().toString();
+        info.userabout = status.getText().toString();
         
         
         if(is_image_from_gallery){
@@ -170,8 +170,8 @@ public class UpdateProfile extends Activity {
         }
             try {
             	
-            	server_response = new RequestTask().execute("http://54.183.113.236/metster/profiledataupdate.php", appkey, info.useraccnumber, "1", info.userstayingin, info.userprofession, info.userprofession, info.userprofession,
-            		info.userlinkedin, "1", "1", info.userstatus, image_str, "1").get();
+            	server_response = new RequestTask().execute("http://54.183.113.236/metster/profiledataupdate.php", appkey, info.useraccnumber, "1", info.userstayingin, info.userprofession, info.userworksat,"1",
+            		"1", "1", "1", info.userabout, image_str, "1").get();
             Log.w("serversays",server_response);
             System.out.println(server_response.contains("no"));
             
