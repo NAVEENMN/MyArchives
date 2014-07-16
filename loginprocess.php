@@ -5,7 +5,6 @@ include 'keys.php';
 $appkey = $_POST['appkey'];
 $email = $_POST['param2'];
 $password = $_POST['param3'];
-//$mykey = "n1a1v2e3e5n8m13y21s34o55r89e";
 //---------------------------
 $result = mysql_query("SELECT * FROM Accounts
  WHERE EmailId = '$email'") or die(mysql_error());

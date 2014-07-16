@@ -24,10 +24,10 @@ $prfdata = mysql_fetch_array( $prf );
 //--------
 
 $Gender = $row['UserGender'];
-$Age = $prfdata['age'];
 $Profession = $prfdata['usrprofession'];
 $WorksAt = $prfdata['usrworksat'] ;
 $CurrentyCity = $prfdata['usrstayingat'] ;
+$About = $prfdata['About'];
 
 //-----------------------------------------------------------
 if($locat){ //location already exists
@@ -41,12 +41,12 @@ else{ //location doesn`t exist add new one
 
 // Insert a row of information into the table "example"
 mysql_query("INSERT INTO Location 
-(Latitude, Longitude, Zipcode, UsrID, Country, Status ) VALUES('$latitude', '$longitude','$zip','$accountnumber','$country','$Status' ) ") 
+(AddressId, Latitude, Longitude, Zipcode, UsrID, Country, Status ) VALUES('$accountnumber','$latitude', '$longitude','$zip','$accountnumber','$country','$Status' ) ") 
 or die(mysql_error());
 }
 
 if ($row){
-echo $row['UserFirstName']."-".$row['UserLastName']."-".$Gender."-".$Age."-".$Profession."-".$WorksAt."-".$CurrentyCity;
+echo $row['UserFirstName']."-".$row['UserLastName']."-".$Gender."-".$About."-".$Profession."-".$WorksAt."-".$CurrentyCity;
 }
 else{
 echo "no";

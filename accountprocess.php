@@ -32,11 +32,11 @@ else {//----------------------------------------> user ok to create account
 mysql_query("INSERT INTO `Accounts`( `TokenKey`,`image`,`UserFirstName`, `UserLastName`,`UserGender`,`FirstLoginDate`, `LastLoginDate`,`EmailId`, `LoginPassword`) VALUES ( '$token','$image','$firstname','$lastname','$gender',NOW(),NOW(),'$email','$password')") or die(mysql_error());
 $res = mysql_query("SELECT MAX(UserId) FROM Accounts");
 $uid = mysql_fetch_array( $res );
-$useride = $uid[0];
+$userid = $uid[0];
 //--------------
 $dummy = "none";
-$dummyval = 10;
-mysql_query("INSERT INTO `profiledata`( `usrid`,`usrstayingat`,`usrhometown`, `usrprofession`,`usrworksat`,`usrhobbies`, `usrmusic`,`usrmovies`, `usrbooks`,`usrstatus`, `age`, `passion`) VALUES ( '$useride','$dummy','$dummy','$dummy','$dummy','$dummy','$dummy','$dummy','$dummy','$dummy','$dummyval','$dummy')") or die(mysql_error());
+$is = "no";
+mysql_query("INSERT INTO `profiledata`( `usrid`,`usrstayingat`, `usrprofession`,`usrworksat`,`About`, `isupdated`) VALUES ( '$userid','$dummy','$dummy','$dummy','$dummy','$is')") or die(mysql_error());
 //----------------------
 echo $uid[0]."-".$token;
 
