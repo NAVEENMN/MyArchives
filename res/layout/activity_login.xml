@@ -123,7 +123,7 @@
           android:name="com.google.android.gms.maps.MapFragment"/>
 	</LinearLayout>
 	<!-- ******************************************************************* Map region               -->
-	<LinearLayout
+    <LinearLayout
         android:id="@+id/MetsterInformation"
         android:paddingLeft="10dp"
         android:layout_width="0dip"
@@ -142,14 +142,14 @@
             <TextView
                 android:id="@+id/YourLocation"
                 android:textColor="#5F04B4"
-                android:textSize="12sp"
+                android:textSize="22sp"
                 android:text="@string/CurrentCounty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/YourLocationcity"
                 android:textColor="#5F04B4"
-                android:textSize="12sp"
+                android:textSize="20sp"
                 android:text="@string/CurrentCounty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -158,36 +158,22 @@
                 android:id="@+id/NumberofUsersLable"
                 android:paddingTop="10dp"
                 android:textColor="#424242"
-                android:textSize="12sp"
+                android:textSize="20sp"
+                android:gravity="center"
                 android:text="@string/MetsterUsers"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/NumberofUsers"
-                android:textColor="#5F04B4"
-                android:textSize="12sp"
+                android:textColor="#38610B"
+                android:textSize="35sp"
+                android:gravity="center"
                 android:text="@string/MetsterUsers"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             
             
-            <TextView
-                android:id="@+id/MyStatuslabel"
-                android:paddingTop="10dp"
-                android:textColor="#424242"
-                android:textSize="12sp"
-                android:text="@string/MyStatusLabel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <EditText
-                android:id="@+id/MyStatus"
-                android:paddingTop="10dp"
-                android:textSize="12sp"
-                android:textColor="#3A01DF"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/MyStatus"
-		        android:inputType="text"/>
+            
             
        </LinearLayout>
       </LinearLayout>      
@@ -207,7 +193,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/Dividertwo"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
+    
+        <TextView
+                android:id="@+id/MyStatuslabel"
+                android:paddingTop="10dp"
+                android:textColor="#424242"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:text="@string/MyStatusLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <EditText
+                android:id="@+id/MyStatus"
+                android:paddingTop="10dp"
+                android:textSize="12sp"
+                android:textColor="#3A01DF"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/MyStatus"
+		        android:inputType="text"/>
 
         <Button
             android:id="@+id/buttonmeet"
