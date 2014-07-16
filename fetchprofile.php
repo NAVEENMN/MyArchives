@@ -34,7 +34,7 @@ if($locat){ //location already exists
 //delete old now and add new one
 mysql_query("DELETE FROM Location WHERE UsrID ='$accountnumber'");
 mysql_query("INSERT INTO Location 
-(Latitude, Longitude, Zipcode, UsrID, Country, Status) VALUES('$latitude', '$longitude','$zip','$accountnumber','$country','$Status') ") 
+(AddressId, Latitude, Longitude, Zipcode, UsrID, Country, Status) VALUES('$accountnumber','$latitude', '$longitude','$zip','$accountnumber','$country','$Status') ") 
 or die(mysql_error());
 }
 else{ //location doesn`t exist add new one
