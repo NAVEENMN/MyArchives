@@ -44,7 +44,7 @@ public class ProfilelistActivity extends Activity {
 	
 	public static class visitorinfo{
 		
-		static int profileid;
+		static String profileid;
 		static String FirstName;
 		static String LastName;
 		static String Image;
@@ -89,7 +89,7 @@ public class ProfilelistActivity extends Activity {
 	    	navigate_account_numbers = listdata.getString("accountnumberlist").split("#%-->");
 	    	number_of_profiles = navigate_account_numbers.length;
             number_of_profiles --;
-	    	visitorinfo.profileid = Integer.parseInt(navigate_account_numbers[1]);
+	    	visitorinfo.profileid = navigate_account_numbers[1];
 	    	
 	    }
 	    		
@@ -114,7 +114,7 @@ public class ProfilelistActivity extends Activity {
 							
 							if( prfcounter >= number_of_profiles ) prfcounter = 0 ;
 							prfcounter++;
-							visitorinfo.profileid = Integer.parseInt(navigate_account_numbers[prfcounter]);
+							visitorinfo.profileid = navigate_account_numbers[prfcounter];
 							try {
 								current_visitor(visitorinfo.profileid );
 							} catch (InterruptedException e) {
@@ -157,7 +157,7 @@ public class ProfilelistActivity extends Activity {
 							
 							if( prfcounter <= 1 ) prfcounter = number_of_profiles + 1  ;
 							prfcounter--;
-							visitorinfo.profileid = Integer.parseInt(navigate_account_numbers[prfcounter]);
+							visitorinfo.profileid = navigate_account_numbers[prfcounter];
 							try {
 								current_visitor(visitorinfo.profileid );
 							} catch (InterruptedException e) {
@@ -177,10 +177,10 @@ public class ProfilelistActivity extends Activity {
 		
 	}
 	
-	public void current_visitor(int account_number) throws InterruptedException, ExecutionException{
+	public void current_visitor(String account_number) throws InterruptedException, ExecutionException{
 		
 		 try {
-		    	server_response = new RequestTask().execute("http://54.183.113.236/metster/getprofiledata.php", account.appkey, Integer.toString(account_number), "1","1","1", "1", "1"
+		    	server_response = new RequestTask().execute("http://54.183.113.236/metster/getprofiledata.php", account.appkey, account_number, "1","1","1", "1", "1"
 						, "1", "1", "1", "1", "1", "1" ).get();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

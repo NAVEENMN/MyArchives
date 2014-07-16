@@ -73,7 +73,8 @@
         android:text="@string/Logout"
         android:textColor="#21610B"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:onClick="logout" />
 
     <Button
         android:id="@+id/DeleteAccount"

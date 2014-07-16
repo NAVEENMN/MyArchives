@@ -12,18 +12,41 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Profiles extends Activity {
+	
+	
+	public static class info{
+	
+		 static String FirstName;
+		 static String LastName;
+		 static String Image;
+		 static String Gender;
+		 static String Age;
+		 static String Status;
+		 static String Profession;
+		 static String worksat;
+		 static String CurrentCity;
+		 static String hometown;
+		 static String hobbies;
+		 static String music;
+		 static String movies;
+		 static String books;
+		 static String AboutMe;
+		 static String Passion;
+		
+	};
 
+	String server_reponse = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profiles);
 	
 		String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";
-    	String reply = null;
     	String visitorid = getIntent().getStringExtra("VisitorId");
     	Log.w("visitorid", visitorid);
         try {
-			reply = new RequestTask().execute("http://54.183.113.236/metster/getprofiledata.php", appkey, visitorid, visitorid,visitorid,visitorid, visitorid, visitorid
+        	server_reponse = new RequestTask().execute("http://54.183.113.236/metster/getprofiledata.php", appkey, visitorid, visitorid,visitorid,visitorid, visitorid, visitorid
 					, visitorid, visitorid, visitorid, visitorid, visitorid, visitorid ).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -34,58 +57,54 @@ public class Profiles extends Activity {
 		}
 		//-------------------------------------------
 
-		 final String[] separated = reply.split("#%-->");
-		 String FirstName = separated[0];
-		 String LastName = separated[1];
-		 String Image = separated[2];
-		 String Gender = separated[3];
-		 String Age = separated[4];
-		 String Status = separated[5];
-		 String Profession = separated[6];
-		 String worksat = separated[7];
-		 String CurrentCity = separated[8];
-		 String hometown = separated[9];
-		 String hobbies = separated[10];
-		 String music = separated[11];
-		 String movies = separated[12];
-		 String books = separated[13];
-		 String AboutMe = separated[14];
-		 String Passion = separated[15];
+		 final String[] separated = server_reponse.split("#%-->");
+		 info.FirstName = separated[0];
+		 info.LastName = separated[1];
+		 info.Image = separated[2];
+		 info.Gender = separated[3];
+		 info.Age = separated[4];
+		 info.Status = separated[5];
+		 info.Profession = separated[6];
+		 info.worksat = separated[7];
+		 info.CurrentCity = separated[8];
+		 info.hometown = separated[9];
+		 info.hobbies = separated[10];
+		 info.music = separated[11];
+		 info.movies = separated[12];
+		 info.books = separated[13];
+		 info.AboutMe = separated[14];
+		 info.Passion = separated[15];
 		 
-		 String usrageandgender = Gender + " | " + Age ;
-		 
-		 Log.w("aboutme",AboutMe);
-		 Log.w("passion",Passion);
+		 Log.w("aboutme",info.AboutMe);
+		 Log.w("passion",info.Passion);
 		
-		 setTitle(Status);
+		 setTitle(info.Status);
 		 //------------------------------------------------------
 		 TextView fname = (TextView)findViewById(R.id.FirstName); 
-	     fname.setText((String)FirstName);
+	     fname.setText((String)info.FirstName);
 	     TextView lname = (TextView)findViewById(R.id.LastName); 
-	     lname.setText((String)LastName);
+	     lname.setText((String)info.LastName);
 	     TextView prof = (TextView)findViewById(R.id.Profession); 
-	     prof.setText((String)Profession);
+	     prof.setText((String)info.Profession);
 	     TextView wat = (TextView)findViewById(R.id.Worksat); 
-	     wat.setText((String)worksat);
-	     TextView ag = (TextView)findViewById(R.id.AgeandGender); 
-	     ag.setText((String)usrageandgender);
+	     wat.setText((String)info.worksat);
 	     TextView cc = (TextView)findViewById(R.id.CurrentCity); 
-	     cc.setText((String)CurrentCity);
+	     cc.setText((String)info.CurrentCity);
 	     TextView hob = (TextView)findViewById(R.id.Hobbies); 
-	     hob.setText((String)hobbies);
+	     hob.setText((String)info.hobbies);
 	     TextView mus = (TextView)findViewById(R.id.Music); 
-	     mus.setText((String)music);
+	     mus.setText((String)info.music);
 	     TextView mov = (TextView)findViewById(R.id.Movies); 
-	     mov.setText((String)movies);
+	     mov.setText((String)info.movies);
 	     TextView book = (TextView)findViewById(R.id.Books); 
-	     book.setText((String)books);
+	     book.setText((String)info.books);
 	     TextView abo = (TextView)findViewById(R.id.AboutMe); 
-	     abo.setText((String)AboutMe);
+	     abo.setText((String)info.AboutMe);
 	     TextView pas = (TextView)findViewById(R.id.MyPassion); 
-	     pas.setText((String)Passion);
+	     pas.setText((String)info.Passion);
 	     
-	     if (Image!=null){
-             byte[] decodedString = Base64.decode(Image, Base64.DEFAULT);
+	     if (info.Image!=null){
+             byte[] decodedString = Base64.decode(info.Image, Base64.DEFAULT);
 	             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 	             	ImageView image =(ImageView)findViewById(R.id.ProfileImage);
 	                image.setImageBitmap(decodedByte);

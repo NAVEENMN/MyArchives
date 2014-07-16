@@ -181,9 +181,15 @@ public class SignUpActivity extends Activity {
     	               
             //---------------------------------- image base64 compression 
              if(image_from_gallery){
-              finalimagepath = picturePath;
+              finalimagepath = picturePath;              
               Bitmap bitmapOrg= BitmapFactory.decodeFile(finalimagepath);
               ByteArrayOutputStream stream = new ByteArrayOutputStream();
+              //Resize the image
+              double width = bitmapOrg.getWidth();
+              double height = bitmapOrg.getHeight();
+              double ratio = 400/width;
+              int newheight = (int)(ratio*height);               
+              bitmapOrg = Bitmap.createScaledBitmap(bitmapOrg, 400, newheight, true);
               bitmapOrg.compress(Bitmap.CompressFormat.JPEG, 100, stream);
               byte[] byte_arr = stream.toByteArray();
               image_str =Base64.encodeToString(byte_arr, Base64.DEFAULT);
@@ -259,7 +265,9 @@ public class SignUpActivity extends Activity {
                          .setCancelable(false)
                          .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                              public void onClick(DialogInterface dialog, int id) {
-                          	   finish();
+                            	Intent intent = new Intent(SignUpActivity.this, HomescreenActivity.class);
+                         		startActivity(intent);
+                         		finish();
                              }
                          });
                   AlertDialog alert = builder.create();

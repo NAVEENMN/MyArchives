@@ -34,7 +34,7 @@
 			android:background = "@drawable/loginbg"
 			android:scaleType="centerCrop"
             android:contentDescription="@string/desc"
-            android:onClick="updateprofile" />
+            android:onClick="on_image_click" />
         </LinearLayout>
                 
 

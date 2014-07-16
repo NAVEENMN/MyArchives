@@ -1,6 +1,5 @@
 package com.example.metster;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -143,7 +142,7 @@ public class Login extends Activity {
             @Override
             public void run()
             {
-                updatelocation();
+                updatelocation(null);
             }
     };
      
@@ -172,6 +171,7 @@ public class Login extends Activity {
 			profilelistactdata.putString("accountnumber", account.accnumber);
 			account.tokennumber = b.getString("tokennumber");
 			User.profileimage = b.getString("userimage");
+			profilelistactdata.putString("userimage",User.profileimage);
 		}
 //-------------------------------------> Read data from server
 	    try {
@@ -185,7 +185,7 @@ public class Login extends Activity {
 				e.printStackTrace();
 			}
 	              
-	            updatelocation();
+	            updatelocation(null);
 	    if(Userslist.server_response.contains("null")){
 					Toast.makeText(getApplicationContext(), "Metster is unable to connect to server at this time.", Toast.LENGTH_SHORT).show();
 		}
@@ -198,7 +198,9 @@ public class Login extends Activity {
 		            User.usrprofession = separated[4];
 		            User.usrworksat = separated[5];
 		            User.usrcurrentcity = separated[6];
-		            User.usrageandgender = User.usrgender + " | "+User.usrage;
+		            profilelistactdata.putString("userprofession", User.usrprofession);
+		            profilelistactdata.putString("userworksat", User.usrworksat);
+		            profilelistactdata.putString("usercurrentcity", User.usrcurrentcity);
 					
 		            SetupUIdata();
 	//----------------------------------
@@ -281,7 +283,7 @@ public class Login extends Activity {
 		
 	}
 	
-	public void updatelocation()
+	public void updatelocation(View view)
 	{
 		
 		Log.w("called","gaina");
@@ -334,18 +336,14 @@ public class Login extends Activity {
 	public void updateprofile(View view){
 		stopRepeatingTask();
     	Intent intent2 = new Intent( Login.this, UpdateProfile.class);
-		startActivity(intent2);
-    }
-	
-	public void logout(){
-		stopRepeatingTask();
-		locationManager.removeUpdates(locationListener);
-		Intent intent2 = new Intent( Login.this, HomescreenActivity.class);
-		File dir = getFilesDir();
-		File file = new File(dir, "accounts.txt");
-		boolean deleted = file.delete();
+    	intent2.putExtras(profilelistactdata);
 		startActivity(intent2);
 		finish();
+    }
+	
+	
+	public void on_image_click(View view){
+		// implement
 	}
 	
 	@Override
@@ -407,6 +405,7 @@ public class Login extends Activity {
 			locationManager.removeUpdates(locationListener);
             Intent settingsIntent = new Intent(Login.this, Settings.class);
             startActivity(settingsIntent);
+            finish();
 			return true;	
 			
 		}

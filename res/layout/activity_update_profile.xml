@@ -58,13 +58,7 @@
 			android:paddingTop="5dp"
             android:orientation="vertical" >
 
-            <EditText
-                android:id="@+id/iamfrom"
-                android:textColor="#F2F2F2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/MyHomeTown"
-		       android:inputType="text"/>
+
 
             <EditText
                 android:id="@+id/iamlivingin"
@@ -92,36 +86,10 @@
 	   			
    </LinearLayout>
    			<!-- ******************************************************* -->
-   			<EditText
-			       android:id="@+id/hobbies"
-			       android:textColor="#F2F2F2"
-			       android:layout_width="match_parent"
-			       android:layout_height="wrap_content"
-			       android:ems="10"
-			       android:hint="@string/Hobbies"
-			       android:inputType="text" > 
-	   			</EditText>
-	   			<EditText
-			       android:id="@+id/music"
-			       android:textColor="#F2F2F2"
-			       android:layout_width="match_parent"
-			       android:layout_height="wrap_content"
-			       android:ems="10"
-			       android:hint="@string/Music"
-			       android:inputType="text" > 
-	   			</EditText>
+   			
 
 		   <EditText
-		       android:id="@+id/movies"
-		       android:textColor="#F2F2F2"
-		       android:layout_width="match_parent"
-		       android:layout_height="wrap_content"
-		       android:ems="10"
-		       android:hint="@string/Movies"
-		       android:inputType="text" />
-
-		   <EditText
-		       android:id="@+id/books"
+		       android:id="@+id/Facebook"
 		       android:textColor="#F2F2F2"
 		       android:layout_width="match_parent"
 		       android:layout_height="wrap_content"
@@ -130,7 +98,7 @@
 		       android:inputType="text" />
 		   
 		   <EditText
-                android:id="@+id/MyPassion"
+                android:id="@+id/Linkedin"
                 android:textColor="#F2F2F2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
