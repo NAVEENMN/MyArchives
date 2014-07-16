@@ -187,7 +187,8 @@ public class Login extends Activity {
 			}
 	              
 	            updatelocation(null);
-	    if(Userslist.server_response.contains("null")){
+	            Log.w("response",Userslist.server_response);
+	    if(Userslist.server_response.contains("no")){
 					Toast.makeText(getApplicationContext(), "Metster is unable to connect to server at this time.", Toast.LENGTH_SHORT).show();
 		}
 		else{			
