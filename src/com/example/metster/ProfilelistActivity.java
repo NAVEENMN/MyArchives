@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,9 +62,10 @@ public class ProfilelistActivity extends Activity {
 		static String books;
 		static String AboutMe;
 		static String Passion;
-		static String usrageandgender;
 		static Double latitude;
 		static Double longitude;
+		static String facebookurl;
+		static String linkedinurl;
 		
 	};
 	
@@ -72,6 +74,7 @@ public class ProfilelistActivity extends Activity {
     String[] navigate_account_numbers = null;
     String server_response = null;
     int number_of_profiles = 0;
+    Bundle visitoractdata = new Bundle();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +141,7 @@ public class ProfilelistActivity extends Activity {
 						public void onClick(View v) { // yet to be implemented
 							
 							Intent intent = new Intent(ProfilelistActivity.this, Profiles.class);
-							intent.putExtra("VisitorId",visitorinfo.profileid);
-							intent.putExtra("VisitorImage",visitorinfo.Image);
+							intent.putExtras(visitoractdata);
 			        		startActivity(intent);
 							
 					       }//on click
@@ -190,26 +192,37 @@ public class ProfilelistActivity extends Activity {
 				e.printStackTrace();
 			}
 
+		   
 			 final String[] separated = server_response.split("#%-->");
 			 visitorinfo.FirstName = separated[0];
 			 visitorinfo.LastName = separated[1];
 			 visitorinfo.Image = separated[2];
 			 visitorinfo.Gender = separated[3];
-			 visitorinfo.Age = separated[4];
-			 visitorinfo.Status = separated[5];
-			 visitorinfo.Profession = separated[6];
-			 visitorinfo.worksat = separated[7];
-			 visitorinfo.CurrentCity = separated[8];
-			 visitorinfo.hometown = separated[9];
-			 visitorinfo.hobbies = separated[10];
-			 visitorinfo.music = separated[11];
-			 visitorinfo.movies = separated[12];
-			 visitorinfo.books = separated[13];
-			 visitorinfo.AboutMe = separated[14];
-			 visitorinfo.Passion = separated[15];
-			 visitorinfo.latitude = Double.parseDouble(separated[16]);
-			 visitorinfo.longitude = Double.parseDouble(separated[17]);
-			 visitorinfo.usrageandgender = visitorinfo.Gender + " | " + visitorinfo.Age ;
+			 visitorinfo.Status = separated[4];
+			 visitorinfo.Profession = separated[5];
+			 visitorinfo.worksat = separated[6];
+			 visitorinfo.CurrentCity = separated[7];
+			 visitorinfo.AboutMe = separated[8];
+			 visitorinfo.latitude = Double.parseDouble(separated[9]);
+			 visitorinfo.longitude = Double.parseDouble(separated[10]);
+			 visitorinfo.facebookurl = separated[11];
+			 visitorinfo.linkedinurl = separated[12];
+			 
+			 //------
+			 
+			 visitoractdata.putString("visitor_image",visitorinfo.Image);
+			 visitoractdata.putString("visitor_firstname",visitorinfo.FirstName);
+			 visitoractdata.putString("visitor_lastname",visitorinfo.LastName);
+			 visitoractdata.putString("visitor_gender",visitorinfo.Gender);
+			 visitoractdata.putString("visitor_status",visitorinfo.Status);
+			 visitoractdata.putString("visitor_profession",visitorinfo.Profession);
+			 visitoractdata.putString("visitor_worksat",visitorinfo.worksat);
+			 visitoractdata.putString("visitor_currentcity",visitorinfo.CurrentCity);
+			 visitoractdata.putString("visitor_aboutme",visitorinfo.AboutMe);
+			 visitoractdata.putString("visitor_facebook",visitorinfo.facebookurl);
+			 visitoractdata.putString("visitor_linkedin",visitorinfo.linkedinurl);
+			 
+			 //------
 			 
 			 displayprofile(visitorinfo.Image, visitorinfo.FirstName, visitorinfo.LastName, visitorinfo.latitude, visitorinfo.longitude, visitorinfo.Gender,
 					        visitorinfo.Age, visitorinfo.Profession, visitorinfo.worksat, visitorinfo.CurrentCity);

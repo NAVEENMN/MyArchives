@@ -46,8 +46,11 @@
     <string name="Major">Major</string>
     <string name="Gender">M</string>
     <string name="Age">age</string>
+    <string name="Facebook">Facebook</string>
+    <string name="Linkedin">Linkedin</string>
     <string name="University">University</string>
     <string name="MetsterUsers">Metster users around you</string>
+    <string name="MetsterUsersvalue">0</string>
     <string name="YourLocation">Your Location</string>
     <string name="InvisibleIn">Your profile will go invisible at</string>
     <string name="CurrentLocation">Location</string>

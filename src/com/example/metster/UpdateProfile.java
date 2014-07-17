@@ -1,7 +1,12 @@
 package com.example.metster;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +23,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +31,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.metster.Login.User;
 import com.github.sendgrid.SendGrid;
 
 public class UpdateProfile extends Activity {
@@ -56,13 +63,68 @@ public class UpdateProfile extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_update_profile);
+			
+		ImageButton imageButton =(ImageButton)findViewById(R.id.ProfileImage);
 		
-		//------------------ Set up profile image
+		Log.w("here","here");
 		
-		ImageButton imageButton =(ImageButton)findViewById(R.id.ImageButton01);
+		//--------------------------------> Read user ID
+        
+        try {
+            FileInputStream inputStream = openFileInput("accounts.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                info.useraccnumber =  stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+            .show();
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+            .show();
+        }	
 		
-		info.userprofileimage = getIntent().getStringExtra("userimage"); // read from file only
-		info.useraccnumber = getIntent().getStringExtra("accountnumber"); // read from file only
+		
+      //--------------------------------> Read image from file
+		try {
+			FileInputStream inputStream = openFileInput("image.txt");
+
+			if ( inputStream != null ) {
+				InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+				BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+				String receiveString = "";
+				StringBuilder stringBuilder = new StringBuilder();
+				
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                	stringBuilder.append(receiveString);
+				}
+                inputStream.close();
+                info.userprofileimage = stringBuilder.toString();
+				}
+			}
+		catch (FileNotFoundException e) {
+				Log.e("login activity", "File not found: " + e.toString());
+				Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+				            .show();
+				} catch (IOException e) {
+				            Log.e("login activity", "Can not read file: " + e.toString());
+				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+				            .show();
+	    }     
+		
 					        
 		        if (info.userprofileimage!=null){
                     byte[] decodedString = Base64.decode(info.userprofileimage, Base64.DEFAULT);
@@ -124,16 +186,12 @@ public class UpdateProfile extends Activity {
 		EditText iamlivingin = (EditText)  findViewById(R.id.iamlivingin) ;
 		EditText myprofession = (EditText)  findViewById(R.id.myprofession) ;
 		EditText iworkat = (EditText)  findViewById(R.id.iworkat) ;
-		EditText facebook = (EditText)  findViewById(R.id.Facebook) ;
-		EditText linkedin = (EditText)  findViewById(R.id.Linkedin) ;
 		EditText status = (EditText)  findViewById(R.id.AboutMe) ;
 
 
         info.userstayingin = iamlivingin.getText().toString();
         info.userprofession = myprofession.getText().toString();
         info.userworksat = iworkat.getText().toString();
-        info.userfacebook = facebook.getText().toString();
-        info.userlinkedin = linkedin.getText().toString();
         info.userabout = status.getText().toString();
         
         
@@ -170,8 +228,8 @@ public class UpdateProfile extends Activity {
         }
             try {
             	
-            	server_response = new RequestTask().execute("http://54.183.113.236/metster/profiledataupdate.php", appkey, info.useraccnumber, "1", info.userstayingin, info.userprofession, info.userworksat,"1",
-            		"1", "1", "1", info.userabout, image_str, "1").get();
+            	server_response = new RequestTask().execute("http://54.183.113.236/metster/profiledataupdate.php", appkey, info.useraccnumber, "1", info.userstayingin, info.userprofession, info.userworksat,info.userfacebook,
+            		info.userlinkedin, "1", "1", info.userabout, image_str, "1").get();
             Log.w("serversays",server_response);
             System.out.println(server_response.contains("no"));
             
@@ -213,6 +271,67 @@ public class UpdateProfile extends Activity {
 	    return matcher.matches();
 
 	}
+	
+	public void updatefacebook(View view){
+		
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Connect better with your Facebook public URL ");
+		alert.setMessage("https://www.facebook.com/ ");
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		input.setHint("naveen.mn");
+		alert.setView(input);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  Editable value = input.getText();
+		  info.userfacebook = value.toString();
+		  // Do something with value!
+		  }
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+		    // Canceled.
+		  }
+		});
+
+		alert.show();
+		
+    }
+	
+	public void updatelinkedin(View view){
+		
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Connect better with your Linkedin public URL ");
+		alert.setMessage("http://www.linkedin.com/ ");
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		alert.setView(input);
+		input.setHint("pub/naveen-mysore/3a/a92/760");
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  Editable value = input.getText();
+		  info.userlinkedin = value.toString();
+		  setTitle(User.usrstatus);
+		  // Do something with value!
+		  }
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+		    // Canceled.
+		  }
+		});
+
+		alert.show();
+		
+    }
 	
 	public void sendEmail(String fEmail){
 		//SendGrid Integration

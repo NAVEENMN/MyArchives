@@ -49,14 +49,14 @@
             <TextView
                 android:id="@+id/FirstName"
                 android:textColor="#F2F2F2"
-                android:textSize="21sp"
+                android:textSize="23sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/LastName"
                 android:textColor="#F2F2F2"
-                android:textSize="21sp"
+                android:textSize="23sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -134,7 +134,7 @@
                 android:id="@+id/YourLocationLable"
                 android:paddingTop="10dp"
                 android:textColor="#424242"
-                android:textSize="12sp"
+                android:textSize="18sp"
                 android:text="@string/YourLocation"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -142,14 +142,14 @@
             <TextView
                 android:id="@+id/YourLocation"
                 android:textColor="#5F04B4"
-                android:textSize="22sp"
+                android:textSize="16sp"
                 android:text="@string/CurrentCounty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/YourLocationcity"
                 android:textColor="#5F04B4"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:text="@string/CurrentCounty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -158,22 +158,17 @@
                 android:id="@+id/NumberofUsersLable"
                 android:paddingTop="10dp"
                 android:textColor="#424242"
-                android:textSize="20sp"
-                android:gravity="center"
+                android:textSize="18sp"
                 android:text="@string/MetsterUsers"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/NumberofUsers"
                 android:textColor="#38610B"
-                android:textSize="35sp"
-                android:gravity="center"
-                android:text="@string/MetsterUsers"
+                android:textSize="38sp"
+                android:text="@string/MetsterUsersvalue"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-            
-            
-            
             
        </LinearLayout>
       </LinearLayout>      
@@ -188,32 +183,13 @@
         android:id="@+id/ActionButtons"
         style="?android:attr/buttonBarStyle"
         android:background="#F2F2F2"
-        android:paddingTop="10dp"
+        android:paddingTop="20dp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/Dividertwo"
         android:orientation="vertical" >
-    
-        <TextView
-                android:id="@+id/MyStatuslabel"
-                android:paddingTop="10dp"
-                android:textColor="#424242"
-                android:textSize="12sp"
-                android:gravity="center"
-                android:text="@string/MyStatusLabel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <EditText
-                android:id="@+id/MyStatus"
-                android:paddingTop="10dp"
-                android:textSize="12sp"
-                android:textColor="#3A01DF"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/MyStatus"
-		        android:inputType="text"/>
+  
 
         <Button
             android:id="@+id/buttonmeet"

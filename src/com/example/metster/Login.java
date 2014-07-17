@@ -20,7 +20,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.NavUtils;
+import android.text.Editable;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -28,6 +28,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,10 +56,10 @@ public class Login extends Activity {
 		static String usrlname;
 		static String usrgender;
 		static String usrabout;
-		static String usrageandgender;
 		static String usrprofession;
 		static String usrworksat;
 		static String usrcurrentcity;
+		static String usrstatus;
 		
 	};
 	
@@ -101,7 +102,8 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		setupActionBar();// Show the Up button in the action bar.
-		setTitle("Metster");
+		User.usrstatus = "Hello There!!";
+		setTitle(User.usrstatus);
 	//--------------------------------> Setup location
 	locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
     locationListener = new LocationListener() {
@@ -188,10 +190,8 @@ public class Login extends Activity {
 	              
 	            updatelocation(null);
 	            Log.w("response",Userslist.server_response);
-	    if(Userslist.server_response.contains("no")){
-					Toast.makeText(getApplicationContext(), "Metster is unable to connect to server at this time.", Toast.LENGTH_SHORT).show();
-		}
-		else{			
+	    
+					
 					String[] separated = Userslist.server_response.split("-");
 		            User.usrfname = separated[0];
 		            User.usrlname = separated[1];
@@ -237,7 +237,7 @@ public class Login extends Activity {
 					
 		        		}
 		        );	        
-} // else ends here
+ // else ends here
 				
 				
 	}
@@ -301,7 +301,7 @@ public class Login extends Activity {
     	profilelistactdata.putDouble("longitude", Map.Longival);
     	
         try {
-        	 new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
+        	 new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), User.usrstatus,"1",
 					"1", "1", "1", "1", "1", "1").get();
         	 Userslist.numberofusers = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
 					"1", "1", "1", "1", "1", "1").get();
@@ -345,7 +345,7 @@ public class Login extends Activity {
 	
 	
 	public void on_image_click(View view){
-		// implement
+		//
 	}
 	
 	@Override
@@ -391,7 +391,31 @@ public class Login extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+			alert.setTitle("Set your Status");
+			alert.setMessage("What I am upto!!");
+
+			// Set an EditText view to get user input 
+			final EditText input = new EditText(this);
+			alert.setView(input);
+
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			  Editable value = input.getText();
+			  User.usrstatus = value.toString();
+			  setTitle(User.usrstatus);
+			  // Do something with value!
+			  }
+			});
+
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+			    // Canceled.
+			  }
+			});
+
+			alert.show();
 			return true;
 			
 		case R.id.person_icon:

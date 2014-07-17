@@ -1,64 +1,60 @@
-<ScrollView
+<FrameLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-<FrameLayout 
-    
-    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
     android:id="@+id/container"
-    android:layout_height="wrap_content"
     android:background="#B3B0B0"
     tools:context=".UpdateProfile" >
 
      <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="top"
+    android:gravity="bottom"
     android:background="@drawable/basebg" >
             
-     <LinearLayout
-	        android:id="@+id/linearLayout2"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:background="@drawable/loginbg"
-	    	android:gravity="bottom"
-	        android:orientation="vertical">
 	        
          <!-- ******************************************************* -->
-             <LinearLayout
-		        android:id="@+id/linearLayout3"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:background="@drawable/imageborder"
-		        android:orientation="horizontal"
-		        android:paddingBottom="0dp"
-		        android:paddingTop="0dp"
-		        android:shadowColor="#333333"
-		        android:shadowDx="2.0"
-		        android:shadowDy="2.0"
-		        android:shadowRadius="3.0" 
-		        android:radius="10dip">
-	   			<ImageButton
-		            android:contentDescription="@string/desc"
-				    android:id="@+id/ImageButton01"
-				    android:layout_width="180dp"
-				    android:layout_height="170dp"
-				    android:src="@drawable/defaultprofile"
-				    android:background = "@drawable/loginbg"
-				    android:drawableTop="@drawable/ic_action_new_picture"
-				    android:scaleType="centerCrop"
-				    android:onClick="pickimage" />
-	   			
-	   			<LinearLayout
-            android:layout_weight="1"
-            android:layout_width="0px"
+         
+         <!--  ******************************************************************  User Basic Profile data -->
+
+    <LinearLayout
+        android:id="@+id/Profiledata"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#5F04B4"
+        android:gravity="top"
+        android:orientation="horizontal" >
+        
+        <LinearLayout
+            android:layout_width="0dip"
+			android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="#424242"
+            android:paddingLeft="5dp"
+            android:orientation="vertical" >
+               
+        <ImageButton
+            android:id="@+id/ProfileImage"
+            android:layout_width="150dp"
+			android:layout_height="140dp"
+			android:gravity="center"
+			android:src="@drawable/defaultprofile"
+			android:background = "@drawable/loginbg"
+			android:scaleType="centerCrop"
+            android:contentDescription="@string/desc"
+            android:onClick="pickimage" />
+        </LinearLayout>
+                
+
+        <LinearLayout
+            android:layout_width="0dip"
+			android:layout_weight="1"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-			android:paddingTop="5dp"
+			android:paddingTop="10dp"
             android:orientation="vertical" >
-
-
 
             <EditText
                 android:id="@+id/iamlivingin"
@@ -82,29 +78,57 @@
 		       android:layout_height="wrap_content"
 		       android:hint="@string/IWorkAt"
 		       android:inputType="text" />
+            
         </LinearLayout>
+        
 	   			
    </LinearLayout>
    			<!-- ******************************************************* -->
    			
+   	<!-- ********************************************************************* User Social             -->
+    
+    <LinearLayout
+		        android:id="@+id/Social"
+		        android:layout_below="@+id/Profiledata"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:orientation="horizontal">     
+			    <Button
+			        android:id="@+id/facebook"
+			        style="?android:attr/buttonStyleSmall"
+			        android:layout_width="0dip"
+			        android:layout_weight="1"
+			        android:layout_height="wrap_content"
+					android:drawableTop="@drawable/facebook"
+			        android:background = "@drawable/buttonhandler"
+			        android:textColor="#F2F2F2"
+			        android:textSize="15sp"
+			        android:textStyle="bold"
+			        android:onClick="updatefacebook"/> 
+			        
+			    <Button
+			        android:id="@+id/linkedin"
+			        style="?android:attr/buttonStyleSmall"
+			        android:layout_width="0dip"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="1"
+			        android:background="@drawable/buttonhandler"
+			        android:drawableTop="@drawable/linkedin"
+			        android:onClick="updatelinkedin"
+			        android:textColor="#F2F2F2"
+			        android:textSize="15sp"
+			        android:textStyle="bold" />
+			        
+        </LinearLayout>		
 
-		   <EditText
-		       android:id="@+id/Facebook"
-		       android:textColor="#F2F2F2"
-		       android:layout_width="match_parent"
-		       android:layout_height="wrap_content"
-		       android:ems="10"
-		       android:hint="@string/Books"
-		       android:inputType="text" />
-		   
-		   <EditText
-                android:id="@+id/Linkedin"
-                android:textColor="#F2F2F2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/MyPassion"
-		        android:inputType="text"/>
-
+    	<LinearLayout
+	        android:id="@+id/Aboutme"
+	        android:layout_below="@+id/Social"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@drawable/loginbg"
+	    	android:gravity="bottom"
+	        android:orientation="vertical">
 		   <EditText
 			    android:id="@+id/AboutMe"
 			    android:textColor="#F2F2F2"
@@ -114,21 +138,18 @@
 			    android:inputType="textMultiLine"
 			    android:hint="@string/AboutMe"
 			    android:scrollHorizontally="false" />
+		   
+	</LinearLayout>
+		   
 		   <LinearLayout
-		        android:id="@+id/linearLayout4"
+		        android:id="@+id/Updatebuttonsection"
+		        style="?android:attr/buttonBarStyle"
+		        android:background="#F2F2F2"
+		        android:gravity="center"
 		        android:layout_width="match_parent"
-		        android:layout_height="match_parent"
-		        android:background="@drawable/loginbg"
-		    	android:gravity="bottom"
-		        android:orientation="horizontal"
-		        android:paddingBottom="5dp"
-		        android:paddingTop="5dp"
-		        android:shadowColor="#333333"
-		        android:shadowDx="2.0"
-		        android:shadowDy="2.0"
-		        android:shadowRadius="3.0" 
-		        android:radius="10dip">
-   			</LinearLayout> 
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/Aboutme"
+		        android:orientation="vertical" >
    			
 	        <Button
 		        android:id="@+id/button3"
@@ -141,10 +162,9 @@
 		        android:textStyle="bold"
 		        android:text="@string/Update" 
 		        android:onClick="UpdateUserProfile"/>
-              
-         </LinearLayout>   
+	        </LinearLayout>
+                
     
     </RelativeLayout>
 
 </FrameLayout>
-</ScrollView>
