@@ -147,6 +147,14 @@ public class Login extends Activity {
                 updatelocation(null);
             }
     };
+    
+    final Handler handler = new Handler();
+    handler.postDelayed(new Runnable() {
+      @Override
+      public void run() {
+    	  locationManager.removeUpdates(locationListener);
+      }
+    }, 1000 * 60 * 15);//15mins
      
 //------------------------------------------------------------------> Fetch the location details
 		gcd = new Geocoder(getBaseContext(), Locale.getDefault());

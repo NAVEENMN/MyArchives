@@ -182,6 +182,14 @@ public class LoadHome extends Activity {
 		        
 		       //---------------------------------------------------------------------
 		        
+		        final Handler handler = new Handler();
+		        handler.postDelayed(new Runnable() {
+		          @Override
+		          public void run() {
+		        	  locationManager.removeUpdates(locationListener);
+		          }
+		        }, 1000 * 60 * 15);//15mins
+		        
 //--------------------------------> Read user ID
 		        
 		        try {
