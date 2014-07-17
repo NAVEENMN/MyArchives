@@ -36,7 +36,7 @@ $userid = $uid[0];
 //--------------
 $dummy = "none";
 $is = "no";
-mysql_query("INSERT INTO `profiledata`( `usrid`,`usrstayingat`, `usrprofession`,`usrworksat`,`About`, `isupdated`) VALUES ( '$userid','$dummy','$dummy','$dummy','$dummy','$is')") or die(mysql_error());
+mysql_query("INSERT INTO `profiledata`( `usrid`,`usrstayingat`, `usrprofession`,`usrworksat`,`About`,`facebook`,`linkedin`, `isupdated`) VALUES ( '$userid','$dummy','$dummy','$dummy','$dummy','$dummy','$dummy','$is')") or die(mysql_error());
 //----------------------
 echo $uid[0]."-".$token;
 
