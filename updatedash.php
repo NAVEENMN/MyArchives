@@ -5,7 +5,7 @@ $token = $_POST['param2'];
 $zip = $_POST['param3']; // this is zip
 $latitude = $_POST['param4'];
 $longitude = $_POST['param5'];
-$country = $_POST['param6'];
+$status = $_POST['param6'];
 $pinpoint = $_POST['param7'];
 //----------------------------------------------------------
 $result = mysql_query("SELECT * FROM Accounts
@@ -23,26 +23,17 @@ $prfdata = mysql_fetch_array( $prf );
 
 
 //-----------------------------------------------------------
-if($locat){ //location already exists
+//location already exists
 //delete old now and add new one
 
 $result = mysql_query("UPDATE Location SET Latitude='$latitude' WHERE UsrID='$accountnumber'") 
 or die(mysql_error());
 
-$result = mysql_query("UPDATE Location SET Longitude='$longitude' WHERE UsrID='$accountnumber'") 
-or die(mysql_error());
-
-}
-else{ //location doesn`t exist add new one
-
-// Insert a row of information into the table "example"
-$result = mysql_query("UPDATE Location SET Latitude='$latitude' WHERE UsrID='$accountnumber'") 
-or die(mysql_error());
+$result = mysql_query("UPDATE Location SET Status='$status' WHERE UsrID='$accountnumber'");
 
 $result = mysql_query("UPDATE Location SET Longitude='$longitude' WHERE UsrID='$accountnumber'") 
 or die(mysql_error());
 
-}
 
 if ($row){
 echo $row['UserFirstName'];

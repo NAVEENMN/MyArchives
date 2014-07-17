@@ -28,24 +28,19 @@ $FirstName = $row2['UserFirstName'];
 $LastName = $row2['UserLastName'];
 $Image = $row2['image'];
 $Gender = $row2['UserGender'];
-$Age = $row['age'];
 $Status = $locat['Status'];
 $Profession = $row['usrprofession'];
 $WorksAt = $row['usrworksat'] ;
 $CurrentyCity = $row['usrstayingat'] ;
-$Hometown = $row['usrhometown'];
-$Hobbies = $row['usrhobbies'];
-$Music = $row['usrmusic'];
-$Movies = $row['usrmovies'];
-$Books = $row['usrbooks'];
-$AboutStatus = $row['usrstatus'];
-$Passion = $row['passion'];
+$About = $row['About'];
 $latitude = $locat['Latitude'];
 $longitude = $locat['Longitude'];
+$facebook = $row['facebook'];
+$linkedin = $row['linkedin'];
 //---------------------------------------------
 
 
-echo $FirstName."#%-->".$LastName."#%-->".$Image."#%-->".$Gender."#%-->".$Age."#%-->".$Status."#%-->".$Profession."#%-->".$WorksAt."#%-->".$CurrentyCity."#%-->".$Hometown."#%-->".$Hobbies."#%-->".$Music."#%-->".$Movies."#%-->".$Books."#%-->".$AboutStatus."#%-->".$Passion."#%-->".$latitude."#%-->".$longitude;
+echo $FirstName."#%-->".$LastName."#%-->".$Image."#%-->".$Gender."#%-->".$Status."#%-->".$Profession."#%-->".$WorksAt."#%-->".$CurrentyCity."#%-->".$About."#%-->".$latitude."#%-->".$longitude."#%-->".$facebook."#%-->".$linkedin;
 
 
 }
