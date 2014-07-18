@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Profiles extends Activity {
 	
@@ -84,8 +85,26 @@ public class Profiles extends Activity {
 	
 	public void openfacebook(View view){
 		String url = info.Facebook;
+		try{
+		Intent i = new Intent(Intent.ACTION_VIEW);
+		i.setData(Uri.parse(url));
+		startActivity(i);}
+		catch(Exception e){
+			Toast.makeText(this, "User seems to have not linked facebook", Toast.LENGTH_SHORT)
+            .show();
+		}
+	}
+	
+	public void openlinkedin(View view){
+		String url = info.Linkedin;
+		try{
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		i.setData(Uri.parse(url));
 		startActivity(i);
+		}
+		catch(Exception e){
+			Toast.makeText(this, "User seems to have not linked facebook", Toast.LENGTH_SHORT)
+            .show();
+		}
 	}
 }

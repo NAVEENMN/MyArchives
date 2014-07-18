@@ -20,6 +20,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.util.Base64;
 import android.util.Log;
@@ -27,6 +28,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -96,6 +99,7 @@ public class Login extends Activity {
 	Runnable getData;
     Criteria criteria = new Criteria();
     Bundle profilelistactdata = new Bundle();
+    
     //---------------------------------------->
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +158,7 @@ public class Login extends Activity {
       public void run() {
     	  locationManager.removeUpdates(locationListener);
       }
-    }, 1000 * 60 * 15);//15mins
+    }, 1000 * 60 * 3);//15mins
      
 //------------------------------------------------------------------> Fetch the location details
 		gcd = new Geocoder(getBaseContext(), Locale.getDefault());
@@ -226,20 +230,35 @@ public class Login extends Activity {
 					        
 //-----------------------------------------------------------------------> Button Actions	            
 	            //------------------------------------- meet someone
+
+			final Animation animScale = AnimationUtils.loadAnimation(this, R.anim.anim_scale);
 		        find = (Button) findViewById(R.id.buttonmeet);
-		        find.setOnClickListener(new View.OnClickListener() {	
-						public void onClick(View v) {
+		              
+		        find.setOnClickListener(new View.OnClickListener() {
+		        	public void onClick(View v) {
 							
-							if(Userslist.user_count > 0){
-							stopRepeatingTask();
-							locationManager.removeUpdates(locationListener);
-							Intent intentprofilelist = new Intent( Login.this, ProfilelistActivity.class);
-							intentprofilelist.putExtras(profilelistactdata);
-			        		startActivity(intentprofilelist);
-							}
-							else{
-								//Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT).show();
-							}
+							v.startAnimation(animScale);
+							
+							
+							new Thread(new Runnable() { 
+					            public void run(){
+					            	SystemClock.sleep(2000);
+					            	if(Userslist.user_count > 0){
+										stopRepeatingTask();
+										locationManager.removeUpdates(locationListener);
+										Intent intentprofilelist = new Intent( Login.this, ProfilelistActivity.class);
+										intentprofilelist.putExtras(profilelistactdata);
+						        		startActivity(intentprofilelist);
+										}
+										else{
+											//Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT).show();
+										}
+
+
+					            }
+					    }).start();
+							
+							
 							       
 					}//on click
 					
@@ -254,11 +273,14 @@ public class Login extends Activity {
 	public void SetupUIdata(){
 		
 //-----------------------------------------------------------> Setup the GUI with data acquired
+		 Animation animTimeChange = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left); 
 		//----------- Section 1
-		TextView fname = (TextView)findViewById(R.id.FirstName); 
+		TextView fname = (TextView)findViewById(R.id.FirstName);
+		fname.startAnimation(animTimeChange);
         fname.setText((String)User.usrfname);
         TextView lname = (TextView)findViewById(R.id.LastName); 
         lname.setText((String)User.usrlname);
+        lname.startAnimation(animTimeChange);
         TextView prof = (TextView)findViewById(R.id.Profession); 
         prof.setText((String)User.usrprofession);
         TextView wat = (TextView)findViewById(R.id.Worksat); 
@@ -285,10 +307,7 @@ public class Login extends Activity {
 
         map.setMyLocationEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
-        //-------------- Section Footer
-        String footertext = "Metster \u00a9 2014, Apha Ver1.1";
-        TextView foot = (TextView)findViewById(R.id.footer);
-        foot.setText(footertext);
+        
 //-------------------------------------------------------------------------------------------- 
 		
 	}
@@ -325,6 +344,7 @@ public class Login extends Activity {
 				}
         	TextView num = (TextView)findViewById(R.id.NumberofUsers); 
             num.setText(Integer.toString(Userslist.user_count));
+            
             
         	} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

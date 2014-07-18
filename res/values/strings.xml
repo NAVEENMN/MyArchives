@@ -46,8 +46,8 @@
     <string name="Major">Major</string>
     <string name="Gender">M</string>
     <string name="Age">age</string>
-    <string name="Facebook">Facebook</string>
-    <string name="Linkedin">Linkedin</string>
+    <string name="Facebook">f</string>
+    <string name="Linkedin">in</string>
     <string name="University">University</string>
     <string name="MetsterUsers">Metster users around you</string>
     <string name="MetsterUsersvalue">0</string>
@@ -59,7 +59,7 @@
     <string name="updateprofile">update profile</string>
     <string name="MyStatus">Hello there!!</string>
     <string name="MyStatusLabel">Set your status</string>
-    <string name="MeetSomeone">Meet Someone!</string> <!-- button meet someone -->
+    <string name="MeetSomeone">M</string> <!-- button meet someone -->
     <string name="footer">Metster</string>
     <!-- ******************************************************** -->
 
