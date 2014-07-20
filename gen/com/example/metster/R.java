@@ -464,7 +464,7 @@ containing a value of this type.
         public static final int FAQ=0x7f070041;
         public static final int FirstName=0x7f07001e;
         public static final int ImageButton01=0x7f070044;
-        public static final int ImagevisitorView01=0x7f070030;
+        public static final int ImagevisitorView01=0x7f070031;
         public static final int Information=0x7f070024;
         public static final int LastName=0x7f07001f;
         public static final int Logout=0x7f070042;
@@ -472,7 +472,7 @@ containing a value of this type.
         public static final int MetsterInformation=0x7f070027;
         public static final int NumberofUsers=0x7f07002c;
         public static final int NumberofUsersLable=0x7f07002b;
-        public static final int Options=0x7f070031;
+        public static final int Options=0x7f070033;
         public static final int Password=0x7f070017;
         public static final int Privacy=0x7f070040;
         public static final int Profession=0x7f070020;
@@ -534,9 +534,9 @@ containing a value of this type.
         public static final int socialbuttons=0x7f070038;
         public static final int strict_sandbox=0x7f070009;
         public static final int terrain=0x7f070003;
-        public static final int visitorbuttonnext=0x7f070034;
-        public static final int visitorbuttonprev=0x7f070032;
-        public static final int visitorbuttonviewprofile=0x7f070033;
+        public static final int visitorbuttonnext=0x7f070032;
+        public static final int visitorbuttonprev=0x7f070030;
+        public static final int visitorbuttonviewprofile=0x7f070034;
         public static final int visitormap=0x7f070026;
         public static final int wrap_content=0x7f07000d;
     }

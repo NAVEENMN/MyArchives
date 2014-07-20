@@ -152,13 +152,32 @@ public class Login extends Activity {
             }
     };
     
-    final Handler handler = new Handler();
-    handler.postDelayed(new Runnable() {
+    final Handler handler_remove_location_updates = new Handler();
+    handler_remove_location_updates.postDelayed(new Runnable() {
       @Override
       public void run() {
     	  locationManager.removeUpdates(locationListener);
       }
-    }, 1000 * 60 * 3);//15mins
+    }, 1000 * 30);//3mins
+    
+    final Handler handler_delete_location = new Handler();
+    handler_delete_location.postDelayed(new Runnable() {
+      @Override
+      public void run() {
+    	  stopRepeatingTask();
+    	  Toast.makeText(getApplicationContext(), "Location will be deleted.", Toast.LENGTH_SHORT).show();
+    	  try {
+  	    	 new RequestTask().execute("http://54.183.113.236/metster/deletelocation.php",account.appkey,account.accnumber,"1","1","1","1","1"
+  			, "1", "1", "1", "1", "1", "1").get();
+  			} catch (InterruptedException e) {
+  							// TODO Auto-generated catch block
+  				e.printStackTrace();
+  			} catch (ExecutionException e) {
+  							// TODO Auto-generated catch block
+  				e.printStackTrace();
+  			}
+      }
+    }, 1000 * 30);//3mins
      
 //------------------------------------------------------------------> Fetch the location details
 		gcd = new Geocoder(getBaseContext(), Locale.getDefault());

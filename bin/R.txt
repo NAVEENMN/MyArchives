@@ -135,7 +135,7 @@ int id Email 0x7f070016
 int id FAQ 0x7f070041
 int id FirstName 0x7f07001e
 int id ImageButton01 0x7f070044
-int id ImagevisitorView01 0x7f070030
+int id ImagevisitorView01 0x7f070031
 int id Information 0x7f070024
 int id LastName 0x7f07001f
 int id Logout 0x7f070042
@@ -143,7 +143,7 @@ int id MapsRegion 0x7f070025
 int id MetsterInformation 0x7f070027
 int id NumberofUsers 0x7f07002c
 int id NumberofUsersLable 0x7f07002b
-int id Options 0x7f070031
+int id Options 0x7f070033
 int id Password 0x7f070017
 int id Privacy 0x7f070040
 int id Profession 0x7f070020
@@ -205,9 +205,9 @@ int id settings_icon 0x7f070057
 int id socialbuttons 0x7f070038
 int id strict_sandbox 0x7f070009
 int id terrain 0x7f070003
-int id visitorbuttonnext 0x7f070034
-int id visitorbuttonprev 0x7f070032
-int id visitorbuttonviewprofile 0x7f070033
+int id visitorbuttonnext 0x7f070032
+int id visitorbuttonprev 0x7f070030
+int id visitorbuttonviewprofile 0x7f070034
 int id visitormap 0x7f070026
 int id wrap_content 0x7f07000d
 int integer google_play_services_version 0x7f080000
