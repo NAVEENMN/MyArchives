@@ -12,7 +12,7 @@
         android:baselineAligned="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#5F04B4"
+        android:background="#424242"
         android:gravity="top"
         android:orientation="horizontal" >
         
@@ -46,14 +46,14 @@
 
             <TextView
                 android:id="@+id/FirstName"
-                android:textColor="#F2F2F2"
+                android:textColor="#58D3F7"
                 android:textSize="22sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/LastName"
-                android:textColor="#F2F2F2"
+                android:textColor="#58D3F7"
                 android:textSize="22sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"

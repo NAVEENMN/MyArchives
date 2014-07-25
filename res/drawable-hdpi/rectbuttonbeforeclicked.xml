@@ -4,11 +4,6 @@ android:shape="rectangle">
     
     <solid android:color="#08088A" />
     
-    <stroke
-        android:width="1px"
-        android:color="#08088A">
-    </stroke>
-    
     <gradient
       android:angle="270"
       android:startColor="#5882FA"

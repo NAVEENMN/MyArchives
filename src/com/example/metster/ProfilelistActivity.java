@@ -9,11 +9,11 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -133,22 +133,7 @@ public class ProfilelistActivity extends Activity {
 					
 		        		});
 		//----------------------------------
-		      //---------------------------------- Button view profile
-				Button findviewprofile = (Button) findViewById(R.id.visitorbuttonviewprofile);
-				findviewprofile.setOnClickListener(new View.OnClickListener() {
-					
-						
-						public void onClick(View v) { // yet to be implemented
-							
-							Intent intent = new Intent(ProfilelistActivity.this, Profiles.class);
-							intent.putExtras(visitoractdata);
-			        		startActivity(intent);
-							
-					       }//on click
-					
-					
-		        		});
-		//----------------------------------
+		      
 		        
 		      //---------------------------------- Button previous
 				Button findprev = (Button) findViewById(R.id.visitorbuttonprev);
@@ -263,11 +248,20 @@ public class ProfilelistActivity extends Activity {
         
         byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
 		    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        ImageView imgg = (ImageView)findViewById(R.id.ImagevisitorView01);
+		    ImageButton imgg = (ImageButton)findViewById(R.id.ImagevisitorView01);
         imgg.setImageBitmap(decodedByte);
 		
 	}
 
+	
+	public void load_profile(View view){
+		
+		Intent intent = new Intent(ProfilelistActivity.this, Profiles.class);
+		intent.putExtras(visitoractdata);
+		startActivity(intent);
+		
+	}
+	
 	//---------------------
 	@Override
 	public void onBackPressed() {

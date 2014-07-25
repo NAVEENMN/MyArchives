@@ -13,7 +13,7 @@
         android:baselineAligned="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#5F04B4"
+        android:background="#424242"
         android:gravity="top"
         android:orientation="horizontal" >
         
@@ -26,7 +26,7 @@
 			android:paddingTop="50dip"
 	        android:layout_height="match_parent"
 	        android:background = "@drawable/buttonhandler"
-	        android:drawableTop="@drawable/ic_action_back"
+	        android:drawableTop="@drawable/ic_action_previous_item"
 	        android:textColor="#F2F2F2"
 	        android:textSize="12sp"
 	        android:textStyle="bold" />
@@ -39,14 +39,15 @@
             android:layout_weight="0.08"
             android:orientation="vertical" >
                
-        <ImageView
+        <ImageButton
             android:id="@+id/ImagevisitorView01"
             android:layout_width="150dp"
 			android:layout_height="140dp"
 			android:src="@drawable/defaultprofile"
 			android:background = "@drawable/loginbg"
 			android:scaleType="centerCrop"
-            android:contentDescription="@string/desc" />
+            android:contentDescription="@string/desc" 
+            android:onClick="load_profile"/>
         </LinearLayout>
                 
 
@@ -60,14 +61,14 @@
 
             <TextView
                 android:id="@+id/FirstName"
-                android:textColor="#F2F2F2"
+                android:textColor="#58D3F7"
                 android:textSize="20sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/LastName"
-                android:textColor="#F2F2F2"
+                android:textColor="#58D3F7"
                 android:textSize="20sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
@@ -107,7 +108,7 @@
 			android:paddingTop="50dip"
 	        android:layout_height="match_parent"
 	        android:background = "@drawable/buttonhandler"
-	        android:drawableTop="@drawable/ic_action_forward"
+	        android:drawableTop="@drawable/ic_action_next_item"
 	        android:textColor="#F2F2F2"
 	        android:textSize="12sp"
 	        android:textStyle="bold" />
@@ -115,41 +116,13 @@
     </LinearLayout>
     
     <!--  ******************************************************************  User Basic Profile data -->
-    <!-- ******************************************************************* Options region           -->
-
-    <LinearLayout
-        android:id="@+id/Options"
-        style="?android:attr/buttonBarStyle"
-        android:layout_below="@+id/Profiledata"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/loginbg"
-        android:gravity="bottom"
-        android:orientation="horizontal" >
-  
-    <Button
-	        android:id="@+id/visitorbuttonviewprofile"
-	        style="?android:attr/buttonBarButtonStyle"
-	        android:layout_width="0dip"
-			android:layout_weight="1"
-			android:paddingTop="10dip"
-			android:gravity="center"
-	        android:layout_height="wrap_content"
-	        android:background = "@drawable/buttonhandler"
-	        android:drawableTop="@drawable/ic_action_person"
-	        android:textColor="#F2F2F2"
-	        android:textSize="12sp"
-	        android:textStyle="bold" />
-
-    </LinearLayout>
-<!-- ******************************************************************* Options region           -->
-
+    
     <!-- ******************************************************************* Map region               -->
     <LinearLayout
         android:id="@+id/MapsRegion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Options"
+        android:layout_below="@+id/Profiledata"
         android:gravity="center"
         android:orientation="vertical" >
     <fragment 

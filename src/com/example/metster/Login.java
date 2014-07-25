@@ -158,7 +158,7 @@ public class Login extends Activity {
       public void run() {
     	  locationManager.removeUpdates(locationListener);
       }
-    }, 1000 * 30);//3mins
+    }, 1000 * 60 * 3);//3mins
     
     final Handler handler_delete_location = new Handler();
     handler_delete_location.postDelayed(new Runnable() {
@@ -177,7 +177,7 @@ public class Login extends Activity {
   				e.printStackTrace();
   			}
       }
-    }, 1000 * 30);//3mins
+    }, 1000 * 60 * 15);//3mins
      
 //------------------------------------------------------------------> Fetch the location details
 		gcd = new Geocoder(getBaseContext(), Locale.getDefault());

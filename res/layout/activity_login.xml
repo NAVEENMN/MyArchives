@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#58ACFA"
+    android:background="#F2F2F2"
     tools:context=".Login" >
 
     
@@ -13,7 +13,7 @@
         android:baselineAligned="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#5F04B4"
+        android:background="#424242"
         android:gravity="top"
         android:orientation="horizontal" >
         
@@ -48,14 +48,14 @@
 
             <TextView
                 android:id="@+id/FirstName"
-                android:textColor="#F2F2F2"
+                android:textColor="#58D3F7"
                 android:textSize="23sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/LastName"
-                android:textColor="#F2F2F2"
+                android:textColor="#58D3F7"
                 android:textSize="23sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
@@ -96,7 +96,7 @@
     android:layout_below="@+id/Profiledata"
     android:layout_width="match_parent"
     android:layout_height="3dp"
-    android:background="#A9D0F5" /> 
+    android:background="#424242" /> 
     
      <!--  ****************************************************************** Information area        -->
     <LinearLayout
@@ -177,12 +177,12 @@
     android:layout_below="@+id/Information"
     android:layout_width="match_parent"
     android:layout_height="3dp"
-    android:background="#5882FA" />     
+    android:background="#424242" />     
     <!-- ******************************************************************** Action Buttons          -->
     <LinearLayout
         android:id="@+id/ActionButtons"
         style="?android:attr/buttonBarStyle"
-        android:background="#CEE3F6"
+        android:background="#F2F2F2"
         android:paddingTop="2dp"
         android:gravity="center"
         android:layout_alignParentBottom="true"

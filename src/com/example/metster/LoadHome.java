@@ -32,29 +32,25 @@ public class LoadHome extends Activity {
 	private static final boolean TOGGLE_ON_CLICK = true;
 	private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
 	private SystemUiHider mSystemUiHider;
-	private static final int TWO_MINUTES = 1000 * 60 * 2;
-	
 	Bundle data = new Bundle();	
-	
+
 	public static class gpslocation{
-		
+
 		static double latival;
 		static double Longival;
-		
+
 	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		setTitle("Meet, Connect and Socialize");
 		final LocationManager locationManager;
 		final LocationListener locationListener;
 		Location location = null;
 		Location pos = null ;
-		Location gpsposition = null;
-		Location networkposition =null;
 		String provider;
-		
+
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_load_home);
@@ -123,9 +119,9 @@ public class LoadHome extends Activity {
 		// while interacting with the UI.
 		//findViewById(R.id.dummy_button).setOnTouchListener(
 		//		mDelayHideTouchListener);
-		
+
 //----------------------------------------------------------  Setup GPS reader here!!
-		
+
 		Log.w("befofe","fg");
 		//--------------------------------> Setup location
 		super.onCreate(savedInstanceState);
@@ -136,15 +132,15 @@ public class LoadHome extends Activity {
 		    public void onLocationChanged(Location location) {	
 		    	gpslocation.latival = location.getLatitude();
 	        	gpslocation.Longival = location.getLongitude();
-		    	
+
 		    }
-		    
+
 			@SuppressWarnings("unused")
 			public void onStatusChanged(Location location) {
 		    	gpslocation.latival = location.getLatitude();
 	        	gpslocation.Longival = location.getLongitude();
 		    }
-		  
+
 			@SuppressWarnings("unused")
 			public void onProviderEnabled(Location location) {
 		    	gpslocation.latival = location.getLatitude();
@@ -155,44 +151,37 @@ public class LoadHome extends Activity {
 			@Override
 			public void onProviderEnabled(String provider) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void onStatusChanged(String provider, int status,
 					Bundle extras) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		  };
 		      //------------------------------------------------------------------------
 		// Register the listener with the Location Manager to receive location updates
-		  		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);// first get the location form the gps
-		  		gpsposition = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		        Boolean state = isBetterLocation(location, location);
-		        if(state){
-		        	gpslocation.latival = gpsposition.getLatitude();
-		        	gpslocation.Longival = gpsposition.getLongitude();
-		        	Log.w("used","gps");
-		        }
+		  		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		        Criteria criteria = new Criteria();
+		        pos = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		        if( pos == null ) 
+		        	{
+		        	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		        	pos = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		        	provider = locationManager.getBestProvider(criteria, false);
+		        	location = locationManager.getLastKnownLocation(provider);
+		        	gpslocation.latival = location.getLatitude();
+		        	gpslocation.Longival = location.getLongitude();
+		        	}
 		        else{
-		        	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);// first get the location form the gps
-		        	networkposition = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		        	Boolean statenet = isBetterLocation(location, location);
-		        	if(statenet){
-		        		gpslocation.latival = networkposition.getLatitude();
-		        		gpslocation.Longival = networkposition.getLongitude();
-		        		Log.w("used","network");
+		        	gpslocation.latival = pos.getLatitude();
+		        	gpslocation.Longival = pos.getLongitude();
 		        	}
-		        	else{
-		        		gpslocation.latival = gpsposition.getLatitude();
-		        		gpslocation.Longival = gpsposition.getLongitude();
-		        	}
-		        }
-		        
-		        
+
 		       //---------------------------------------------------------------------
-		        
+
 		        final Handler handler = new Handler();
 		        handler.postDelayed(new Runnable() {
 		          @Override
@@ -200,9 +189,9 @@ public class LoadHome extends Activity {
 		        	  locationManager.removeUpdates(locationListener);
 		          }
 		        }, 1000 * 60 * 15);//15mins
-		        
+
 //--------------------------------> Read user ID
-		        
+
 		        try {
 		            FileInputStream inputStream = openFileInput("accounts.txt");
 
@@ -255,7 +244,7 @@ public class LoadHome extends Activity {
 				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
 				            .show();
 				  }	
-				        
+
 //--------------------------------> Read image from file
 				try {
 					FileInputStream inputStream = openFileInput("image.txt");
@@ -265,7 +254,7 @@ public class LoadHome extends Activity {
 						BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 						String receiveString = "";
 						StringBuilder stringBuilder = new StringBuilder();
-						
+
 		                while ( (receiveString = bufferedReader.readLine()) != null ) {
 		                	stringBuilder.append(receiveString);
 						}
@@ -283,9 +272,9 @@ public class LoadHome extends Activity {
 						            .show();
 			    }
 		      //-----------------------------------------------------------------------
-				
-				
-		        
+
+
+
 		        Runnable mRunnable;
 		        Handler mHandler = new Handler();
 		        mRunnable = new Runnable() {
@@ -300,9 +289,9 @@ public class LoadHome extends Activity {
 		            }
 		        };
 		        mHandler.postDelayed(mRunnable, 1000 * 4 );
-		        
+
 		//-----------------------------------------------------------------------------------
-		
+
 	}
 
 	@Override
@@ -313,61 +302,8 @@ public class LoadHome extends Activity {
 		// created, to briefly hint to the user that UI controls
 		// are available.
 		delayedHide(100);
-		
+
 	}
-	
-	
-	
-	protected boolean isBetterLocation(Location location, Location currentBestLocation) {
-	    if (currentBestLocation == null) {
-	        // A new location is always better than no location
-	        return true;
-	    }
-
-	    // Check whether the new location fix is newer or older
-	    long timeDelta = location.getTime() - currentBestLocation.getTime();
-	    boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;
-	    boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
-	    boolean isNewer = timeDelta > 0;
-
-	    // If it's been more than two minutes since the current location, use the new location
-	    // because the user has likely moved
-	    if (isSignificantlyNewer) {
-	        return true;
-	    // If the new location is more than two minutes older, it must be worse
-	    } else if (isSignificantlyOlder) {
-	        return false;
-	    }
-
-	    // Check whether the new location fix is more or less accurate
-	    int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
-	    boolean isLessAccurate = accuracyDelta > 0;
-	    boolean isMoreAccurate = accuracyDelta < 0;
-	    boolean isSignificantlyLessAccurate = accuracyDelta > 200;
-
-	    // Check if the old and new location are from the same provider
-	    boolean isFromSameProvider = isSameProvider(location.getProvider(),
-	            currentBestLocation.getProvider());
-
-	    // Determine location quality using a combination of timeliness and accuracy
-	    if (isMoreAccurate) {
-	        return true;
-	    } else if (isNewer && !isLessAccurate) {
-	        return true;
-	    } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
-	        return true;
-	    }
-	    return false;
-	}
-
-	/** Checks whether two providers are the same */
-	private boolean isSameProvider(String provider1, String provider2) {
-	    if (provider1 == null) {
-	      return provider2 == null;
-	    }
-	    return provider1.equals(provider2);
-	}
-	
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
