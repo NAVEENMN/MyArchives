@@ -104,73 +104,19 @@
         android:baselineAligned="false"
         android:layout_below="@+id/Dividerone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dip"
         android:background="#E6E6E6"
         android:gravity="top"
         android:orientation="horizontal" >
              <!-- ******************************************************************* Map region               -->        
-    <LinearLayout
-        android:id="@+id/MapsRegion"
-        android:layout_width="0dip"
-	    android:layout_weight="1"
-        android:layout_height="200dip"
-        android:gravity="center"
-        android:orientation="vertical" >
     <fragment 
           android:id="@+id/visitormap"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:name="com.google.android.gms.maps.MapFragment"/>
-	</LinearLayout>
-	<!-- ******************************************************************* Map region               -->
-    <LinearLayout
-        android:id="@+id/MetsterInformation"
-        android:paddingLeft="10dp"
-        android:layout_width="0dip"
-	    android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-    		<TextView
-                android:id="@+id/YourLocationLable"
-                android:paddingTop="10dp"
-                android:textColor="#424242"
-                android:textSize="18sp"
-                android:text="@string/YourLocation"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
 
-            <TextView
-                android:id="@+id/YourLocation"
-                android:textColor="#5F04B4"
-                android:textSize="16sp"
-                android:text="@string/CurrentCounty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <TextView
-                android:id="@+id/YourLocationcity"
-                android:textColor="#5F04B4"
-                android:textSize="16sp"
-                android:text="@string/CurrentCounty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            
-            <TextView
-                android:id="@+id/NumberofUsersLable"
-                android:paddingTop="10dp"
-                android:textColor="#424242"
-                android:textSize="18sp"
-                android:text="@string/MetsterUsers"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <TextView
-                android:id="@+id/NumberofUsers"
-                android:textColor="#38610B"
-                android:textSize="38sp"
-                android:text="@string/MetsterUsersvalue"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            
-       </LinearLayout>
+	<!-- ******************************************************************* Map region               -->
+    
       </LinearLayout>      
       <View
     android:id="@+id/Dividertwo"
@@ -179,9 +125,13 @@
     android:layout_height="3dp"
     android:background="#424242" />     
     <!-- ******************************************************************** Action Buttons          -->
+    
+    
+    
     <LinearLayout
         android:id="@+id/ActionButtons"
         style="?android:attr/buttonBarStyle"
+        android:layout_below="@+id/Dividertwo"
         android:background="#F2F2F2"
         android:paddingTop="2dp"
         android:gravity="center"
@@ -189,7 +139,6 @@
         android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Dividertwo"
         android:orientation="vertical" >
   
 

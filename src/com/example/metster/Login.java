@@ -40,6 +40,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Login extends Activity {
 		
@@ -307,10 +308,10 @@ public class Login extends Activity {
         TextView cc = (TextView)findViewById(R.id.CurrentCity); 
         cc.setText((String)User.usrcurrentcity);
         //----------- Section 2
-        TextView loca = (TextView)findViewById(R.id.YourLocation); 
-        loca.setText((String)addrs.addressline);
-        TextView locacity = (TextView)findViewById(R.id.YourLocationcity); 
-        locacity.setText((String)addrs.cityName);
+        //TextView loca = (TextView)findViewById(R.id.YourLocation); 
+        //loca.setText((String)addrs.addressline);
+        //TextView locacity = (TextView)findViewById(R.id.YourLocationcity); 
+        //locacity.setText((String)addrs.cityName);
         //----------- Section Profile Image
         if (User.profileimage!=null){
             byte[] decodedString = Base64.decode(User.profileimage, Base64.DEFAULT);
@@ -361,8 +362,8 @@ public class Login extends Activity {
 					Userslist.user_count = accountnumb.length;
 					Userslist.user_count --;
 				}
-        	TextView num = (TextView)findViewById(R.id.NumberofUsers); 
-            num.setText(Integer.toString(Userslist.user_count));
+        	//TextView num = (TextView)findViewById(R.id.NumberofUsers); 
+            //num.setText(Integer.toString(Userslist.user_count));
             
             
         	} catch (InterruptedException e) {
@@ -372,6 +373,13 @@ public class Login extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+        
+        GoogleMap mMap;
+        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(Map.latival, Map.Longival)) // visitor
+                .title(Integer.toString(Userslist.user_count))).showInfoWindow();
 	
 	}
 	

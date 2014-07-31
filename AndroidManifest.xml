@@ -113,6 +113,10 @@
             android:name="com.example.metster.Settings"
             android:label="@string/title_activity_settings" >
         </activity>
+        <activity
+            android:name="com.example.metster.Profession_info"
+            android:label="@string/title_activity_profession_info" >
+        </activity>
     </application>
 
 </manifest>

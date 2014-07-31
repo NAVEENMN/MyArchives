@@ -87,7 +87,8 @@
     <string name="Previous">Previous</string>
 
     <!-- ******************************************************** -->
-    
+
+
     <!-- Settings -->
 
     <string name="AboutMetster">About Metster</string>
@@ -98,6 +99,12 @@
     <string name="DeleteAccount">Delete Account</string>
 
     <!-- ******************************************************** -->
+    
+    <!--  Pofession info -->
+    
+    <string name="question">Question ?</string>
+    
+     <!-- ******************************************************** -->
 
 
     <!-- Others -->
@@ -111,5 +118,6 @@
     <string name="title_activity_load_home">LoadHome</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_profession_info">Profession_info</string>
 
 </resources>
