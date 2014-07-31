@@ -2,19 +2,106 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F2F2F2"
     tools:context="${packageName}.${activityClass}" >
 
-    <TextView
-        android:layout_width="wrap_content"
+ <LinearLayout
+        android:id="@+id/Profiledata"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:background="#424242"
+        android:layout_centerHorizontal="true"  
+        android:gravity="top"
+        android:orientation="vertical" >
     
     <TextView
-        android:id="@+id/info_view"
+        android:id="@+id/question"
+        android:paddingTop="120dp"
         android:textColor="#F2F2F2"
-        android:textSize="12sp"
+        android:textSize="32sp"
+        android:gravity="center"
         android:text="@string/question"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"/> 
+    </LinearLayout>
+ 
+ <View
+    android:id="@+id/Dividertwo"
+    android:layout_below="@+id/Profiledata"
+    android:layout_width="match_parent"
+    android:layout_height="3dp"
+    android:background="#2ECCFA" />  
+ 
+    <LinearLayout
+        android:id="@+id/answer"
+        android:layout_below="@+id/Dividertwo"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F2F2F2"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="40dp"  
+        android:gravity="center"
+        android:orientation="vertical" >
+    <EditText
+		       android:id="@+id/answerbyuser"
+		       android:textColor="#F2F2F2"
+		       android:gravity="center"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:hint="@string/MyProfession"
+		       android:inputType="text" />
+    
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/Submit"
+        android:layout_below="@+id/answer"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F2F2F2"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="40dp"  
+        android:gravity="center"
+        android:orientation="horizontal" >
+    
+        <Button
+			        android:id="@+id/prevsub"
+			        style="?android:attr/buttonStyleSmall"
+			        android:layout_width="0dip"
+			        android:layout_weight="0.2"
+			        android:layout_height="60dp"
+			        android:background = "@drawable/navigation_invisible"
+			        android:gravity="center"
+			        android:paddingTop="10dip"
+			        android:drawableTop="@drawable/ic_action_previous_itemd"
+			        android:onClick="previous_question"
+			        />
+        <Button
+			        android:id="@+id/skpsub"
+			        style="?android:attr/buttonStyleSmall"
+			        android:layout_width="0dip"
+			        android:layout_weight="1"
+			        android:layout_height="60dp"
+			        android:background = "@drawable/curved_submit"
+			        android:gravity="center"
+			        android:paddingTop="10dip"
+			        android:drawableTop="@drawable/ic_action_upload"
+			        android:onClick="update_information"
+			        />
+        <Button
+			        android:id="@+id/nextsub"
+			        style="?android:attr/buttonStyleSmall"
+			        android:layout_width="0dip"
+			        android:layout_weight="0.2"
+			        android:layout_height="60dp"
+			        android:background = "@drawable/navigation_invisible"
+			        android:gravity="center"
+			        android:paddingTop="10dip"
+			        android:drawableTop="@drawable/ic_action_next_itemd"
+			        android:onClick="next_question"
+			        />
+    </LinearLayout>
 
 </RelativeLayout>

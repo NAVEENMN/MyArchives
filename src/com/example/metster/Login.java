@@ -392,10 +392,9 @@ public class Login extends Activity {
 	
 	public void updateprofile(View view){
 		stopRepeatingTask();
-    	Intent intent2 = new Intent( Login.this, UpdateProfile.class);
+    	Intent intent2 = new Intent( Login.this, Profession_info.class);
     	intent2.putExtras(profilelistactdata);
 		startActivity(intent2);
-		finish();
     }
 	
 	
