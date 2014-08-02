@@ -36,6 +36,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -43,6 +44,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Login extends Activity {
+	
+	public static class fbdata{
+		
+		static String fbref;
+		static Firebase firebaseobj;
+		
+	};
 		
 	public static class addrs{
 	
@@ -101,6 +109,7 @@ public class Login extends Activity {
     Criteria criteria = new Criteria();
     Bundle profilelistactdata = new Bundle();
     
+   
     //---------------------------------------->
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +118,17 @@ public class Login extends Activity {
 		setupActionBar();// Show the Up button in the action bar.
 		User.usrstatus = "Hello There!!";
 		setTitle(User.usrstatus);
+		//--------------------------------> Read Bundle
+		
+				Bundle b = getIntent().getExtras();
+				if( b != null ){
+					account.accnumber = b.getString("accountnumber");
+					profilelistactdata.putString("accountnumber", account.accnumber);
+					account.tokennumber = b.getString("tokennumber");
+					User.profileimage = b.getString("userimage");
+					profilelistactdata.putString("userimage",User.profileimage);
+				}
+							
 	//--------------------------------> Setup location
 	locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
     locationListener = new LocationListener() {
@@ -144,6 +164,32 @@ public class Login extends Activity {
         Map.Longival = location.getLongitude();
     }
     
+  //------------------------------------------------------------------> Fetch the location details
+  		gcd = new Geocoder(getBaseContext(), Locale.getDefault());
+  		List<Address> addresses;
+  		
+  		try {
+              addresses = gcd.getFromLocation(Map.latival, Map.Longival, 1);
+              if (addresses.size() > 0)
+              addrs.cityName = addresses.get(0).getLocality();
+              addrs.country = addresses.get(0).getCountryCode();
+              addrs.zip = addresses.get(0).getPostalCode();
+              profilelistactdata.putString("zip", addrs.zip);
+              addrs.addressline = addresses.get(0).getThoroughfare();
+             
+          } catch (IOException e) {
+              e.printStackTrace();
+          }
+
+  	//----------------------> Fire base reference creation
+		StringBuilder strBuilder = new StringBuilder("https://met-ster.firebaseio.com/");
+		strBuilder.append(addrs.zip);
+		strBuilder.append("/");
+	    strBuilder.append(account.accnumber);
+	    fbdata.fbref = strBuilder.toString();
+	    fbdata.firebaseobj = new Firebase(fbdata.fbref);
+    
+    
     getData = new Runnable()
     {
             @Override
@@ -167,6 +213,8 @@ public class Login extends Activity {
       public void run() {
     	  stopRepeatingTask();
     	  Toast.makeText(getApplicationContext(), "Location will be deleted.", Toast.LENGTH_SHORT).show();
+    	  fbdata.firebaseobj.child("Latitude").removeValue();
+    	  fbdata.firebaseobj.child("Longitude").removeValue();
     	  try {
   	    	 new RequestTask().execute("http://54.183.113.236/metster/deletelocation.php",account.appkey,account.accnumber,"1","1","1","1","1"
   			, "1", "1", "1", "1", "1", "1").get();
@@ -178,35 +226,10 @@ public class Login extends Activity {
   				e.printStackTrace();
   			}
       }
-    }, 1000 * 60 * 15);//3mins
+    }, 1000 * 60);//3mins
      
-//------------------------------------------------------------------> Fetch the location details
-		gcd = new Geocoder(getBaseContext(), Locale.getDefault());
-		List<Address> addresses;
-		
-		try {
-            addresses = gcd.getFromLocation(Map.latival, Map.Longival, 1);
-            if (addresses.size() > 0)
-            addrs.cityName = addresses.get(0).getLocality();
-            addrs.country = addresses.get(0).getCountryCode();
-            addrs.zip = addresses.get(0).getPostalCode();
-            profilelistactdata.putString("zip", addrs.zip);
-            addrs.addressline = addresses.get(0).getThoroughfare();
-           
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-//--------------------------------> Read Bundle
-		
-		Bundle b = getIntent().getExtras();
-		if( b != null ){
-			account.accnumber = b.getString("accountnumber");
-			profilelistactdata.putString("accountnumber", account.accnumber);
-			account.tokennumber = b.getString("tokennumber");
-			User.profileimage = b.getString("userimage");
-			profilelistactdata.putString("userimage",User.profileimage);
-		}
+
 //-------------------------------------> Read data from server
 		
 	    try {
@@ -223,7 +246,7 @@ public class Login extends Activity {
 	            updatelocation(null);
 	            Log.w("response",Userslist.server_response);
 	    
-					
+	           
 					String[] separated = Userslist.server_response.split("-");
 		            User.usrfname = separated[0];
 		            User.usrlname = separated[1];
@@ -251,7 +274,7 @@ public class Login extends Activity {
 //-----------------------------------------------------------------------> Button Actions	            
 	            //------------------------------------- meet someone
 
-			final Animation animScale = AnimationUtils.loadAnimation(this, R.anim.anim_scale);
+			final Animation animScale = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
 		        find = (Button) findViewById(R.id.buttonmeet);
 		              
 		        find.setOnClickListener(new View.OnClickListener() {
@@ -346,7 +369,8 @@ public class Login extends Activity {
     	Map.Longival = location.getLongitude();
     	profilelistactdata.putDouble("latitude",Map.latival);
     	profilelistactdata.putDouble("longitude", Map.Longival);
-    	
+    	fbdata.firebaseobj.child("Latitude").setValue(Double.toString(Map.latival));
+    	fbdata.firebaseobj.child("Longitude").setValue(Double.toString(Map.Longival));
         try {
         	 new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), User.usrstatus,"1",
 					"1", "1", "1", "1", "1", "1").get();

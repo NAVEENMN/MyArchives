@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -206,8 +211,44 @@ public class ProfilelistActivity extends Activity {
 			 visitoractdata.putString("visitor_facebook",visitorinfo.facebookurl);
 			 visitoractdata.putString("visitor_linkedin",visitorinfo.linkedinurl);
 			 
-			 //------
+			 //-------
+			 Log.w("nowuser",account_number);
+			 try{
+			 StringBuilder strBuilder = new StringBuilder("https://met-ster.firebaseio.com/");
+			 strBuilder.append(account_number);
+			 String fbref = strBuilder.toString();
+			 Firebase dat = new Firebase(fbref);
+			 dat.child("Latitude").addValueEventListener(new ValueEventListener() {
+			        @Override
+			        public void onDataChange(DataSnapshot snapshot) {
+			            System.out.println(snapshot.getValue()); 
+			            visitorinfo.latitude = (Double) snapshot.getValue();
+			            try{
+			            updatemap(null);
+			            }catch(Exception e){
+			            	Log.w("map","locationerror");
+			            }
+			        }
+			        @Override public void onCancelled(FirebaseError error) { }
+			    });
+			 dat.child("Longitude").addValueEventListener(new ValueEventListener() {
+			        @Override
+			        public void onDataChange(DataSnapshot snapshot) {
+			            System.out.println(snapshot.getValue());
+			            visitorinfo.longitude = (Double) snapshot.getValue();
+			            try{
+				            updatemap(null);
+				            }catch(Exception e){
+				            	Log.w("map","locationerror");
+				            }
+			        }
+			        @Override public void onCancelled(FirebaseError error) { }
+			    });
+			 }catch(Exception e){
+				 Log.w("error","cannot access firebase");
+			 }
 			 
+			 //-------
 			 displayprofile(visitorinfo.Image, visitorinfo.FirstName, visitorinfo.LastName, visitorinfo.latitude, visitorinfo.longitude, visitorinfo.Gender,
 					        visitorinfo.Age, visitorinfo.Profession, visitorinfo.worksat, visitorinfo.CurrentCity);
 		
@@ -228,23 +269,7 @@ public class ProfilelistActivity extends Activity {
         TextView currcity = (TextView)findViewById(R.id.CurrentCity); 
         currcity.setText(currentcity);
         setTitle(visitorinfo.Status); // user status here
-		//-----------------------> put vis on map
-        GoogleMap map = ((MapFragment) getFragmentManager()
-                .findFragmentById(R.id.visitormap)).getMap();
-
-        LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
-
-        map.setMyLocationEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
-        
-        GoogleMap mMap;
-        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
-        mMap.clear();
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(lativale, Longivale)) // visitor
-                .title("Hi")).showInfoWindow();
-        
-        
+        updatemap(null);
         byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
 		    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 		    ImageButton imgg = (ImageButton)findViewById(R.id.ImagevisitorView01);
@@ -259,6 +284,26 @@ public class ProfilelistActivity extends Activity {
 		intent.putExtras(visitoractdata);
 		startActivity(intent);
 		
+	}
+	
+	public void updatemap(View view){
+		//-----------------------> put vis on map
+        GoogleMap map = ((MapFragment) getFragmentManager()
+                .findFragmentById(R.id.visitormap)).getMap();
+
+        LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
+
+        map.setMyLocationEnabled(true);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
+        
+        GoogleMap mMap;
+        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(visitorinfo.latitude, visitorinfo.longitude)) // visitor
+                .title("Hi")).showInfoWindow();
+        
+        
 	}
 	
 	//---------------------
