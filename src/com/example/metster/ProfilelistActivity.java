@@ -3,9 +3,11 @@ package com.example.metster;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Base64;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.metster.Login.visitorinfo;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -47,31 +50,10 @@ public class ProfilelistActivity extends Activity {
 		static String zip;
 	};
 	
-	public static class visitorinfo{
-		
-		static String profileid;
-		static String FirstName;
-		static String LastName;
-		static String Image;
-		static String Gender;
-		static String Age;
-		static String Status;
-		static String Profession;
-		static String worksat;
-		static String CurrentCity;
-		static String hometown;
-		static String hobbies;
-		static String music;
-		static String movies;
-		static String books;
-		static String AboutMe;
-		static String Passion;
-		static Double latitude;
-		static Double longitude;
-		static String facebookurl;
-		static String linkedinurl;
-		
-	};
+	public static class viz{
+		static String acc;
+	}
+	
 	
 
     int prfcounter = 1 ;
@@ -79,7 +61,7 @@ public class ProfilelistActivity extends Activity {
     String server_response = null;
     int number_of_profiles = 0;
     Bundle visitoractdata = new Bundle();
-
+    ProgressDialog progress;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -169,7 +151,9 @@ public class ProfilelistActivity extends Activity {
 	}
 	
 	public void current_visitor(String account_number) throws InterruptedException, ExecutionException{
-		
+		viz.acc = account_number;
+		new LongOperation().execute("");
+
 		 try {
 		    	server_response = new RequestTask().execute("http://54.183.113.236/metster/getprofiledata.php", account.appkey, account_number, "1","1","1", "1", "1"
 						, "1", "1", "1", "1", "1", "1" ).get();
@@ -215,6 +199,8 @@ public class ProfilelistActivity extends Activity {
 			 Log.w("nowuser",account_number);
 			 try{
 			 StringBuilder strBuilder = new StringBuilder("https://met-ster.firebaseio.com/");
+			 strBuilder.append(addrs.zip);
+		     strBuilder.append("/");
 			 strBuilder.append(account_number);
 			 String fbref = strBuilder.toString();
 			 Firebase dat = new Firebase(fbref);
@@ -222,7 +208,8 @@ public class ProfilelistActivity extends Activity {
 			        @Override
 			        public void onDataChange(DataSnapshot snapshot) {
 			            System.out.println(snapshot.getValue()); 
-			            visitorinfo.latitude = (Double) snapshot.getValue();
+			            Double d = Double.parseDouble(snapshot.getValue().toString());
+			            visitorinfo.latitude = d;
 			            try{
 			            updatemap(null);
 			            }catch(Exception e){
@@ -235,9 +222,24 @@ public class ProfilelistActivity extends Activity {
 			        @Override
 			        public void onDataChange(DataSnapshot snapshot) {
 			            System.out.println(snapshot.getValue());
-			            visitorinfo.longitude = (Double) snapshot.getValue();
+			            Double d = Double.parseDouble(snapshot.getValue().toString());
+			            visitorinfo.longitude = d;
 			            try{
 				            updatemap(null);
+				            }catch(Exception e){
+				            	Log.w("map","locationerror");
+				            }
+			        }
+			        @Override public void onCancelled(FirebaseError error) { }
+			    });
+			 dat.child("Status").addValueEventListener(new ValueEventListener() {
+			        @Override
+			        public void onDataChange(DataSnapshot snapshot) {
+			            System.out.println(snapshot.getValue());
+			            
+			            visitorinfo.Status = (String) snapshot.getValue();
+			            try{
+			            	setTitle(visitorinfo.Status);
 				            }catch(Exception e){
 				            	Log.w("map","locationerror");
 				            }
@@ -301,7 +303,7 @@ public class ProfilelistActivity extends Activity {
         mMap.clear();
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(visitorinfo.latitude, visitorinfo.longitude)) // visitor
-                .title("Hi")).showInfoWindow();
+                .title(visitorinfo.FirstName)).showInfoWindow();
         
         
 	}
@@ -347,5 +349,44 @@ public class ProfilelistActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+public void spin(View v){
+	progress = ProgressDialog.show(getApplicationContext(), "hello", "world");
+}
+	
+    private class LongOperation extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+        	
+        	//spin(null);
+        	for(int i=0;i<5;i++) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            Log.w("background","executed");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+        	//progress.dismiss();
+        Log.w("post","executed");
+        }
+        
+
+        @Override
+        protected void onPreExecute() {
+        	Log.w("pre","executed");
+        	
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+    }
 
 }

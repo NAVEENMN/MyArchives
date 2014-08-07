@@ -99,12 +99,13 @@
     <string name="DeleteAccount">Delete Account</string>
 
     <!-- ******************************************************** -->
-    
-    <!--  Pofession info -->
-    
+
+
+    <!-- Pofession info -->
+
     <string name="question">Question ?</string>
-    
-     <!-- ******************************************************** -->
+
+    <!-- ******************************************************** -->
 
 
     <!-- Others -->
@@ -119,5 +120,6 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_profession_info">Profession_info</string>
+    <string name="title_activity_loading_screen">Loading_screen</string>
 
 </resources>

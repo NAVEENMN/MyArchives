@@ -117,6 +117,12 @@
             android:name="com.example.metster.Profession_info"
             android:label="@string/title_activity_profession_info" >
         </activity>
+        <activity
+            android:name="com.example.metster.Loading_screen"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_loading_screen"
+            android:theme="@style/FullscreenTheme" >
+        </activity>
     </application>
 
 </manifest>

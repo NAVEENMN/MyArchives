@@ -7,6 +7,8 @@
 
     
     <!--  ******************************************************************  User Basic Profile data -->
+    
+    
 
     <LinearLayout
         android:id="@+id/Profiledata"
@@ -42,10 +44,13 @@
             android:layout_width="0dip"
 			android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:paddingLeft="2dp"
 			android:paddingTop="10dp"
             android:orientation="vertical" >
-
+            
+         
+            
+      
             <TextView
                 android:id="@+id/FirstName"
                 android:textColor="#58D3F7"
@@ -60,7 +65,8 @@
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-
+        
+            
             <TextView
                 android:id="@+id/Profession"
                 android:textColor="#F2F2F2"

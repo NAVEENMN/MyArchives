@@ -18,6 +18,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -51,6 +52,10 @@ public class Login extends Activity {
 		static Firebase firebaseobj;
 		
 	};
+	
+	public static class loading_token{
+		static Boolean ok_to_load;
+	}
 		
 	public static class addrs{
 	
@@ -72,6 +77,33 @@ public class Login extends Activity {
 		static String usrworksat;
 		static String usrcurrentcity;
 		static String usrstatus;
+		
+	};
+	
+	
+public static class visitorinfo{
+		
+		static String profileid;
+		static String FirstName;
+		static String LastName;
+		static String Image;
+		static String Gender;
+		static String Age;
+		static String Status;
+		static String Profession;
+		static String worksat;
+		static String CurrentCity;
+		static String hometown;
+		static String hobbies;
+		static String music;
+		static String movies;
+		static String books;
+		static String AboutMe;
+		static String Passion;
+		static Double latitude;
+		static Double longitude;
+		static String facebookurl;
+		static String linkedinurl;
 		
 	};
 	
@@ -117,7 +149,7 @@ public class Login extends Activity {
 		setContentView(R.layout.activity_login);
 		setupActionBar();// Show the Up button in the action bar.
 		User.usrstatus = "Hello There!!";
-		setTitle(User.usrstatus);
+		setTitle("Set your status");
 		//--------------------------------> Read Bundle
 		
 				Bundle b = getIntent().getExtras();
@@ -188,7 +220,7 @@ public class Login extends Activity {
 	    strBuilder.append(account.accnumber);
 	    fbdata.fbref = strBuilder.toString();
 	    fbdata.firebaseobj = new Firebase(fbdata.fbref);
-    
+	    fbdata.firebaseobj.child("Status").setValue("Hello There!!");
     
     getData = new Runnable()
     {
@@ -210,11 +242,12 @@ public class Login extends Activity {
     final Handler handler_delete_location = new Handler();
     handler_delete_location.postDelayed(new Runnable() {
       @Override
-      public void run() {
+      public void run() { // Might have to kill this thread on refresh
     	  stopRepeatingTask();
     	  Toast.makeText(getApplicationContext(), "Location will be deleted.", Toast.LENGTH_SHORT).show();
     	  fbdata.firebaseobj.child("Latitude").removeValue();
     	  fbdata.firebaseobj.child("Longitude").removeValue();
+    	  fbdata.firebaseobj.child("Status").removeValue();
     	  try {
   	    	 new RequestTask().execute("http://54.183.113.236/metster/deletelocation.php",account.appkey,account.accnumber,"1","1","1","1","1"
   			, "1", "1", "1", "1", "1", "1").get();
@@ -226,23 +259,17 @@ public class Login extends Activity {
   				e.printStackTrace();
   			}
       }
-    }, 1000 * 60);//3mins
+    }, 1000 * 30);//3mins
      
 
 
 //-------------------------------------> Read data from server
-		
-	    try {
-	    	Userslist.server_response = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",account.accnumber,account.tokennumber,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival),(String)addrs.country,"1"
-			, "1", "1", "1", "1", "1", "1").get();
-			} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-							// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	              
+    try{
+    	Userslist.server_response = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",account.accnumber,account.tokennumber,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival),(String)addrs.country,"1"
+    			, "1", "1", "1", "1", "1", "1").get();
+    	}catch(Exception e){
+    		Log.w("fetch","failed");
+    	}            
 	            updatelocation(null);
 	            Log.w("response",Userslist.server_response);
 	    
@@ -286,6 +313,7 @@ public class Login extends Activity {
 							new Thread(new Runnable() { 
 					            public void run(){
 					            	SystemClock.sleep(2000);
+					            	
 					            	if(Userslist.user_count > 0){
 										stopRepeatingTask();
 										locationManager.removeUpdates(locationListener);
@@ -372,8 +400,8 @@ public class Login extends Activity {
     	fbdata.firebaseobj.child("Latitude").setValue(Double.toString(Map.latival));
     	fbdata.firebaseobj.child("Longitude").setValue(Double.toString(Map.Longival));
         try {
-        	 new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), User.usrstatus,"1",
-					"1", "1", "1", "1", "1", "1").get();
+        	new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), User.usrstatus,"1",
+ 					"1", "1", "1", "1", "1", "1").get();
         	 Userslist.numberofusers = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
 					"1", "1", "1", "1", "1", "1").get();
         	 profilelistactdata.putString("accountnumberlist", Userslist.numberofusers);
@@ -424,6 +452,9 @@ public class Login extends Activity {
 	
 	public void on_image_click(View view){
 		//
+		//Intent intentprofilelist = new Intent( Login.this, Loading_screen.class);
+		//startActivity(intentprofilelist);
+		new LongOperation().execute("");
 	}
 	
 	@Override
@@ -483,6 +514,7 @@ public class Login extends Activity {
 			  Editable value = input.getText();
 			  User.usrstatus = value.toString();
 			  setTitle(User.usrstatus);
+			  fbdata.firebaseobj.child("Status").setValue(User.usrstatus);
 			  // Do something with value!
 			  }
 			});
@@ -516,6 +548,45 @@ public class Login extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	
+	 private class LongOperation extends AsyncTask<String, Void, String> {
+	        @Override
+	        protected String doInBackground(String... params) {
+	            
+	            new Thread(new Runnable() { 
+		            public void run(){
+		            	try{
+			            	
+		    	            Userslist.server_response = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",account.accnumber,account.tokennumber,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival),(String)addrs.country,"1"
+		    	        			, "1", "1", "1", "1", "1", "1").get();
+		    	            }catch(Exception e){
+		    	            	Log.w("thread","failed");
+		    	            }	
+
+		            }
+		    }).start();
+	            
+	            Log.w("background","executed");
+	            return null;
+	        }
+
+	        @Override
+	        protected void onPostExecute(String result) {
+	        loading_token.ok_to_load = true;	
+	        Log.w("post","executed");
+	        }
+	        
+
+	        @Override
+	        protected void onPreExecute() {
+	        	Log.w("pre","executed");
+	        	loading_token.ok_to_load = false;
+	        	Intent intentprofilelist = new Intent( Login.this, Loading_screen.class);
+	    		startActivity(intentprofilelist);
+	        }
+
+	        @Override
+	        protected void onProgressUpdate(Void... values) {
+	        }
+	 }
 
 }
