@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,7 +15,7 @@ import android.widget.Toast;
 public class Profiles extends Activity {
 	
 	
-	public static class info{
+	public static class visitor_info{
 	
 		 static String FirstName;
 		 static String LastName;
@@ -42,38 +41,37 @@ public class Profiles extends Activity {
 		Bundle visitordata = getIntent().getExtras();
     	
 
-		 info.FirstName = visitordata.getString("visitor_firstname");
-		 info.LastName = visitordata.getString("visitor_lastname");
-		 info.Image = visitordata.getString("visitor_image");
-		 info.Gender = visitordata.getString("visitor_gender");
-		 info.Status = visitordata.getString("visitor_status");
-		 info.Profession = visitordata.getString("visitor_profession");
-		 info.worksat = visitordata.getString("visitor_worksat");
-		 info.CurrentCity = visitordata.getString("visitor_currentcity");
-		 info.AboutMe = visitordata.getString("visitor_aboutme");
-		 info.Facebook = visitordata.getString("visitor_facebook");
-		 info.Linkedin = visitordata.getString("visitor_linkedin");
+		 visitor_info.FirstName = visitordata.getString("visitor_firstname");
+		 visitor_info.LastName = visitordata.getString("visitor_lastname");
+		 visitor_info.Image = visitordata.getString("visitor_image");
+		 visitor_info.Gender = visitordata.getString("visitor_gender");
+		 visitor_info.Status = visitordata.getString("visitor_status");
+		 visitor_info.Profession = visitordata.getString("visitor_profession");
+		 visitor_info.worksat = visitordata.getString("visitor_worksat");
+		 visitor_info.CurrentCity = visitordata.getString("visitor_currentcity");
+		 visitor_info.AboutMe = visitordata.getString("visitor_aboutme");
+		 visitor_info.Facebook = visitordata.getString("visitor_facebook");
+		 visitor_info.Linkedin = visitordata.getString("visitor_linkedin");
 		 
-		 Log.w("fa",info.Facebook);
 		 		
-		 setTitle(info.Status);
+		 setTitle(visitor_info.Status);
 		 //------------------------------------------------------
 		 TextView fname = (TextView)findViewById(R.id.FirstName); 
-	     fname.setText((String)info.FirstName);
+	     fname.setText((String)visitor_info.FirstName);
 	     TextView lname = (TextView)findViewById(R.id.LastName); 
-	     lname.setText((String)info.LastName);
+	     lname.setText((String)visitor_info.LastName);
 	     TextView prof = (TextView)findViewById(R.id.Profession); 
-	     prof.setText((String)info.Profession);
+	     prof.setText((String)visitor_info.Profession);
 	     TextView wat = (TextView)findViewById(R.id.Worksat); 
-	     wat.setText((String)info.worksat);
+	     wat.setText((String)visitor_info.worksat);
 	     TextView cc = (TextView)findViewById(R.id.CurrentCity); 
-	     cc.setText((String)info.CurrentCity); 
+	     cc.setText((String)visitor_info.CurrentCity); 
 	     TextView abo = (TextView)findViewById(R.id.AboutMe); 
-	     abo.setText((String)info.AboutMe);
+	     abo.setText((String)visitor_info.AboutMe);
 
 	     
-	     if (info.Image!=null){
-             byte[] decodedString = Base64.decode(info.Image, Base64.DEFAULT);
+	     if (visitor_info.Image!=null){
+             byte[] decodedString = Base64.decode(visitor_info.Image, Base64.DEFAULT);
 	             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 	             	ImageView image =(ImageView)findViewById(R.id.ProfileImage);
 	                image.setImageBitmap(decodedByte);
@@ -84,7 +82,7 @@ public class Profiles extends Activity {
 	}
 	
 	public void openfacebook(View view){
-		String url = info.Facebook;
+		String url = visitor_info.Facebook;
 		try{
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		i.setData(Uri.parse(url));
@@ -96,7 +94,7 @@ public class Profiles extends Activity {
 	}
 	
 	public void openlinkedin(View view){
-		String url = info.Linkedin;
+		String url = visitor_info.Linkedin;
 		try{
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		i.setData(Uri.parse(url));

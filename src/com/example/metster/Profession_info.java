@@ -1,16 +1,25 @@
 package com.example.metster;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class Profession_info extends Activity {
 
+   public static class info{
+		
+		static String userprofileimage;
+		static String useraccnumber;
+		static String userstayingin;
+        static String userprofession;
+        static String userworksat;
+        static String userfacebook;
+        static String userlinkedin;
+        static String userabout; 
+	};
+	
 	public static class user_info{
 		
 		static String question;
@@ -18,6 +27,8 @@ public class Profession_info extends Activity {
 		static String profession;
 		static String works_at;
 		static String Location;
+		static String Facebook;
+		static String Linkedin;
 		
 	};
 	
@@ -25,7 +36,8 @@ public class Profession_info extends Activity {
 			"What is your profession?",
 			"Where do you work?",
 			"What is your current city?",
-			"Update your image.", 
+			"Link your Facebook account.",
+			"Link your Linkedin account.",
 	};
 	int counter = 0;
 	@Override
@@ -36,11 +48,11 @@ public class Profession_info extends Activity {
 		user_info.profession = listdata.getString("userprofession");
 		user_info.works_at = listdata.getString("userworksat");
 		user_info.Location = listdata.getString("usercurrentcity");
+		user_info.Facebook = "https://www.facebook.com/";
+		user_info.Linkedin = "https://www.linkedin.com/";
 		user_info.question = questions[0];
 		user_info.answer = user_info.profession;
-		setup_view(null);
-		
-		
+		setup_view(null);		
 	}
 	
 	public void previous_question(View v){
@@ -63,9 +75,11 @@ public class Profession_info extends Activity {
 			user_info.answer = lo;
 			break;
 		case 3:
-			String im = "image";
-			user_info.answer = im;
-			break;
+			String fb = user_info.Facebook;
+			user_info.answer = fb;
+		case 4:
+			String ln = user_info.Linkedin;
+			user_info.answer = ln;
 		
 		}
 		
@@ -91,10 +105,11 @@ public class Profession_info extends Activity {
 			user_info.answer = lo;
 			break;
 		case 3:
-			String im = "image";
-			user_info.answer = im;
-			break;
-		
+			String fb = user_info.Facebook;
+			user_info.answer = fb;
+		case 4:
+			String ln = user_info.Linkedin;
+			user_info.answer = ln;
 		}
 		setup_view(null);
 		
@@ -108,17 +123,6 @@ public class Profession_info extends Activity {
 		TextView quest = (TextView)findViewById(R.id.question);
         quest.setText(user_info.question);
         EditText ans = (EditText) findViewById(R.id.answerbyuser) ;
-        if(user_info.answer != "image"){
-        ans.setHint(user_info.answer);}
-        else{
-        	ans.setFocusable(false);
-        	ViewGroup linearLayout = (ViewGroup) findViewById(R.id.answer);
-			Button bt = new Button(this);
-			bt.setText("A Button");
-			bt.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, 
-			                                    LayoutParams.WRAP_CONTENT));
-			linearLayout.addView(bt);
-        }
-		
+        ans.setHint(user_info.answer);
 	}
 }

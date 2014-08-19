@@ -5,11 +5,9 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.metster.Login.loading_token;
 import com.example.metster.util.SystemUiHider;
 
 /**

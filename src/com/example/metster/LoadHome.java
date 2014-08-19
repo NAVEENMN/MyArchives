@@ -43,7 +43,7 @@ public class LoadHome extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
+		Log.w("befofe","fg");
 		setTitle("Meet, Connect and Socialize");
 		final LocationManager locationManager;
 		final LocationListener locationListener;
@@ -122,7 +122,7 @@ public class LoadHome extends Activity {
 
 //----------------------------------------------------------  Setup GPS reader here!!
 
-		Log.w("befofe","fg");
+		
 		//--------------------------------> Setup location
 		super.onCreate(savedInstanceState);
 		// Acquire a reference to the system Location Manager

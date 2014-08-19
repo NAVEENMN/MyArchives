@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +19,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -77,6 +77,8 @@ public class Login extends Activity {
 		static String usrworksat;
 		static String usrcurrentcity;
 		static String usrstatus;
+		static String linkedin;
+		static String facebook;
 		
 	};
 	
@@ -140,7 +142,7 @@ public static class visitorinfo{
 	Runnable getData;
     Criteria criteria = new Criteria();
     Bundle profilelistactdata = new Bundle();
-    
+    ProgressDialog pd;
    
     //---------------------------------------->
 	@Override
@@ -227,7 +229,7 @@ public static class visitorinfo{
             @Override
             public void run()
             {
-                updatelocation(null);
+               // updatelocation(null);
             }
     };
     
@@ -261,9 +263,7 @@ public static class visitorinfo{
       }
     }, 1000 * 30);//3mins
      
-
-
-//-------------------------------------> Read data from server
+	//-------------------------------------> Read data from server
     try{
     	Userslist.server_response = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",account.accnumber,account.tokennumber,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival),(String)addrs.country,"1"
     			, "1", "1", "1", "1", "1", "1").get();
@@ -282,6 +282,9 @@ public static class visitorinfo{
 		            User.usrprofession = separated[4];
 		            User.usrworksat = separated[5];
 		            User.usrcurrentcity = separated[6];
+		            User.linkedin = null; // setup in server
+		            User.facebook = null;
+		           
 		            profilelistactdata.putString("userprofession", User.usrprofession);
 		            profilelistactdata.putString("userworksat", User.usrworksat);
 		            profilelistactdata.putString("usercurrentcity", User.usrcurrentcity);
@@ -452,9 +455,8 @@ public static class visitorinfo{
 	
 	public void on_image_click(View view){
 		//
-		//Intent intentprofilelist = new Intent( Login.this, Loading_screen.class);
-		//startActivity(intentprofilelist);
-		new LongOperation().execute("");
+		Intent intentprofilelist = new Intent( Login.this, Upload_Image.class);
+		startActivity(intentprofilelist);
 	}
 	
 	@Override
@@ -547,46 +549,5 @@ public static class visitorinfo{
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	 private class LongOperation extends AsyncTask<String, Void, String> {
-	        @Override
-	        protected String doInBackground(String... params) {
-	            
-	            new Thread(new Runnable() { 
-		            public void run(){
-		            	try{
-			            	
-		    	            Userslist.server_response = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",account.accnumber,account.tokennumber,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival),(String)addrs.country,"1"
-		    	        			, "1", "1", "1", "1", "1", "1").get();
-		    	            }catch(Exception e){
-		    	            	Log.w("thread","failed");
-		    	            }	
-
-		            }
-		    }).start();
-	            
-	            Log.w("background","executed");
-	            return null;
-	        }
-
-	        @Override
-	        protected void onPostExecute(String result) {
-	        loading_token.ok_to_load = true;	
-	        Log.w("post","executed");
-	        }
-	        
-
-	        @Override
-	        protected void onPreExecute() {
-	        	Log.w("pre","executed");
-	        	loading_token.ok_to_load = false;
-	        	Intent intentprofilelist = new Intent( Login.this, Loading_screen.class);
-	    		startActivity(intentprofilelist);
-	        }
-
-	        @Override
-	        protected void onProgressUpdate(Void... values) {
-	        }
-	 }
 
 }

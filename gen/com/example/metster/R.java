@@ -566,7 +566,8 @@ containing a value of this type.
         public static final int activity_settings=0x7f030007;
         public static final int activity_sign_up=0x7f030008;
         public static final int activity_update_profile=0x7f030009;
-        public static final int fragment_update_profile=0x7f03000a;
+        public static final int activity_upload__image=0x7f03000a;
+        public static final int fragment_update_profile=0x7f03000b;
     }
     public static final class menu {
         public static final int login=0x7f0b0000;
@@ -642,7 +643,7 @@ containing a value of this type.
          */
         public static final int ViewProfile=0x7f050058;
         public static final int YourLocation=0x7f050043;
-        public static final int action_settings=0x7f050063;
+        public static final int action_settings=0x7f050064;
         /**  ******************************************************** 
  Home screen 
          */
@@ -742,10 +743,10 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f05001e;
-        public static final int desc=0x7f050065;
+        public static final int desc=0x7f050066;
         public static final int dontdisclose=0x7f050037;
-        public static final int dummy_button=0x7f050068;
-        public static final int dummy_content=0x7f050069;
+        public static final int dummy_button=0x7f050069;
+        public static final int dummy_content=0x7f05006a;
         public static final int email_hint=0x7f050030;
         public static final int female=0x7f050036;
         /**  button meet someone 
@@ -754,32 +755,37 @@ containing a value of this type.
         /**  ******************************************************** 
  Others 
          */
-        public static final int footnote=0x7f050062;
-        public static final int hello_world=0x7f050064;
+        public static final int footnote=0x7f050063;
+        public static final int hello_world=0x7f050065;
         public static final int male=0x7f050035;
         /**  ******************************************************** 
  Pofession info 
          */
         public static final int question=0x7f050061;
         public static final int terms=0x7f050038;
-        public static final int title_activity_load_home=0x7f050067;
-        public static final int title_activity_loading_screen=0x7f05006b;
+        public static final int title_activity_load_home=0x7f050068;
+        public static final int title_activity_loading_screen=0x7f05006c;
         public static final int title_activity_log_out=0x7f050026;
         public static final int title_activity_login=0x7f050025;
         public static final int title_activity_person=0x7f050027;
-        public static final int title_activity_profession_info=0x7f05006a;
+        public static final int title_activity_profession_info=0x7f05006b;
         /**  Titles 
          */
         public static final int title_activity_profilelist=0x7f050020;
         /**  ******************************************************** 
          */
-        public static final int title_activity_profiles=0x7f050066;
+        public static final int title_activity_profiles=0x7f050067;
         public static final int title_activity_refresh=0x7f050028;
         public static final int title_activity_settings=0x7f050029;
         public static final int title_activity_sign_up=0x7f050023;
         public static final int title_activity_update_profile=0x7f050021;
+        public static final int title_activity_upload__image=0x7f05006d;
         public static final int title_activity_user_sign_up=0x7f050024;
         public static final int title_activity_visitor_profile=0x7f050022;
+        /**  ******************************************************** 
+ Upload  image 
+         */
+        public static final int update_image=0x7f050062;
         public static final int updateprofile=0x7f050048;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 

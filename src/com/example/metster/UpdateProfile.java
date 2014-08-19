@@ -32,21 +32,10 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.metster.Login.User;
+import com.example.metster.Profession_info.info;
 import com.github.sendgrid.SendGrid;
 
 public class UpdateProfile extends Activity {
-	
-	public static class info{
-		
-		static String userprofileimage;
-		static String useraccnumber;
-		static String userstayingin;
-        static String userprofession;
-        static String userworksat;
-        static String userfacebook;
-        static String userlinkedin;
-        static String userabout; 
-	};
 
 	String val;
 	int userid;
