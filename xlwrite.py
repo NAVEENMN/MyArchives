@@ -7,9 +7,12 @@ def setup_workbook():
 	rb = open_workbook('sample.xls', formatting_info=True, on_demand=True )
 	wb = copy(rb)
 	p, q = find_boundries(rb)
+	position = find_position(rb, q)
+	position = position - 1
 	print p
 	print q
-	for x in range(1,p):
+	print position
+	for x in range(position,p):
 		val = rb.sheet_by_index(0).cell(0,x).value
 		print "Input data for " + val
 		for y in range(1,q):
@@ -20,6 +23,15 @@ def setup_workbook():
 		os.system("rm sample.xls")
 		print "Saving records"
 		wb.save('sample.xls')
+
+def find_position(rb, maxy):
+	sheet1 = rb.sheet_by_index(0)
+	position = 0
+	value = 0
+	while(value != "done"):
+		value = rb.sheet_by_index(0).cell(maxy, position).value
+		position = position + 1
+	return(position)
 
 def find_boundries(rb):
 	sheet1 = rb.sheet_by_index(0)
