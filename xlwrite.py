@@ -15,16 +15,25 @@ def setup_workbook():
 	for x in range(position,p):
 		val = rb.sheet_by_index(0).cell(0,x).value
 		print "Input data for " + val
-		for y in range(1,q):
-			val = rb.sheet_by_index(0).cell(y,0).value
-			print val
-			answer = raw_input("enter: ")
-			wb.get_sheet(0).write(y,x,answer)
-		wb.get_sheet(0).write(y+1,x+1,"done")
-		wb.get_sheet(0).write(y+1,x,"")
-		os.system("rm sample.xls")
-		print "Saving records"
-		wb.save('sample.xls')
+		response = raw_input("enter the response: ")
+		number_of_response = len(response)
+		if number_of_response != q-1 :
+			print number_of_response
+			print "missing responses"
+			exit()
+		else:	
+			for y in range(1,q):
+				if y >= q-6 :
+					resp = int(raw_input("enter range"))
+					resp = (resp/20.0)*7.0
+					wb.get_sheet(0).write(y,x,resp)
+				else:
+					wb.get_sheet(0).write(y,x,int(response[y-1]))
+			wb.get_sheet(0).write(y+1,x+1,"done")
+			wb.get_sheet(0).write(y+1,x,"")
+			os.system("rm sample.xls")
+			print "Saving records"
+			wb.save('sample.xls')
 	
 def find_position(rb, maxy):
 	sheet1 = rb.sheet_by_index(0)
