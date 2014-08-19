@@ -20,10 +20,12 @@ def setup_workbook():
 			print val
 			answer = raw_input("enter: ")
 			wb.get_sheet(0).write(y,x,answer)
+		wb.get_sheet(0).write(y+1,x+1,"done")
+		wb.get_sheet(0).write(y+1,x,"")
 		os.system("rm sample.xls")
 		print "Saving records"
 		wb.save('sample.xls')
-
+	
 def find_position(rb, maxy):
 	sheet1 = rb.sheet_by_index(0)
 	position = 0
