@@ -14,10 +14,11 @@ class linked_list:
 		new_node.Data = data
 		new_node.Next = self.cur_node 
 		self.cur_node = new_node # save current node refrence
-	def del_node(self, node, data):
-		while node.Data != data:
-			node = node.Next
-		print node.Data	
+	def del_node(self, data):
+		node = self.head
+		print node.Data
+		node = node.Next
+		print node
 	def list_print(self):
 		node = self.cur_node
 		while node:
@@ -28,8 +29,8 @@ def main():
 	ll.add_node(1)
 	ll.add_node(3)
 	ll.add_node(9)
-	ll.list_print()
-	#ll.del_node(head, 3)
+	ll.del_node(3)
+	#ll.list_print()
 	#print head.Data
 
 if __name__ == '__main__':
