@@ -5,13 +5,19 @@ class node:
 	
 class linked_list:
 	def __init__(self):
-		self.cur_node = None # holds previous node refrence
-
+		self.head = node()
+		self.head.Data = None
+		self.head.Next = None
+		self.cur_node = self.head
 	def add_node(self, data):
 		new_node = node() # create a new node
 		new_node.Data = data
 		new_node.Next = self.cur_node 
 		self.cur_node = new_node # save current node refrence
+	def del_node(self, node, data):
+		while node.Data != data:
+			node = node.Next
+		print node.Data	
 	def list_print(self):
 		node = self.cur_node
 		while node:
@@ -21,7 +27,10 @@ def main():
 	ll = linked_list()
 	ll.add_node(1)
 	ll.add_node(3)
+	ll.add_node(9)
 	ll.list_print()
+	#ll.del_node(head, 3)
+	#print head.Data
 
 if __name__ == '__main__':
 	main()
