@@ -14,12 +14,13 @@ public class WordCount {
   public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
     private final static IntWritable one = new IntWritable(1);
     private Text word = new Text();
-
     public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException {
       String line = value.toString();
       StringTokenizer tokenizer = new StringTokenizer(line);
+      FileSplit fs = (FileSplit)reporter.getInputSplit();
+      String fn = fs.getPath().getName();
       while (tokenizer.hasMoreTokens()) {
-        word.set(tokenizer.nextToken());
+        word.set(tokenizer.nextToken()+ " " + fn);
         output.collect(word, one);
       }
     }
