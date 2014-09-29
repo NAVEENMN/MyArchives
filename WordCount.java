@@ -11,28 +11,33 @@ import org.apache.hadoop.util.*;
 
 public class WordCount {
 
-  public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
+  public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
     private final static IntWritable one = new IntWritable(1);
     private Text word = new Text();
-    public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException {
+    private Text file_name = new Text();
+    public void map(LongWritable key, Text value, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
       String line = value.toString();
       StringTokenizer tokenizer = new StringTokenizer(line);
       FileSplit fs = (FileSplit)reporter.getInputSplit();
       String fn = fs.getPath().getName();
       while (tokenizer.hasMoreTokens()) {
-        word.set(tokenizer.nextToken()+ " " + fn);
-        output.collect(word, one);
+        word.set(tokenizer.nextToken());
+	file_name.set(fn);
+        output.collect(word, file_name);
       }
     }
   }
 
-  public static class Reduce extends MapReduceBase implements Reducer<Text, IntWritable, Text, IntWritable> {
-    public void reduce(Text key, Iterator<IntWritable> values, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException {
+  public static class Reduce extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
+    private Text list_of_file_names = new Text();
+    public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
+      String FN = " ";
       int sum = 0;
       while (values.hasNext()) {
-        sum += values.next().get();
+        FN += values.next().toString();
       }
-      output.collect(key, new IntWritable(sum));
+      list_of_file_names.set(FN);
+      output.collect(key, list_of_file_names);
     }
   }
 
@@ -41,7 +46,7 @@ public class WordCount {
     conf.setJobName("wordcount");
 
     conf.setOutputKeyClass(Text.class);
-    conf.setOutputValueClass(IntWritable.class);
+    conf.setOutputValueClass(Text.class);
 
     conf.setMapperClass(Map.class);
     conf.setCombinerClass(Reduce.class);
