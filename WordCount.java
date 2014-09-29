@@ -12,7 +12,6 @@ import org.apache.hadoop.util.*;
 public class WordCount {
 
   public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
-    private final static IntWritable one = new IntWritable(1);
     private Text word = new Text();
     private Text file_name = new Text();
     public void map(LongWritable key, Text value, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
@@ -22,7 +21,7 @@ public class WordCount {
       String fn = fs.getPath().getName();
       while (tokenizer.hasMoreTokens()) {
         word.set(tokenizer.nextToken());
-	file_name.set(fn);
+	file_name.set(fn+",");
         output.collect(word, file_name);
       }
     }
@@ -31,12 +30,11 @@ public class WordCount {
   public static class Reduce extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
     private Text list_of_file_names = new Text();
     public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
-      String FN = " ";
-      int sum = 0;
+      String file_names = "";
       while (values.hasNext()) {
-        FN += values.next().toString();
+        file_names += values.next().toString();
       }
-      list_of_file_names.set(FN);
+      list_of_file_names.set(file_names);
       output.collect(key, list_of_file_names);
     }
   }
