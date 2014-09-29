@@ -31,10 +31,17 @@ public class WordCount {
     private Text list_of_file_names = new Text();
     public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
       String file_names = "";
+      StringBuilder sb = new StringBuilder();
+      String final_list = "";
       while (values.hasNext()) {
         file_names += values.next().toString();
       }
-      list_of_file_names.set(file_names);
+      Set<String> file_names_non_duplicate = new HashSet<String>(Arrays.asList(file_names.split(",")));
+      for(String s : file_names_non_duplicate){
+	sb.append(s+",");
+      }
+      final_list = sb.toString();
+      list_of_file_names.set(final_list);
       output.collect(key, list_of_file_names);
     }
   }
