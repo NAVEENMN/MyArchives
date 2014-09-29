@@ -21,7 +21,7 @@ public class WordCount {
       String fn = fs.getPath().getName();
       while (tokenizer.hasMoreTokens()) {
         word.set(tokenizer.nextToken());
-	file_name.set(fn+",");
+	file_name.set(fn+", ");
         output.collect(word, file_name);
       }
     }
@@ -36,9 +36,9 @@ public class WordCount {
       while (values.hasNext()) {
         file_names += values.next().toString();
       }
-      Set<String> file_names_non_duplicate = new HashSet<String>(Arrays.asList(file_names.split(",")));
+      Set<String> file_names_non_duplicate = new HashSet<String>(Arrays.asList(file_names.split(" ")));
       for(String s : file_names_non_duplicate){
-	sb.append(s+",");
+       if(s != null && !s.isEmpty())sb.append(s+" ");
       }
       final_list = sb.toString();
       list_of_file_names.set(final_list);
