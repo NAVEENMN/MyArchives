@@ -9,7 +9,7 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
-public class WordCount {
+public class Index {
 
   public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
     private Text word = new Text();
@@ -47,8 +47,8 @@ public class WordCount {
   }
 
   public static void main(String[] args) throws Exception {
-    JobConf conf = new JobConf(WordCount.class);
-    conf.setJobName("wordcount");
+    JobConf conf = new JobConf(Index.class);
+    conf.setJobName("Generate_Index");
 
     conf.setOutputKeyClass(Text.class);
     conf.setOutputValueClass(Text.class);
