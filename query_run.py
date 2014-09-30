@@ -6,8 +6,8 @@ def main():
 	print "\n\n"
 	query = raw_input("Please enter your query text:  ")
 	query_terms = query.split(" ")
-	os.system("sudo rm input/query.txt")
-	f = open('input/query.txt','w')
+	os.system("sudo rm query_input/query.txt")
+	f = open('query_input/query.txt','w')
 	for x in range(0,len(query_terms)):
 		f.write(query_terms[x]+"\n")
 	f.close()
@@ -23,5 +23,11 @@ def main():
 	print "\nJar created.."
 	print "\nExecuting jar on Hadoop...\n\n"
 	os.system("sudo -u hdfs hadoop jar Index.jar org.myorg.Index /user/cloudera/QueryIndex/input /user/cloudera/QueryIndex/output")
+	print "\n\n getting the response.."
+	os.system("sudo rm -rf output")
+	os.system("sudo mkdir output")
+	os.system("sudo hadoop fs -get /user/cloudera/QueryIndex/output")
+	print "\n"
+	os.system("cat output/part-00000")
 if __name__ == "__main__":
 	main()
