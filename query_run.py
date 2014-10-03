@@ -27,23 +27,8 @@ def main():
 	os.system("sudo rm -rf output")
 	os.system("sudo mkdir output")
 	os.system("sudo hadoop fs -get /user/cloudera/QueryIndex/output")
-	'''
-	print "\n"
-	print "\noutput of Index.jar is stored in output folder"
-	print "\nSettgin up compliation envirornment"
-	os.system("sh config/setup_dir_query.sh")
-	os.system("sh config/com_setup_query.sh")
-	print "\n\n compiling QueryIndex.java...\n"
-	os.system("sudo javac -cp /usr/lib/hadoop/*:/usr/lib/hadoop/client-0.20/* -d QueryIndex_classes QueryIndex.java")
-	os.system("jar -cvf QueryIndex.jar -C QueryIndex_classes/ .")
-	print "\nJar created.."
-	print "\n Executing jar on Hadoop...\n\n"
-	os.system("sudo -u hdfs hadoop jar QueryIndex.jar org.myorg.QueryIndex /user/cloudera/QueryIndex/input /user/cloudera/QueryIndex/output")
-	print "\n\n getting the response.."
-	os.system("sudo rm -rf output")
-	os.system("sudo mkdir output")
-	os.system("sudo hadoop fs -get /user/cloudera/QueryIndex/output")
-	os.system("cat output/part-00000")
-	'''
+	print "\n now executing QueryIndex.java..."
+	os.system("javac QueryIndex.java");
+	os.system("java QueryIndex");
 if __name__ == "__main__":
 	main()
