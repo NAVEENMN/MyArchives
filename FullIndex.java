@@ -9,7 +9,7 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
-public class WordCount {
+public class FullIndex {
 
   public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
     private Text word = new Text();
@@ -21,7 +21,7 @@ public class WordCount {
       String fn = fs.getPath().getName();
       while (tokenizer.hasMoreTokens()) {
         word.set(tokenizer.nextToken());
-	file_name.set(fn+", ");
+	file_name.set(fn+"@"+key.toString()+"+");
         output.collect(word, file_name);
       }
     }
@@ -31,10 +31,12 @@ public class WordCount {
     private Text list_of_file_names = new Text();
     public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
       String file_names = "";
+      String par_values = "";
       StringBuilder sb = new StringBuilder();
       String final_list = "";
       while (values.hasNext()) {
-        file_names += values.next().toString();
+	par_values = values.next().toString();
+        file_names += par_values;
       }
       Set<String> file_names_non_duplicate = new HashSet<String>(Arrays.asList(file_names.split(" ")));
       for(String s : file_names_non_duplicate){
@@ -47,8 +49,8 @@ public class WordCount {
   }
 
   public static void main(String[] args) throws Exception {
-    JobConf conf = new JobConf(WordCount.class);
-    conf.setJobName("wordcount");
+    JobConf conf = new JobConf(FullIndex.class);
+    conf.setJobName("Generate_Index");
 
     conf.setOutputKeyClass(Text.class);
     conf.setOutputValueClass(Text.class);
