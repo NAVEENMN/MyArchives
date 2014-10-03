@@ -37,12 +37,10 @@ public class QueryIndex {
 			while ((strLine = br.readLine()) != null)   {
 			  // Print the content on the console
 			String[] splitArray = strLine.split("\\s+");
-			//for(int i = 0; i<Str.size();i++){	
-			//  if(ArrayUtils.contains( fieldsToInclude, "id" ))	
-			//  System.out.println (strLine);
-			//}
+			
 			for(String s:splitArray){
 				for(int i = 0; i<Str.size(); i++){
+					//System.out.println("str:" + s);
 					if(s.contentEquals(Str.get(i))){
 						System.out.println(strLine);
 					}

@@ -21,7 +21,7 @@ public class Index {
       String fn = fs.getPath().getName();
       while (tokenizer.hasMoreTokens()) {
         word.set(tokenizer.nextToken());
-	file_name.set(fn+", ");
+	file_name.set(fn+"@"+key.toString()+", ");
         output.collect(word, file_name);
       }
     }
@@ -38,7 +38,7 @@ public class Index {
 	par_values = values.next().toString();
         file_names += par_values;
       }
-      Set<String> file_names_non_duplicate = new HashSet<String>(Arrays.asList(file_names.split(" ")));
+      Set<String> file_names_non_duplicate = new HashSet<String>(Arrays.asList(file_names.split("$")));
       for(String s : file_names_non_duplicate){
        if(s != null && !s.isEmpty())sb.append(s+" ");
       }
