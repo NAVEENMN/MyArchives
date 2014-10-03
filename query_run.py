@@ -51,6 +51,8 @@ def main():
                 os.system("sudo hadoop fs -get /user/cloudera/QueryIndex/output")
                 print "\n now executing QueryFullIndex.java..."
                 os.system("javac QueryFullIndex.java");
-                os.system("java QueryFullIndex");
+		print "\n\n"
+		#print "run java QueryFullIndex ~/[your path]/query_input/query.txt ~/[your path]/output/part-00000 to run java file"
+                os.system("java QueryFullIndex query_input/query.txt output/part-00000 query_output.txt");
 if __name__ == "__main__":
 	main()
