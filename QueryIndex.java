@@ -4,17 +4,21 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.net.URL;
+
 public class QueryIndex {
-public static void main(String[] args) {
-FileInputStream fstream = null;
-FileInputStream fstreamq = null;
-try {
-fstream = new FileInputStream("/home/nmysore/Documents/hadoop/output/part-00000");
-fstreamq = new FileInputStream("/home/nmysore/Documents/hadoop/query_input/query.txt");
-} catch (FileNotFoundException e) {
-// TODO Auto-generated catch block
-e.printStackTrace();
-}
+	public static void main(String[] args) {
+	FileInputStream fstream = null;
+	FileInputStream fstreamq = null;
+	URL location = QueryIndex.class.getProtectionDomain().getCodeSource().getLocation();
+	String path_here = location.getPath();
+	try {
+		fstream = new FileInputStream(path_here+"/"+args[0]);
+		fstreamq = new FileInputStream(path_here+"/"+args[1]);
+	} catch (FileNotFoundException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+	}
 BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 BufferedReader brq = new BufferedReader(new InputStreamReader(fstreamq));
 String strLine;

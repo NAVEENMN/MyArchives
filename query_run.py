@@ -31,7 +31,7 @@ def main():
 		os.system("sudo hadoop fs -get /user/cloudera/QueryIndex/output")
 		print "\n now executing QueryIndex.java..."
 		os.system("javac QueryIndex.java");
-		os.system("java QueryIndex");
+		os.system("java QueryIndex output/part-00000 query_input/query.txt");
 	else:
                 print "\n"
                 print "Setting up hdfs for input and output ....\n"
