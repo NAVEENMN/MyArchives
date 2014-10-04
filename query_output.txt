@@ -1,41 +1,4 @@
-and:
-roadnot.txt@454->had trodden black.
-roadnot.txt@289->Because it was grassy and wanted wear;
-roadnot.txt@623->omewhere ages and ages hence:
-roadnot.txt@622->Somewhere ages and ages hence:
-roadnot.txt@572->er come back.
-roadnot.txt@95->avel both
-cagedbird.txt@671->and he names the sky his own.
-daffodils.txt@294->d twinkle on the milky way,
-daffodils.txt@653-> to me had brought:
-daffodils.txt@181->
-daffodils.txt@590->I gazed -- and gazed -- but little thought
 the:
-roadnot.txt@572->er come back.
-roadnot.txt@702->ne less traveled by,
-cagedbird.txt@671->and he names the sky his own.
-cagedbird.txt@633->t worms waiting on a dawn-bright lawn
-cagedbird.txt@473->rd
-cagedbird.txt@476->on the distant hill
-cagedbird.txt@839->opens his throat to sing
-cagedbird.txt@0->I Know Why the Caged Bird Sings
-cagedbird.txt@71->on the back of the wind
-cagedbird.txt@968->on the distant hill
-cagedbird.txt@214->a bird that stalks
-cagedbird.txt@177->ays
-cagedbird.txt@218->rd that stalks
-cagedbird.txt@768->n a nightmare scream
-cagedbird.txt@365->ing.
-cagedbird.txt@623->and the fat worms waiting on a dawn-bright lawn
-cagedbird.txt@723->ds on the grave of dreams
-cagedbird.txt@411->of the things unknown
-cagedbird.txt@252->e
-cagedbird.txt@328-> are tied
-daffodils.txt@496->
-daffodils.txt@292->And twinkle on the milky way,
-daffodils.txt@497->Out-did the sparkling leaves in glee;
-daffodils.txt@181->
-daffodils.txt@182->Beside the lake, beneath the trees,
-daffodils.txt@358->Along the margin of a bay:
-daffodils.txt@257->Continuous as the stars that shine
-daffodils.txt@690-> my couch I lie
+roadnot.txt@365->Had worn them really about the same,
+roadnot.txt@723->And that has made all the difference.
+roadnot.txt@690->I took the one less traveled by,
