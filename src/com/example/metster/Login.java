@@ -440,6 +440,7 @@ public static class visitorinfo{
         GoogleMap mMap;
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
         mMap.clear();
+        mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(Map.latival, Map.Longival)) // visitor
                 .title(Integer.toString(Userslist.user_count))).showInfoWindow();
