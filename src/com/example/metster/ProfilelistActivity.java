@@ -152,7 +152,6 @@ public class ProfilelistActivity extends Activity {
 	
 	public void current_visitor(String account_number) throws InterruptedException, ExecutionException{
 		viz.acc = account_number;
-		new LongOperation().execute("");
 
 		 try {
 		    	server_response = new RequestTask().execute("http://54.183.113.236/metster/getprofiledata.php", account.appkey, account_number, "1","1","1", "1", "1"
@@ -350,43 +349,5 @@ public class ProfilelistActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-public void spin(View v){
-	progress = ProgressDialog.show(getApplicationContext(), "hello", "world");
-}
-	
-    private class LongOperation extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-        	
-        	//spin(null);
-        	for(int i=0;i<5;i++) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            Log.w("background","executed");
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-        	//progress.dismiss();
-        Log.w("post","executed");
-        }
-        
-
-        @Override
-        protected void onPreExecute() {
-        	Log.w("pre","executed");
-        	
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
-    }
 
 }

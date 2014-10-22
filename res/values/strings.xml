@@ -60,6 +60,7 @@
     <string name="MyStatus">Hello there!!</string>
     <string name="MyStatusLabel">Set your status</string>
     <string name="MeetSomeone">M</string> <!-- button meet someone -->
+    <string name="Rend">R</string> <!-- button rend someone -->
     <string name="footer">Metster</string>
     <!-- ******************************************************** -->
 
@@ -127,5 +128,6 @@
     <string name="title_activity_profession_info">Profession_info</string>
     <string name="title_activity_loading_screen">Loading_screen</string>
     <string name="title_activity_upload__image">Upload_Image</string>
+    <string name="title_activity_rend">Rend</string>
 
 </resources>

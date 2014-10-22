@@ -63,7 +63,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDSINVA6YF6w_FiZpTBxuWTRr2kpREV1Zo" />
+            android:value="AIzaSyC460-cuQqQx-nF7xWfYFVXkov9ql7Q0kQ" />
 
         <activity
             android:name="com.example.metster.ProfilelistActivity"
@@ -126,6 +126,10 @@
         <activity
             android:name="com.example.metster.Upload_Image"
             android:label="@string/title_activity_upload__image" >
+        </activity>
+        <activity
+            android:name="com.example.metster.Rend"
+            android:label="@string/title_activity_rend" >
         </activity>
     </application>
 

@@ -1,5 +1,4 @@
 package com.example.metster;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -138,6 +137,7 @@ public static class visitorinfo{
 	String provider;	
 	List<Address> addresses;
 	private Button find;
+	private Button rend_button_obj;
 	private final Handler _handler = new Handler();
 	Runnable getData;
     Criteria criteria = new Criteria();
@@ -229,7 +229,7 @@ public static class visitorinfo{
             @Override
             public void run()
             {
-               // updatelocation(null);
+                updatelocation(null);
             }
     };
     
@@ -261,7 +261,7 @@ public static class visitorinfo{
   				e.printStackTrace();
   			}
       }
-    }, 1000 * 30);//3mins
+    }, 1000 * 60* 3);//3mins
      
 	//-------------------------------------> Read data from server
     try{
@@ -303,16 +303,13 @@ public static class visitorinfo{
 					        
 //-----------------------------------------------------------------------> Button Actions	            
 	            //------------------------------------- meet someone
-
 			final Animation animScale = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
 		        find = (Button) findViewById(R.id.buttonmeet);
-		              
+		        rend_button_obj = (Button) findViewById(R.id.Rend);
+		        //----------------------------------------------------------------      
 		        find.setOnClickListener(new View.OnClickListener() {
 		        	public void onClick(View v) {
-							
-							v.startAnimation(animScale);
-							
-							
+							v.startAnimation(animScale);			
 							new Thread(new Runnable() { 
 					            public void run(){
 					            	SystemClock.sleep(2000);
@@ -327,21 +324,32 @@ public static class visitorinfo{
 										else{
 											//Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT).show();
 										}
-
-
 					            }
-					    }).start();
-							
-							
-							       
+					    }).start();						
 					}//on click
-					
-		        		}
-		        );	        
- // else ends here
+		        });	        
+		      //---------------------------------------------------------------	
+		      //------------------------------------- Rend      
+		        rend_button_obj.setOnClickListener(new View.OnClickListener() {
+			        	public void onClick(View v) {
+								v.startAnimation(animScale);			
+								new Thread(new Runnable() { 
+						            public void run(){
+						            	SystemClock.sleep(2000);
+						            	
+											stopRepeatingTask();
+											locationManager.removeUpdates(locationListener);
+											Intent intentrend = new Intent( Login.this, Rend.class);
+											intentrend.putExtras(profilelistactdata);
+							        		startActivity(intentrend);
+											
+						            }
+						    }).start();						
+						}//on click
+			        });	        
+			      //---------------------------------------------------------------	
 				
-				
-	}
+	}//on create
 	//------------------------------------- update profile
 	
 	public void SetupUIdata(){

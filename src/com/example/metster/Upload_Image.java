@@ -29,10 +29,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.metster.Login.Map;
-import com.example.metster.Login.Userslist;
-import com.example.metster.Login.account;
-import com.example.metster.Login.addrs;
 import com.example.metster.Profession_info.info;
 
 public class Upload_Image extends Activity {

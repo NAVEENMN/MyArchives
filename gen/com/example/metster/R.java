@@ -429,126 +429,129 @@ containing a value of this type.
         public static final int facebook=0x7f020023;
         public static final int ic_action_back=0x7f020024;
         public static final int ic_action_forward=0x7f020025;
-        public static final int ic_action_new_picture=0x7f020026;
-        public static final int ic_action_next_item=0x7f020027;
-        public static final int ic_action_next_itemd=0x7f020028;
-        public static final int ic_action_person=0x7f020029;
-        public static final int ic_action_previous_item=0x7f02002a;
-        public static final int ic_action_previous_itemd=0x7f02002b;
-        public static final int ic_action_refresh=0x7f02002c;
-        public static final int ic_action_settings=0x7f02002d;
-        public static final int ic_action_upload=0x7f02002e;
-        public static final int ic_launcher=0x7f02002f;
-        public static final int ic_plusone_medium_off_client=0x7f020030;
-        public static final int ic_plusone_small_off_client=0x7f020031;
-        public static final int ic_plusone_standard_off_client=0x7f020032;
-        public static final int ic_plusone_tall_off_client=0x7f020033;
-        public static final int imageborder=0x7f020034;
-        public static final int linkedin=0x7f020035;
-        public static final int loginbg=0x7f020036;
-        public static final int logo=0x7f020037;
-        public static final int navigation_invisible=0x7f020038;
-        public static final int navigationafter=0x7f020039;
-        public static final int navigationbefore=0x7f02003a;
-        public static final int powered_by_google_dark=0x7f02003b;
-        public static final int powered_by_google_light=0x7f02003c;
-        public static final int rectbuttonafterclicked=0x7f02003d;
-        public static final int rectbuttonbeforeclicked=0x7f02003e;
-        public static final int roundedbutton=0x7f02003f;
-        public static final int roundedbuttonclicked=0x7f020040;
-        public static final int settingsbuttonafter=0x7f020041;
-        public static final int settingsbuttonbefore=0x7f020042;
-        public static final int settingsbuttonhandler=0x7f020043;
-        public static final int shape=0x7f020044;
+        public static final int ic_action_group=0x7f020026;
+        public static final int ic_action_location_found=0x7f020027;
+        public static final int ic_action_new_picture=0x7f020028;
+        public static final int ic_action_next_item=0x7f020029;
+        public static final int ic_action_next_itemd=0x7f02002a;
+        public static final int ic_action_person=0x7f02002b;
+        public static final int ic_action_previous_item=0x7f02002c;
+        public static final int ic_action_previous_itemd=0x7f02002d;
+        public static final int ic_action_refresh=0x7f02002e;
+        public static final int ic_action_settings=0x7f02002f;
+        public static final int ic_action_upload=0x7f020030;
+        public static final int ic_launcher=0x7f020031;
+        public static final int ic_plusone_medium_off_client=0x7f020032;
+        public static final int ic_plusone_small_off_client=0x7f020033;
+        public static final int ic_plusone_standard_off_client=0x7f020034;
+        public static final int ic_plusone_tall_off_client=0x7f020035;
+        public static final int imageborder=0x7f020036;
+        public static final int linkedin=0x7f020037;
+        public static final int loginbg=0x7f020038;
+        public static final int logo=0x7f020039;
+        public static final int navigation_invisible=0x7f02003a;
+        public static final int navigationafter=0x7f02003b;
+        public static final int navigationbefore=0x7f02003c;
+        public static final int powered_by_google_dark=0x7f02003d;
+        public static final int powered_by_google_light=0x7f02003e;
+        public static final int rectbuttonafterclicked=0x7f02003f;
+        public static final int rectbuttonbeforeclicked=0x7f020040;
+        public static final int roundedbutton=0x7f020041;
+        public static final int roundedbuttonclicked=0x7f020042;
+        public static final int settingsbuttonafter=0x7f020043;
+        public static final int settingsbuttonbefore=0x7f020044;
+        public static final int settingsbuttonhandler=0x7f020045;
+        public static final int shape=0x7f020046;
     }
     public static final class id {
-        public static final int AboutMe=0x7f07003d;
-        public static final int AboutMeLable=0x7f070038;
-        public static final int AboutMetster=0x7f07003e;
-        public static final int Aboutme=0x7f070053;
+        public static final int AboutMe=0x7f07003e;
+        public static final int AboutMeLable=0x7f070039;
+        public static final int AboutMetster=0x7f07003f;
+        public static final int Aboutme=0x7f070054;
         public static final int ActionButtons=0x7f070029;
         public static final int CurrentCity=0x7f070024;
-        public static final int DeleteAccount=0x7f070040;
+        public static final int DeleteAccount=0x7f070041;
         public static final int Dividerone=0x7f070025;
         public static final int Dividertwo=0x7f070028;
         public static final int Email=0x7f070016;
-        public static final int FAQ=0x7f070042;
+        public static final int FAQ=0x7f070043;
         public static final int FirstName=0x7f070020;
-        public static final int ImageButton01=0x7f070045;
-        public static final int ImagevisitorView01=0x7f070033;
+        public static final int ImageButton01=0x7f070046;
+        public static final int ImagevisitorView01=0x7f070034;
         public static final int Information=0x7f070026;
         public static final int LastName=0x7f070021;
-        public static final int Logout=0x7f070043;
-        public static final int MapsRegion=0x7f070035;
+        public static final int Logout=0x7f070044;
+        public static final int MapsRegion=0x7f070036;
         public static final int Password=0x7f070017;
-        public static final int Privacy=0x7f070041;
+        public static final int Privacy=0x7f070042;
         public static final int Profession=0x7f070022;
         public static final int ProfileImage=0x7f07001f;
         public static final int Profiledata=0x7f07001e;
-        public static final int RetypePassword=0x7f070048;
-        public static final int Scroll=0x7f07003c;
-        public static final int Social=0x7f070052;
+        public static final int Rend=0x7f07002b;
+        public static final int RetypePassword=0x7f070049;
+        public static final int Scroll=0x7f07003d;
+        public static final int Social=0x7f070053;
         public static final int Spinner1=0x7f07001c;
-        public static final int Submit=0x7f07002e;
-        public static final int Support=0x7f07003f;
-        public static final int Updatebuttonsection=0x7f070054;
-        public static final int UserAboutMe=0x7f070037;
-        public static final int UserAboutMeandsocial=0x7f070036;
+        public static final int Submit=0x7f07002f;
+        public static final int Support=0x7f070040;
+        public static final int Updatebuttonsection=0x7f070055;
+        public static final int UserAboutMe=0x7f070038;
+        public static final int UserAboutMeandsocial=0x7f070037;
         public static final int Worksat=0x7f070023;
-        public static final int action_settings=0x7f070055;
-        public static final int answer=0x7f07002c;
-        public static final int answerbyuser=0x7f07002d;
+        public static final int action_settings=0x7f070056;
+        public static final int answer=0x7f07002d;
+        public static final int answerbyuser=0x7f07002e;
         public static final int book_now=0x7f070010;
         public static final int button1=0x7f07001a;
         public static final int button2=0x7f070019;
-        public static final int button3=0x7f07004d;
+        public static final int button3=0x7f07004e;
         public static final int buttonmeet=0x7f07002a;
         public static final int buyButton=0x7f07000a;
         public static final int buy_now=0x7f07000f;
         public static final int buy_with_google=0x7f07000e;
-        public static final int checkBox1=0x7f07004c;
+        public static final int checkBox1=0x7f07004d;
         public static final int classic=0x7f070011;
-        public static final int container=0x7f07004e;
-        public static final int facebook=0x7f07003a;
+        public static final int container=0x7f07004f;
+        public static final int facebook=0x7f07003b;
         public static final int fullscreen_content=0x7f07001b;
         public static final int fullscreen_content_controls=0x7f07001d;
         public static final int grayscale=0x7f070012;
         public static final int holo_dark=0x7f070005;
         public static final int holo_light=0x7f070006;
         public static final int hybrid=0x7f070004;
-        public static final int iamlivingin=0x7f07004f;
-        public static final int imagenamesection=0x7f070044;
-        public static final int info=0x7f070047;
-        public static final int iworkat=0x7f070051;
+        public static final int iamlivingin=0x7f070050;
+        public static final int imagenamesection=0x7f070045;
+        public static final int info=0x7f070048;
+        public static final int iworkat=0x7f070052;
         public static final int line1=0x7f070015;
         public static final int linearLayout2=0x7f070014;
         public static final int linearLayout3=0x7f070018;
-        public static final int linearLayout4=0x7f070049;
-        public static final int linkedin=0x7f07003b;
+        public static final int linearLayout4=0x7f07004a;
+        public static final int linkedin=0x7f07003c;
         public static final int match_parent=0x7f07000c;
         public static final int monochrome=0x7f070013;
-        public static final int myprofession=0x7f070050;
-        public static final int nextsub=0x7f070031;
+        public static final int myprofession=0x7f070051;
+        public static final int nextsub=0x7f070032;
         public static final int none=0x7f070000;
         public static final int normal=0x7f070001;
-        public static final int person_icon=0x7f070056;
-        public static final int prevsub=0x7f07002f;
+        public static final int person_icon=0x7f070057;
+        public static final int prevsub=0x7f070030;
         public static final int production=0x7f070007;
-        public static final int question=0x7f07002b;
-        public static final int radioButton1=0x7f07004a;
-        public static final int radioButton2=0x7f07004b;
-        public static final int refresh_icon=0x7f070057;
+        public static final int question=0x7f07002c;
+        public static final int radioButton1=0x7f07004b;
+        public static final int radioButton2=0x7f07004c;
+        public static final int refresh_icon=0x7f070058;
         public static final int sandbox=0x7f070008;
         public static final int satellite=0x7f070002;
-        public static final int scrollsection=0x7f070046;
+        public static final int scrollsection=0x7f070047;
         public static final int selectionDetails=0x7f07000b;
-        public static final int settings_icon=0x7f070058;
-        public static final int skpsub=0x7f070030;
-        public static final int socialbuttons=0x7f070039;
+        public static final int settings_icon=0x7f070059;
+        public static final int skpsub=0x7f070031;
+        public static final int socialbuttons=0x7f07003a;
         public static final int strict_sandbox=0x7f070009;
         public static final int terrain=0x7f070003;
-        public static final int visitorbuttonnext=0x7f070034;
-        public static final int visitorbuttonprev=0x7f070032;
+        public static final int visitorbuttonnext=0x7f070035;
+        public static final int visitorbuttonprev=0x7f070033;
         public static final int visitormap=0x7f070027;
         public static final int wrap_content=0x7f07000d;
     }
@@ -563,11 +566,12 @@ containing a value of this type.
         public static final int activity_profession_info=0x7f030004;
         public static final int activity_profilelist=0x7f030005;
         public static final int activity_profiles=0x7f030006;
-        public static final int activity_settings=0x7f030007;
-        public static final int activity_sign_up=0x7f030008;
-        public static final int activity_update_profile=0x7f030009;
-        public static final int activity_upload__image=0x7f03000a;
-        public static final int fragment_update_profile=0x7f03000b;
+        public static final int activity_rend=0x7f030007;
+        public static final int activity_settings=0x7f030008;
+        public static final int activity_sign_up=0x7f030009;
+        public static final int activity_update_profile=0x7f03000a;
+        public static final int activity_upload__image=0x7f03000b;
+        public static final int fragment_update_profile=0x7f03000c;
     }
     public static final class menu {
         public static final int login=0x7f0b0000;
@@ -577,20 +581,20 @@ containing a value of this type.
         public static final int visitor_profile=0x7f0b0004;
     }
     public static final class string {
-        public static final int AboutMe=0x7f050056;
+        public static final int AboutMe=0x7f050057;
         /**  ******************************************************** 
  Settings 
          */
-        public static final int AboutMetster=0x7f05005b;
+        public static final int AboutMetster=0x7f05005c;
         public static final int Age=0x7f05003d;
-        public static final int Books=0x7f050054;
+        public static final int Books=0x7f050055;
         public static final int CurrentCountry=0x7f050047;
         public static final int CurrentCounty=0x7f050046;
         public static final int CurrentLocation=0x7f050045;
         public static final int DateofBirthLable=0x7f050031;
-        public static final int DeleteAccount=0x7f050060;
+        public static final int DeleteAccount=0x7f050061;
         public static final int Email=0x7f05002f;
-        public static final int FAQ=0x7f05005e;
+        public static final int FAQ=0x7f05005f;
         public static final int Facebook=0x7f05003e;
         /**  Button Login 
  ******************************************************** 
@@ -598,52 +602,55 @@ containing a value of this type.
          */
         public static final int FirstName=0x7f05002d;
         public static final int Gender=0x7f05003c;
-        public static final int Hobbies=0x7f050051;
-        public static final int IWorkAt=0x7f050050;
+        public static final int Hobbies=0x7f050052;
+        public static final int IWorkAt=0x7f050051;
         public static final int InvisibleIn=0x7f050044;
         public static final int LastName=0x7f05002e;
         public static final int Linkedin=0x7f05003f;
         /**  Button Sign Up 
          */
         public static final int LogIn=0x7f05002c;
-        public static final int Logout=0x7f05005f;
+        public static final int Logout=0x7f050060;
         public static final int Major=0x7f05003b;
         public static final int MeetSomeone=0x7f05004b;
         public static final int MetsterUsers=0x7f050041;
         public static final int MetsterUsersvalue=0x7f050042;
-        public static final int Movies=0x7f050053;
-        public static final int Music=0x7f050052;
-        public static final int MyCurrentCity=0x7f05004e;
+        public static final int Movies=0x7f050054;
+        public static final int Music=0x7f050053;
+        public static final int MyCurrentCity=0x7f05004f;
         /**  ******************************************************** 
  Update Profile 
          */
-        public static final int MyHomeTown=0x7f05004d;
-        public static final int MyPassion=0x7f050055;
-        public static final int MyProfession=0x7f05004f;
+        public static final int MyHomeTown=0x7f05004e;
+        public static final int MyPassion=0x7f050056;
+        public static final int MyProfession=0x7f050050;
         public static final int MyStatus=0x7f050049;
         public static final int MyStatusLabel=0x7f05004a;
         /**  ******************************************************** 
  My Profile Home 
          */
         public static final int Name=0x7f050039;
-        public static final int Next=0x7f050059;
+        public static final int Next=0x7f05005a;
         public static final int Password=0x7f050032;
         public static final int Password_hint=0x7f050034;
-        public static final int Previous=0x7f05005a;
-        public static final int Privacy=0x7f05005d;
+        public static final int Previous=0x7f05005b;
+        public static final int Privacy=0x7f05005e;
+        /**  button meet someone 
+         */
+        public static final int Rend=0x7f05004c;
         public static final int RetypePassword=0x7f050033;
         public static final int SignUp=0x7f05002b;
         public static final int StudentType=0x7f05003a;
-        public static final int Support=0x7f05005c;
+        public static final int Support=0x7f05005d;
         public static final int University=0x7f050040;
-        public static final int Update=0x7f050057;
+        public static final int Update=0x7f050058;
         /**  Button Update 
  ******************************************************** 
  View Students Profile 
          */
-        public static final int ViewProfile=0x7f050058;
+        public static final int ViewProfile=0x7f050059;
         public static final int YourLocation=0x7f050043;
-        public static final int action_settings=0x7f050064;
+        public static final int action_settings=0x7f050065;
         /**  ******************************************************** 
  Home screen 
          */
@@ -743,49 +750,50 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f05001e;
-        public static final int desc=0x7f050066;
+        public static final int desc=0x7f050067;
         public static final int dontdisclose=0x7f050037;
-        public static final int dummy_button=0x7f050069;
-        public static final int dummy_content=0x7f05006a;
+        public static final int dummy_button=0x7f05006a;
+        public static final int dummy_content=0x7f05006b;
         public static final int email_hint=0x7f050030;
         public static final int female=0x7f050036;
-        /**  button meet someone 
+        /**  button rend someone 
          */
-        public static final int footer=0x7f05004c;
+        public static final int footer=0x7f05004d;
         /**  ******************************************************** 
  Others 
          */
-        public static final int footnote=0x7f050063;
-        public static final int hello_world=0x7f050065;
+        public static final int footnote=0x7f050064;
+        public static final int hello_world=0x7f050066;
         public static final int male=0x7f050035;
         /**  ******************************************************** 
  Pofession info 
          */
-        public static final int question=0x7f050061;
+        public static final int question=0x7f050062;
         public static final int terms=0x7f050038;
-        public static final int title_activity_load_home=0x7f050068;
-        public static final int title_activity_loading_screen=0x7f05006c;
+        public static final int title_activity_load_home=0x7f050069;
+        public static final int title_activity_loading_screen=0x7f05006d;
         public static final int title_activity_log_out=0x7f050026;
         public static final int title_activity_login=0x7f050025;
         public static final int title_activity_person=0x7f050027;
-        public static final int title_activity_profession_info=0x7f05006b;
+        public static final int title_activity_profession_info=0x7f05006c;
         /**  Titles 
          */
         public static final int title_activity_profilelist=0x7f050020;
         /**  ******************************************************** 
          */
-        public static final int title_activity_profiles=0x7f050067;
+        public static final int title_activity_profiles=0x7f050068;
         public static final int title_activity_refresh=0x7f050028;
+        public static final int title_activity_rend=0x7f05006f;
         public static final int title_activity_settings=0x7f050029;
         public static final int title_activity_sign_up=0x7f050023;
         public static final int title_activity_update_profile=0x7f050021;
-        public static final int title_activity_upload__image=0x7f05006d;
+        public static final int title_activity_upload__image=0x7f05006e;
         public static final int title_activity_user_sign_up=0x7f050024;
         public static final int title_activity_visitor_profile=0x7f050022;
         /**  ******************************************************** 
  Upload  image 
          */
-        public static final int update_image=0x7f050062;
+        public static final int update_image=0x7f050063;
         public static final int updateprofile=0x7f050048;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 

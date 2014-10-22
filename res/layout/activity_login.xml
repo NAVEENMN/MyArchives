@@ -145,19 +145,29 @@
         android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
-  
-
-        <Button
+        android:orientation="horizontal" >
+  		<Button
             android:id="@+id/buttonmeet"
             style="?android:attr/buttonBarButtonStyle"
             android:gravity="center_vertical|center_horizontal"
+            android:paddingTop="48dip"
             android:layout_width="120sp"
 			android:layout_height="120sp"
-            android:background="@drawable/curvedbuttonhandler"
-            android:text="@string/MeetSomeone"
+            android:background="@drawable/buttonhandler"
+            android:drawableTop="@drawable/ic_action_location_found"
             android:textColor="#A9E2F3"
-            android:textSize="42sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/Rend"
+            style="?android:attr/buttonBarButtonStyle"
+            android:gravity="center_vertical|center_horizontal"
+            android:paddingTop="48dip"
+            android:layout_width="120sp"
+			android:layout_height="120sp"
+            android:background="@drawable/buttonhandler"
+            android:drawableTop="@drawable/ic_action_group"
+            android:textColor="#A9E2F3"
             android:textStyle="bold" />
       
     </LinearLayout>
