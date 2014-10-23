@@ -4,19 +4,27 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.Contacts;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.metster.Login.Map;
+import com.example.metster.Login.User;
+import com.example.metster.Login.addrs;
+import com.example.metster.Login.fbdata;
 import com.example.metster.ProfilelistActivity.account;
+import com.firebase.client.Firebase;
+import com.firebase.client.core.Path;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -27,14 +35,50 @@ public class Rend extends Activity {
 	private static final int CONTACT_PICKER_RESULT = 1001;
 	String server_response;
 	ArrayList<String> group_list = new ArrayList<String>();
+	
 	public static class group{
 		static String curr_person;
+	}
+	
+	public static class event_info{
+		static String event_name;
+	}
+	
+	public static class fb_event_ref{
+		static String fbref;
+		static Firebase firebaseobj;
 	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rend);
+		//----> set up maps
+		set_up_map_view();
+		//----> call event function
+        create_event_notfication();
+        //----> set up fire base refrence
+        create_firebase_refrence();// this is base refrence
+        
+        
+	}
+	
+	public void create_firebase_refrence(){
+		//----------------------> Fire base reference creation
+				StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+				strBuilder.append(commondata.user_information.account_number);
+			    fb_event_ref.fbref = strBuilder.toString();
+			    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
+			    fb_event_ref.firebaseobj.child("EventName").setValue(commondata.user_information.account_number+"-event");
+			    Path fb_member = fb_event_ref.firebaseobj.child("EventName").getPath();
+			    fb_member.child("members");
+	}
+	
+	public void add_a_member(String member_ref){
+		fb_event_ref.firebaseobj.child("EventName").child("members").child(member_ref);
+	}
+	
+	public void set_up_map_view(){
 		GoogleMap mMap;
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
         mMap.clear();
@@ -44,8 +88,9 @@ public class Rend extends Activity {
         mMap.setMyLocationEnabled(true);
         LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 11));
-        mMap.getUiSettings().setZoomControlsEnabled(false);   
+        mMap.getUiSettings().setZoomControlsEnabled(false);
 	}
+	
 	public void doLaunchContactPicker(View view) {
 	    Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
 	            Contacts.CONTENT_URI);
@@ -56,6 +101,7 @@ public class Rend extends Activity {
         group.curr_person = emailEntry.getText().toString();
         Log.w("requesting",group.curr_person);
         get_this_person_loc(group.curr_person);
+        add_a_member(group.curr_person);
 	}
 	public void get_this_person_loc(String per_email){
 		new GetRestaurantAsyncTask().execute("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&name=cruise&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE");
@@ -72,6 +118,37 @@ public class Rend extends Activity {
 		}
 		*/
 	}
+	
+	public void create_event_notfication(){
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("New Meetup");
+		alert.setMessage("Set meetup name");
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  Editable value = input.getText();
+		  event_info.event_name = value.toString();
+		  setTitle(event_info.event_name);
+		  fb_event_ref.firebaseobj.child("EventName").setValue(event_info.event_name);//update on firebase
+		  // Do something with value!
+		  }
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+			  event_info.event_name = commondata.user_information.account_number+"-event";
+			  setTitle(event_info.event_name);
+		  }
+		});
+
+		alert.show();
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (resultCode == RESULT_OK) {

@@ -206,7 +206,8 @@ public class LoadHome extends Activity {
 		                }
 
 		                inputStream.close();
-		                data.putString("accountnumber", stringBuilder.toString()); 
+		                data.putString("accountnumber", stringBuilder.toString());
+		                commondata.user_information.account_number = stringBuilder.toString();
 		            }
 		        }
 		        catch (FileNotFoundException e) {
@@ -233,6 +234,7 @@ public class LoadHome extends Activity {
 				        }
 				                inputStream.close();
 				                data.putString("tokennumber", stringBuilder.toString());
+				                commondata.user_information.token_number = stringBuilder.toString();
 				        }
 				    }
 				 catch (FileNotFoundException e) {
@@ -260,6 +262,7 @@ public class LoadHome extends Activity {
 						}
 		                inputStream.close();
 						                data.putString("userimage", stringBuilder.toString());
+						                commondata.user_information.profileimage = stringBuilder.toString();
 						}
 					}
 				catch (FileNotFoundException e) {
