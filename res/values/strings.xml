@@ -129,5 +129,6 @@
     <string name="title_activity_loading_screen">Loading_screen</string>
     <string name="title_activity_upload__image">Upload_Image</string>
     <string name="title_activity_rend">Rend</string>
+    <string name="title_activity_meet_up">MeetUp</string>
 
 </resources>
