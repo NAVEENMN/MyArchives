@@ -1,4 +1,4 @@
-w<?php
+<?php
 
 include 'databaseauth.php';
 include 'keys.php';
@@ -21,7 +21,7 @@ while($ziprow = mysql_fetch_array($zipresult)) {
   $distance = sqrt(pow($diffperlati, 2)+ pow($diffperlongi, 2));
   //echo $distance*1000 ;
   //array_push($stack,$ziprow['UsrID']);
-  if($distance < 0.0005 && $ziprow['UsrID'] != $accountnumber ){
+  if($distance < 0.0010 && $ziprow['UsrID'] != $accountnumber ){
   //---------------------------------fetch that user profile
   $ud = $ziprow['UsrID'] ;
   $resultprfi = mysql_query("SELECT * FROM Accounts
@@ -45,7 +45,7 @@ while($ziprow = mysql_fetch_array($zipresult)) {
   echo $rowgps['Longitude'];
   }
 }//while
-
+//  mysql_query("DELETE * FROM Location WHERE UsrID='$accountnumber'") or die(mysql_error()); 
 }//keyverification
 
 

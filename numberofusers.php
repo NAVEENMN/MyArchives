@@ -19,7 +19,7 @@ while($ziprow = mysql_fetch_array($zipresult)) {
   $diffperlati = $perlati - $latitude ;
   $diffperlongi = $perlongi - $longitude ;
   $distance = sqrt(pow($diffperlati, 2)+ pow($diffperlongi, 2));
-  if($distance < 0.0005 && $ziprow['UsrID'] != $accountnumber ){
+  if($distance < 0.0010 && $ziprow['UsrID'] != $accountnumber ){
   //---------------------------------fetch that user profile
   $ud = $ziprow['UsrID'] ;
   $resultprfi = mysql_query("SELECT * FROM Accounts
