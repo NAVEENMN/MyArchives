@@ -1,8 +1,10 @@
 package com.example.metster;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -11,6 +13,10 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.View;
+
+import com.example.metster.commondata.gcm_incoming;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
@@ -57,33 +63,60 @@ public class GcmIntentService extends IntentService {
                 }
                 Log.i("tag", "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
-                sendNotification("Received: " + extras.toString());
+                String message[] = extras.toString().split(" ");
+                Log.w("from",message[1]);
+                String message_data[] = message[1].split("="); 
+                sendNotification(message_data[1]);
                 Log.i("tag", "Received: " + extras.toString());
+                
+                String action  = intent.getStringExtra("action");
+                int extra = 0;
+                try {
+                        extra = Integer.parseInt(intent.getStringExtra("action_id"));
+                } catch (Exception e){
+                        /* ignore */
+                }
+                
+                
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
+    public void createNotification(View view, String message) {
+	    // Prepare intent which is triggered if the
+	    // notification is selected
+	    Intent intent = new Intent(this, Login.class);
+	    PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+	    
+	    // Build notification
+	    // Actions are just fake
+	    Notification noti = new Notification.Builder(this)
+	        .setContentTitle("Metster")
+	        .setContentText(message + " is requesting your location.").setSmallIcon(R.drawable.ic_action_group)
+	        .setContentIntent(pIntent)
+	        .addAction(R.drawable.ic_action_next_item, "Call", pIntent)
+	        .addAction(R.drawable.ic_action_back, "And more", pIntent).build();
+	    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+	    // hide the notification after its selected
+	    noti.flags |= Notification.FLAG_AUTO_CANCEL;
+	    notificationManager.notify(0, noti);
+
+	  }
+    
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.
     private void sendNotification(String msg) {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, Login.class), 0);
+        
         Log.w("messa","rec");
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-        .setSmallIcon(R.drawable.ic_action_add_person)
-        .setContentTitle("GCM Notification")
-        .setStyle(new NotificationCompat.BigTextStyle()
-        .bigText(msg))
-        .setContentText(msg);
+        
 
-        mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        createNotification(null, msg);
+        
+        
     }
 }

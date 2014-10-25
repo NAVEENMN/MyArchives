@@ -18,5 +18,8 @@ public class commondata {
 		static String facebook;
 	}
 	
+	public static class gcm_incoming{
+		static String message;
+	}
 	
 }
