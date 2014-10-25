@@ -1,6 +1,7 @@
 package com.example.metster;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.gms.maps.MapFragment;
 import com.example.metster.Login.Map;
+import com.example.metster.Login.account;
 import com.firebase.client.Firebase;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -55,31 +57,9 @@ public class Rend extends Activity {
         create_event_notfication();
         //----> set up fire base refrence
         create_firebase_refrence();// this is base refrence
-        createNotification(null);
         
 	}
 	
-	public void createNotification(View view) {
-	    // Prepare intent which is triggered if the
-	    // notification is selected
-	    Intent intent = new Intent(this, Login.class);
-	    PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-	    // Build notification
-	    // Actions are just fake
-	    Notification noti = new Notification.Builder(this)
-	        .setContentTitle("New mail from " + "test@gmail.com")
-	        .setContentText("Subject").setSmallIcon(R.drawable.ic_action_group)
-	        .setContentIntent(pIntent)
-	        .addAction(R.drawable.ic_action_next_item, "Call", pIntent)
-	        .addAction(R.drawable.ic_action_new_picture, "More", pIntent)
-	        .addAction(R.drawable.ic_action_back, "And more", pIntent).build();
-	    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-	    // hide the notification after its selected
-	    noti.flags |= Notification.FLAG_AUTO_CANCEL;
-	    notificationManager.notify(0, noti);
-
-	  }
 	
 	public void create_firebase_refrence(){
 		//----------------------> Fire base reference creation
@@ -94,6 +74,16 @@ public class Rend extends Activity {
 	public void add_a_member_to_fb(ArrayList<String> member_ref){
 		fb_event_ref.firebaseobj.child("members").setValue(member_ref);
 		Toast.makeText(getApplicationContext(), group.curr_person + " has been added", Toast.LENGTH_SHORT).show();
+		try {
+ 	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/exe_gcm_send.php",commondata.user_information.account_number,group.curr_person,"hello","1","1","1","1"
+ 			, "1", "1", "1", "1", "1", "1").get();
+ 			} catch (InterruptedException e) {
+ 							// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			} catch (ExecutionException e) {
+ 							// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
 	}
 	
 	public void set_up_map_view(){
