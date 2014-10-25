@@ -1,0 +1,89 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#B3B0B0"
+    tools:context=".HomescreenActivity" >
+    
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:background="@drawable/basebg">
+    
+    
+        <LinearLayout
+                tools:context=".MainActivity"
+		        android:id="@+id/linearLayout2"
+		        android:gravity="bottom"
+		        android:layout_width="fill_parent"
+		        android:background="#5F04B4"
+		        android:layout_height="140dp"
+		        android:orientation="vertical">
+		
+		<TextView
+			    android:id="@+id/line1"
+			    style="?android:attr/listSeparatorTextViewStyle"
+			    android:background="#08088A"
+			    android:layout_width="match_parent"
+			    android:layout_height="2dp" />
+		
+		<EditText
+		       android:id="@+id/Email"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:hint="@string/Email"
+		       android:inputType="textEmailAddress" />
+
+		   <EditText
+		       android:id="@+id/Password"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:hint="@string/Password"
+		       android:inputType="textPassword" />
+		
+        
+       <LinearLayout
+		        android:id="@+id/linearLayout3"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:gravity="bottom"
+		        android:orientation="horizontal">     
+			    <Button
+			        android:id="@+id/button2"
+			        style="?android:attr/buttonStyleSmall"
+			        android:layout_width="0dip"
+			        android:layout_weight="1"
+			        android:layout_height="60dp"
+			        android:background = "@drawable/buttonclicker"
+			        android:textColor="#F2F2F2"
+			        android:textSize="15sp"
+			        android:textStyle="bold"
+			        android:text="@string/LogIn" 
+			        android:onClick="logintoaccount"/> 
+			        
+			    <Button
+			        android:id="@+id/button1"
+			        style="?android:attr/buttonStyleSmall"
+			        android:layout_width="0dip"
+			        android:layout_weight="1"
+			        android:layout_height="60dp"
+			        android:background = "@drawable/buttonclicker"
+			        android:textColor="#F2F2F2"
+			        android:textSize="15sp"
+			        android:textStyle="bold"
+			        android:text="@string/SignUp" 
+			        android:onClick="Signupaccount"/>
+			        
+        </LinearLayout>
+        
+        </LinearLayout> 
+        
+        
+
+</RelativeLayout>
+
+   
+
+</FrameLayout>

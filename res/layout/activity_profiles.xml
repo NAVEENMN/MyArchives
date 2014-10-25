@@ -1,0 +1,189 @@
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="${packageName}.${activityClass}" >
+
+    <!--  ******************************************************************  User Basic Profile data -->
+
+    <LinearLayout
+        android:id="@+id/Profiledata"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#424242"
+        android:gravity="top"
+        android:orientation="horizontal" >
+        
+        <LinearLayout
+            android:layout_width="0dip"
+			android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="#424242"
+            android:paddingLeft="5dp"
+            android:orientation="vertical" >
+               
+        <ImageButton
+            android:id="@+id/ProfileImage"
+            android:layout_width="150dp"
+			android:layout_height="140dp"
+			android:gravity="center"
+			android:src="@drawable/defaultprofile"
+			android:background = "@drawable/loginbg"
+			android:scaleType="centerCrop"
+            android:contentDescription="@string/desc" />
+        </LinearLayout>
+                
+
+        <LinearLayout
+            android:layout_width="0dip"
+			android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+			android:paddingTop="10dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/FirstName"
+                android:textColor="#58D3F7"
+                android:textSize="22sp"
+                android:text="@string/Name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/LastName"
+                android:textColor="#58D3F7"
+                android:textSize="22sp"
+                android:text="@string/Name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:id="@+id/Profession"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/StudentType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/Worksat"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/Major"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:id="@+id/CurrentCity"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp"
+                android:text="@string/Gender"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            
+        </LinearLayout>
+         
+    </LinearLayout>
+    
+    <!-- ********************************************************************* User Social             -->
+    
+    <LinearLayout
+        android:id="@+id/UserAboutMeandsocial"
+        android:baselineAligned="false"
+        android:layout_below="@+id/Profiledata"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F2F2F2"
+        android:paddingTop="2dp"
+        android:gravity="top"
+        android:orientation="horizontal" >
+        
+        <LinearLayout
+	        android:id="@+id/UserAboutMe"
+	        style="?android:attr/buttonBarStyle"
+	        android:background="#F2F2F2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+            
+            <TextView
+                android:id="@+id/AboutMeLable"
+                android:textColor="#2E9AFE"
+                android:paddingTop="10dp"
+                android:textSize="26sp"
+                android:text="@string/AboutMe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        
+        <LinearLayout
+	        android:id="@+id/socialbuttons"
+	        style="?android:attr/buttonBarStyle"
+	        android:background="#F2F2F2"
+	        android:gravity="right"
+	        android:paddingLeft="90dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal" >
+        	<Button
+	            android:id="@+id/facebook"
+	            style="?android:attr/buttonStyleSmall"
+	            android:layout_width="60dip"
+	            android:layout_height="60dip"
+	            android:background="@drawable/curvedbuttonhandler"
+	            android:gravity="center"
+	            android:onClick="openfacebook"
+	            android:text="@string/Facebook"
+	            android:textColor="#F2F2F2"
+	            android:textSize="15sp"
+	            android:textStyle="bold" />
+			        
+			<Button
+			        android:id="@+id/linkedin"
+			        style="?android:attr/buttonStyleSmall"
+			        android:layout_width="60dip"
+			        android:layout_height="60dip"
+			        android:gravity="center"
+			        android:layout_marginLeft="1dp"
+			        android:paddingLeft="2dp"
+			        android:background="@drawable/curvedbuttonhandler"
+			        android:text="@string/Linkedin"
+			        android:onClick="openlinkedin"
+			        android:textColor="#F2F2F2"
+			        android:textSize="15sp"
+			        android:textStyle="bold" />
+			    </LinearLayout>
+        
+     </LinearLayout>
+    
+    
+    <!--  ******************************************************************  User Basic Profile data -->
+    
+     
+    <!-- ******************************************************************** Action Buttons          -->
+
+    
+
+        <!-- About Me -->
+              
+       
+          <ScrollView
+			    android:id="@+id/Scroll"
+			    android:layout_below="@+id/UserAboutMeandsocial"
+			    android:paddingTop="5dp"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content">
+        	<TextView
+                android:id="@+id/AboutMe"
+                android:textColor="#585858"
+                android:paddingTop="2dp"
+                android:textSize="18sp"
+                android:text="@string/AboutMe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+             </ScrollView>
+
+
+</RelativeLayout>
+

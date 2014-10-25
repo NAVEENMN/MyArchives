@@ -1,0 +1,137 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#B3B0B0"
+    tools:context=".SignUpActivity" >
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:background="@drawable/basebg" >
+       
+     <LinearLayout
+	        android:id="@+id/imagenamesection"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:background="@drawable/loginbg"
+	    	android:gravity="top"
+	        android:orientation="horizontal">
+	        
+         <!-- ******************************************************* -->
+	   			<ImageButton
+		            android:contentDescription="@string/desc"
+				    android:id="@+id/ImageButton01"
+				    android:gravity="center"
+				    android:layout_width="180dp"
+				    android:layout_height="170dp"
+				    android:src="@drawable/defaultprofile"
+				    android:background = "@drawable/loginbg"
+				    android:scaleType="centerCrop"
+				    android:onClick="pickimage" />
+	    </LinearLayout>        
+   			<!-- ******************************************************* -->
+   			
+   	<ScrollView
+   	    android:id="@+id/scrollsection"
+	   	android:layout_below="@+id/imagenamesection"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content" >		
+   			   
+      <LinearLayout
+	        android:id="@+id/info"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical" >
+	      
+           <EditText
+			       android:id="@+id/FirstName"
+			       android:layout_width="match_parent"
+			       android:layout_height="wrap_content"
+			       android:hint="@string/FirstName"
+			       android:inputType="textPersonName" /> 
+	   		<EditText
+			       android:id="@+id/LastName"
+			       android:layout_width="match_parent"
+			       android:layout_height="wrap_content"
+			       android:hint="@string/LastName"
+			       android:inputType="textPersonName" /> 
+          
+		   <EditText
+		       android:id="@+id/Email"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:hint="@string/Email"
+		       android:inputType="textEmailAddress" />
+
+		   <EditText
+		       android:id="@+id/Password"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:hint="@string/Password"
+		       android:inputType="textPassword" />
+
+		   <EditText
+		       android:id="@+id/RetypePassword"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:hint="@string/RetypePassword"
+		       android:inputType="textPassword" />
+		 
+		   
+		   <LinearLayout
+		        android:id="@+id/linearLayout4"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        android:background="@drawable/loginbg"
+		    	android:gravity="bottom"
+		        android:orientation="horizontal">
+		   <RadioButton
+		       android:id="@+id/radioButton1"
+		       android:layout_width="wrap_content"
+		       android:layout_height="wrap_content"
+		       android:textColor="#848484"
+	           android:textSize="12sp"
+	           android:textStyle="bold"
+		       android:text="@string/male"
+		       android:onClick="radio1_onClick" />
+
+   			<RadioButton
+		       android:id="@+id/radioButton2"
+		       android:layout_width="wrap_content"
+		       android:layout_height="wrap_content"
+		       android:textColor="#848484"
+	           android:textSize="12sp"
+	           android:textStyle="bold"
+		       android:text="@string/female"
+		       android:onClick="radio2_onClick" />
+   			
+   			</LinearLayout> 
+   			<CheckBox
+		       android:id="@+id/checkBox1"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:textColor="#848484"
+		       android:textSize="12sp"
+		       android:textStyle="bold"
+		       android:text="@string/terms" />
+   			<Button
+		        android:id="@+id/button3"
+		        style="?android:attr/buttonStyleSmall"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background = "@drawable/curvedbuttonhandler"
+		        android:textColor="#4E4E4E"
+		        android:textSize="12sp"
+		        android:textStyle="bold"
+		        android:gravity="center"
+		        android:text="@string/SignUp" 
+		        android:onClick="Signupaccount"/>
+             
+     </LinearLayout>
+     
+      </ScrollView>
+    </RelativeLayout>
+
+</FrameLayout>
