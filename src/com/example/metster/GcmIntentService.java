@@ -1,7 +1,6 @@
 package com.example.metster;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Random;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.metster.Rend.fb_event_ref;
-import com.example.metster.commondata.gcm_incoming;
 import com.firebase.client.Firebase;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -94,6 +92,7 @@ public class GcmIntentService extends IntentService {
 		strBuilder.append(from+"/"+"member"+memberid);
 	    fb_event_ref.fbref = strBuilder.toString();
 	    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
+	  
 	    fb_event_ref.firebaseobj.child("latitudes").setValue(commondata.user_information.latitude);
 	    fb_event_ref.firebaseobj.child("longitudes").setValue(commondata.user_information.longitude);
     }

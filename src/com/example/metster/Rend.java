@@ -128,6 +128,7 @@ public class Rend extends Activity {
 				    longitudes.indexOf(Integer.parseInt(reftoarray));
 				    longitudes.set(Integer.parseInt(reftoarray)-1, Double.parseDouble(snapshot.getValue().toString()));
 				    set_up_map_view();
+				    Toast.makeText(getApplicationContext(), "member just joined.", Toast.LENGTH_SHORT).show();
 			  }
 
 			  @Override public void onCancelled(FirebaseError error) { }
@@ -234,7 +235,6 @@ public class Rend extends Activity {
 			e.printStackTrace();
 		}
 		//set_up_map_for_places();
-		//Log.w("plcea",commondata.places_found.places.get(0));
 
 		myFirebaseflag.child("dataready").addValueEventListener(new ValueEventListener() {
 
@@ -270,30 +270,7 @@ public class Rend extends Activity {
 		final Dialog dialog = builder.create();
 
 		dialog.show();
-		
-		//--------
-		/*
-		final CharSequence[] items = {
-				commondata.places_found.places.get(0), 
-				commondata.places_found.places.get(1),
-				commondata.places_found.places.get(2),
-				commondata.places_found.places.get(3),
-				commondata.places_found.places.get(4),
-				"Blue"};
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		builder.setTitle("Best match places");
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-
-		   public void onClick(DialogInterface dialog, int item) {
-		        Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
-		   }
-
-		});
-
-		AlertDialog alert = builder.create();
-
-		alert.show(); */
 	}
 	
 	public void create_event_notfication(){
