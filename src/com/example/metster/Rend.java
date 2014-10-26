@@ -346,9 +346,7 @@ public class Rend extends Activity {
 	                }
 	                EditText emailEntry = (EditText) findViewById(R.id.invite_email);
 	                emailEntry.setText(email);
-	                group_list.add(email);
-	                group.curr_person = email;
-	                Log.w("email list", group_list.get(0));
+	                
 	                if (email.length() == 0) {
 	                    Toast.makeText(this, "No email found for contact.",
 	                            Toast.LENGTH_LONG).show();
