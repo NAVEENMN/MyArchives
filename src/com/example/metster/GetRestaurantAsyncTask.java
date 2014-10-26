@@ -73,6 +73,7 @@ public class GetRestaurantAsyncTask extends AsyncTask<String,Void,ArrayList<Rest
 		for (int i=0; i< result.size(); i++){
 			commondata.places_found.places.add(result.get(i).getName());
 			commondata.places_found.latitudes.add(result.get(i).getLatitude());
+			Log.w("string",result.get(i).toString());
 			commondata.places_found.longitudes.add(result.get(i).getLongitude());
 		}
 		Log.d("doneman",commondata.places_found.places.get(0));

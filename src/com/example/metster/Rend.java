@@ -2,24 +2,23 @@ package com.example.metster;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.Contacts;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.metster.Login.Map;
@@ -35,6 +34,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Rend extends Activity {
+	GoogleMap mMap;
 	private static final int CONTACT_PICKER_RESULT = 1001;
 	public int member_count = 0;
 	String server_response;
@@ -187,12 +187,12 @@ public class Rend extends Activity {
 	}
 	
 	public void set_up_map_for_places(){
-		GoogleMap mMap;
+		      
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
-        mMap.clear();
+       
         
         for(int i = 0; i< commondata.places_found.places.size(); i++){
-        Log.w("places",commondata.places_found.places.get(i));
+        Log.w("plcae",commondata.places_found.places.get(i));
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(commondata.places_found.latitudes.get(i), commondata.places_found.longitudes.get(i))) // visitor
                 ).showInfoWindow();
@@ -253,6 +253,26 @@ public class Rend extends Activity {
 	}
 	
 	public void list_rest(){
+		//--------
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Best Matching places");
+
+		ListView modeList = new ListView(this);
+		ArrayList<String> stringArray = new ArrayList<String>();
+		for(int i =0 ; i< commondata.places_found.places.size();i++)
+		stringArray.add(commondata.places_found.places.get(i));
+		//String[] stringArray = new String[] { "Bright Mode", "Normal Mode" };
+		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, stringArray);
+		modeList.setAdapter(modeAdapter);
+
+		builder.setView(modeList);
+		final Dialog dialog = builder.create();
+
+		dialog.show();
+		
+		//--------
+		/*
 		final CharSequence[] items = {
 				commondata.places_found.places.get(0), 
 				commondata.places_found.places.get(1),
@@ -273,7 +293,7 @@ public class Rend extends Activity {
 
 		AlertDialog alert = builder.create();
 
-		alert.show();
+		alert.show(); */
 	}
 	
 	public void create_event_notfication(){
