@@ -86,6 +86,7 @@ public class Rend extends Activity {
 	}
 	
 	public void add_a_member_to_fb(String member_email){
+		
 		member_count ++ ;
 		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).setValue(member_email);
 		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").setValue(0.0);
@@ -211,6 +212,10 @@ public class Rend extends Activity {
 	}
 	public void add_this_person(View view){
 		EditText emailEntry = (EditText) findViewById(R.id.invite_email);
+		if(emailEntry.getText().toString().isEmpty()){
+			 Toast.makeText(this, "No email found for contact.",
+                     Toast.LENGTH_LONG).show();
+		}else{
         group.curr_person = emailEntry.getText().toString();
         Log.w("requesting",group.curr_person);
         group_list.add(group.curr_person);
@@ -219,6 +224,7 @@ public class Rend extends Activity {
         
         add_a_member_to_fb(group.curr_person);
         set_up_map_view();
+		}
 	}
 	
 	public void get_places_mean_loc(Double mean_latitude, Double mean_longitude){
