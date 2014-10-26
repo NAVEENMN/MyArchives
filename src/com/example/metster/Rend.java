@@ -5,9 +5,6 @@ import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -20,20 +17,26 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.google.android.gms.maps.MapFragment;
+
 import com.example.metster.Login.Map;
-import com.example.metster.Login.account;
+import com.example.metster.Login.Userslist;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Rend extends Activity {
 	private static final int CONTACT_PICKER_RESULT = 1001;
+	public int member_count = 0;
 	String server_response;
 	ArrayList<String> group_list = new ArrayList<String>();
-	
+	ArrayList<Double> latitudes = new ArrayList<Double>();
+	ArrayList<Double> longitudes = new ArrayList<Double>();
 	public static class group{
 		static String curr_person;
 	}
@@ -52,7 +55,13 @@ public class Rend extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rend);
 		//----> set up maps
-		set_up_map_view();
+		GoogleMap mMap;
+        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
+        mMap.clear();
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(Map.latival, Map.Longival)) // visitor
+                .title(Integer.toString(Userslist.user_count))).showInfoWindow();
 		//----> call event function
         create_event_notfication();
         //----> set up fire base refrence
@@ -68,14 +77,36 @@ public class Rend extends Activity {
 			    fb_event_ref.fbref = strBuilder.toString();
 			    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
 			    fb_event_ref.firebaseobj.child("EventName").setValue(commondata.user_information.account_number+"-event");
-			    fb_event_ref.firebaseobj.child("members").setValue("none");
 	}
 	
-	public void add_a_member_to_fb(ArrayList<String> member_ref){
-		fb_event_ref.firebaseobj.child("members").setValue(member_ref);
+	public void add_a_member_to_fb(String member_email){
+		member_count ++ ;
+		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).setValue(member_email);
+		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").setValue(0.0);
+		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("longitudes").setValue(0.0);
+		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").addValueEventListener(new ValueEventListener() {
+		
+			  @Override
+			  public void onDataChange(DataSnapshot snapshot) {
+			    System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+			  }
+
+			  @Override public void onCancelled(FirebaseError error) { }
+
+			});
+		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("longitudes").addValueEventListener(new ValueEventListener() {
+
+			  @Override
+			  public void onDataChange(DataSnapshot snapshot) {
+			    System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+			  }
+
+			  @Override public void onCancelled(FirebaseError error) { }
+
+			});
 		Toast.makeText(getApplicationContext(), group.curr_person + " has been added", Toast.LENGTH_SHORT).show();
 		try {
- 	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/exe_gcm_send.php",commondata.user_information.account_number,group.curr_person,"hello","1","1","1","1"
+ 	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/exe_gcm_send.php",commondata.user_information.account_number,group.curr_person,Integer.toString(member_count),"1","1","1","1"
  			, "1", "1", "1", "1", "1", "1").get();
  			} catch (InterruptedException e) {
  							// TODO Auto-generated catch block
@@ -86,13 +117,22 @@ public class Rend extends Activity {
  			}
 	}
 	
+	public void update_map(){
+		
+	}
+	
+	
 	public void set_up_map_view(){
 		GoogleMap mMap;
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
-        mMap.clear();
+        //mMap.clear();
+        
+        for(int i = 0; i< group_list.size(); i++){
+        
         mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Map.latival, Map.Longival)) // visitor
-                .title("me")).showInfoWindow();
+                .position(new LatLng(latitudes.get(i), longitudes.get(i))) // visitor
+                .title(group_list.get(i))).showInfoWindow();
+        }
         mMap.setMyLocationEnabled(true);
         LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 11));
@@ -109,24 +149,16 @@ public class Rend extends Activity {
         group.curr_person = emailEntry.getText().toString();
         Log.w("requesting",group.curr_person);
         group_list.add(group.curr_person);
+        latitudes.add(35.91030878 + member_count);
+        longitudes.add(-79.05191779);
         get_this_person_loc(group.curr_person);
-        add_a_member_to_fb(group_list);
+        add_a_member_to_fb(group.curr_person);
+        set_up_map_view();
 	}
 	
 	public void get_this_person_loc(String per_email){
-		new GetRestaurantAsyncTask().execute("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&name=cruise&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE");
-		/*
-		try {
-	    	server_response = new RequestTask().execute("http://54.183.113.236/metster/getprofiledata.php", account.appkey, group.curr_person, "1","1","1", "1", "1"
-					, "1", "1", "1", "1", "1", "1" ).get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+		//new GetRestaurantAsyncTask().execute("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&name=cruise&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE");
+		
 	}
 	
 	public void create_event_notfication(){

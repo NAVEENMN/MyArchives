@@ -16,6 +16,8 @@ public class commondata {
 		static String usrstatus;
 		static String linkedin;
 		static String facebook;
+		static Double latitude;
+		static Double longitude;
 	}
 	
 	public static class gcm_incoming{

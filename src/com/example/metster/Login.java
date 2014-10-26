@@ -224,6 +224,13 @@ public static class visitorinfo{
 	    fbdata.fbref = strBuilder.toString();
 	    fbdata.firebaseobj = new Firebase(fbdata.fbref);
 	    fbdata.firebaseobj.child("Status").setValue("Hello There!!");
+	    
+	    //---- find base place to add to add location to comman data area
+	    
+	    commondata.user_information.latitude = Map.latival;
+	    commondata.user_information.longitude = Map.Longival;
+	    
+	    //---
     
     getData = new Runnable()
     {

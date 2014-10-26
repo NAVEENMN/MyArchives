@@ -286,6 +286,7 @@ public class ProfilelistActivity extends Activity {
 		
 	}
 	
+	
 	public void updatemap(View view){
 		//-----------------------> put vis on map
         GoogleMap map = ((MapFragment) getFragmentManager()

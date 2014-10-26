@@ -15,7 +15,9 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 
+import com.example.metster.Rend.fb_event_ref;
 import com.example.metster.commondata.gcm_incoming;
+import com.firebase.client.Firebase;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class GcmIntentService extends IntentService {
@@ -66,9 +68,12 @@ public class GcmIntentService extends IntentService {
                 String message[] = extras.toString().split(" ");
                 Log.w("from",message[1]);
                 String message_data[] = message[1].split("="); 
-                sendNotification(message_data[1]);
+                String info_gcm[] = message_data[1].split("-#>");
+                sendNotification(info_gcm[0]);
+                Log.w("memberid",info_gcm[1]);
+                Log.w("from",info_gcm[2].replace(",", ""));
                 Log.i("tag", "Received: " + extras.toString());
-                
+                update_loc_of(info_gcm[1],info_gcm[2].replace(",", ""));
                 String action  = intent.getStringExtra("action");
                 int extra = 0;
                 try {
@@ -83,6 +88,15 @@ public class GcmIntentService extends IntentService {
         // Release the wake lock provided by the WakefulBroadcastReceiver.
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
+    
+    public void update_loc_of(String memberid, String from){
+    	StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+		strBuilder.append(from+"/"+"member"+memberid);
+	    fb_event_ref.fbref = strBuilder.toString();
+	    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
+	    fb_event_ref.firebaseobj.child("latitudes").setValue(commondata.user_information.latitude);
+	    fb_event_ref.firebaseobj.child("longitudes").setValue(commondata.user_information.longitude);
+    }
 
     public void createNotification(View view, String message) {
 	    // Prepare intent which is triggered if the
@@ -96,8 +110,7 @@ public class GcmIntentService extends IntentService {
 	        .setContentTitle("Metster")
 	        .setContentText(message + " is requesting your location.").setSmallIcon(R.drawable.ic_action_group)
 	        .setContentIntent(pIntent)
-	        .addAction(R.drawable.ic_action_next_item, "Call", pIntent)
-	        .addAction(R.drawable.ic_action_back, "And more", pIntent).build();
+	        .addAction(R.drawable.ic_action_next_item, "Send location", pIntent).build();
 	    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	    // hide the notification after its selected
 	    noti.flags |= Notification.FLAG_AUTO_CANCEL;
