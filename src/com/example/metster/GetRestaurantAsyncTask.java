@@ -11,14 +11,23 @@ import java.util.ArrayList;
 
 import org.json.JSONException;
 
+import com.firebase.client.Firebase;
+
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class GetRestaurantAsyncTask extends AsyncTask<String,Void,ArrayList<Restaurant>>{
+	
+	public GetRestaurantAsyncTask() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	protected ArrayList<Restaurant> doInBackground(String... arg0) {
 		// TODO Auto-generated method stub
+		
 		try {
 			URL url = new URL(arg0[0]);
 			
@@ -57,12 +66,18 @@ public class GetRestaurantAsyncTask extends AsyncTask<String,Void,ArrayList<Rest
 		//return null;
 		
 	}
-
+	
 	protected void onPostExecute(ArrayList<Restaurant> result) {
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
-		
-		Log.d("demo",result.toString());
+		for (int i=0; i< result.size(); i++){
+			commondata.places_found.places.add(result.get(i).getName());
+			commondata.places_found.latitudes.add(result.get(i).getLatitude());
+			commondata.places_found.longitudes.add(result.get(i).getLongitude());
+		}
+		Log.d("doneman",commondata.places_found.places.get(0));
+		Firebase myFirebaseflag = new Firebase("https://met-ster-control.firebaseio.com/");
+		myFirebaseflag.child("dataready").setValue("ok");
 	}
 
 

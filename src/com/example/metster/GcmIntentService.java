@@ -59,7 +59,7 @@ public class GcmIntentService extends IntentService {
                     Log.i("tag", "Working... " + (i+1)
                             + "/5 @ " + SystemClock.elapsedRealtime());
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                     }
                 }

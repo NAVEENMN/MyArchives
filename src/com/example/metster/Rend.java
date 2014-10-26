@@ -2,6 +2,8 @@ package com.example.metster;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,7 +11,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.Contacts;
 import android.text.Editable;
@@ -60,14 +64,16 @@ public class Rend extends Activity {
         mMap.clear();
         mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Map.latival, Map.Longival)) // visitor
+                .position(new LatLng(commondata.user_information.latitude, commondata.user_information.longitude)) // visitor
                 .title(Integer.toString(Userslist.user_count))).showInfoWindow();
 		//----> call event function
         create_event_notfication();
         //----> set up fire base refrence
         create_firebase_refrence();// this is base refrence
         
+        
 	}
+	
 	
 	
 	public void create_firebase_refrence(){
@@ -84,21 +90,44 @@ public class Rend extends Activity {
 		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).setValue(member_email);
 		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").setValue(0.0);
 		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("longitudes").setValue(0.0);
+		
 		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").addValueEventListener(new ValueEventListener() {
 		
 			  @Override
 			  public void onDataChange(DataSnapshot snapshot) {
 			    System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+			    
+			    //----- parse and get what changed
+			    String[] refrencetosnap = snapshot.getRef().toString().split("/");
+			    String reftoarray = refrencetosnap[4].substring(refrencetosnap[4].length()-1);
+			    Log.w("this is", refrencetosnap[4].substring(refrencetosnap[4].length()-1));//get the last char
+			    // update that particular in array list
+			    latitudes.indexOf(Integer.parseInt(reftoarray));
+			    latitudes.set(Integer.parseInt(reftoarray)-1, Double.parseDouble(snapshot.getValue().toString()));
+			    set_up_map_view();
 			  }
 
 			  @Override public void onCancelled(FirebaseError error) { }
 
 			});
+		
+
+		
+
+		
 		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("longitudes").addValueEventListener(new ValueEventListener() {
 
 			  @Override
 			  public void onDataChange(DataSnapshot snapshot) {
-			    System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+				
+				//----- parse and get what changed
+				    String[] refrencetosnap = snapshot.getRef().toString().split("/");
+				    String reftoarray = refrencetosnap[4].substring(refrencetosnap[4].length()-1);
+				    Log.w("this is", refrencetosnap[4].substring(refrencetosnap[4].length()-1));//get the last char
+				    // update that particular in array list
+				    longitudes.indexOf(Integer.parseInt(reftoarray));
+				    longitudes.set(Integer.parseInt(reftoarray)-1, Double.parseDouble(snapshot.getValue().toString()));
+				    set_up_map_view();
 			  }
 
 			  @Override public void onCancelled(FirebaseError error) { }
@@ -117,7 +146,25 @@ public class Rend extends Activity {
  			}
 	}
 	
-	public void update_map(){
+	public void find_places(View w){
+		
+		Double temp_lat = 0.0;
+		Double temp_long = 0.0;
+		for(int i = 0;i< latitudes.size();i++){
+			temp_lat += latitudes.get(i);
+		}
+		for (int i = 0; i < longitudes.size(); i++){
+			temp_long += longitudes.get(i);
+		}
+		temp_lat = temp_lat / latitudes.size();
+		temp_long = temp_long / latitudes.size();
+		latitudes.add(temp_lat);
+		longitudes.add(temp_long);
+		group_list.add("mean");
+		Log.w("meanlat",Double.toString(temp_lat));
+		Log.w("meanlon",Double.toString(temp_long));
+		set_up_map_view();
+		get_places_mean_loc(temp_lat, temp_long);
 		
 	}
 	
@@ -125,17 +172,34 @@ public class Rend extends Activity {
 	public void set_up_map_view(){
 		GoogleMap mMap;
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
-        //mMap.clear();
+        mMap.clear();
         
         for(int i = 0; i< group_list.size(); i++){
         
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(latitudes.get(i), longitudes.get(i))) // visitor
-                .title(group_list.get(i))).showInfoWindow();
+                ).showInfoWindow();
         }
         mMap.setMyLocationEnabled(true);
         LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 11));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 16));
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+	}
+	
+	public void set_up_map_for_places(){
+		GoogleMap mMap;
+        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
+        mMap.clear();
+        
+        for(int i = 0; i< commondata.places_found.places.size(); i++){
+        Log.w("places",commondata.places_found.places.get(i));
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(commondata.places_found.latitudes.get(i), commondata.places_found.longitudes.get(i))) // visitor
+                ).showInfoWindow();
+        }
+        mMap.setMyLocationEnabled(true);
+        LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 16));
         mMap.getUiSettings().setZoomControlsEnabled(false);
 	}
 	
@@ -149,16 +213,67 @@ public class Rend extends Activity {
         group.curr_person = emailEntry.getText().toString();
         Log.w("requesting",group.curr_person);
         group_list.add(group.curr_person);
-        latitudes.add(35.91030878 + member_count);
-        longitudes.add(-79.05191779);
-        get_this_person_loc(group.curr_person);
+        latitudes.add(Map.latival);
+        longitudes.add(Map.Longival);
+        
         add_a_member_to_fb(group.curr_person);
         set_up_map_view();
 	}
 	
-	public void get_this_person_loc(String per_email){
-		//new GetRestaurantAsyncTask().execute("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&name=cruise&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE");
+	public void get_places_mean_loc(Double mean_latitude, Double mean_longitude){
+		Firebase myFirebaseflag = new Firebase("https://met-ster-control.firebaseio.com/");
+		myFirebaseflag.child("dataready").setValue("no");
+		String req_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+mean_latitude+","+mean_longitude+"&radius=500&types=food&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE";
+		 try {
+			ArrayList<Restaurant> run_places = new GetRestaurantAsyncTask().execute(req_url).get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//set_up_map_for_places();
+		//Log.w("plcea",commondata.places_found.places.get(0));
+
+		myFirebaseflag.child("dataready").addValueEventListener(new ValueEventListener() {
+
+			  @Override
+			  public void onDataChange(DataSnapshot snapshot) {
+			    System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+			    //set_up_map_for_places();
+			    list_rest();
+			  }
+
+			  @Override public void onCancelled(FirebaseError error) { }
+
+			});
+		//Log.w("plcea",commondata.places_found.places.get(0));
 		
+	}
+	
+	public void list_rest(){
+		final CharSequence[] items = {
+				commondata.places_found.places.get(0), 
+				commondata.places_found.places.get(1),
+				commondata.places_found.places.get(2),
+				commondata.places_found.places.get(3),
+				commondata.places_found.places.get(4),
+				"Blue"};
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		builder.setTitle("Best match places");
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+
+		   public void onClick(DialogInterface dialog, int item) {
+		        Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+		   }
+
+		});
+
+		AlertDialog alert = builder.create();
+
+		alert.show();
 	}
 	
 	public void create_event_notfication(){

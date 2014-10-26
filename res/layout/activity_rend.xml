@@ -32,6 +32,13 @@
         android:drawableTop="@drawable/ic_action_new"
         android:layout_alignParentRight="true"
         android:onClick="doLaunchContactPicker"></Button>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/find_places"
+        android:drawableTop="@drawable/ic_action_next_item"
+        android:layout_alignParentRight="false"
+        android:onClick="find_places"></Button>
     
 </RelativeLayout>
 <Button
@@ -41,4 +48,5 @@
         android:drawableTop="@drawable/ic_action_add_person"
         android:layout_alignParentRight="false"
         android:onClick="add_this_person"></Button>
+
 </RelativeLayout>

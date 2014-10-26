@@ -164,6 +164,10 @@
             android:label="@string/title_activity_load_home1"
             android:theme="@style/FullscreenTheme" >
         </activity>
+        <activity
+            android:name=".ViewPlaces"
+            android:label="@string/title_activity_view_places" >
+        </activity>
     </application>
 
 </manifest>
