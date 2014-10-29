@@ -22,7 +22,7 @@ public class Index {
 			String line = value.toString();
 			temp_title = extract_title(line);
 			temp_ref = extract_refrences(line);
-			Title.set(temp_title);
+			Title.set(temp_title + " : ");
 			Refrences.set(temp_ref.toString());
 			output.collect(Title, Refrences);
 		}	
@@ -31,7 +31,7 @@ public class Index {
 	
 
 	public static class Reduce extends MapReduceBase implements Reducer<Text, Text, Text, Text> {
-		private Text list_of_file_names = new Text();
+		private Text list_of_refrences = new Text();
 		public void reduce(Text key, Iterator<Text> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
 			String par_values = "";
 			String ref_names = "";
@@ -41,8 +41,8 @@ public class Index {
 				ref_names += par_values;
 			}
 			final_list = ref_names;
-			list_of_file_names.set(final_list);
-			output.collect(key, list_of_file_names);
+			list_of_refrences.set(final_list);
+			output.collect(key, list_of_refrences);
 		}
 	}
 
