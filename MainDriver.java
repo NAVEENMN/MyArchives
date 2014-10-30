@@ -62,7 +62,7 @@ public class MainDriver {
 		Path TempInputPath = null;
 		Path TempOutputPath = null;
 		
-		for(int i=1; i<=4; i++){
+		for(int i=1; i<=10; i++){
 
 			// delete previous input path
 			if(TempInputPath != null) fs.delete(TempInputPath, true);

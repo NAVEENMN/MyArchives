@@ -34,7 +34,7 @@ public class Index{
 			if(page.getTitle() == null) return;
 			if(page.getTitle().contains(":")) return;
 			title.set(page.getTitle());
-			codedLinks.set("1.0||" + page.getCodedLinks());
+			codedLinks.set("0.15||" + page.getCodedLinks());//Set initial rank to 1-d ir 0.15
 			output.collect(title, codedLinks);
 		}	
 	}
