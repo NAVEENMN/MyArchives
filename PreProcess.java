@@ -13,7 +13,7 @@ import java.util.regex.*;
 * External links are excluded.
 * Links within a page are exluded.
 */
-public class WikiPage
+public class PreProcess
 {
 //-----------------------------------------
 // static constants
@@ -46,7 +46,7 @@ private String page = null;
 //------------------------------------------
 // constructor
 //
-public WikiPage(String page){
+public PreProcess(String page){
 this.page = page;
 }
 //------------------------------------------
