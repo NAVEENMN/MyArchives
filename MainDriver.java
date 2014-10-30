@@ -62,7 +62,7 @@ public class MainDriver {
 		Path TempInputPath = null;
 		Path TempOutputPath = null;
 		
-		for(int i=1; i<=4; i++){
+		for(int i=1; i<=10; i++){
 
 			// delete previous input path
 			if(TempInputPath != null) fs.delete(TempInputPath, true);
@@ -96,6 +96,29 @@ public class MainDriver {
 			JobClient.runJob(conf);
 		
 		}
+		//------------------SORT BASED ON PAGE RANKS--------------------------
+
+		System.out.println("\n---------------------------");
+		System.out.println( "Sorting Ranks ");
+		System.out.println( "input = " + TempOutputPath.toString());
+		System.out.println( "output = " + IndexOutPath.toString());
+		System.out.println( "---------------------------");
+		conf = new JobConf(SortPage.class);
+		conf.setJobName("sort_rank");
+		fs = FileSystem.get(conf);
+		conf.setOutputKeyClass(Text.class);
+		conf.setOutputValueClass(Text.class);
+		conf.setReducerClass(SortPage.Reduce.class);
+		conf.setMapperClass(SortPage.Map.class);
+		conf.setInputFormat(TextInputFormat.class);
+		conf.setOutputFormat(TextOutputFormat.class);
+		FileInputFormat.setInputPaths(conf,new Path(TempOutputPath, "part-*"));
+		FileOutputFormat.setOutputPath(conf, IndexOutPath);
+		JobClient.runJob(conf);
+		// clean-up intermediate results
+		//if(fs.exists(GraphPath))fs.delete(GraphPath, true);
+		//if(fs.exists(PageRankPath))fs.delete(PageRankPath, true);
+		//------------------------------------------------------------------------
 
 	}
 }
