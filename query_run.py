@@ -10,7 +10,7 @@ def main():
 	print "\nSetting up compliation envirornment..."
 	os.system("sh config/com_setup.sh\n")
 	print "\ncompling MainDriver.java..\n"
-	os.system("sudo javac -cp /usr/lib/hadoop/*:/usr/lib/hadoop/client-0.20/* -d Index_classes Index.java MainDriver.java")
+	os.system("sudo javac -cp /usr/lib/hadoop/*:/usr/lib/hadoop/client-0.20/* -d Index_classes Index.java WikiPage.java MainDriver.java")
 	os.system("jar -cvf MainDriver.jar -C Index_classes/ .")
 	print "\nJar created.."
 	print "\nExecuting jar on Hadoop...\n\n"
