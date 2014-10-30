@@ -9,12 +9,12 @@ def main():
 	print "\nhdfs input/output is now setup."
 	print "\nSetting up compliation envirornment..."
 	os.system("sh config/com_setup.sh\n")
-	print "\ncompling Index.java..\n"
-	os.system("sudo javac -cp /usr/lib/hadoop/*:/usr/lib/hadoop/client-0.20/* -d Index_classes Index.java")
-	os.system("jar -cvf Index.jar -C Index_classes/ .")
+	print "\ncompling MainDriver.java..\n"
+	os.system("sudo javac -cp /usr/lib/hadoop/*:/usr/lib/hadoop/client-0.20/* -d Index_classes Index.java MainDriver.java")
+	os.system("jar -cvf MainDriver.jar -C Index_classes/ .")
 	print "\nJar created.."
 	print "\nExecuting jar on Hadoop...\n\n"
-	os.system("sudo -u hdfs hadoop jar Index.jar org.myorg.Index /user/cloudera/QueryIndex/input /user/cloudera/QueryIndex/output")
+	os.system("sudo -u hdfs hadoop jar MainDriver.jar org.myorg.MainDriver /user/cloudera/QueryIndex/input /user/cloudera/QueryIndex/output")
 	print "\n\n getting the response.."
 	os.system("sudo rm -rf output")
 	os.system("sudo mkdir output")

@@ -1,17 +1,20 @@
 package org.myorg;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.*;
+
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Index {
+public class Index{
 
 	public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
 		private Text Title = new Text();
@@ -69,18 +72,4 @@ public class Index {
 		return(tags);
 	}
 
-	public static void main(String[] args) throws Exception {
-		JobConf conf = new JobConf(Index.class);
-		conf.setJobName("Generate_Index");
-		conf.setOutputKeyClass(Text.class);
-		conf.setOutputValueClass(Text.class);
-		conf.setMapperClass(Map.class);
-		conf.setCombinerClass(Reduce.class);
-		conf.setReducerClass(Reduce.class);
-		conf.setInputFormat(TextInputFormat.class);
-		conf.setOutputFormat(TextOutputFormat.class);
-		FileInputFormat.setInputPaths(conf, new Path(args[0]));
-		FileOutputFormat.setOutputPath(conf, new Path(args[1]));
-		JobClient.runJob(conf);
-	}
 }
