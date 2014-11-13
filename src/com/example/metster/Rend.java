@@ -2,6 +2,7 @@ package com.example.metster;
 
 import java.util.ArrayList;
 
+import android.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -22,11 +23,6 @@ import android.widget.Toast;
 
 import com.example.metster.Login.Map;
 import com.firebase.client.Firebase;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Rend extends Activity {
 	private static final int CONTACT_PICKER_RESULT = 1001;

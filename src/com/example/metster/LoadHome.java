@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import android.R;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -30,11 +31,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.metster.Rend.group;
 import com.example.metster.util.SystemUiHider;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 public class LoadHome extends Activity {
 	public static final String EXTRA_MESSAGE = "message";
