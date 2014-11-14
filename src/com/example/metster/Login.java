@@ -56,70 +56,6 @@ public class Login extends Activity {
 		static Boolean ok_to_load;
 	}
 		
-	public static class addrs{
-	
-		static String zip;
-		static String cityName;
-		static String country;
-		static String addressline;
-		
-	};
-	
-	public static class User{
-		
-		static String profileimage;
-		static String usrfname;
-		static String usrlname;
-		static String usrgender;
-		static String usrabout;
-		static String usrprofession;
-		static String usrworksat;
-		static String usrcurrentcity;
-		static String usrstatus;
-		static String linkedin;
-		static String facebook;
-		
-	};
-	
-	
-public static class visitorinfo{
-		
-		static String profileid;
-		static String FirstName;
-		static String LastName;
-		static String Image;
-		static String Gender;
-		static String Age;
-		static String Status;
-		static String Profession;
-		static String worksat;
-		static String CurrentCity;
-		static String hometown;
-		static String hobbies;
-		static String music;
-		static String movies;
-		static String books;
-		static String AboutMe;
-		static String Passion;
-		static Double latitude;
-		static Double longitude;
-		static String facebookurl;
-		static String linkedinurl;
-		
-	};
-	
-	public static class account{
-		static String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";
-		static String accnumber;
-		static String tokennumber;
-	};
-	
-	public static class Map{
-		
-		static Double latival;
-		static Double Longival;
-		
-	};
 	
 	public static class Userslist{
 		static String server_response;
@@ -150,35 +86,24 @@ public static class visitorinfo{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		setupActionBar();// Show the Up button in the action bar.
-		User.usrstatus = "Hello There!!";
+		commondata.user_information.status = "Hello There!!";
 		setTitle("Set your status");
-		Firebase.setAndroidContext(this);
-		//--------------------------------> Read Bundle
-		
-				Bundle b = getIntent().getExtras();
-				if( b != null ){
-					account.accnumber = b.getString("accountnumber");
-					profilelistactdata.putString("accountnumber", account.accnumber);
-					account.tokennumber = b.getString("tokennumber");
-					User.profileimage = b.getString("userimage");
-					profilelistactdata.putString("userimage",User.profileimage);
-				}
-							
-	//--------------------------------> Setup location
-	locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-    locationListener = new LocationListener() {
-    public void onLocationChanged(Location location) {	
-    	Map.latival = location.getLatitude();
-    	Map.Longival = location.getLongitude();
-    }
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    	Map.latival = location.getLatitude();
-    	Map.Longival = location.getLongitude();
-    }
-    public void onProviderEnabled(String provider) {
-    	Map.latival = location.getLatitude();
-    	Map.Longival = location.getLongitude();
-    }
+		Firebase.setAndroidContext(this);					
+		//--------------------------------> Setup location listener
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		locationListener = new LocationListener() {
+		public void onLocationChanged(Location location) {	
+			commondata.user_information.latitude = location.getLatitude();
+			commondata.user_information.longitude = location.getLongitude();
+		}
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			commondata.user_information.latitude = location.getLatitude();
+			commondata.user_information.longitude = location.getLongitude();
+		}
+		public void onProviderEnabled(String provider) {
+			commondata.user_information.latitude = location.getLatitude();
+			commondata.user_information.longitude = location.getLongitude();
+		}
     public void onProviderDisabled(String provider) {}
     };
   	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);// Register the listener with the Location Manager to receive location updates
@@ -189,14 +114,14 @@ public static class visitorinfo{
         position = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         provider = locationManager.getBestProvider(criteria, false);
         location = locationManager.getLastKnownLocation(provider);
-        Map.latival = location.getLatitude();
-        Map.Longival = location.getLongitude();
+        commondata.user_information.latitude = location.getLatitude();
+        commondata.user_information.longitude = location.getLongitude();
     }
     else{
     	provider = locationManager.getBestProvider(criteria, false);
         location = locationManager.getLastKnownLocation(provider);
-        Map.latival = location.getLatitude();
-        Map.Longival = location.getLongitude();
+        commondata.user_information.latitude = location.getLatitude();
+        commondata.user_information.longitude = location.getLongitude();
     }
     
   //------------------------------------------------------------------> Fetch the location details
@@ -204,13 +129,13 @@ public static class visitorinfo{
   		List<Address> addresses;
   		
   		try {
-              addresses = gcd.getFromLocation(Map.latival, Map.Longival, 1);
+              addresses = gcd.getFromLocation(commondata.user_information.latitude, commondata.user_information.longitude, 1);
               if (addresses.size() > 0)
-              addrs.cityName = addresses.get(0).getLocality();
-              addrs.country = addresses.get(0).getCountryCode();
-              addrs.zip = addresses.get(0).getPostalCode();
-              profilelistactdata.putString("zip", addrs.zip);
-              addrs.addressline = addresses.get(0).getThoroughfare();
+              commondata.user_information.cityname = addresses.get(0).getLocality();
+              commondata.user_information.country = addresses.get(0).getCountryCode();
+              commondata.user_information.zip = addresses.get(0).getPostalCode();
+              profilelistactdata.putString("zip", commondata.user_information.zip);
+              commondata.user_information.addressline = addresses.get(0).getThoroughfare();
              
           } catch (IOException e) {
               e.printStackTrace();
@@ -218,28 +143,22 @@ public static class visitorinfo{
 
   	//----------------------> Fire base reference creation
 		StringBuilder strBuilder = new StringBuilder("https://met-ster.firebaseio.com/");
-		strBuilder.append(addrs.zip);
+		strBuilder.append(commondata.user_information.zip);
 		strBuilder.append("/");
-	    strBuilder.append(account.accnumber);
+	    strBuilder.append(commondata.user_information.account_number);
 	    fbdata.fbref = strBuilder.toString();
 	    fbdata.firebaseobj = new Firebase(fbdata.fbref);
 	    fbdata.firebaseobj.child("Status").setValue("Hello There!!");
 	    
-	    //---- find base place to add to add location to comman data area
-	    
-	    commondata.user_information.latitude = Map.latival;
-	    commondata.user_information.longitude = Map.Longival;
-	    
+	    //---- find base place to add to add location to comman data are
 	    //---
     
-    getData = new Runnable()
-    {
-            @Override
-            public void run()
-            {
+    getData = new Runnable(){
+            	@Override
+            	public void run(){
                 updatelocation(null);
-            }
-    };
+            	}
+    			};
     
     final Handler handler_remove_location_updates = new Handler();
     handler_remove_location_updates.postDelayed(new Runnable() {
@@ -259,7 +178,7 @@ public static class visitorinfo{
     	  fbdata.firebaseobj.child("Longitude").removeValue();
     	  fbdata.firebaseobj.child("Status").removeValue();
     	  try {
-  	    	 new RequestTask().execute("http://54.183.113.236/metster/deletelocation.php",account.appkey,account.accnumber,"1","1","1","1","1"
+  	    	 new RequestTask().execute("http://54.183.113.236/metster/deletelocation.php",commondata.keys.appkey,commondata.user_information.account_number,"1","1","1","1","1"
   			, "1", "1", "1", "1", "1", "1").get();
   			} catch (InterruptedException e) {
   							// TODO Auto-generated catch block
@@ -273,7 +192,7 @@ public static class visitorinfo{
      
 	//-------------------------------------> Read data from server
     try{
-    	Userslist.server_response = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",account.accnumber,account.tokennumber,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival),(String)addrs.country,"1"
+    	Userslist.server_response = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",commondata.user_information.account_number,commondata.user_information.token_number,commondata.user_information.zip,Double.toString(commondata.user_information.latitude),Double.toString(commondata.user_information.longitude),commondata.user_information.country,"1"
     			, "1", "1", "1", "1", "1", "1").get();
     	}catch(Exception e){
     		Log.w("fetch","failed");
@@ -283,27 +202,26 @@ public static class visitorinfo{
 	    
 	           
 					String[] separated = Userslist.server_response.split("-");
-		            User.usrfname = separated[0];
-		            User.usrlname = separated[1];
-		            User.usrgender = separated[2];
-		            User.usrabout = separated[3];
-		            User.usrprofession = separated[4];
-		            User.usrworksat = separated[5];
-		            User.usrcurrentcity = separated[6];
-		            User.linkedin = null; // setup in server
-		            User.facebook = null;
+		            commondata.user_information.firstname = separated[0];
+		            commondata.user_information.lastname = separated[1];
+		            commondata.user_information.gender = separated[2];
+		            commondata.user_information.about = separated[3];
+		            commondata.user_information.profession = separated[4];
+		            commondata.user_information.worksat = separated[5];
+		            commondata.user_information.currentcity = separated[6];
+		            commondata.user_information.linkedin = null; // setup in server
+		            commondata.user_information.facebook = null;
 		           
-		            profilelistactdata.putString("userprofession", User.usrprofession);
-		            profilelistactdata.putString("userworksat", User.usrworksat);
-		            profilelistactdata.putString("usercurrentcity", User.usrcurrentcity);
+		            profilelistactdata.putString("userprofession", commondata.user_information.profession);
+		            profilelistactdata.putString("userworksat", commondata.user_information.worksat);
+		            profilelistactdata.putString("usercurrentcity", commondata.user_information.currentcity);
 					
 		            SetupUIdata();
 	//----------------------------------
 			if(Userslist.numberofusers.isEmpty()) 
 			{
 				Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
-			}
-			else {
+			}else {
 				final String[] accountnumbers = Userslist.numberofusers.split("#%-->");
 				Userslist.user_count = accountnumbers.length;
 				Userslist.user_count --;
@@ -311,9 +229,11 @@ public static class visitorinfo{
 					        
 //-----------------------------------------------------------------------> Button Actions	            
 	            //------------------------------------- meet someone
+			
 			final Animation animScale = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
-		        find = (Button) findViewById(R.id.buttonmeet);
+		        //find = (Button) findViewById(R.id.buttonmeet);
 		        rend_button_obj = (Button) findViewById(R.id.Rend);
+		        /*
 		        //----------------------------------------------------------------      
 		        find.setOnClickListener(new View.OnClickListener() {
 		        	public void onClick(View v) {
@@ -335,7 +255,8 @@ public static class visitorinfo{
 					            }
 					    }).start();						
 					}//on click
-		        });	        
+		        });
+		        */	        
 		      //---------------------------------------------------------------	
 		      //------------------------------------- Rend      
 		        rend_button_obj.setOnClickListener(new View.OnClickListener() {
@@ -367,24 +288,24 @@ public static class visitorinfo{
 		//----------- Section 1
 		TextView fname = (TextView)findViewById(R.id.FirstName);
 		fname.startAnimation(animTimeChange);
-        fname.setText((String)User.usrfname);
+        fname.setText((String)commondata.user_information.firstname);
         TextView lname = (TextView)findViewById(R.id.LastName); 
-        lname.setText((String)User.usrlname);
+        lname.setText((String)commondata.user_information.lastname);
         lname.startAnimation(animTimeChange);
         TextView prof = (TextView)findViewById(R.id.Profession); 
-        prof.setText((String)User.usrprofession);
+        prof.setText((String)commondata.user_information.profession);
         TextView wat = (TextView)findViewById(R.id.Worksat); 
-        wat.setText((String)User.usrworksat);
+        wat.setText((String)commondata.user_information.worksat);
         TextView cc = (TextView)findViewById(R.id.CurrentCity); 
-        cc.setText((String)User.usrcurrentcity);
+        cc.setText((String)commondata.user_information.currentcity);
         //----------- Section 2
         //TextView loca = (TextView)findViewById(R.id.YourLocation); 
         //loca.setText((String)addrs.addressline);
         //TextView locacity = (TextView)findViewById(R.id.YourLocationcity); 
         //locacity.setText((String)addrs.cityName);
         //----------- Section Profile Image
-        if (User.profileimage!=null){
-            byte[] decodedString = Base64.decode(User.profileimage, Base64.DEFAULT);
+        if (commondata.user_information.profileimage!=null){
+            byte[] decodedString = Base64.decode(commondata.user_information.profileimage, Base64.DEFAULT);
 	             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 	             	ImageButton imageButton =(ImageButton)findViewById(R.id.ProfileImage);
 	                imageButton.setImageBitmap(decodedByte);
@@ -393,7 +314,7 @@ public static class visitorinfo{
         GoogleMap map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.visitormap)).getMap();
 
-        LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
+        LatLng currlocation = new LatLng(commondata.user_information.latitude, commondata.user_information.longitude);// yours
 
         map.setMyLocationEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
@@ -412,27 +333,25 @@ public static class visitorinfo{
 		position = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
     	provider = locationManager.getBestProvider(criteria, false);
     	location = locationManager.getLastKnownLocation(provider);
-    	Map.latival = location.getLatitude();
-    	Map.Longival = location.getLongitude();
-    	profilelistactdata.putDouble("latitude",Map.latival);
-    	profilelistactdata.putDouble("longitude", Map.Longival);
-    	fbdata.firebaseobj.child("Latitude").setValue(Double.toString(Map.latival));
-    	fbdata.firebaseobj.child("Longitude").setValue(Double.toString(Map.Longival));
+    	commondata.user_information.latitude = location.getLatitude();
+    	commondata.user_information.longitude = location.getLongitude();
+    	profilelistactdata.putDouble("latitude",commondata.user_information.latitude);
+    	profilelistactdata.putDouble("longitude", commondata.user_information.longitude);
+    	fbdata.firebaseobj.child("Latitude").setValue(Double.toString(commondata.user_information.latitude));
+    	fbdata.firebaseobj.child("Longitude").setValue(Double.toString(commondata.user_information.longitude));
         try {
-        	new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), User.usrstatus,"1",
+        	new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",commondata.user_information.account_number,commondata.keys.appkey,commondata.user_information.zip,Double.toString(commondata.user_information.latitude),Double.toString(commondata.user_information.longitude), commondata.user_information.status,"1",
  					"1", "1", "1", "1", "1", "1").get();
-        	 Userslist.numberofusers = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",account.accnumber,account.appkey,addrs.zip,Double.toString(Map.latival),Double.toString(Map.Longival), "1","1",
+        	 Userslist.numberofusers = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",commondata.user_information.account_number,commondata.keys.appkey,commondata.user_information.zip,Double.toString(commondata.user_information.latitude),Double.toString(commondata.user_information.longitude), "1","1",
 					"1", "1", "1", "1", "1", "1").get();
         	 profilelistactdata.putString("accountnumberlist", Userslist.numberofusers);
-		     if(Userslist.numberofusers.isEmpty()) 
-				{
+		     if(Userslist.numberofusers.isEmpty()) {
 					//Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
-				}
-				else {
+			  }else {
 					final String[] accountnumb = Userslist.numberofusers.split("#%-->");
 					Userslist.user_count = accountnumb.length;
 					Userslist.user_count --;
-				}
+			}
         	//TextView num = (TextView)findViewById(R.id.NumberofUsers); 
             //num.setText(Integer.toString(Userslist.user_count));
             
@@ -450,7 +369,7 @@ public static class visitorinfo{
         mMap.clear();
         mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Map.latival, Map.Longival)) // visitor
+                .position(new LatLng(commondata.user_information.latitude, commondata.user_information.longitude)) // visitor
                 .title(Integer.toString(Userslist.user_count))).showInfoWindow();
 	
 	}
@@ -479,7 +398,6 @@ public static class visitorinfo{
 	@Override
 	public void onBackPressed() {
 	 
-		
 		new AlertDialog.Builder(this)
         .setMessage("You will go invisible, Do you wish to exit?")
         .setTitle("Metster")
@@ -531,9 +449,9 @@ public static class visitorinfo{
 			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 			  Editable value = input.getText();
-			  User.usrstatus = value.toString();
-			  setTitle(User.usrstatus);
-			  fbdata.firebaseobj.child("Status").setValue(User.usrstatus);
+			  commondata.user_information.status = value.toString();
+			  setTitle(commondata.user_information.status);
+			  fbdata.firebaseobj.child("Status").setValue(commondata.user_information.status);
 			  // Do something with value!
 			  }
 			});

@@ -15,7 +15,7 @@
         android:baselineAligned="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#424242"
+        android:background="#0B3B2E"
         android:gravity="top"
         android:orientation="horizontal" >
         
@@ -23,7 +23,7 @@
             android:layout_width="0dip"
 			android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:background="#424242"
+            android:background="#0B3B2E"
             android:paddingLeft="5dp"
             android:orientation="vertical" >
                
@@ -53,14 +53,14 @@
       
             <TextView
                 android:id="@+id/FirstName"
-                android:textColor="#58D3F7"
+                android:textColor="#D8D8D8"
                 android:textSize="23sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/LastName"
-                android:textColor="#58D3F7"
+                android:textColor="#D8D8D8"
                 android:textSize="23sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
@@ -69,14 +69,14 @@
             
             <TextView
                 android:id="@+id/Profession"
-                android:textColor="#F2F2F2"
+                android:textColor="#D8D8D8"
                 android:textSize="12sp"
                 android:text="@string/StudentType"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/Worksat"
-                android:textColor="#F2F2F2"
+                android:textColor="#D8D8D8"
                 android:textSize="12sp"
                 android:text="@string/Major"
                 android:layout_width="match_parent"
@@ -84,7 +84,7 @@
  
             <TextView
                 android:id="@+id/CurrentCity"
-                android:textColor="#F2F2F2"
+                android:textColor="#D8D8D8"
                 android:textSize="12sp"
                 android:text="@string/Gender"
                 android:layout_width="match_parent"
@@ -102,7 +102,7 @@
     android:layout_below="@+id/Profiledata"
     android:layout_width="match_parent"
     android:layout_height="3dp"
-    android:background="#424242" /> 
+    android:background="#088A85" /> 
     
      <!--  ****************************************************************** Information area        -->
     <LinearLayout
@@ -123,13 +123,14 @@
 
 	<!-- ******************************************************************* Map region               -->
     
-      </LinearLayout>      
+      </LinearLayout>   
+         
       <View
     android:id="@+id/Dividertwo"
     android:layout_below="@+id/Information"
     android:layout_width="match_parent"
     android:layout_height="3dp"
-    android:background="#424242" />     
+    android:background="#088A85" />     
     <!-- ******************************************************************** Action Buttons          -->
     
     
@@ -138,7 +139,7 @@
         android:id="@+id/ActionButtons"
         style="?android:attr/buttonBarStyle"
         android:layout_below="@+id/Dividertwo"
-        android:background="#F2F2F2"
+        android:background="#01DFD7"
         android:paddingTop="2dp"
         android:gravity="center"
         android:layout_alignParentBottom="true"
@@ -146,6 +147,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
+    <!-- 
   		<Button
             android:id="@+id/buttonmeet"
             style="?android:attr/buttonBarButtonStyle"
@@ -157,19 +159,30 @@
             android:drawableTop="@drawable/ic_action_location_found"
             android:textColor="#A9E2F3"
             android:textStyle="bold" />
-
+     -->
+      
         <Button
             android:id="@+id/Rend"
             style="?android:attr/buttonBarButtonStyle"
             android:gravity="center_vertical|center_horizontal"
-            android:paddingTop="48dip"
+            android:paddingTop="18dip"
             android:layout_width="120sp"
 			android:layout_height="120sp"
             android:background="@drawable/buttonhandler"
-            android:drawableTop="@drawable/ic_action_group"
+            android:drawableTop="@drawable/addfriend"
             android:textColor="#A9E2F3"
             android:textStyle="bold" />
       
+      <!--  
+      		<ImageButton
+           android:id="@+id/Rend"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:contentDescription="@string/desc"
+           android:background="#0000"
+           android:onClick="selfDestruct"
+           android:src="@drawable/addfriend" />
+      -->
     </LinearLayout>
 
 </RelativeLayout>

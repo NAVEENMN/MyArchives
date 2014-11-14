@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapFragment;
-import com.example.metster.Login.visitorinfo;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -77,13 +76,13 @@ public class ProfilelistActivity extends Activity {
 	    	navigate_account_numbers = listdata.getString("accountnumberlist").split("#%-->");
 	    	number_of_profiles = navigate_account_numbers.length;
             number_of_profiles --;
-	    	visitorinfo.profileid = navigate_account_numbers[1];
+	    	commondata.visitorinfo.profileid = navigate_account_numbers[1];
 	    	
 	    }
 	    		
 	    
 	    try {
-			current_visitor(visitorinfo.profileid );
+			current_visitor(commondata.visitorinfo.profileid );
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -102,9 +101,9 @@ public class ProfilelistActivity extends Activity {
 							
 							if( prfcounter >= number_of_profiles ) prfcounter = 0 ;
 							prfcounter++;
-							visitorinfo.profileid = navigate_account_numbers[prfcounter];
+							commondata.visitorinfo.profileid = navigate_account_numbers[prfcounter];
 							try {
-								current_visitor(visitorinfo.profileid );
+								current_visitor(commondata.visitorinfo.profileid );
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -129,9 +128,9 @@ public class ProfilelistActivity extends Activity {
 							
 							if( prfcounter <= 1 ) prfcounter = number_of_profiles + 1  ;
 							prfcounter--;
-							visitorinfo.profileid = navigate_account_numbers[prfcounter];
+							commondata.visitorinfo.profileid = navigate_account_numbers[prfcounter];
 							try {
-								current_visitor(visitorinfo.profileid );
+								current_visitor(commondata.visitorinfo.profileid );
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -165,33 +164,33 @@ public class ProfilelistActivity extends Activity {
 
 		   
 			 final String[] separated = server_response.split("#%-->");
-			 visitorinfo.FirstName = separated[0];
-			 visitorinfo.LastName = separated[1];
-			 visitorinfo.Image = separated[2];
-			 visitorinfo.Gender = separated[3];
-			 visitorinfo.Status = separated[4];
-			 visitorinfo.Profession = separated[5];
-			 visitorinfo.worksat = separated[6];
-			 visitorinfo.CurrentCity = separated[7];
-			 visitorinfo.AboutMe = separated[8];
-			 visitorinfo.latitude = Double.parseDouble(separated[9]);
-			 visitorinfo.longitude = Double.parseDouble(separated[10]);
-			 visitorinfo.facebookurl = separated[11];
-			 visitorinfo.linkedinurl = separated[12];
+			 commondata.visitorinfo.FirstName = separated[0];
+			 commondata.visitorinfo.LastName = separated[1];
+			 commondata.visitorinfo.Image = separated[2];
+			 commondata.visitorinfo.Gender = separated[3];
+			 commondata.visitorinfo.Status = separated[4];
+			 commondata.visitorinfo.Profession = separated[5];
+			 commondata.visitorinfo.worksat = separated[6];
+			 commondata.visitorinfo.CurrentCity = separated[7];
+			 commondata.visitorinfo.AboutMe = separated[8];
+			 commondata.visitorinfo.latitude = Double.parseDouble(separated[9]);
+			 commondata.visitorinfo.longitude = Double.parseDouble(separated[10]);
+			 commondata.visitorinfo.facebookurl = separated[11];
+			 commondata.visitorinfo.linkedinurl = separated[12];
 			 
 			 //------
 			 
-			 visitoractdata.putString("visitor_image",visitorinfo.Image);
-			 visitoractdata.putString("visitor_firstname",visitorinfo.FirstName);
-			 visitoractdata.putString("visitor_lastname",visitorinfo.LastName);
-			 visitoractdata.putString("visitor_gender",visitorinfo.Gender);
-			 visitoractdata.putString("visitor_status",visitorinfo.Status);
-			 visitoractdata.putString("visitor_profession",visitorinfo.Profession);
-			 visitoractdata.putString("visitor_worksat",visitorinfo.worksat);
-			 visitoractdata.putString("visitor_currentcity",visitorinfo.CurrentCity);
-			 visitoractdata.putString("visitor_aboutme",visitorinfo.AboutMe);
-			 visitoractdata.putString("visitor_facebook",visitorinfo.facebookurl);
-			 visitoractdata.putString("visitor_linkedin",visitorinfo.linkedinurl);
+			 visitoractdata.putString("visitor_image",commondata.visitorinfo.Image);
+			 visitoractdata.putString("visitor_firstname",commondata.visitorinfo.FirstName);
+			 visitoractdata.putString("visitor_lastname",commondata.visitorinfo.LastName);
+			 visitoractdata.putString("visitor_gender",commondata.visitorinfo.Gender);
+			 visitoractdata.putString("visitor_status",commondata.visitorinfo.Status);
+			 visitoractdata.putString("visitor_profession",commondata.visitorinfo.Profession);
+			 visitoractdata.putString("visitor_worksat",commondata.visitorinfo.worksat);
+			 visitoractdata.putString("visitor_currentcity",commondata.visitorinfo.CurrentCity);
+			 visitoractdata.putString("visitor_aboutme",commondata.visitorinfo.AboutMe);
+			 visitoractdata.putString("visitor_facebook",commondata.visitorinfo.facebookurl);
+			 visitoractdata.putString("visitor_linkedin",commondata.visitorinfo.linkedinurl);
 			 
 			 //-------
 			 Log.w("nowuser",account_number);
@@ -207,7 +206,7 @@ public class ProfilelistActivity extends Activity {
 			        public void onDataChange(DataSnapshot snapshot) {
 			            System.out.println(snapshot.getValue()); 
 			            Double d = Double.parseDouble(snapshot.getValue().toString());
-			            visitorinfo.latitude = d;
+			            commondata.visitorinfo.latitude = d;
 			            try{
 			            updatemap(null);
 			            }catch(Exception e){
@@ -221,7 +220,7 @@ public class ProfilelistActivity extends Activity {
 			        public void onDataChange(DataSnapshot snapshot) {
 			            System.out.println(snapshot.getValue());
 			            Double d = Double.parseDouble(snapshot.getValue().toString());
-			            visitorinfo.longitude = d;
+			            commondata.visitorinfo.longitude = d;
 			            try{
 				            updatemap(null);
 				            }catch(Exception e){
@@ -235,9 +234,9 @@ public class ProfilelistActivity extends Activity {
 			        public void onDataChange(DataSnapshot snapshot) {
 			            System.out.println(snapshot.getValue());
 			            
-			            visitorinfo.Status = (String) snapshot.getValue();
+			            commondata.visitorinfo.Status = (String) snapshot.getValue();
 			            try{
-			            	setTitle(visitorinfo.Status);
+			            	setTitle(commondata.visitorinfo.Status);
 				            }catch(Exception e){
 				            	Log.w("map","locationerror");
 				            }
@@ -249,8 +248,8 @@ public class ProfilelistActivity extends Activity {
 			 }
 			 
 			 //-------
-			 displayprofile(visitorinfo.Image, visitorinfo.FirstName, visitorinfo.LastName, visitorinfo.latitude, visitorinfo.longitude, visitorinfo.Gender,
-					        visitorinfo.Age, visitorinfo.Profession, visitorinfo.worksat, visitorinfo.CurrentCity);
+			 displayprofile(commondata.visitorinfo.Image, commondata.visitorinfo.FirstName, commondata.visitorinfo.LastName, commondata.visitorinfo.latitude, commondata.visitorinfo.longitude, commondata.visitorinfo.Gender,
+					 commondata.visitorinfo.Age, commondata.visitorinfo.Profession, commondata.visitorinfo.worksat, commondata.visitorinfo.CurrentCity);
 		
 	}
 	
@@ -268,7 +267,7 @@ public class ProfilelistActivity extends Activity {
         workat.setText(worksat);
         TextView currcity = (TextView)findViewById(R.id.CurrentCity); 
         currcity.setText(currentcity);
-        setTitle(visitorinfo.Status); // user status here
+        setTitle(commondata.visitorinfo.Status); // user status here
         updatemap(null);
         byte[] decodedString = Base64.decode(image, Base64.DEFAULT);
 		    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -301,8 +300,8 @@ public class ProfilelistActivity extends Activity {
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
         mMap.clear();
         mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(visitorinfo.latitude, visitorinfo.longitude)) // visitor
-                .title(visitorinfo.FirstName)).showInfoWindow();
+                .position(new LatLng(commondata.visitorinfo.latitude, commondata.visitorinfo.longitude)) // visitor
+                .title(commondata.visitorinfo.FirstName)).showInfoWindow();
         
         
 	}

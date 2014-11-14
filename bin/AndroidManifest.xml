@@ -159,14 +159,12 @@
             android:label="@string/title_activity_meet_up" >
         </activity>
         <activity
-            android:name=".LoadHome1"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_load_home1"
-            android:theme="@style/FullscreenTheme" >
-        </activity>
-        <activity
             android:name=".ViewPlaces"
             android:label="@string/title_activity_view_places" >
+        </activity>
+        <activity
+            android:name=".CentraDash"
+            android:label="@string/title_activity_centra_dash" >
         </activity>
     </application>
 

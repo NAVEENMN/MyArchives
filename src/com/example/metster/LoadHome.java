@@ -1,5 +1,4 @@
 package com.example.metster;
-import com.example.metster.util.SystemUiHider;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,12 +8,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.metster.util.SystemUiHider;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -64,63 +65,40 @@ public class LoadHome extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.w("befofe","fg");
 		setTitle("Meet, Connect and Socialize");
 		final LocationManager locationManager;
 		final LocationListener locationListener;
-		Location location = null;
 		Location pos = null ;
-		String provider;
-
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_load_home);
 		setupActionBar();
-
 		//final View controlsView = findViewById(R.id.fullscreen_content_controls);
 		final View contentView = findViewById(R.id.fullscreen_content);
-
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.
 		mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
 		mSystemUiHider.setup();
 		mSystemUiHider.setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
-					// Cached values.
-					int mControlsHeight;
-					int mShortAnimTime;
-
-					@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-					public void onVisibilityChange(boolean visible) {
-						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-							// If the ViewPropertyAnimator API is available
-							// (Honeycomb MR2 and later), use it to animate the
-							// in-layout UI controls at the bottom of the
-							// screen.
-							if (mControlsHeight == 0) {
-								//mControlsHeight = controlsView.getHeight();
-							}
-							if (mShortAnimTime == 0) {
-								mShortAnimTime = getResources().getInteger(
-										android.R.integer.config_shortAnimTime);
-							}
-							//controlsView
-							//		.animate()
-							//		.translationY(visible ? 0 : mControlsHeight)
-							//		.setDuration(mShortAnimTime);
-						} //else {
-							// If the ViewPropertyAnimator APIs aren't
-							// available, simply show or hide the in-layout UI
-							// controls.
-							//controlsView.setVisibility(visible ? View.VISIBLE
-							//		: View.GONE);
-						//}
-
-						if (visible && AUTO_HIDE) {
-							// Schedule a hide().
-							delayedHide(AUTO_HIDE_DELAY_MILLIS);
-						}
-					}
-				});
+			// Cached values.
+		int mControlsHeight;
+		int mShortAnimTime;
+		@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+		public void onVisibilityChange(boolean visible) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+				if (mControlsHeight == 0) {
+					//mControlsHeight = controlsView.getHeight();
+				}
+				if (mShortAnimTime == 0) {
+					mShortAnimTime = getResources().getInteger(
+					android.R.integer.config_shortAnimTime);
+				}
+			}
+			if (visible && AUTO_HIDE) {
+				// Schedule a hide().
+				delayedHide(AUTO_HIDE_DELAY_MILLIS);
+			}
+		}
+		});
 
 		// Set up the user interaction to manually show or hide the system UI.
 		contentView.setOnClickListener(new View.OnClickListener() {
@@ -134,177 +112,128 @@ public class LoadHome extends Activity {
 			}
 		});
 
-		// Upon interacting with UI controls, delay any scheduled hide()
-		// operations to prevent the jarring behavior of controls going away
-		// while interacting with the UI.
-		//findViewById(R.id.dummy_button).setOnTouchListener(
-		//		mDelayHideTouchListener);
-
 //----------------------------------------------------------  Setup GPS reader here!!
-
-		
-		//--------------------------------> Setup location
 		super.onCreate(savedInstanceState);
 		// Acquire a reference to the system Location Manager
 			locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-		// Define a listener that responds to location updates
-		   locationListener = new LocationListener() {
-		    public void onLocationChanged(Location location) {	
-		    	gpslocation.latival = location.getLatitude();
-	        	gpslocation.Longival = location.getLongitude();
+	      //--------------------------------------------------------   
+		  // Define a listener that responds to location updates
+		  //---------------------------------------------------------
+			   locationListener = new LocationListener() {
+			    public void onLocationChanged(Location location) {	
+			    	commondata.user_information.latitude = location.getLatitude();
+		        	commondata.user_information.longitude = location.getLongitude();
 
-		    }
+			    }
+				@SuppressWarnings("unused")
+				public void onStatusChanged(Location location) {
+					commondata.user_information.latitude = location.getLatitude();
+		        	commondata.user_information.longitude = location.getLongitude();
+			    }
 
-			@SuppressWarnings("unused")
-			public void onStatusChanged(Location location) {
-		    	gpslocation.latival = location.getLatitude();
-	        	gpslocation.Longival = location.getLongitude();
-		    }
+				@SuppressWarnings("unused")
+				public void onProviderEnabled(Location location) {
+					commondata.user_information.latitude = location.getLatitude();
+		        	commondata.user_information.longitude = location.getLongitude();
+			    }
+			    public void onProviderDisabled(String provider) {
+			    	AlertDialog.Builder alert = new AlertDialog.Builder(LoadHome.this);
+	    			alert.setTitle("Connection Error");
+	    			alert.setMessage("Please check your network settings");
+	    			alert.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+	    			public void onClick(DialogInterface dialog, int whichButton) {
+	    				Intent intent = new Intent(LoadHome.this, HomescreenActivity.class);
+	                	startActivity(intent);
+	                	finish();
+	    			  }
+	    			});
 
-			@SuppressWarnings("unused")
-			public void onProviderEnabled(Location location) {
-		    	gpslocation.latival = location.getLatitude();
-	        	gpslocation.Longival = location.getLongitude();
-		    }
-		    public void onProviderDisabled(String provider) {}
+	    			alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+	    			  public void onClick(DialogInterface dialog, int whichButton) {
+	    				  finish();
+	    			  }
+	    			});
+	    			alert.show();
+			    }
 
-			@Override
-			public void onProviderEnabled(String provider) {
-				// TODO Auto-generated method stub
+				@Override
+				public void onProviderEnabled(String provider) {
+					// TODO Auto-generated method stub
 
-			}
+				}
 
-			@Override
-			public void onStatusChanged(String provider, int status,
-					Bundle extras) {
-				// TODO Auto-generated method stub
+				@Override
+				public void onStatusChanged(String provider, int status,
+						Bundle extras) {
+					// TODO Auto-generated method stub
 
-			}
-		  };
-		      //------------------------------------------------------------------------
-		// Register the listener with the Location Manager to receive location updates
-		  		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-		        Criteria criteria = new Criteria();
-		        pos = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		        if( pos == null ) 
-		        	{
-		        	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+				}
+			  };
+			//------------------------------------------------------------------------
+			// getting GPS and network status
+		    boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER); 
+	        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+	        if (!isGPSEnabled && !isNetworkEnabled) {
+	        	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    			alert.setTitle("Connection Error");
+    			alert.setMessage("Please check your network settings");
+    			alert.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+    			public void onClick(DialogInterface dialog, int whichButton) {
+    				Intent intent = new Intent(LoadHome.this, HomescreenActivity.class);
+                	startActivity(intent);
+                	finish();
+    			  }
+    			});
+
+    			alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+    			  public void onClick(DialogInterface dialog, int whichButton) {
+    				  finish();
+    			  }
+    			});
+    			alert.show();
+	        } else {
+	        	if(isGPSEnabled){
+	        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+			        pos = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			        commondata.user_information.latitude = pos.getLatitude();
+			        commondata.user_information.longitude = pos.getLongitude();
+	        	}else{
+	        		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 		        	pos = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		        	provider = locationManager.getBestProvider(criteria, false);
-		        	location = locationManager.getLastKnownLocation(provider);
-		        	gpslocation.latival = location.getLatitude();
-		        	gpslocation.Longival = location.getLongitude();
-		        	}
-		        else{
-		        	gpslocation.latival = pos.getLatitude();
-		        	gpslocation.Longival = pos.getLongitude();
-		        	}
+		        	commondata.user_information.latitude = pos.getLatitude();
+		        	commondata.user_information.longitude = pos.getLongitude();
+	        	}
+	        	
+	        }
 
 		       //---------------------------------------------------------------------
-
-		        final Handler handler = new Handler();
-		        handler.postDelayed(new Runnable() {
-		          @Override
-		          public void run() {
+	        final Handler handler = new Handler();
+		    handler.postDelayed(new Runnable() {
+		    @Override
+		    public void run() {
 		        	  locationManager.removeUpdates(locationListener);
-		          }
-		        }, 1000 * 60 * 15);//15mins
+		    }
+		    }, 1000 * 60 * 15);//15mins
 
 //--------------------------------> Read user ID
-
-		        try {
-		            FileInputStream inputStream = openFileInput("accounts.txt");
-
-		            if ( inputStream != null ) {
-		                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-		                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-		                String receiveString = "";
-		                StringBuilder stringBuilder = new StringBuilder();
-
-		                while ( (receiveString = bufferedReader.readLine()) != null ) {
-		                    stringBuilder.append(receiveString);
-		                }
-
-		                inputStream.close();
-		                data.putString("accountnumber", stringBuilder.toString());
-		                commondata.user_information.account_number = stringBuilder.toString();
-		            }
-		        }
-		        catch (FileNotFoundException e) {
-		            Log.e("login activity", "File not found: " + e.toString());
-		            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-		            .show();
-		        } catch (IOException e) {
-		            Log.e("login activity", "Can not read file: " + e.toString());
-		            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-		            .show();
-		        }	
-//--------------------------------> Read token			
-				try {
-					FileInputStream inputStream = openFileInput("token.txt");
-
-				    if ( inputStream != null ) {
-				    	InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-				        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-				        String receiveString = "";
-				        StringBuilder stringBuilder = new StringBuilder();
-
-				        while ( (receiveString = bufferedReader.readLine()) != null ) {
-				                    stringBuilder.append(receiveString);
-				        }
-				                inputStream.close();
-				                data.putString("tokennumber", stringBuilder.toString());
-				                commondata.user_information.token_number = stringBuilder.toString();
-				        }
-				    }
-				 catch (FileNotFoundException e) {
-				            Log.e("login activity", "File not found: " + e.toString());
-				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-				            .show();
-				    } catch (IOException e) {
-				            Log.e("login activity", "Can not read file: " + e.toString());
-				            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-				            .show();
-				  }	
-
-//--------------------------------> Read image from file
-				try {
-					FileInputStream inputStream = openFileInput("image.txt");
-
-					if ( inputStream != null ) {
-						InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-						BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-						String receiveString = "";
-						StringBuilder stringBuilder = new StringBuilder();
-
-		                while ( (receiveString = bufferedReader.readLine()) != null ) {
-		                	stringBuilder.append(receiveString);
-						}
-		                inputStream.close();
-						                data.putString("userimage", stringBuilder.toString());
-						                commondata.user_information.profileimage = stringBuilder.toString();
-						}
-					}
-				catch (FileNotFoundException e) {
-						Log.e("login activity", "File not found: " + e.toString());
-						Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-						            .show();
-						} catch (IOException e) {
-						            Log.e("login activity", "Can not read file: " + e.toString());
-						            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-						            .show();
-			    }
-		      //-----------------------------------------------------------------------
-
-//----
+		    String AccountNumber = readfile("accounts.txt");
+		    commondata.user_information.account_number = AccountNumber;
+		    
+		    String TokenNumber = readfile("token.txt");
+		    commondata.user_information.token_number = TokenNumber;
+		    
+		    String ImageInfo = readfile("image.txt");
+		    commondata.user_information.profileimage = ImageInfo;
+//----------------------------------------------------------------
+				
+				//-- create a check statement here.. if play service fails
+				//-- prompt and ask them to activate
 		        
 		        Context context = getApplicationContext();
 
 		        // Check device for Play Services APK.
 		        if (checkPlayServices()) {
-		            Log.w("playservice","works");
-		            Toast.makeText(getApplicationContext(),"playservice works" , Toast.LENGTH_SHORT).show();
-		    	
+		           
 		            gcm = GoogleCloudMessaging.getInstance(this);
 		            regid = getRegistrationId(context);
 		            Log.w("regisid",regid);
@@ -322,7 +251,6 @@ public class LoadHome extends Activity {
 		            public void run() {
 		            	locationManager.removeUpdates(locationListener);
 		                Intent serviceIntent = new Intent(LoadHome.this, Login.class);
-		                serviceIntent.putExtras(data);
 		                //LoadHome.this.startService(serviceIntent);
 		                startActivity(serviceIntent);
 		                finish();
@@ -336,16 +264,36 @@ public class LoadHome extends Activity {
 		        
 	}//on create
 	
-	
+	private String readfile(String fname){
+		StringBuilder stringBuilder = null;
+		FileInputStream inputStream;
+		BufferedReader bufferedReader;
+		try {
+            inputStream = openFileInput(fname);
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                stringBuilder = new StringBuilder();
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+                inputStream.close();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+            .show();
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+            .show();
+        }	
+		return stringBuilder.toString();
+	}
 
-	/**
-	 * Gets the current registration ID for application on GCM service.
-	 * <p>
-	 * If result is empty, the app needs to register.
-	 *
-	 * @return registration ID, or empty string if there is no existing
-	 *         registration ID.
-	 */
+	
 	private String getRegistrationId(Context context) {
 	    final SharedPreferences prefs = getGCMPreferences(context);
 	    String registrationId = prefs.getString(PROPERTY_REG_ID, "");
@@ -365,9 +313,7 @@ public class LoadHome extends Activity {
 	    }
 	    return registrationId;
 	}
-	/**
-	 * @return Application's version code from the {@code PackageManager}.
-	 */
+	
 	private static int getAppVersion(Context context) {
 	    try {
 	        PackageInfo packageInfo = context.getPackageManager()
@@ -378,9 +324,7 @@ public class LoadHome extends Activity {
 	        throw new RuntimeException("Could not get package name: " + e);
 	    }
 	}
-	/**
-	 * @return Application's {@code SharedPreferences}.
-	 */
+	
 	private SharedPreferences getGCMPreferences(Context context) {
 	    // This sample app persists the registration ID in shared preferences, but
 	    // how you store the regID in your app is up to you.
@@ -388,8 +332,6 @@ public class LoadHome extends Activity {
 	            Context.MODE_PRIVATE);
 	}
 
-
-	
 	// You need to do the Play Services APK check here too.
 	@Override
 	protected void onResume() {

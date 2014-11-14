@@ -21,6 +21,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/*
+ * 	This class opens up when the App starts
+ * 	It first checks for the accounts.txt if it exists then check for network if OK then 
+ *  go to LoadHome.class
+ *  if not it will display the UI to either signup or login and the methods will take are of it. 
+ */
 
 
 
@@ -33,10 +39,8 @@ public class HomescreenActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_homescreen);
 		//---------------------------------------------------> if account set then login
-		String ret = "";
         try {
             FileInputStream inputStream = openFileInput("accounts.txt");
-
             if ( inputStream != null ) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -48,10 +52,36 @@ public class HomescreenActivity extends Activity {
                 }
 
                 inputStream.close();
-                ret = stringBuilder.toString();
-        		Intent intent = new Intent(this, LoadHome.class);
-        		startActivity(intent);
-        		finish();
+                stringBuilder.toString();
+                
+                boolean stat = haveNetworkConnection();
+                if(stat){
+                	Intent intent = new Intent(this, LoadHome.class);
+                	startActivity(intent);
+                	finish();
+                }else{
+                	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        			alert.setTitle("Connection Error");
+        			alert.setMessage("Please check your network settings");
+
+        			alert.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+        			public void onClick(DialogInterface dialog, int whichButton) {
+        				Intent intent = new Intent(HomescreenActivity.this, HomescreenActivity.class);
+                    	startActivity(intent);
+                    	finish();
+        			  }
+        			});
+
+        			alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+        			  public void onClick(DialogInterface dialog, int whichButton) {
+        				  finish();
+        			  }
+        			});
+
+        			alert.show();
+                }
+                
         		
             }
             
@@ -93,15 +123,13 @@ public class HomescreenActivity extends Activity {
 		boolean stat = haveNetworkConnection();
 		
 		if(stat){
-		
-		File file = new File("token.txt");
-	    file.delete();
-		file = new File("accounts.txt");
-		file.delete();
-		Intent intent = new Intent(this, SignUpActivity.class);
-		startActivity(intent);
-		}
-		else{
+			File file = new File("token.txt");//delete files just before submit not here
+			file.delete();
+			file = new File("accounts.txt");
+			file.delete();
+			Intent intent = new Intent(this, SignUpActivity.class);
+			startActivity(intent);
+		}else{
 			Toast.makeText(getApplicationContext(), "Unable to connect to Internet.", Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -165,14 +193,11 @@ public class HomescreenActivity extends Activity {
 	}
 	
 	
-	public void setuplogin(String accountnumber, String token, String image){
-		
-		
+	public void setuplogin(String accountnumber, String token, String image){	
     	String filetoken = "token.txt";
     	String fileaccount = "accounts.txt";
     	String fileimage = "image.txt";
         FileOutputStream outputStream;
-		
         //-------------------------------------- write token to file
         try {
           outputStream = openFileOutput(fileaccount, Context.MODE_PRIVATE);
@@ -225,28 +250,24 @@ public class HomescreenActivity extends Activity {
         boolean stat = haveNetworkConnection();
       		
 		if(stat){
-		//------------------------------------->
-			
-		EditText email = (EditText)  findViewById(R.id.Email) ;
-		EditText password = (EditText)  findViewById(R.id.Password) ;
-		final String Email = email.getText().toString();
-		final String Password = password.getText().toString();
-		Log.w("email",Email);
-		Log.w("password",Password);
+			EditText email = (EditText)  findViewById(R.id.Email) ;
+			EditText password = (EditText)  findViewById(R.id.Password) ;
+			final String Email = email.getText().toString();
+			final String Password = password.getText().toString();
+			Log.w("email",Email);
+			Log.w("password",Password);
 		
 		if(Email.isEmpty()){
 			Toast.makeText(getApplicationContext(), "Please enter your email", Toast.LENGTH_SHORT).show();
-		}
-		else{
+		}else{
 			if(Password.isEmpty()){
 				Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
-			}
-			else{
+			}else{
 				loginprocess( Email, Password);
 			}
 		}
 		
-		String ret = "";
+		
         try {
             FileInputStream inputStream = openFileInput("accounts.txt");
 
@@ -261,7 +282,7 @@ public class HomescreenActivity extends Activity {
                 }
 
                 inputStream.close();
-                ret = stringBuilder.toString();
+                stringBuilder.toString();
                 
         		Intent intent = new Intent(this, LoadHome.class);
         		startActivity(intent);

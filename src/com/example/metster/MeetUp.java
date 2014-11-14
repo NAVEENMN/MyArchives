@@ -20,8 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.example.metster.Login.Map;
 import com.firebase.client.Firebase;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -98,10 +96,10 @@ public class MeetUp extends Activity {
         mMap = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.visitormap)).getMap();
         mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Map.latival, Map.Longival)) // visitor
+                .position(new LatLng(commondata.user_information.latitude, commondata.user_information.longitude)) // visitor
                 .title("me")).showInfoWindow();
         mMap.setMyLocationEnabled(true);
-        LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
+        LatLng currlocation = new LatLng(commondata.user_information.latitude, commondata.user_information.longitude);// yours
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 11));
         mMap.getUiSettings().setZoomControlsEnabled(false);
 	}

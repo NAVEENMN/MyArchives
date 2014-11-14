@@ -21,7 +21,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.metster.Login.Map;
 import com.example.metster.Login.Userslist;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -35,6 +34,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Rend extends Activity {
 	GoogleMap mMap;
+	AlertDialog levelDialog = null;
 	private static final int CONTACT_PICKER_RESULT = 1001;
 	public int member_count = 0;
 	String server_response;
@@ -47,6 +47,8 @@ public class Rend extends Activity {
 	
 	public static class event_info{
 		static String event_name;
+		static String food_type;
+		static String is_exist;
 	}
 	
 	public static class fb_event_ref{
@@ -58,35 +60,57 @@ public class Rend extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rend);
-		//----> set up maps
-		GoogleMap mMap;
-        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
-        mMap.clear();
-        mMap.getUiSettings().setZoomControlsEnabled(false);
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(commondata.user_information.latitude, commondata.user_information.longitude)) // visitor
-                .title(Integer.toString(Userslist.user_count))).showInfoWindow();
-		//----> call event function
-        create_event_notfication();
-        //----> set up fire base refrence
-        create_firebase_refrence();// this is base refrence
+		set_up_map_view();
+		check_if_event_exist();
+		create_firebase_refrence();// this is base refrence
         
+        //----> set up fire base refrence
         
 	}
 	
+	private void check_if_event_exist(){
+	
+		StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+		fb_event_ref.fbref = strBuilder.toString();
+		fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
+		fb_event_ref.firebaseobj.child(commondata.user_information.account_number.toString()).addValueEventListener(new ValueEventListener() {
+			
+			  @Override
+			  public void onDataChange(DataSnapshot snapshot) {
+			    System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+			    if(snapshot.getValue() == null){
+			    	event_info.is_exist = "no";
+			    	fb_event_ref.firebaseobj.child("EventName").setValue(commondata.user_information.account_number+"-event");
+			    	create_event_notfication();// if event doesn`t exist then create an event
+			    }else{
+			    	event_info.is_exist = "yes";
+			    	Iterable<DataSnapshot> children = snapshot.getChildren();
+			    	while(children.iterator().hasNext()){
+			    		System.out.println(children.iterator().next().getValue());
+			    	}
+			    	//-- fetch all the info
+			    	// and update the info locally
+			    }
+			  }
+
+			  @Override public void onCancelled(FirebaseError error) { 
+				  System.out.println("error baby");  //prints "Do you have data? You'll love Firebase."
+			  }
+
+			});;
+			
+	}
 	
 	
 	public void create_firebase_refrence(){
-		//----------------------> Fire base reference creation
 				StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
 				strBuilder.append(commondata.user_information.account_number);
 			    fb_event_ref.fbref = strBuilder.toString();
 			    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
-			    fb_event_ref.firebaseobj.child("EventName").setValue(commondata.user_information.account_number+"-event");
+			    
 	}
 	
 	public void add_a_member_to_fb(String member_email){
-		
 		member_count ++ ;
 		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).setValue(member_email);
 		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").setValue(0.0);
@@ -112,9 +136,6 @@ public class Rend extends Activity {
 
 			});
 		
-
-		
-
 		
 		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("longitudes").addValueEventListener(new ValueEventListener() {
 
@@ -183,24 +204,7 @@ public class Rend extends Activity {
                 ).showInfoWindow();
         }
         mMap.setMyLocationEnabled(true);
-        LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 16));
-        mMap.getUiSettings().setZoomControlsEnabled(false);
-	}
-	
-	public void set_up_map_for_places(){
-		      
-        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
-       
-        
-        for(int i = 0; i< commondata.places_found.places.size(); i++){
-        Log.w("plcae",commondata.places_found.places.get(i));
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(commondata.places_found.latitudes.get(i), commondata.places_found.longitudes.get(i))) // visitor
-                ).showInfoWindow();
-        }
-        mMap.setMyLocationEnabled(true);
-        LatLng currlocation = new LatLng(Map.latival, Map.Longival);// yours
+        LatLng currlocation = new LatLng(commondata.user_information.latitude, commondata.user_information.longitude);// yours
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 16));
         mMap.getUiSettings().setZoomControlsEnabled(false);
 	}
@@ -219,18 +223,85 @@ public class Rend extends Activity {
         group.curr_person = emailEntry.getText().toString();
         Log.w("requesting",group.curr_person);
         group_list.add(group.curr_person);
-        latitudes.add(Map.latival);
-        longitudes.add(Map.Longival);
+        latitudes.add(commondata.user_information.latitude);
+        longitudes.add(commondata.user_information.longitude);
         
         add_a_member_to_fb(group.curr_person);
         set_up_map_view();
 		}
 	}
 	
+	public void pick_food_type(){
+		
+		// Strings to Show In Dialog with Radio Buttons
+		final CharSequence[] items = {" Chinese "," Coffee "," American ","Sea Food"," Pizza "," Asian ", " Japanese "," Mexican "," Italian ", " Indian", "Ice Cream"};
+		            
+		                // Creating and Building the Dialog 
+		                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		                builder.setTitle("Select food type");
+		                builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+		                public void onClick(DialogInterface dialog, int item) {
+		                   
+		                    
+		                    switch(item)
+		                    {
+		                        case 0:
+		                                event_info.food_type = "chinese";
+		                                 break;
+		                        case 1:
+		                                // Your code when 2nd  option seletced
+		                        	event_info.food_type = "coffee";
+		                                break;
+		                        case 2:
+		                               // Your code when 3rd option seletced
+		                        	event_info.food_type = "american";
+		                                break;
+		                        case 3:
+		                                 // Your code when 4th  option seletced  
+		                        	event_info.food_type = "seafood";
+		                                break;
+		                        case 4:
+	                                // Your code when first option seletced
+		                        	event_info.food_type = "pizza";
+	                                 break;
+		                        case 5:
+		                        	event_info.food_type = "asian";
+	                                // Your code when 2nd  option seletced
+	                                break;
+		                        case 6:
+		                        	event_info.food_type = "japanese";
+	                               // Your code when 3rd option seletced
+	                                break;
+		                        case 7:
+		                        	event_info.food_type = "mexican";
+	                                 // Your code when 4th  option seletced            
+	                                break;
+		                        case 8:
+		                        	event_info.food_type = "italian";
+	                                // Your code when first option seletced
+	                                 break;
+		                        case 9:
+		                        	event_info.food_type = "indian";
+	                                // Your code when 2nd  option seletced
+	                                break;
+		                        case 10:
+		                        	event_info.food_type = "icecream";
+	                               // Your code when 3rd option seletced
+	                                break;                
+		                        
+		                    }
+		                    levelDialog.dismiss();
+		                    setTitle(event_info.event_name+ "  " + event_info.food_type);
+		                    }
+		                });
+		                levelDialog = builder.create();
+		                levelDialog.show();
+	}
+	
 	public void get_places_mean_loc(Double mean_latitude, Double mean_longitude){
 		Firebase myFirebaseflag = new Firebase("https://met-ster-control.firebaseio.com/");
 		myFirebaseflag.child("dataready").setValue("no");
-		String req_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+mean_latitude+","+mean_longitude+"&radius=500&types=food&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE";
+		String req_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+mean_latitude+","+mean_longitude+"&radius=5000&types=food&keyword="+event_info.food_type+"&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE";
 		 try {
 			ArrayList<Restaurant> run_places = new GetRestaurantAsyncTask().execute(req_url).get();
 		} catch (InterruptedException e) {
@@ -293,9 +364,9 @@ public class Rend extends Activity {
 		public void onClick(DialogInterface dialog, int whichButton) {
 		  Editable value = input.getText();
 		  event_info.event_name = value.toString();
-		  setTitle(event_info.event_name);
 		  fb_event_ref.firebaseobj.child("EventName").setValue(event_info.event_name);//update on firebase
 		  // Do something with value!
+		  pick_food_type();
 		  }
 		});
 
@@ -360,5 +431,12 @@ public class Rend extends Activity {
 	    } else {
 	        Log.w("em", "Warning: activity result not ok");
 	    }
+	}
+	
+	@Override
+	public void onBackPressed() {
+	 
+		finish();
+			
 	}
 }

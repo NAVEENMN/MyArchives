@@ -31,7 +31,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.example.metster.Login.User;
 import com.example.metster.Profession_info.info;
 
 public class UpdateProfile extends Activity {
@@ -306,7 +305,7 @@ public class UpdateProfile extends Activity {
 		public void onClick(DialogInterface dialog, int whichButton) {
 		  Editable value = input.getText();
 		  info.userlinkedin = value.toString();
-		  setTitle(User.usrstatus);
+		  setTitle(commondata.user_information.status);
 		  // Do something with value!
 		  }
 		});
