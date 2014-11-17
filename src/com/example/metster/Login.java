@@ -79,63 +79,130 @@ public class Login extends Activity {
     Criteria criteria = new Criteria();
     Bundle profilelistactdata = new Bundle();
     ProgressDialog pd;
+    Location postion_get;
+    boolean isGPSEnabled;
+    boolean isNetworkEnabled;
    
     //---------------------------------------->
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		System.out.println("hey!!");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		setupActionBar();// Show the Up button in the action bar.
 		commondata.user_information.status = "Hello There!!";
 		setTitle("Set your status");
-		Firebase.setAndroidContext(this);					
-		//--------------------------------> Setup location listener
-		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		locationListener = new LocationListener() {
-		public void onLocationChanged(Location location) {	
-			commondata.user_information.latitude = location.getLatitude();
-			commondata.user_information.longitude = location.getLongitude();
-		}
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			commondata.user_information.latitude = location.getLatitude();
-			commondata.user_information.longitude = location.getLongitude();
-		}
-		public void onProviderEnabled(String provider) {
-			commondata.user_information.latitude = location.getLatitude();
-			commondata.user_information.longitude = location.getLongitude();
-		}
-    public void onProviderDisabled(String provider) {}
-    };
-  	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);// Register the listener with the Location Manager to receive location updates
-    locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-    position = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-    if( position == null ){
-    	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        position = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        provider = locationManager.getBestProvider(criteria, false);
-        location = locationManager.getLastKnownLocation(provider);
-        commondata.user_information.latitude = location.getLatitude();
-        commondata.user_information.longitude = location.getLongitude();
-    }
-    else{
-    	provider = locationManager.getBestProvider(criteria, false);
-        location = locationManager.getLastKnownLocation(provider);
-        commondata.user_information.latitude = location.getLatitude();
-        commondata.user_information.longitude = location.getLongitude();
-    }
+		Firebase.setAndroidContext(this);
+		
+		// Acquire a reference to the system Location Manager
+		locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+      //--------------------------------------------------------   
+	  // Define a listener that responds to location updates
+	  //---------------------------------------------------------
+		   locationListener = new LocationListener() {
+		    public void onLocationChanged(Location location) {	
+		    	commondata.user_information.latitude = location.getLatitude();
+	        	commondata.user_information.longitude = location.getLongitude();
+
+		    }
+			@SuppressWarnings("unused")
+			public void onStatusChanged(Location location) {
+				commondata.user_information.latitude = location.getLatitude();
+	        	commondata.user_information.longitude = location.getLongitude();
+		    }
+
+			@SuppressWarnings("unused")
+			public void onProviderEnabled(Location location) {
+				commondata.user_information.latitude = location.getLatitude();
+	        	commondata.user_information.longitude = location.getLongitude();
+		    }
+		    public void onProviderDisabled(String provider) {
+		    	AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
+    			alert.setTitle("Connection Error");
+    			alert.setMessage("Please check your network settings");
+    			alert.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+    			public void onClick(DialogInterface dialog, int whichButton) {
+    				Intent intent = new Intent(Login.this, HomescreenActivity.class);
+                	startActivity(intent);
+                	finish();
+    			  }
+    			});
+
+    			alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+    			  public void onClick(DialogInterface dialog, int whichButton) {
+    				  finish();
+    			  }
+    			});
+    			alert.show();
+		    }
+
+			@Override
+			public void onProviderEnabled(String provider) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onStatusChanged(String provider, int status,
+					Bundle extras) {
+				// TODO Auto-generated method stub
+
+			}
+		  };
+		//------------------------------------------------------------------------
+		// getting GPS and network status
+	    isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER); 
+        isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (!isGPSEnabled && !isNetworkEnabled) {
+        	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setTitle("Connection Error");
+			alert.setMessage("Please check your network settings");
+			alert.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				Intent intent = new Intent(Login.this, HomescreenActivity.class);
+            	startActivity(intent);
+            	finish();
+			  }
+			});
+
+			alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+				  finish();
+			  }
+			});
+			alert.show();
+        } else {
+        	if(isGPSEnabled){
+        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		        postion_get = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		        commondata.user_information.latitude = postion_get.getLatitude();
+		        commondata.user_information.longitude = postion_get.getLongitude();
+        	}else{
+        		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+	        	postion_get = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+	        	commondata.user_information.latitude = postion_get.getLatitude();
+	        	commondata.user_information.longitude = postion_get.getLongitude();
+        	}
+        	
+        }
     
   //------------------------------------------------------------------> Fetch the location details
+    
   		gcd = new Geocoder(getBaseContext(), Locale.getDefault());
   		List<Address> addresses;
   		
   		try {
               addresses = gcd.getFromLocation(commondata.user_information.latitude, commondata.user_information.longitude, 1);
-              if (addresses.size() > 0)
+              if (addresses.size() > 0){
               commondata.user_information.cityname = addresses.get(0).getLocality();
               commondata.user_information.country = addresses.get(0).getCountryCode();
               commondata.user_information.zip = addresses.get(0).getPostalCode();
               profilelistactdata.putString("zip", commondata.user_information.zip);
               commondata.user_information.addressline = addresses.get(0).getThoroughfare();
+              }
+              else{
+            	  System.out.println("address was zero");
+              }
              
           } catch (IOException e) {
               e.printStackTrace();
@@ -326,17 +393,45 @@ public class Login extends Activity {
 	public void updatelocation(View view)
 	{
 		
-		Log.w("called","gaina");
-		
+		Log.w("called","update_loc");
 		_handler.postDelayed(getData, 3000);
+		
+		if (!isGPSEnabled && !isNetworkEnabled) {
+        	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setTitle("Connection Error");
+			alert.setMessage("Please check your network settings");
+			alert.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				Intent intent = new Intent(Login.this, HomescreenActivity.class);
+            	startActivity(intent);
+            	finish();
+			  }
+			});
 
-		position = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-    	provider = locationManager.getBestProvider(criteria, false);
-    	location = locationManager.getLastKnownLocation(provider);
-    	commondata.user_information.latitude = location.getLatitude();
-    	commondata.user_information.longitude = location.getLongitude();
-    	profilelistactdata.putDouble("latitude",commondata.user_information.latitude);
-    	profilelistactdata.putDouble("longitude", commondata.user_information.longitude);
+			alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+				  finish();
+			  }
+			});
+			alert.show();
+        } else {
+        	if(isGPSEnabled){
+        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		        postion_get = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		        commondata.user_information.latitude = postion_get.getLatitude();
+		        commondata.user_information.longitude = postion_get.getLongitude();
+        	}else{
+        		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+	        	postion_get = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+	        	commondata.user_information.latitude = postion_get.getLatitude();
+	        	commondata.user_information.longitude = postion_get.getLongitude();
+        	}
+        	
+        }
+		
+		/*
+		 * 	based on the new location update in firebase
+		 */
     	fbdata.firebaseobj.child("Latitude").setValue(Double.toString(commondata.user_information.latitude));
     	fbdata.firebaseobj.child("Longitude").setValue(Double.toString(commondata.user_information.longitude));
         try {
@@ -352,18 +447,18 @@ public class Login extends Activity {
 					Userslist.user_count = accountnumb.length;
 					Userslist.user_count --;
 			}
-        	//TextView num = (TextView)findViewById(R.id.NumberofUsers); 
-            //num.setText(Integer.toString(Userslist.user_count));
-            
-            
-        	} catch (InterruptedException e) {
+               
+        } catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (ExecutionException e) {
+		} catch (ExecutionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+		}
         
+        /*
+         *  set up map UI
+         */
         GoogleMap mMap;
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
         mMap.clear();

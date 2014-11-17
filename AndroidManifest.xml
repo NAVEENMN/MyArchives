@@ -152,7 +152,12 @@
         </activity>
         <activity
             android:name=".Rend"
-            android:label="@string/title_activity_rend" >
+            android:label="@string/title_activity_rend" 
+            android:parentActivityName=".Login"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.metster.Login" />
         </activity>
         <activity
             android:name=".MeetUp"

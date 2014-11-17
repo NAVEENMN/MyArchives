@@ -39,6 +39,7 @@
         android:drawableTop="@drawable/ic_action_new"
         android:layout_alignParentRight="true"
         android:onClick="doLaunchContactPicker"></Button>
+    
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,5 +56,12 @@
         android:drawableTop="@drawable/ic_action_add_person"
         android:layout_alignParentRight="false"
         android:onClick="add_this_person"></Button>
+<Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_del"
+        android:drawableTop="@drawable/ic_action_discard"
+        android:layout_alignParentRight="true"
+        android:onClick="delete_event"></Button>
 
 </RelativeLayout>

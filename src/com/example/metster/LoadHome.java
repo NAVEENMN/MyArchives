@@ -250,10 +250,13 @@ public class LoadHome extends Activity {
 		            @Override
 		            public void run() {
 		            	locationManager.removeUpdates(locationListener);
+		            	try{
 		                Intent serviceIntent = new Intent(LoadHome.this, Login.class);
 		                //LoadHome.this.startService(serviceIntent);
 		                startActivity(serviceIntent);
 		                finish();
+		            	}catch(Exception e){
+		            		System.out.println("Error on load");		            	}
 		            }
 		        };
 		        mHandler.postDelayed(mRunnable, 1000 * 4 );

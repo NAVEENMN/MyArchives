@@ -3,7 +3,7 @@ package com.example.metster;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import android.app.Activity;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -13,15 +13,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.Contacts;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.metster.Login.Userslist;
+import com.example.metster.Login.fbdata;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -32,7 +36,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class Rend extends Activity {
+public class Rend extends ActionBarActivity {
 	GoogleMap mMap;
 	AlertDialog levelDialog = null;
 	private static final int CONTACT_PICKER_RESULT = 1001;
@@ -56,16 +60,27 @@ public class Rend extends Activity {
 		static Firebase firebaseobj;
 	}
 	
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rend);
+		
+		setupActionBar();
 		set_up_map_view();
 		check_if_event_exist();
 		create_firebase_refrence();// this is base refrence
         
         //----> set up fire base refrence
         
+	}
+	
+	public void delete_event(View v){
+		if(event_info.is_exist != null){
+			StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+			strBuilder.append(commondata.user_information.account_number);
+		    fb_event_ref.fbref = strBuilder.toString();
+		    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
+		    fb_event_ref.firebaseobj.removeValue();
+		}
 	}
 	
 	private void check_if_event_exist(){
@@ -80,7 +95,6 @@ public class Rend extends Activity {
 			    System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
 			    if(snapshot.getValue() == null){
 			    	event_info.is_exist = "no";
-			    	fb_event_ref.firebaseobj.child("EventName").setValue(commondata.user_information.account_number+"-event");
 			    	create_event_notfication();// if event doesn`t exist then create an event
 			    }else{
 			    	event_info.is_exist = "yes";
@@ -120,7 +134,7 @@ public class Rend extends Activity {
 		
 			  @Override
 			  public void onDataChange(DataSnapshot snapshot) {
-			    System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+			    System.out.println(snapshot.getValue());
 			    
 			    //----- parse and get what changed
 			    String[] refrencetosnap = snapshot.getRef().toString().split("/");
@@ -364,6 +378,7 @@ public class Rend extends Activity {
 		public void onClick(DialogInterface dialog, int whichButton) {
 		  Editable value = input.getText();
 		  event_info.event_name = value.toString();
+		  fb_event_ref.firebaseobj.child("EventName").setValue(commondata.user_information.account_number+"-event");
 		  fb_event_ref.firebaseobj.child("EventName").setValue(event_info.event_name);//update on firebase
 		  // Do something with value!
 		  pick_food_type();
@@ -431,6 +446,65 @@ public class Rend extends Activity {
 	    } else {
 	        Log.w("em", "Warning: activity result not ok");
 	    }
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+			alert.setTitle("Set your Status");
+			alert.setMessage("What I am upto!!");
+
+			// Set an EditText view to get user input 
+			final EditText input = new EditText(this);
+			alert.setView(input);
+
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			  Editable value = input.getText();
+			  commondata.user_information.status = value.toString();
+			  setTitle(commondata.user_information.status);
+			  fbdata.firebaseobj.child("Status").setValue(commondata.user_information.status);
+			  // Do something with value!
+			  }
+			});
+
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+			    // Canceled.
+			  }
+			});
+
+			alert.show();
+			return true;
+			
+		case R.id.person_icon1:
+			
+			return true;
+		case R.id.refresh_icon1:
+			
+			return true;
+			
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	private void setupActionBar() {
+
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu1) {
+	    // Inflate the menu items for use in the action bar
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.rend_activity_actions, menu1);
+	    return super.onCreateOptionsMenu(menu1);
+	    
+	    
 	}
 	
 	@Override
