@@ -66,21 +66,21 @@ public class Rend extends ActionBarActivity {
 		
 		setupActionBar();
 		set_up_map_view();
-		check_if_event_exist();
+		
 		create_firebase_refrence();// this is base refrence
         
         //----> set up fire base refrence
         
 	}
 	
-	public void delete_event(View v){
-		if(event_info.is_exist != null){
+	public void delete_event(){
+		//if(event_info.is_exist != null){ // verify later when we add file
 			StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
 			strBuilder.append(commondata.user_information.account_number);
 		    fb_event_ref.fbref = strBuilder.toString();
 		    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
 		    fb_event_ref.firebaseobj.removeValue();
-		}
+		//}
 	}
 	
 	private void check_if_event_exist(){
@@ -452,36 +452,17 @@ public class Rend extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-			alert.setTitle("Set your Status");
-			alert.setMessage("What I am upto!!");
-
-			// Set an EditText view to get user input 
-			final EditText input = new EditText(this);
-			alert.setView(input);
-
-			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-			  Editable value = input.getText();
-			  commondata.user_information.status = value.toString();
-			  setTitle(commondata.user_information.status);
-			  fbdata.firebaseobj.child("Status").setValue(commondata.user_information.status);
-			  // Do something with value!
-			  }
-			});
-
-			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			  public void onClick(DialogInterface dialog, int whichButton) {
-			    // Canceled.
-			  }
-			});
-
-			alert.show();
+			delete_event();
+			create_event_notfication();
 			return true;
-			
-		case R.id.person_icon1:
-			
+		case R.id.delete_icon:
+			/*
+			 *  when we delete an event just restart this intent
+			 */
+			delete_event();
+			Intent intent2 = new Intent(Rend.this, Rend.class);
+			startActivity(intent2);
+			finish();
 			return true;
 		case R.id.refresh_icon1:
 			
@@ -494,6 +475,7 @@ public class Rend extends ActionBarActivity {
 	private void setupActionBar() {
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 
 	}
 	

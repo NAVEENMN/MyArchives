@@ -1527,35 +1527,35 @@ containing a value of this type.
     public static final class id {
         public static final int AboutMe=0x7f07007b;
         public static final int AboutMeLable=0x7f070076;
-        public static final int AboutMetster=0x7f07007f;
-        public static final int Aboutme=0x7f070093;
+        public static final int AboutMetster=0x7f07007e;
+        public static final int Aboutme=0x7f070092;
         public static final int ActionButtons=0x7f070063;
         public static final int CurrentCity=0x7f07005e;
-        public static final int DeleteAccount=0x7f070081;
+        public static final int DeleteAccount=0x7f070080;
         public static final int Dividerone=0x7f07005f;
         public static final int Dividertwo=0x7f070062;
         public static final int Email=0x7f070050;
-        public static final int FAQ=0x7f070083;
+        public static final int FAQ=0x7f070082;
         public static final int FirstName=0x7f07005a;
-        public static final int ImageButton01=0x7f070086;
+        public static final int ImageButton01=0x7f070085;
         public static final int ImagevisitorView01=0x7f070071;
         public static final int Information=0x7f070060;
         public static final int LastName=0x7f07005b;
-        public static final int Logout=0x7f070084;
+        public static final int Logout=0x7f070083;
         public static final int MapsRegion=0x7f070073;
         public static final int Password=0x7f070051;
-        public static final int Privacy=0x7f070082;
+        public static final int Privacy=0x7f070081;
         public static final int Profession=0x7f07005c;
         public static final int ProfileImage=0x7f070059;
         public static final int Profiledata=0x7f070058;
         public static final int Rend=0x7f070064;
-        public static final int RetypePassword=0x7f070089;
+        public static final int RetypePassword=0x7f070088;
         public static final int Scroll=0x7f07007a;
-        public static final int Social=0x7f070092;
+        public static final int Social=0x7f070091;
         public static final int Spinner1=0x7f070056;
         public static final int Submit=0x7f07006c;
-        public static final int Support=0x7f070080;
-        public static final int Updatebuttonsection=0x7f070094;
+        public static final int Support=0x7f07007f;
+        public static final int Updatebuttonsection=0x7f070093;
         public static final int UserAboutMe=0x7f070075;
         public static final int UserAboutMeandsocial=0x7f070074;
         public static final int Worksat=0x7f07005d;
@@ -1567,11 +1567,11 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f070035;
         public static final int action_bar_title=0x7f070034;
         public static final int action_context_bar=0x7f07002f;
-        public static final int action_example=0x7f070097;
+        public static final int action_example=0x7f070096;
         public static final int action_menu_divider=0x7f070028;
         public static final int action_menu_presenter=0x7f070029;
         public static final int action_mode_close_button=0x7f070036;
-        public static final int action_settings=0x7f070098;
+        public static final int action_settings=0x7f070097;
         public static final int activity_chooser_view_content=0x7f070037;
         public static final int add_this_person=0x7f070068;
         public static final int always=0x7f07001e;
@@ -1581,16 +1581,17 @@ containing a value of this type.
         public static final int book_now=0x7f070010;
         public static final int button1=0x7f070054;
         public static final int button2=0x7f070053;
-        public static final int button3=0x7f07008e;
+        public static final int button3=0x7f07008d;
         public static final int buyButton=0x7f07000a;
         public static final int buy_now=0x7f07000f;
         public static final int buy_with_google=0x7f07000e;
-        public static final int checkBox1=0x7f07008d;
+        public static final int checkBox1=0x7f07008c;
         public static final int checkbox=0x7f07003f;
         public static final int classic=0x7f070011;
         public static final int collapseActionView=0x7f070020;
         public static final int container=0x7f070065;
         public static final int default_activity_button=0x7f07003a;
+        public static final int delete_icon=0x7f07009b;
         public static final int dialog=0x7f070021;
         public static final int disableHome=0x7f07001b;
         public static final int do_email_picker=0x7f070067;
@@ -1598,7 +1599,6 @@ containing a value of this type.
         public static final int edit_query=0x7f070042;
         public static final int emailsection=0x7f07007c;
         public static final int end=0x7f070025;
-        public static final int event_del=0x7f07007e;
         public static final int expand_activities_button=0x7f070038;
         public static final int expanded_menu=0x7f07003e;
         public static final int facebook=0x7f070078;
@@ -1611,44 +1611,43 @@ containing a value of this type.
         public static final int home=0x7f070026;
         public static final int homeAsUp=0x7f070018;
         public static final int hybrid=0x7f070004;
-        public static final int iamlivingin=0x7f07008f;
+        public static final int iamlivingin=0x7f07008e;
         public static final int icon=0x7f07003c;
         public static final int ifRoom=0x7f07001d;
         public static final int image=0x7f070039;
-        public static final int imagenamesection=0x7f070085;
-        public static final int info=0x7f070088;
+        public static final int imagenamesection=0x7f070084;
+        public static final int info=0x7f070087;
         public static final int invite_email=0x7f070066;
-        public static final int iworkat=0x7f070091;
+        public static final int iworkat=0x7f070090;
         public static final int line1=0x7f07004f;
         public static final int linearLayout2=0x7f07004e;
         public static final int linearLayout3=0x7f070052;
-        public static final int linearLayout4=0x7f07008a;
+        public static final int linearLayout4=0x7f070089;
         public static final int linkedin=0x7f070079;
         public static final int listMode=0x7f070014;
         public static final int list_item=0x7f07003b;
         public static final int match_parent=0x7f07000c;
         public static final int middle=0x7f070024;
         public static final int monochrome=0x7f070013;
-        public static final int myprofession=0x7f070090;
+        public static final int myprofession=0x7f07008f;
         public static final int never=0x7f07001c;
         public static final int nextsub=0x7f07006f;
         public static final int none=0x7f070000;
         public static final int normal=0x7f070001;
-        public static final int person_icon=0x7f070099;
-        public static final int person_icon1=0x7f07009c;
+        public static final int person_icon=0x7f070098;
         public static final int prevsub=0x7f07006d;
         public static final int production=0x7f070007;
         public static final int progress_circular=0x7f07002a;
         public static final int progress_horizontal=0x7f07002b;
         public static final int question=0x7f070069;
         public static final int radio=0x7f070041;
-        public static final int radioButton1=0x7f07008b;
-        public static final int radioButton2=0x7f07008c;
-        public static final int refresh_icon=0x7f07009a;
-        public static final int refresh_icon1=0x7f07009d;
+        public static final int radioButton1=0x7f07008a;
+        public static final int radioButton2=0x7f07008b;
+        public static final int refresh_icon=0x7f070099;
+        public static final int refresh_icon1=0x7f07009c;
         public static final int sandbox=0x7f070008;
         public static final int satellite=0x7f070002;
-        public static final int scrollsection=0x7f070087;
+        public static final int scrollsection=0x7f070086;
         public static final int search_badge=0x7f070044;
         public static final int search_bar=0x7f070043;
         public static final int search_button=0x7f070045;
@@ -1659,9 +1658,9 @@ containing a value of this type.
         public static final int search_plate=0x7f070048;
         public static final int search_src_text=0x7f070049;
         public static final int search_voice_btn=0x7f07004d;
-        public static final int section_label=0x7f070095;
+        public static final int section_label=0x7f070094;
         public static final int selectionDetails=0x7f07000b;
-        public static final int settings_icon=0x7f07009b;
+        public static final int settings_icon=0x7f07009a;
         public static final int shortcut=0x7f070040;
         public static final int showCustom=0x7f07001a;
         public static final int showHome=0x7f070017;
@@ -1675,7 +1674,7 @@ containing a value of this type.
         public static final int terrain=0x7f070003;
         public static final int title=0x7f07003d;
         public static final int top_action_bar=0x7f070032;
-        public static final int txtLabel=0x7f070096;
+        public static final int txtLabel=0x7f070095;
         public static final int up=0x7f070033;
         public static final int useLogo=0x7f070016;
         public static final int visitorbuttonnext=0x7f070072;
@@ -1878,7 +1877,7 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f05002b;
-        public static final int action_example=0x7f050086;
+        public static final int action_example=0x7f050087;
         public static final int action_settings=0x7f050072;
         /**  ******************************************************** 
  Home screen 
@@ -1995,14 +1994,15 @@ containing a value of this type.
         public static final int footnote=0x7f050071;
         public static final int hello_world=0x7f050073;
         public static final int male=0x7f050042;
-        public static final int navigation_drawer_close=0x7f050085;
-        public static final int navigation_drawer_open=0x7f050084;
+        public static final int navigation_drawer_close=0x7f050086;
+        public static final int navigation_drawer_open=0x7f050085;
         /**  ******************************************************** 
  Pofession info 
          */
         public static final int question=0x7f05006f;
         public static final int terms=0x7f050045;
         public static final int title_activity_centra_dash=0x7f050080;
+        public static final int title_activity_discard=0x7f050081;
         public static final int title_activity_load_home=0x7f050076;
         public static final int title_activity_load_home1=0x7f05007e;
         public static final int title_activity_loading_screen=0x7f05007a;
@@ -2026,9 +2026,9 @@ containing a value of this type.
         public static final int title_activity_user_sign_up=0x7f050031;
         public static final int title_activity_view_places=0x7f05007f;
         public static final int title_activity_visitor_profile=0x7f05002f;
-        public static final int title_section1=0x7f050081;
-        public static final int title_section2=0x7f050082;
-        public static final int title_section3=0x7f050083;
+        public static final int title_section1=0x7f050082;
+        public static final int title_section2=0x7f050083;
+        public static final int title_section3=0x7f050084;
         /**  ******************************************************** 
  Upload  image 
          */

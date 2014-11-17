@@ -135,6 +135,7 @@
     <string name="title_activity_load_home1">LoadHome1</string>
     <string name="title_activity_view_places">ViewPlaces</string>
     <string name="title_activity_centra_dash">CentraDash</string>
+    <string name="title_activity_discard">Delete event</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
