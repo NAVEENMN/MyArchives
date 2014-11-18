@@ -19,7 +19,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.Contacts;
 import android.support.v7.app.ActionBarActivity;
@@ -34,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -76,6 +76,8 @@ public class Rend extends ActionBarActivity {
 		set_up_map_view();
 		
 		create_firebase_refrence();// this is base refrence
+		add_child_listener();
+		/*
 		check_if_event_exist();
 		if(event_info.is_exist == "yes"){//event already exists
 			String event_details = read_event_file("metster_event_info.txt");
@@ -83,9 +85,64 @@ public class Rend extends ActionBarActivity {
 		}else{//event doesnot exists
 			create_event_notfication();//create a new event
 		}
+		*/
+		create_event_notfication();
         
 	}
 	
+	private void add_child_listener(){
+		fb_event_ref.firebaseobj.addChildEventListener( new ChildEventListener() {
+			
+			public void onChildChanged(DataSnapshot snapshot, String previousChildKey) {
+				String changed_member = snapshot.getName().toString();
+				try{
+				String changed_member_id = changed_member.split("-")[1];// get only the number
+				System.out.println("member id is" + changed_member_id );
+				System.out.println("latitude is:" + snapshot.child("latitudes").getValue().toString());
+				System.out.println("longitude is " + snapshot.child("longitudes").getValue().toString());
+				latitudes.set(Integer.parseInt(changed_member_id)-1, Double.parseDouble(snapshot.child("latitudes").getValue().toString()));
+				longitudes.set(Integer.parseInt(changed_member_id)-1, Double.parseDouble(snapshot.child("longitudes").getValue().toString()));
+				set_up_map_view();
+				}catch(Exception e){
+					System.out.println("something");
+				}
+				/*
+			    String[] refrencetosnap = snapshot.getRef().toString().split("/");
+			    String reftoarray = refrencetosnap[4].substring(refrencetosnap[4].length()-1);
+			    // update that particular in array list
+			    System.out.println("updating in loc :"+latitudes.indexOf(Integer.parseInt(reftoarray)));
+			    latitudes.set(Integer.parseInt(reftoarray)-1, Double.parseDouble(snapshot.getValue().toString()));
+			    set_up_map_view();
+			    */
+			}
+
+			@Override
+			public void onCancelled(FirebaseError arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onChildAdded(DataSnapshot arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onChildMoved(DataSnapshot arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onChildRemoved(DataSnapshot arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			
+		});
+	}
 	
 	/*
 	 * This method creates the event files and stores info in this format
@@ -196,15 +253,11 @@ public class Rend extends ActionBarActivity {
 			
 			  @Override
 			  public void onDataChange(DataSnapshot snapshot) {
-			    System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+			    System.out.println("check_if" + snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
 			    if(snapshot.getValue() == null){
 			    	event_info.is_exist = "no";
 			    }else{
 			    	event_info.is_exist = "yes";
-			    	Iterable<DataSnapshot> children = snapshot.getChildren();
-			    	while(children.iterator().hasNext()){
-			    		System.out.println(children.iterator().next().getValue());
-			    	}
 			    	//-- fetch all the info
 			    	// and update the info locally
 			    }
@@ -237,9 +290,9 @@ public class Rend extends ActionBarActivity {
 				   */
 				  member_count ++ ;
 					create_firebase_refrence();
-					fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).setValue("user");
-					fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").setValue(0.0);
-					fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("longitudes").setValue(0.0);
+					fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count)).setValue("user");
+					fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count)).child("latitudes").setValue(0.0);
+					fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count)).child("longitudes").setValue(0.0);
 					/*
 					fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").addValueEventListener(new ValueEventListener() {
 					
@@ -301,6 +354,63 @@ public class Rend extends ActionBarActivity {
 
 		thread.start();			
 	}
+	
+		
+		/*
+		Thread thread = new Thread()
+		{
+		      @Override
+		      public void run() {
+		    	  Looper.prepare();
+		    	  for(int i=0; i < member_count; i++){
+		    		  fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").addValueEventListener(new ValueEventListener() {
+			
+				  @Override
+				  public void onDataChange(DataSnapshot snapshot) {
+				    System.out.println(snapshot.getValue());
+				    
+				    //----- parse and get what changed
+				    String[] refrencetosnap = snapshot.getRef().toString().split("/");
+				    String reftoarray = refrencetosnap[4].substring(refrencetosnap[4].length()-1);
+				    Log.w("this is", refrencetosnap[4].substring(refrencetosnap[4].length()-1));//get the last char
+				    // update that particular in array list
+				    latitudes.indexOf(Integer.parseInt(reftoarray));
+				    latitudes.set(Integer.parseInt(reftoarray)-1, Double.parseDouble(snapshot.getValue().toString()));
+				    set_up_map_view();
+				  }
+
+				  @Override public void onCancelled(FirebaseError error) { }
+
+				});
+			
+			
+			fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("longitudes").addValueEventListener(new ValueEventListener() {
+
+				  @Override
+				  public void onDataChange(DataSnapshot snapshot) {
+					
+					//----- parse and get what changed
+					    String[] refrencetosnap = snapshot.getRef().toString().split("/");
+					    String reftoarray = refrencetosnap[4].substring(refrencetosnap[4].length()-1);
+					    Log.w("this is", refrencetosnap[4].substring(refrencetosnap[4].length()-1));//get the last char
+					    // update that particular in array list
+					    longitudes.indexOf(Integer.parseInt(reftoarray));
+					    longitudes.set(Integer.parseInt(reftoarray)-1, Double.parseDouble(snapshot.getValue().toString()));
+					    set_up_map_view();
+					    Toast.makeText(getApplicationContext(), "member just joined.", Toast.LENGTH_SHORT).show();
+				  }
+
+				  @Override public void onCancelled(FirebaseError error) { }
+
+				});
+				
+		 }
+	   }
+		 };
+
+				thread.start();	
+				*/
+	
 	
 	public void find_places(View w){
 		
@@ -454,7 +564,7 @@ public class Rend extends ActionBarActivity {
 
 			  @Override
 			  public void onDataChange(DataSnapshot snapshot) {
-			    System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+			    System.out.println("get_places"+snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
 			    //set_up_map_for_places();
 			    list_rest();
 			  }
@@ -468,7 +578,6 @@ public class Rend extends ActionBarActivity {
 	
 	public void list_rest(){
 		//--------
-		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Best Matching places");
 

@@ -89,7 +89,7 @@ public class GcmIntentService extends IntentService {
     
     public void update_loc_of(String memberid, String from){
     	StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
-		strBuilder.append(from+"/"+"member"+memberid);
+		strBuilder.append(from+"/"+"member-"+memberid);
 	    fb_event_ref.fbref = strBuilder.toString();
 	    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
 	  
