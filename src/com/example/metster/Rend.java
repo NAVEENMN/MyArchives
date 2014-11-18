@@ -1,16 +1,25 @@
 package com.example.metster;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.SystemClock;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.Contacts;
 import android.support.v7.app.ActionBarActivity;
@@ -25,7 +34,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.metster.Login.fbdata;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -68,10 +76,101 @@ public class Rend extends ActionBarActivity {
 		set_up_map_view();
 		
 		create_firebase_refrence();// this is base refrence
-        
-        //----> set up fire base refrence
+		check_if_event_exist();
+		if(event_info.is_exist == "yes"){//event already exists
+			String event_details = read_event_file("metster_event_info.txt");
+			System.out.println(event_details);
+		}else{//event doesnot exists
+			create_event_notfication();//create a new event
+		}
         
 	}
+	
+	
+	/*
+	 * This method creates the event files and stores info in this format
+	 * event_name-->memberid1-->memberid2-->...-->memberidn
+	 */
+	
+	private void create_event_file(){
+		
+		delete_event_file();
+		
+        FileOutputStream outputStream;
+        StringBuilder stringBuilder = null;
+        stringBuilder = new StringBuilder();
+          try {
+            outputStream = openFileOutput("metster_event_info.txt", Context.MODE_PRIVATE);
+            
+            /*
+             * get the data to write into it
+             */
+          
+            stringBuilder.append(event_info.event_name);
+            stringBuilder.append("-->");
+            stringBuilder.append(event_info.food_type);
+            
+            for(int i = 0; i< group_list.size(); i++){
+            	stringBuilder.append("-->");
+            	stringBuilder.append(group_list.get(i));
+            }
+            outputStream.write(stringBuilder.toString().getBytes());
+            outputStream.close();
+          } catch (Exception e) {
+            e.printStackTrace();
+          }catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
+              if( t instanceof ExecutionException ) {
+                  t = t.getCause();
+              }
+          }
+	}
+	
+	/*
+	 * This method reads event file information
+	 */
+	
+	private String read_event_file(String fname){
+		StringBuilder stringBuilder = null;
+		FileInputStream inputStream;
+		BufferedReader bufferedReader;
+		try {
+            inputStream = openFileInput(fname);
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                stringBuilder = new StringBuilder();
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+                inputStream.close();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+            .show();
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
+            .show();
+        }	
+		return stringBuilder.toString();
+	}
+	
+	/*
+	 * This method deletes the event_file
+	 */
+	
+	private void delete_event_file(){
+		File dir = getFilesDir();
+		File file = new File(dir, "metster_event_info.txt");
+		file.delete();
+	}
+	
+	/*
+	 *  This method deletes the event and restarts the event
+	 */
 	
 	public void delete_event(){
 		//if(event_info.is_exist != null){ // verify later when we add file
@@ -80,8 +179,13 @@ public class Rend extends ActionBarActivity {
 		    fb_event_ref.fbref = strBuilder.toString();
 		    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
 		    fb_event_ref.firebaseobj.removeValue();
+		    delete_event_file();
 		//}
 	}
+	
+	/*
+	 * this method checks if event exists
+	 */
 	
 	private void check_if_event_exist(){
 	
@@ -95,7 +199,6 @@ public class Rend extends ActionBarActivity {
 			    System.out.println(snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
 			    if(snapshot.getValue() == null){
 			    	event_info.is_exist = "no";
-			    	create_event_notfication();// if event doesn`t exist then create an event
 			    }else{
 			    	event_info.is_exist = "yes";
 			    	Iterable<DataSnapshot> children = snapshot.getChildren();
@@ -111,8 +214,7 @@ public class Rend extends ActionBarActivity {
 				  System.out.println("error baby");  //prints "Do you have data? You'll love Firebase."
 			  }
 
-			});;
-			
+			});	
 	}
 	
 	
@@ -121,66 +223,83 @@ public class Rend extends ActionBarActivity {
 				strBuilder.append(commondata.user_information.account_number);
 			    fb_event_ref.fbref = strBuilder.toString();
 			    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
-			    
 	}
 	
 	public void add_a_member_to_fb(String member_email){
-		member_count ++ ;
-		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).setValue(member_email);
-		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").setValue(0.0);
-		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("longitudes").setValue(0.0);
 		
-		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").addValueEventListener(new ValueEventListener() {
-		
-			  @Override
-			  public void onDataChange(DataSnapshot snapshot) {
-			    System.out.println(snapshot.getValue());
-			    
-			    //----- parse and get what changed
-			    String[] refrencetosnap = snapshot.getRef().toString().split("/");
-			    String reftoarray = refrencetosnap[4].substring(refrencetosnap[4].length()-1);
-			    Log.w("this is", refrencetosnap[4].substring(refrencetosnap[4].length()-1));//get the last char
-			    // update that particular in array list
-			    latitudes.indexOf(Integer.parseInt(reftoarray));
-			    latitudes.set(Integer.parseInt(reftoarray)-1, Double.parseDouble(snapshot.getValue().toString()));
-			    set_up_map_view();
-			  }
+		Thread thread = new Thread()
+		{
+		      @Override
+		      public void run() {
+		    	  Looper.prepare();
+		          /*
+				   * 
+				   */
+				  member_count ++ ;
+					create_firebase_refrence();
+					fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).setValue("user");
+					fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").setValue(0.0);
+					fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("longitudes").setValue(0.0);
+					/*
+					fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("latitudes").addValueEventListener(new ValueEventListener() {
+					
+						  @Override
+						  public void onDataChange(DataSnapshot snapshot) {
+						    System.out.println(snapshot.getValue());
+						    
+						    //----- parse and get what changed
+						    String[] refrencetosnap = snapshot.getRef().toString().split("/");
+						    String reftoarray = refrencetosnap[4].substring(refrencetosnap[4].length()-1);
+						    Log.w("this is", refrencetosnap[4].substring(refrencetosnap[4].length()-1));//get the last char
+						    // update that particular in array list
+						    latitudes.indexOf(Integer.parseInt(reftoarray));
+						    latitudes.set(Integer.parseInt(reftoarray)-1, Double.parseDouble(snapshot.getValue().toString()));
+						    set_up_map_view();
+						  }
 
-			  @Override public void onCancelled(FirebaseError error) { }
+						  @Override public void onCancelled(FirebaseError error) { }
 
-			});
-		
-		
-		fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("longitudes").addValueEventListener(new ValueEventListener() {
+						});
+					
+					
+					fb_event_ref.firebaseobj.child("member"+Integer.toString(member_count)).child("longitudes").addValueEventListener(new ValueEventListener() {
 
-			  @Override
-			  public void onDataChange(DataSnapshot snapshot) {
-				
-				//----- parse and get what changed
-				    String[] refrencetosnap = snapshot.getRef().toString().split("/");
-				    String reftoarray = refrencetosnap[4].substring(refrencetosnap[4].length()-1);
-				    Log.w("this is", refrencetosnap[4].substring(refrencetosnap[4].length()-1));//get the last char
-				    // update that particular in array list
-				    longitudes.indexOf(Integer.parseInt(reftoarray));
-				    longitudes.set(Integer.parseInt(reftoarray)-1, Double.parseDouble(snapshot.getValue().toString()));
-				    set_up_map_view();
-				    Toast.makeText(getApplicationContext(), "member just joined.", Toast.LENGTH_SHORT).show();
-			  }
+						  @Override
+						  public void onDataChange(DataSnapshot snapshot) {
+							
+							//----- parse and get what changed
+							    String[] refrencetosnap = snapshot.getRef().toString().split("/");
+							    String reftoarray = refrencetosnap[4].substring(refrencetosnap[4].length()-1);
+							    Log.w("this is", refrencetosnap[4].substring(refrencetosnap[4].length()-1));//get the last char
+							    // update that particular in array list
+							    longitudes.indexOf(Integer.parseInt(reftoarray));
+							    longitudes.set(Integer.parseInt(reftoarray)-1, Double.parseDouble(snapshot.getValue().toString()));
+							    set_up_map_view();
+							    Toast.makeText(getApplicationContext(), "member just joined.", Toast.LENGTH_SHORT).show();
+						  }
 
-			  @Override public void onCancelled(FirebaseError error) { }
+						  @Override public void onCancelled(FirebaseError error) { }
 
-			});
-		Toast.makeText(getApplicationContext(), group.curr_person + " has been added", Toast.LENGTH_SHORT).show();
-		try {
- 	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/exe_gcm_send.php",commondata.user_information.account_number,group.curr_person,Integer.toString(member_count),"1","1","1","1"
- 			, "1", "1", "1", "1", "1", "1").get();
- 			} catch (InterruptedException e) {
- 							// TODO Auto-generated catch block
- 				e.printStackTrace();
- 			} catch (ExecutionException e) {
- 							// TODO Auto-generated catch block
- 				e.printStackTrace();
- 			}
+						});
+						*/
+					Toast.makeText(getApplicationContext(), group.curr_person + " has been added", Toast.LENGTH_SHORT).show();
+					try {
+				    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/exe_gcm_send.php",commondata.user_information.account_number,group.curr_person,Integer.toString(member_count),"1","1","1","1"
+						, "1", "1", "1", "1", "1", "1").get();
+						} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+										// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				  /*
+				   * 
+				   */
+		      }
+		  };
+
+		thread.start();			
 	}
 	
 	public void find_places(View w){
@@ -197,7 +316,7 @@ public class Rend extends ActionBarActivity {
 		temp_long = temp_long / latitudes.size();
 		latitudes.add(temp_lat);
 		longitudes.add(temp_long);
-		group_list.add("mean");
+		group_list.add("mean");// mean is the last point equivalent for group_list content
 		Log.w("meanlat",Double.toString(temp_lat));
 		Log.w("meanlon",Double.toString(temp_long));
 		set_up_map_view();
@@ -234,14 +353,14 @@ public class Rend extends ActionBarActivity {
 			 Toast.makeText(this, "No email found for contact.",
                      Toast.LENGTH_LONG).show();
 		}else{
-        group.curr_person = emailEntry.getText().toString();
-        Log.w("requesting",group.curr_person);
-        group_list.add(group.curr_person);
-        latitudes.add(commondata.user_information.latitude);
-        longitudes.add(commondata.user_information.longitude);
-        
-        add_a_member_to_fb(group.curr_person);
-        set_up_map_view();
+			group.curr_person = emailEntry.getText().toString();
+			Log.w("requesting",group.curr_person);
+			group_list.add(group.curr_person);
+			latitudes.add(commondata.user_information.latitude);
+			longitudes.add(commondata.user_information.longitude);
+			create_event_file();
+			add_a_member_to_fb(group.curr_person);
+			set_up_map_view();
 		}
 	}
 	
@@ -301,7 +420,10 @@ public class Rend extends ActionBarActivity {
 		                        case 10:
 		                        	event_info.food_type = "icecream";
 	                               // Your code when 3rd option seletced
-	                                break;                
+	                                break;   
+	                             default:
+	                            	 event_info.food_type = "american";
+	                            	 break;
 		                        
 		                    }
 		                    levelDialog.dismiss();
@@ -313,6 +435,7 @@ public class Rend extends ActionBarActivity {
 	}
 	
 	public void get_places_mean_loc(Double mean_latitude, Double mean_longitude){
+		
 		Firebase myFirebaseflag = new Firebase("https://met-ster-control.firebaseio.com/");
 		myFirebaseflag.child("dataready").setValue("no");
 		String req_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+mean_latitude+","+mean_longitude+"&radius=5000&types=food&keyword="+event_info.food_type+"&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE";
@@ -367,8 +490,8 @@ public class Rend extends ActionBarActivity {
 	public void create_event_notfication(){
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-		alert.setTitle("New Meetup");
-		alert.setMessage("Set meetup name");
+		alert.setTitle("New Event");
+		alert.setMessage("Set Event name");
 
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
@@ -378,16 +501,15 @@ public class Rend extends ActionBarActivity {
 		public void onClick(DialogInterface dialog, int whichButton) {
 		  Editable value = input.getText();
 		  event_info.event_name = value.toString();
-		  fb_event_ref.firebaseobj.child("EventName").setValue(commondata.user_information.account_number+"-event");
-		  fb_event_ref.firebaseobj.child("EventName").setValue(event_info.event_name);//update on firebase
-		  // Do something with value!
+		  create_firebase_refrence();
+		  fb_event_ref.firebaseobj.setValue(event_info.event_name);//update on firebase
 		  pick_food_type();
 		  }
 		});
 
 		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 		  public void onClick(DialogInterface dialog, int whichButton) {
-			  event_info.event_name = commondata.user_information.account_number+"-event";
+			  event_info.event_name = "Metster-event";
 			  setTitle(event_info.event_name);
 		  }
 		});

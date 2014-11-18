@@ -204,9 +204,7 @@ public class UpdateProfile extends Activity {
                   outputStream.close();
                 } catch (Exception e) {
                   e.printStackTrace();
-                }
-                
-               catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
+                }catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
                     if( t instanceof ExecutionException ) {
                         t = t.getCause();
                     }
