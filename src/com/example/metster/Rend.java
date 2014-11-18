@@ -53,6 +53,7 @@ public class Rend extends ActionBarActivity {
 	ArrayList<String> group_list = new ArrayList<String>();
 	ArrayList<Double> latitudes = new ArrayList<Double>();
 	ArrayList<Double> longitudes = new ArrayList<Double>();
+	ArrayList<Double> lat_lon = new ArrayList<Double>();
 	public static class group{
 		static String curr_person;
 	}
@@ -83,23 +84,49 @@ public class Rend extends ActionBarActivity {
 			String[] parts = file_contents.split("-->");
 			setTitle(parts[0]+"--"+parts[1]);
 			int number_of_members = Integer.parseInt(parts[2]);
-			for(int i=0; i<=number_of_members; i++){
-				
-				fb_event_ref.firebaseobj.child("member-"+Integer.toString(i)).addListenerForSingleValueEvent(new ValueEventListener() {
-				    @Override
-				    public void onDataChange(DataSnapshot snapshot) {
-				        for (DataSnapshot child : snapshot.getChildren()) {
-				            System.out.println(child.getValue().toString());
-				        }
-				    }
+			
+			fb_event_ref.firebaseobj.addListenerForSingleValueEvent(new ValueEventListener() {
 
-					@Override
-					public void onCancelled(FirebaseError arg0) {
-						// TODO Auto-generated method stub
-						
-					}
-				});
-			}
+				@Override
+				public void onCancelled(FirebaseError arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void onDataChange(DataSnapshot snapshot) {
+					// TODO Auto-generated method stub
+					int i =0;
+					for (DataSnapshot child : snapshot.getChildren()) {
+						// go through each member
+						i++;
+						fb_event_ref.firebaseobj.child("member-"+Integer.toString(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+						    @Override
+						    public void onDataChange(DataSnapshot snapshot) {
+						        for (DataSnapshot child : snapshot.getChildren()) {
+						            System.out.println(child.getValue().toString());
+						            lat_lon.add(Double.parseDouble(child.getValue().toString()));
+						        }
+						    }
+
+							@Override
+							public void onCancelled(FirebaseError arg0) {
+								// TODO Auto-generated method stub
+								
+							}
+						});
+			        }
+					
+				}
+				
+			});
+			
+				
+				
+			
+			
+			//--- now set 
+			
 		}else{//event doesnot exists
 			create_event_notfication();//create a new event
 		}    
