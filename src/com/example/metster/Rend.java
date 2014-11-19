@@ -76,10 +76,14 @@ public class Rend extends ActionBarActivity {
 		setContentView(R.layout.activity_rend);
 		setupActionBar();
 		
-		set_up_map_view();
 		create_firebase_refrence();// this is base refrence
 		add_child_listener();
 		check_if_event_exist();
+		try{
+			setup_initial_map();
+		}catch(Exception e){
+			System.out.println("view error");
+		}
 		if(event_info.is_exist == "yes"){//event already exists
 			System.out.println("event exist");
 			String file_contents = read_event_file("metster_event_info.txt");
@@ -105,6 +109,16 @@ public class Rend extends ActionBarActivity {
 		
 	}
 	
+	private void setup_initial_map(){
+		GoogleMap mMap;
+        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
+        mMap.clear();
+        mMap.setMyLocationEnabled(true);
+        LatLng currlocation = new LatLng(commondata.user_information.latitude, commondata.user_information.longitude);// yours
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 16));
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+	}
+	
 	private void ret_data(){
 		
 		fb_event_ref.firebaseobj.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -118,33 +132,15 @@ public class Rend extends ActionBarActivity {
 			@Override
 			public void onDataChange(DataSnapshot snapshot) {
 				// TODO Auto-generated method stub
-				temp_mem =0;
+				latitudes.clear();
+				longitudes.clear();
+				group_list.clear();
+				
 				for (DataSnapshot child : snapshot.getChildren()) {// go through each member
-					group_list.add("member");
-					temp_mem++;
-					fb_event_ref.firebaseobj.child("member-"+Integer.toString(temp_mem)).addListenerForSingleValueEvent(new ValueEventListener() {
-					    @Override
-					    public void onDataChange(DataSnapshot snapshot) {
-					        for (DataSnapshot child : snapshot.getChildren()) {
-					            
-					            if(child.getName().toString() == "latitudes"){
-					            	latitudes.add(Double.parseDouble(child.getValue().toString()));
-					            }else{
-					            	longitudes.add(Double.parseDouble(child.getValue().toString()));
-					            	System.out.println("ok ok");
-					            	set_up_map_view();
-					            }
-					            
-					        }
-					    }
-
-						@Override
-						public void onCancelled(FirebaseError arg0) {
-							// TODO Auto-generated method stub
-							
-						}
-					});
-					
+					group_list.add("member");		
+					latitudes.add(Double.parseDouble(child.child("latitudes").getValue().toString()));
+					longitudes.add(Double.parseDouble(child.child("longitudes").getValue().toString()));
+					set_up_map_view();
 		        }
 				
 			}
@@ -412,8 +408,8 @@ public class Rend extends ActionBarActivity {
 		GoogleMap mMap;
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
         mMap.clear();
-        
-        for(int i = 0; i< longitudes.size(); i++){
+        try{
+        for(int i = 0; i< group_list.size(); i++){
         if(i==longitudes.size()-1){
         	mMap.addMarker(new MarkerOptions()
             .position(new LatLng(latitudes.get(i), longitudes.get(i))) // visitor
@@ -428,6 +424,13 @@ public class Rend extends ActionBarActivity {
         LatLng currlocation = new LatLng(commondata.user_information.latitude, commondata.user_information.longitude);// yours
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 16));
         mMap.getUiSettings().setZoomControlsEnabled(false);
+        }catch(Exception e){
+        	System.out.println("something fishy");
+        	System.out.println("size" + group_list.size());
+        	System.out.println("latitudes" + latitudes.toString());
+        	System.out.println("longitudes" + longitudes.toString());
+        	//ret_data();
+        }
 	}
 	
 	public void doLaunchContactPicker(View view) {
@@ -435,6 +438,8 @@ public class Rend extends ActionBarActivity {
 	            Contacts.CONTENT_URI);
 	    startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
 	}
+	
+	
 	public void add_this_person(View view){
 		EditText emailEntry = (EditText) findViewById(R.id.invite_email);
 		if(emailEntry.getText().toString().isEmpty()){
@@ -699,10 +704,5 @@ public class Rend extends ActionBarActivity {
 	    
 	}
 	
-	@Override
-	public void onBackPressed() {
-	 
-		finish();
-			
-	}
+	
 }
