@@ -16,24 +16,30 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
-import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.metster.Login.Userslist;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -71,6 +77,18 @@ public class Rend extends ActionBarActivity {
 		static Firebase firebaseobj;
 	}
 	
+	private static class contact_info{
+		static String contact_name;
+		static String contact_number;
+		static Bitmap contact_image;
+	}
+	
+	//
+	private static final String TAG = Rend.class.getSimpleName();
+    private static final int REQUEST_CODE_PICK_CONTACTS = 1;
+    private Uri uriContact;
+    private String contactID;     // contacts unique ID
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rend);
@@ -78,6 +96,7 @@ public class Rend extends ActionBarActivity {
 		
 		create_firebase_refrence();// this is base refrence
 		add_child_listener();
+		
 		check_if_event_exist();
 		try{
 			setup_initial_map();
@@ -328,7 +347,6 @@ public class Rend extends ActionBarActivity {
 		
 	}
 	
-	
 	public void create_firebase_refrence(){
 				StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
 				strBuilder.append(commondata.user_information.account_number);
@@ -440,7 +458,9 @@ public class Rend extends ActionBarActivity {
 	}
 	
 	
+	
 	public void add_this_person(View view){
+		
 		EditText emailEntry = (EditText) findViewById(R.id.invite_email);
 		if(emailEntry.getText().toString().isEmpty()){
 			 Toast.makeText(this, "No email found for contact.",
@@ -455,6 +475,7 @@ public class Rend extends ActionBarActivity {
 			add_a_member_to_fb(group.curr_person);
 			set_up_map_view();
 		}
+		
 	}
 	
 	public void pick_food_type(){
@@ -610,58 +631,128 @@ public class Rend extends ActionBarActivity {
 		alert.show();
 	}
 	
+	private void confirm_add_this_person(){
+		
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+		final int height = size.y;
+		
+		ImageView image = new ImageView(this);
+        image.setImageResource(R.drawable.ic_home);
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Confirm");
+		alert.setMessage("Do you want to add " + contact_info.contact_name);
+		alert.setIcon(R.drawable.ic_action_add_person);
+		// Set an EditText view to get user input 
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  // add this person
+			Toast toast= Toast.makeText(getApplicationContext(), 
+					contact_info.contact_name + " has been added", Toast.LENGTH_SHORT);  
+					toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, height/4);
+					TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+					//v.setBackgroundColor(Color.TRANSPARENT);
+					v.setTextColor(Color.rgb(175, 250, 176));
+					toast.show();
+		  }
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+			  //just cancel it
+		  }
+		});
+
+		alert.show();
+		
+	}
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (resultCode == RESULT_OK) {
-	        switch (requestCode) {
-	        case CONTACT_PICKER_RESULT:
-	            Cursor cursor = null;
-	            String email = "";
-	            try {
-	                Uri result = data.getData();
-	                Log.v("res", "Got a contact result: "
-	                        + result.toString());
-
-	                // get the contact id from the Uri
-	                String id = result.getLastPathSegment();
-
-	                // query for everything email
-	                cursor = getContentResolver().query(Email.CONTENT_URI,
-	                        null, Email.CONTACT_ID + "=?", new String[] { id },
-	                        null);
-
-	                int emailIdx = cursor.getColumnIndex(Email.DATA);
-
-	                // let's just get the first email
-	                if (cursor.moveToFirst()) {
-	                    email = cursor.getString(emailIdx);
-	                    Log.v("em", "Got email: " + email);
-	                } else {
-	                    Log.w("em", "No results");
-	                }
-	            } catch (Exception e) {
-	                Log.e("em", "Failed to get email data", e);
-	            } finally {
-	                if (cursor != null) {
-	                    cursor.close();
-	                }
-	                EditText emailEntry = (EditText) findViewById(R.id.invite_email);
-	                emailEntry.setText(email);
-	                
-	                if (email.length() == 0) {
-	                    Toast.makeText(this, "No email found for contact.",
-	                            Toast.LENGTH_LONG).show();
-	                }
-
-	            }
-
-	            break;
-	        }
-
-	    } else {
-	        Log.w("em", "Warning: activity result not ok");
-	    }
+		
+		
+		super.onActivityResult(requestCode, resultCode, data);
+		 
+        if (resultCode == RESULT_OK) {
+            Log.d(TAG, "onactivityres: " + data.toString());
+            uriContact = data.getData();
+ 
+            retrieveContactName();
+            retrieveContactNumber();
+            confirm_add_this_person();
+        }
+		
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * Contact functions
+	 */
+	 
+    private void retrieveContactNumber() {
+ 
+        String contactNumber = null;
+ 
+        // getting contacts ID
+        Cursor cursorID = getContentResolver().query(uriContact,
+                new String[]{ContactsContract.Contacts._ID},
+                null, null, null);
+ 
+        if (cursorID.moveToFirst()) {
+ 
+            contactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
+        }
+ 
+        cursorID.close();
+ 
+        Log.d(TAG, "Contact ID: " + contactID);
+ 
+        // Using the contact ID now we will get contact phone number
+        Cursor cursorPhone = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
+ 
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
+                        ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
+                        ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE,
+ 
+                new String[]{contactID},
+                null);
+ 
+        if (cursorPhone.moveToFirst()) {
+            contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+        }
+ 
+        cursorPhone.close();
+ 
+        Log.d(TAG, "Contact Phone Number: " + contactNumber);
+        contact_info.contact_number = contactNumber;
+    }
+ 
+    private void retrieveContactName() {
+ 
+        String contactName = null;
+ 
+        // querying contact data store
+        Cursor cursor = getContentResolver().query(uriContact, null, null, null, null);
+ 
+        if (cursor.moveToFirst()) {
+ 
+            // DISPLAY_NAME = The display name for the contact.
+            // HAS_PHONE_NUMBER =   An indicator of whether this contact has at least one phone number.
+ 
+            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+        }
+ 
+        cursor.close();
+ 
+        Log.d(TAG, "Contact Name: " + contactName);
+        contact_info.contact_name = contactName;
+    }	
+	//-----------------
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
