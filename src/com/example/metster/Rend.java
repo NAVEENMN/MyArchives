@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.metster.Login.Userslist;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -54,6 +55,7 @@ public class Rend extends ActionBarActivity {
 	ArrayList<Double> latitudes = new ArrayList<Double>();
 	ArrayList<Double> longitudes = new ArrayList<Double>();
 	ArrayList<Double> lat_lon = new ArrayList<Double>();
+	int temp_mem;
 	public static class group{
 		static String curr_person;
 	}
@@ -83,53 +85,72 @@ public class Rend extends ActionBarActivity {
 			String file_contents = read_event_file("metster_event_info.txt");
 			String[] parts = file_contents.split("-->");
 			setTitle(parts[0]+"--"+parts[1]);
-			int number_of_members = Integer.parseInt(parts[2]);
-			
-			fb_event_ref.firebaseobj.addListenerForSingleValueEvent(new ValueEventListener() {
+			Thread thread = new Thread()
+			{
+			      @Override
+			      public void run() {
+			    	  Looper.prepare();
+			    	  ret_data();
+			      }
+			  };
 
-				@Override
-				public void onCancelled(FirebaseError arg0) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void onDataChange(DataSnapshot snapshot) {
-					// TODO Auto-generated method stub
-					int i =0;
-					for (DataSnapshot child : snapshot.getChildren()) {
-						// go through each member
-						i++;
-						fb_event_ref.firebaseobj.child("member-"+Integer.toString(i)).addListenerForSingleValueEvent(new ValueEventListener() {
-						    @Override
-						    public void onDataChange(DataSnapshot snapshot) {
-						        for (DataSnapshot child : snapshot.getChildren()) {
-						            System.out.println(child.getValue().toString());
-						            lat_lon.add(Double.parseDouble(child.getValue().toString()));
-						        }
-						    }
-
-							@Override
-							public void onCancelled(FirebaseError arg0) {
-								// TODO Auto-generated method stub
-								
-							}
-						});
-			        }
-					
-				}
-				
-			});
-			
-				
-				
+			thread.start();
 			
 			
-			//--- now set 
 			
+			System.out.println("final;" + lat_lon.toString());
 		}else{//event doesnot exists
 			create_event_notfication();//create a new event
-		}    
+		}
+		
+	}
+	
+	private void ret_data(){
+		
+		fb_event_ref.firebaseobj.addListenerForSingleValueEvent(new ValueEventListener() {
+
+			@Override
+			public void onCancelled(FirebaseError arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onDataChange(DataSnapshot snapshot) {
+				// TODO Auto-generated method stub
+				temp_mem =0;
+				for (DataSnapshot child : snapshot.getChildren()) {// go through each member
+					group_list.add("member");
+					temp_mem++;
+					fb_event_ref.firebaseobj.child("member-"+Integer.toString(temp_mem)).addListenerForSingleValueEvent(new ValueEventListener() {
+					    @Override
+					    public void onDataChange(DataSnapshot snapshot) {
+					        for (DataSnapshot child : snapshot.getChildren()) {
+					            
+					            if(child.getName().toString() == "latitudes"){
+					            	latitudes.add(Double.parseDouble(child.getValue().toString()));
+					            }else{
+					            	longitudes.add(Double.parseDouble(child.getValue().toString()));
+					            	System.out.println("ok ok");
+					            	set_up_map_view();
+					            }
+					            
+					        }
+					    }
+
+						@Override
+						public void onCancelled(FirebaseError arg0) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+					
+		        }
+				
+			}
+			
+		});
+		
 	}
 	
 	private void add_child_listener(){
@@ -373,6 +394,14 @@ public class Rend extends ActionBarActivity {
 		group_list.add("mean");// mean is the last point equivalent for group_list content
 		Log.w("meanlat",Double.toString(temp_lat));
 		Log.w("meanlon",Double.toString(temp_long));
+		/*
+		 * set up mean point on fb
+		 */
+		create_firebase_refrence();
+		fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count+1)).setValue("user");
+		fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count+1)).child("latitudes").setValue(temp_lat);
+		fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count+1)).child("longitudes").setValue(temp_long);
+		
 		set_up_map_view();
 		get_places_mean_loc(temp_lat, temp_long);
 		
@@ -384,11 +413,16 @@ public class Rend extends ActionBarActivity {
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
         mMap.clear();
         
-        for(int i = 0; i< group_list.size(); i++){
-        
+        for(int i = 0; i< longitudes.size(); i++){
+        if(i==longitudes.size()-1){
+        	mMap.addMarker(new MarkerOptions()
+            .position(new LatLng(latitudes.get(i), longitudes.get(i))) // visitor
+            .title("meet here!")).showInfoWindow();
+        }else{
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(latitudes.get(i), longitudes.get(i))) // visitor
                 ).showInfoWindow();
+        }
         }
         mMap.setMyLocationEnabled(true);
         LatLng currlocation = new LatLng(commondata.user_information.latitude, commondata.user_information.longitude);// yours
