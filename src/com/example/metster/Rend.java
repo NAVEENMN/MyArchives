@@ -358,7 +358,7 @@ public class Rend extends ActionBarActivity {
 	 * This method will add a new member in firebase
 	 */
 	
-	public void add_a_member_to_fb(String member_email){
+	public void add_a_member_to_fb(final String member_email){
 		
 		Thread thread = new Thread()
 		{
@@ -372,7 +372,7 @@ public class Rend extends ActionBarActivity {
 					fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count)).child("longitudes").setValue(0.0);
 					Toast.makeText(getApplicationContext(), group.curr_person + " has been added", Toast.LENGTH_SHORT).show();
 					try {
-				    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/exe_gcm_send.php",commondata.user_information.account_number,group.curr_person,Integer.toString(member_count),"1","1","1","1"
+				    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/exe_gcm_send.php",commondata.user_information.account_number,member_email,Integer.toString(member_count),"1","1","1","1"
 						, "1", "1", "1", "1", "1", "1").get();
 						} catch (InterruptedException e) {
 										// TODO Auto-generated catch block
@@ -459,14 +459,10 @@ public class Rend extends ActionBarActivity {
 	
 	
 	
-	public void add_this_person(View view){
+	private void add_this_person(){
 		
-		EditText emailEntry = (EditText) findViewById(R.id.invite_email);
-		if(emailEntry.getText().toString().isEmpty()){
-			 Toast.makeText(this, "No email found for contact.",
-                     Toast.LENGTH_LONG).show();
-		}else{
-			group.curr_person = emailEntry.getText().toString();
+		
+			group.curr_person = contact_info.contact_number;
 			Log.w("requesting",group.curr_person);
 			group_list.add(group.curr_person);
 			create_event_file();//update local file after every member added
@@ -474,7 +470,6 @@ public class Rend extends ActionBarActivity {
 			longitudes.add(commondata.user_information.longitude);
 			add_a_member_to_fb(group.curr_person);
 			set_up_map_view();
-		}
 		
 	}
 	
@@ -650,6 +645,7 @@ public class Rend extends ActionBarActivity {
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int whichButton) {
+		add_this_person();
 		  // add this person
 			Toast toast= Toast.makeText(getApplicationContext(), 
 					contact_info.contact_name + " has been added", Toast.LENGTH_SHORT);  
@@ -727,7 +723,10 @@ public class Rend extends ActionBarActivity {
         }
  
         cursorPhone.close();
- 
+        contactNumber = contactNumber.replace('(',' ');
+        contactNumber = contactNumber.replace(')',' ');
+        contactNumber = contactNumber.replace('-',' ');
+        contactNumber = contactNumber.replace(" ","");
         Log.d(TAG, "Contact Phone Number: " + contactNumber);
         contact_info.contact_number = contactNumber;
     }
