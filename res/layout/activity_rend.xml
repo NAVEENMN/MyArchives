@@ -5,42 +5,52 @@
     android:background ="#01DFD7"
     tools:context="${packageName}.${activityClass}" >
 
-     <!-- ******************************************************************* Map region               -->        
+     <!-- ******************************************************************* Map region               --> 
+     <LinearLayout
+        android:id="@+id/RendMapSection"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E6E6E6"
+        android:gravity="top"
+        android:orientation="horizontal" >       
     <fragment 
           android:id="@+id/visitormap"
           android:layout_width="match_parent"
           android:layout_height="420dp"
           android:name="com.google.android.gms.maps.MapFragment"/>
+    </LinearLayout>
 
 	<!-- ******************************************************************* Map region               -->
-<RelativeLayout
-    android:layout_height="wrap_content"
+    <View
+    android:id="@+id/Dividerone"
+    android:layout_below="@+id/RendMapSection"
     android:layout_width="match_parent"
-    android:id="@+id/emailsection"
-    android:layout_below="@+id/visitormap">
-    </RelativeLayout>
+    android:layout_height="3dp"
+    android:background="#088A85" /> 
+   <RelativeLayout
+       android:id="@+id/ButtonSection"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+       android:layout_alignParentLeft="true"
+       android:gravity="bottom" >
 
-        <RelativeLayout
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:layout_below="@+id/emailsection">
-    
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/do_email_picker"
-        android:drawableTop="@drawable/ic_action_new"
-        android:layout_alignParentRight="true"
-        android:onClick="doLaunchContactPicker"></Button>
-    
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/find_places"
-        android:drawableTop="@drawable/ic_action_next_item"
-        android:layout_alignParentRight="false"
-        android:onClick="find_places"></Button>
-    
-</RelativeLayout>
+       <Button
+           android:id="@+id/do_email_picker"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentRight="true"
+           android:drawableTop="@drawable/ic_action_new"
+           android:onClick="AccessButton" />
+
+       <Button
+           android:id="@+id/find_places"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentRight="false"
+           android:drawableTop="@drawable/ic_action_next_item"
+           android:onClick="find_places" />
+   </RelativeLayout>
 
 </RelativeLayout>

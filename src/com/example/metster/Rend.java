@@ -10,13 +10,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
@@ -33,7 +33,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -61,6 +63,7 @@ public class Rend extends ActionBarActivity {
 	ArrayList<Double> latitudes = new ArrayList<Double>();
 	ArrayList<Double> longitudes = new ArrayList<Double>();
 	ArrayList<Double> lat_lon = new ArrayList<Double>();
+	
 	int temp_mem;
 	public static class group{
 		static String curr_person;
@@ -70,6 +73,7 @@ public class Rend extends ActionBarActivity {
 		static String event_name;
 		static String food_type;
 		static String is_exist;
+		static String is_food_chosen;
 	}
 	
 	public static class fb_event_ref{
@@ -80,7 +84,6 @@ public class Rend extends ActionBarActivity {
 	private static class contact_info{
 		static String contact_name;
 		static String contact_number;
-		static Bitmap contact_image;
 	}
 	
 	//
@@ -88,15 +91,18 @@ public class Rend extends ActionBarActivity {
     private static final int REQUEST_CODE_PICK_CONTACTS = 1;
     private Uri uriContact;
     private String contactID;     // contacts unique ID
+    private String access_to_button;
+    private String event_tracer_is_setup;
+    private String initiate;
+    
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rend);
 		setupActionBar();
-		
+		initiate = "no";
 		create_firebase_refrence();// this is base refrence
 		add_child_listener();
-		
 		check_if_event_exist();
 		try{
 			setup_initial_map();
@@ -104,6 +110,7 @@ public class Rend extends ActionBarActivity {
 			System.out.println("view error");
 		}
 		if(event_info.is_exist == "yes"){//event already exists
+			access_to_button = "no";
 			System.out.println("event exist");
 			String file_contents = read_event_file("metster_event_info.txt");
 			String[] parts = file_contents.split("-->");
@@ -119,10 +126,12 @@ public class Rend extends ActionBarActivity {
 
 			thread.start();
 			
-			
-			
 			System.out.println("final;" + lat_lon.toString());
 		}else{//event doesnot exists
+			setTitle("Create an Event");
+			access_to_button = "yes";
+			event_info.is_food_chosen = "no";
+			event_info.is_exist = "no";
 			create_event_notfication();//create a new event
 		}
 		
@@ -391,7 +400,7 @@ public class Rend extends ActionBarActivity {
 	 * This method will find the mean point to meet	
 	 */
 	
-	public void find_places(View w){
+	public void find_places(View v){
 		
 		Double temp_lat = 0.0;
 		Double temp_long = 0.0;
@@ -451,13 +460,83 @@ public class Rend extends ActionBarActivity {
         }
 	}
 	
-	public void doLaunchContactPicker(View view) {
-	    Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
-	            Contacts.CONTENT_URI);
-	    startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
+	public void AccessButton(View view) {
+		if(access_to_button == "yes"){
+			if(event_tracer_is_setup == "yes"){
+				if(event_info.is_food_chosen == "yes"){
+					//---------
+					ContactPicker();
+					//----------
+				}else{
+					pick_food_type();
+				}
+			}else{
+				create_event_notfication();
+			}
+		}else{
+			/*
+			 *  Tell them you can`t add more people and check if they want to create tracer 
+			 */
+			
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+			alert.setTitle("Notification");
+			alert.setMessage("You cannot add more people to this tracer. Would you like to create a new tracer?");
+
+
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			  
+				delete_event();
+				Intent intent2 = new Intent(Rend.this, Rend.class);
+				startActivity(intent2);
+				finish();
+				
+			  }
+			});
+
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+			  }
+			});
+
+			alert.show();
+			
+			
+		}
 	}
 	
-	
+	private void ContactPicker(){
+		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+	            Contacts.CONTENT_URI);
+	    startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
+	    //---
+	    
+	    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Notification");
+		alert.setMessage("Would you like to add more people to this tracer?");
+
+
+		alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  
+			ContactPicker();
+		  }
+		});
+
+		alert.setNegativeButton("No I am done", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+			  // 
+			  initiate = "yes";
+		  }
+		});
+
+		alert.show();
+		//---------
+	    
+	    //---
+	}
 	
 	private void add_this_person(){
 		
@@ -489,49 +568,61 @@ public class Rend extends ActionBarActivity {
 		                    {
 		                        case 0:
 		                                event_info.food_type = "chinese";
+		                                event_info.is_food_chosen = "yes";
 		                                 break;
 		                        case 1:
 		                                // Your code when 2nd  option seletced
 		                        	event_info.food_type = "coffee";
+		                        	event_info.is_food_chosen = "yes";
 		                                break;
 		                        case 2:
 		                               // Your code when 3rd option seletced
 		                        	event_info.food_type = "american";
+		                        	event_info.is_food_chosen = "yes";
 		                                break;
 		                        case 3:
 		                                 // Your code when 4th  option seletced  
 		                        	event_info.food_type = "seafood";
+		                        	event_info.is_food_chosen = "yes";
 		                                break;
 		                        case 4:
 	                                // Your code when first option seletced
 		                        	event_info.food_type = "pizza";
+		                        	event_info.is_food_chosen = "yes";
 	                                 break;
 		                        case 5:
 		                        	event_info.food_type = "asian";
+		                        	event_info.is_food_chosen = "yes";
 	                                // Your code when 2nd  option seletced
 	                                break;
 		                        case 6:
 		                        	event_info.food_type = "japanese";
+		                        	event_info.is_food_chosen = "yes";
 	                               // Your code when 3rd option seletced
 	                                break;
 		                        case 7:
 		                        	event_info.food_type = "mexican";
+		                        	event_info.is_food_chosen = "yes";
 	                                 // Your code when 4th  option seletced            
 	                                break;
 		                        case 8:
 		                        	event_info.food_type = "italian";
+		                        	event_info.is_food_chosen = "yes";
 	                                // Your code when first option seletced
 	                                 break;
 		                        case 9:
 		                        	event_info.food_type = "indian";
+		                        	event_info.is_food_chosen = "yes";
 	                                // Your code when 2nd  option seletced
 	                                break;
 		                        case 10:
 		                        	event_info.food_type = "icecream";
+		                        	event_info.is_food_chosen = "yes";
 	                               // Your code when 3rd option seletced
 	                                break;   
 	                             default:
 	                            	 event_info.food_type = "american";
+	                            	 event_info.is_food_chosen = "no";
 	                            	 break;
 		                        
 		                    }
@@ -613,13 +704,16 @@ public class Rend extends ActionBarActivity {
 		  create_event_file();//update local file
 		  pick_food_type();
 		  create_event_file();//update local file after food chosen
+		  event_tracer_is_setup = "yes";
 		  }
 		});
 
 		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 		  public void onClick(DialogInterface dialog, int whichButton) {
 			  event_info.event_name = "Metster-event";
-			  setTitle(event_info.event_name);
+			  setTitle("Create an Event");
+			  event_info.is_exist = "no";
+			  event_tracer_is_setup = "no";
 		  }
 		});
 
