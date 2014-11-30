@@ -1,6 +1,18 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.SimpleScriptContext;
 
 /*
  * This a Driver Class which controls all the map reduce operations
@@ -13,6 +25,43 @@ public class MainDriver {
 	 * 													  arg[3] : review.txt path
 	 */
 	public static void main(String[] args) throws Exception {
+		Process p = Runtime.getRuntime().exec("rm -rf /home/nmysore/Documents/pr/sen/outputs");
+		Writer review_input = null;
+		//  prompt the user to enter their review
+	    System.out.print("Enter your review: ");
+	 
+	    //  open up standard input
+	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	 
+	    String userName = null;
+	 
+	     //  read the username from the command-line; need to use try/catch with the
+	     //  readLine() method
+	      try {
+	         userName = br.readLine();
+	      } catch (IOException ioe) {
+	         System.out.println("IO error trying to read your name!");
+	         System.exit(1);
+	      }
+	 
+	      System.out.println("review, " + userName);
+		try {
+			review_input = new BufferedWriter(new OutputStreamWriter(
+		          new FileOutputStream("review.txt"), "utf-8"));
+			review_input.write(userName);
+		} catch (IOException ex) {
+		  // report
+		} finally {
+		   try {review_input.close();} catch (Exception ex) {}
+		}
+		
+		p = Runtime.getRuntime().exec("python /home/nmysore/Documents/pr/sen/pre_process_review.py");
+		try {
+		    //thread to sleep for the specified number of milliseconds
+		    Thread.sleep(2000);
+		} catch ( java.lang.InterruptedException ie) {
+		    System.out.println(ie);
+		}
 		Index job1 = new Index();
 		process job2 = new process();
 		String review;

@@ -24,7 +24,6 @@ def gen_bigrams(review):
 def main():
 	f = open('review.txt', 'r+')
 	line =  f.read()
-	line = raw_input("give your review")
 	review = line
 	bigram_list = gen_bigrams(review)
 	unigram_list = gen_unigrams(review)
