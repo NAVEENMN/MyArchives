@@ -40,15 +40,13 @@ public class process {
 				throws IOException {
 			str = get_trainline(value.toString());
 			str1 = Index.get_senti(value.toString());
-			String[] test_split_line = testline.split("\t");
-			String[] test_word_list = test_split_line[2].split(" ");
-			sentence.set(test_split_line[0] + "\t" + test_split_line[1] + "\t"
-					+ str + "--");
+			String[] test_split_line = testline.split("-->");
+			sentence.set(str);
 			// sentiment.set(Integer.toString(bucketid));
 			sentiment.set(str1);
 			// if (str.equals(Integer.toString(bucketid))){
 			// System.out.println("hello");
-			for (String testwrd : test_word_list) {
+			for (String testwrd : test_split_line) {
 				if (str.toLowerCase().equals(testwrd.toLowerCase())) {
 					output.collect(sentence, sentiment);
 				}
