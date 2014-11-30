@@ -25,8 +25,9 @@ public class MainDriver {
 	 * 													  arg[3] : review.txt path
 	 */
 	public static void main(String[] args) throws Exception {
-		Process p = Runtime.getRuntime().exec("rm -rf /home/nmysore/Documents/pr/sen/outputs");
+		
 		Writer review_input = null;
+		Process p;
 		//  prompt the user to enter their review
 	    System.out.print("Enter your review: ");
 	 
@@ -34,15 +35,12 @@ public class MainDriver {
 	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	 
 	    String userName = null;
-	 
-	     //  read the username from the command-line; need to use try/catch with the
-	     //  readLine() method
-	      try {
+	    try {
 	         userName = br.readLine();
-	      } catch (IOException ioe) {
+	    } catch (IOException ioe) {
 	         System.out.println("IO error trying to read your name!");
 	         System.exit(1);
-	      }
+	    }
 	 
 	      System.out.println("review, " + userName);
 		try {
@@ -79,11 +77,28 @@ public class MainDriver {
 		for (int i = 0; i <= 4; i++) {
 			job1.runjob(args[0], args[1], i);//Bucketing for bucket i
 			job2.runjob(args[1] + Integer.toString(i), args[2], review, i);//Processing for bucket i
+			p = Runtime.getRuntime().exec("cp /home/nmysore/Documents/pr/sen/outputs/output_post"+Integer.toString(i)+"/part-00000"+ " /home/nmysore/Documents/pr/sen/prerank/"+Integer.toString(i)+".txt");
+			p = Runtime.getRuntime().exec("rm -rf /home/nmysore/Documents/pr/sen/outputs");
 		}
-		// calculate_score();
+		
+		 //organize_job3_input();
 		// delete_folders();
 	}
 
+	/*
+	 * This method will organize the input for job3
+	 */
+	
+	private static void organize_job3_input(){
+		for(int i=0; i<=4 ; i++){
+		try {
+			Process p = Runtime.getRuntime().exec("rm -rf /home/nmysore/Documents/pr/sen/outputs/output"+"i");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+	}
 	/*
 	 * This method reads the review
 	 */
