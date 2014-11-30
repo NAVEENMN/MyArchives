@@ -60,7 +60,7 @@ public class Index {
 				output.collect(key, values.next());
 			else
 				throw new IOException("No links found for" + key.toString());
-		}
+		    }
 	}
 
 	/*

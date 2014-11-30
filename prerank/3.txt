@@ -1,1 +1,2 @@
 good	3
+is awesome	3

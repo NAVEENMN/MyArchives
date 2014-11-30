@@ -6,13 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.StringWriter;
 import java.io.Writer;
-
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.SimpleScriptContext;
+import java.util.ArrayList;
 
 /*
  * This a Driver Class which controls all the map reduce operations
@@ -28,6 +23,7 @@ public class MainDriver {
 		
 		Writer review_input = null;
 		Process p;
+		ArrayList<Integer> sentis = new ArrayList<Integer>();
 		//  prompt the user to enter their review
 	    System.out.print("Enter your review: ");
 	 
@@ -80,6 +76,25 @@ public class MainDriver {
 			p = Runtime.getRuntime().exec("cp /home/nmysore/Documents/pr/sen/outputs/output_post"+Integer.toString(i)+"/part-00000"+ " /home/nmysore/Documents/pr/sen/prerank/"+Integer.toString(i)+".txt");
 			p = Runtime.getRuntime().exec("rm -rf /home/nmysore/Documents/pr/sen/outputs");
 		}
+		
+		gen_rank job3 = new gen_rank();
+		job3.runjob("/home/nmysore/Documents/pr/sen/prerank","/home/nmysore/Documents/pr/sen/postrank");
+		
+		try(BufferedReader rk = new BufferedReader(new FileReader("/home/nmysore/Documents/pr/sen/postrank/part-00000"))) {
+	        String line = rk.readLine();
+	        while (line != null) {
+	            String[] pra = line.split("-->");
+	            String rank = pra[1];
+	            sentis.add(Integer.parseInt(rank));
+	            line = rk.readLine();
+	        }
+	    }
+		
+		int sum = 0;
+		for(int x=0; x<sentis.size();x++){
+			sum +=sentis.get(x);
+		}
+		System.out.println(Integer.toString(sum/sentis.size()));
 		
 		 //organize_job3_input();
 		// delete_folders();
