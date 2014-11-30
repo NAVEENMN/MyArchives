@@ -30,9 +30,8 @@ public class gen_rank {
 				throws IOException {
 			String line = value.toString();
 			String[] wor = line.split("\t");
-
 			word.set(wor[0]);
-			ran.set("-->"+wor[1]);
+			ran.set(wor[1]);
 			output.collect(word, ran);
 
 		}

@@ -1,6 +1,7 @@
 import nltk 
 from nltk import word_tokenize
 from nltk.util import ngrams
+from nltk.corpus import stopwords
 
 #This function genarates unigrams
 def gen_unigrams(review):
@@ -24,6 +25,8 @@ def gen_bigrams(review):
 def main():
 	f = open('review.txt', 'r+')
 	line =  f.read()
+	#stop = set(stopwords.words('english'))
+	#review = '\t'.join([i for i in line.split() if i not in stop])
 	review = line
 	bigram_list = gen_bigrams(review)
 	unigram_list = gen_unigrams(review)
