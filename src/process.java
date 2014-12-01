@@ -16,19 +16,26 @@ import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.mapred.TextInputFormat;
 import org.apache.hadoop.mapred.TextOutputFormat;
 
+/**
+ * Copyright 2010, Mysore Naveen, Bulbule Akash, <a href="http://devdaily.com" title="http://devdaily.com">http://devdaily.com</a>.
+ *
+ * This software is released under the terms of the
+ * GNU LGPL license. See <a href="http://www.gnu.org/licenses/gpl.html" title="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>
+ * for more information.
+ */
+
 /*
  * Review processing
- * Output: Sentiment value
- *
+ * Output: Intermediate file for sentiment value calculation
  */
 public class process {
 	public static int bucketid;
 	public static String testline;
 
 	/*
-	 * This is a mapper class where each line will to thrown into appropriate
-	 * buckets Each line is compared againts iterator value and will be sent to
-	 * reducer
+	 * This is a mapper class where each line from different buckets will be considered
+	 * and compared against the processed user review file which is the ouput of python script
+	 * for every uni and bi words from the user review we emit the word and its sentiment value
 	 */
 	public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, Text> {
 		private Text sentence = new Text();
@@ -42,10 +49,7 @@ public class process {
 			str1 = Index.get_senti(value.toString());
 			String[] test_split_line = testline.split("-->");
 			sentence.set(str);
-			// sentiment.set(Integer.toString(bucketid));
 			sentiment.set(str1);
-			// if (str.equals(Integer.toString(bucketid))){
-			// System.out.println("hello");
 			for (String testwrd : test_split_line) {
 				if (str.toLowerCase().equals(testwrd.toLowerCase())) {
 					output.collect(sentence, sentiment);
@@ -70,7 +74,7 @@ public class process {
 	}
 
 	/*
-	 * This functions takes care of returning the input file line to compare
+	 * This functions takes care of returning the actual sentence and removing id`s associated in the line
 	 * with the word.
 	 */
 	public static String get_trainline(String str) {
@@ -85,12 +89,10 @@ public class process {
 	 */
 	public void runjob(String inputPath, String OutputPath, String review, int i) {
 		JobConf conf = new JobConf(process.class);
-		// conf.set("bucketid",Integer.toString(i));
-		// paths for input, output and intermediate paths
+		conf.setJobName("Bucket_processing");
 		testline = review;
-		Path RawDataInPath = new Path(inputPath);// Path where the orignal raw
-		// data is stored
-		Path IndexOutPath = new Path(OutputPath + Integer.toString(i));// Output
+		Path RawDataInPath = new Path(inputPath);// Path where the processed ouputs are present
+		Path IndexOutPath = new Path(OutputPath + Integer.toString(i));// Output it to prerank folder which is intermediate
 		// Set up the classes for jobs
 		conf.setOutputKeyClass(Text.class);
 		conf.setOutputValueClass(Text.class);
@@ -98,12 +100,8 @@ public class process {
 		conf.setReducerClass(Reduce.class);
 		conf.setInputFormat(TextInputFormat.class);
 		conf.setOutputFormat(TextOutputFormat.class);
-		// conf.set("bucketid", Integer.toString(i));
-		// Set up the paths
-		FileInputFormat.setInputPaths(conf, RawDataInPath);// In put is from
-		// args[0]
-		FileOutputFormat.setOutputPath(conf, IndexOutPath);// In put from arg[1]
-		// Build the link graph
+		FileInputFormat.setInputPaths(conf, RawDataInPath);
+		FileOutputFormat.setOutputPath(conf, IndexOutPath);
 		System.out.println("\n---------------------------");
 		System.out.println("Proceessing bucket: ");
 		System.out.println("input taken from = " + RawDataInPath.toString());

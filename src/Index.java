@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.nio.file.FileSystem;
 import java.util.Iterator;
 
 import org.apache.hadoop.fs.Path;
@@ -17,17 +16,27 @@ import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.mapred.TextInputFormat;
 import org.apache.hadoop.mapred.TextOutputFormat;
 
+
+/**
+ * Copyright 2010, Mysore Naveen, Bulbule Akash, <a href="http://devdaily.com" title="http://devdaily.com">http://devdaily.com</a>.
+ *
+ * This software is released under the terms of the
+ * GNU GPL license. See <a href="http://www.gnu.org/licenses/gpl.html" title="http://www.gnu.org/licenses/gpl.html">http://www.gnu.org/licenses/gpl.html</a>
+ * for more information
+ */
+
 /*
  * Build Buckets
- * Output: 4 files
+ * Input: train.tsv in input directory 
+ * Output: 4 files - intermediate - (0.txt, 1.txt, 2.txt, 3.txt) placed in prerank directory
  *
  */
 public class Index {
 	public static int bucketid;
 
 	/*
-	 * This is a mapper class where each line will to thrown into appropriate
-	 * buckets Each line is compared againts iterator value and will be sent to
+	 * This is a mapper class where each line will be thrown into appropriate
+	 * buckets each line is compared against iterator value and will be sent to
 	 * reducer
 	 */
 	public static class Map extends MapReduceBase implements
@@ -59,7 +68,7 @@ public class Index {
 			if (values.hasNext())
 				output.collect(key, values.next());
 			else
-				throw new IOException("No links found for" + key.toString());
+				throw new IOException("No traces found for" + key.toString());
 		    }
 	}
 
@@ -79,25 +88,11 @@ public class Index {
 	 */
 	public void runjob(String inputPath, String OutputPath, int i) {
 		JobConf conf = new JobConf(Index.class);
-		// conf.set("bucketid",Integer.toString(i));
+		conf.setJobName("Bucketing");
 		bucketid = i;
 		// paths for input, output and intermediate paths
-		Path RawDataInPath = new Path(inputPath);// Path where the orignal raw
-													// data is stored
-		Path IndexOutPath = new Path(OutputPath + Integer.toString(i));// Output
-																		// the
-																		// result
-																		// to
-																		// ~/QueryIndex/output
-		// Path IntrPath = new Path("/user/cloudera/QueryIndex/output");// Use
-		// this for intermediate paths
-		// Path INTR1Path = new Path("/user/cloudera/PageRank/output");
-		// Path TempOutputPath = new Path(OutputPath+ Integer.toString(i),
-		// String.valueOf(i));
-		// clean up the contents for these paths
-		// if(fs.exists(IndexOutPath)) fs.delete(IndexOutPath, true);
-		// if(fs.exists(IntrPath))fs.delete(GraphPath, true);
-		// if(fs.exists(INTR1Path))fs.delete(PageRankPath, true);
+		Path RawDataInPath = new Path(inputPath);// Path where train.tsv is stored
+		Path IndexOutPath = new Path(OutputPath + Integer.toString(i));// Output it to intermediate folder outputs
 		// Set up the classes for jobs
 		conf.setOutputKeyClass(Text.class);
 		conf.setOutputValueClass(Text.class);
@@ -105,13 +100,12 @@ public class Index {
 		conf.setReducerClass(Index.Reduce.class);
 		conf.setInputFormat(TextInputFormat.class);
 		conf.setOutputFormat(TextOutputFormat.class);
-		// conf.set("bucketid", Integer.toString(i));
 		// Set up the paths
 		FileInputFormat.setInputPaths(conf, RawDataInPath);// In put is from args[0]
 		FileOutputFormat.setOutputPath(conf, IndexOutPath);// In put from arg[1]
 		// Build the link graph
 		System.out.println("\n---------------------------");
-		System.out.println(" Creating bucket: " + Integer.toString(i));
+		System.out.println("Creating bucket: " + Integer.toString(i));
 		System.out.println("input taken from = " + RawDataInPath.toString());
 		System.out.println("output to = " + IndexOutPath.toString());
 		System.out.println("---------------------------");

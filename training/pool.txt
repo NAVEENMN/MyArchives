@@ -1,0 +1,44 @@
+The	3.0
+This is	3.5
+This kannada	3.0
+a	3.0
+a good	3.0
+and yawing	3.0
+awesome	3.0
+awesome but	3.0
+bengal	3.0
+bengal movie	3.0
+best	4.0
+best telgu	4.0
+better then	3.0
+bored in	3.0
+but makes	3.0
+comedy is	3.0
+end .	3.0
+good bengal	3.0
+good.	3.0
+good. The	3.0
+is a	3.0
+is pretty	3.0
+is the	4.0
+it keeps	3.0
+kannada	3.0
+kannada movie	3.0
+keeps viewer	3.0
+makes viewer	3.0
+middle and	3.0
+movie is	3.0
+on track	3.0
+pretty awesome	3.0
+really good.	3.0
+so sutle	3.0
+sutle	3.0
+sutle it	3.0
+telgu	2.8075
+telgu movie	3.5
+then telgu	3.0
+track .	3.0
+viewer bored	3.0
+viewer on	3.0
+yawing	3.0
+yawing in	3.0
