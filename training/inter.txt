@@ -1,14 +1,12 @@
-The	3.0
-comedy is	3.0
-good.	3.0
-good. The	3.0
-it keeps	3.0
-keeps viewer	3.0
-movie is	3.0
-on track	3.0
-really good.	3.0
-so sutle	3.0
-sutle	3.0
-sutle it	3.0
-track .	3.0
-viewer on	3.0
+The	3.3333333333333335
+and keeps	3.3333333333333335
+audience engaging	3.3333333333333335
+awesome.	3.3333333333333335
+awesome. The	3.3333333333333335
+comedy involved	3.3333333333333335
+involved is	3.3333333333333335
+is awesome.	3.3333333333333335
+is very	3.3333333333333335
+keeps the	3.3333333333333335
+movie is	3.3333333333333335
+very subtle	3.3333333333333335

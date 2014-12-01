@@ -37,6 +37,7 @@ public class MainDriver {
 	public static void main(String[] args) throws Exception {
 		ArrayList<String> biwords = new ArrayList<String>();
 		ArrayList<String> uniwords = new ArrayList<String>();
+		ArrayList<String> wordsused = new ArrayList<String>();
 		Map<String, Double> map = new HashMap<String, Double>();
 		Writer review_input = null;
 		Process p;
@@ -126,6 +127,7 @@ public class MainDriver {
 				//add to sum
 				if(map.get(str) != 2){
 					sum += map.get(str);
+					wordsused.add(str);
 					words_count++;
 					//System.out.println(str);
 				}
@@ -141,6 +143,7 @@ public class MainDriver {
 				if(uniflag == 0){
 					if(map.get(str) != 2){
 						sum += map.get(str);
+						wordsused.add(str);
 						words_count++;
 						//System.out.println(str);
 					}
@@ -174,13 +177,13 @@ public class MainDriver {
         p = Runtime.getRuntime().exec("rm  -rf /home/nmysore/Documents/pr/sen/postrank");
         p = Runtime.getRuntime().exec("rm  -rf /home/nmysore/Documents/pr/sen/test");
         
-        print_report(map.toString(), biwords.toString(), uniwords.toString());
+        print_report(map.toString(), biwords.toString(), uniwords.toString(), wordsused.toString());
 	}
 	
 	/*
 	 * This method prints the report
 	 */
-	 private static void print_report(String word_contri, String bi_words, String uni_words){
+	 private static void print_report(String word_contri, String bi_words, String uni_words, String words_used){
 		
 		System.out.println("------------------------------");
 		System.out.println("----- Sentiment Analysis -----");
@@ -191,6 +194,7 @@ public class MainDriver {
 		System.out.println("Words and their contribution: " + word_contri);
 		System.out.println("Bi grams involved: " + bi_words);
 		System.out.println("Uni grams involved: " + uni_words);
+		System.out.println("words contributed: " + words_used);
 		System.out.println("------------------------------");
 		
 	}
