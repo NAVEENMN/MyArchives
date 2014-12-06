@@ -82,8 +82,7 @@ public class Login extends Activity {
     Location postion_get;
     boolean isGPSEnabled;
     boolean isNetworkEnabled;
-   
-    //---------------------------------------->
+  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		System.out.println("hey!!");
@@ -93,7 +92,8 @@ public class Login extends Activity {
 		commondata.user_information.status = "Hello There!!";
 		setTitle("Set your status");
 		Firebase.setAndroidContext(this);
-		
+		//------ side bar
+		//--------
 		// Acquire a reference to the system Location Manager
 		locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
       //--------------------------------------------------------   
@@ -212,7 +212,7 @@ public class Login extends Activity {
 		StringBuilder strBuilder = new StringBuilder("https://met-ster.firebaseio.com/");
 		strBuilder.append(commondata.user_information.zip);
 		strBuilder.append("/");
-	    strBuilder.append(commondata.user_information.account_number);
+	    strBuilder.append(commondata.facebook_details.facebook);
 	    fbdata.fbref = strBuilder.toString();
 	    fbdata.firebaseobj = new Firebase(fbdata.fbref);
 	    fbdata.firebaseobj.child("Status").setValue("Hello There!!");
@@ -257,42 +257,6 @@ public class Login extends Activity {
       }
     }, 1000 * 60* 3);//3mins
      
-	//-------------------------------------> Read data from server
-    try{
-    	Userslist.server_response = new RequestTask().execute("http://54.183.113.236/metster/fetchprofile.php",commondata.user_information.account_number,commondata.user_information.token_number,commondata.user_information.zip,Double.toString(commondata.user_information.latitude),Double.toString(commondata.user_information.longitude),commondata.user_information.country,"1"
-    			, "1", "1", "1", "1", "1", "1").get();
-    	}catch(Exception e){
-    		Log.w("fetch","failed");
-    	}            
-	            updatelocation(null);
-	            Log.w("response",Userslist.server_response);
-	    
-	           
-					String[] separated = Userslist.server_response.split("-");
-		            commondata.user_information.firstname = separated[0];
-		            commondata.user_information.lastname = separated[1];
-		            commondata.user_information.gender = separated[2];
-		            commondata.user_information.about = separated[3];
-		            commondata.user_information.profession = separated[4];
-		            commondata.user_information.worksat = separated[5];
-		            commondata.user_information.currentcity = separated[6];
-		            commondata.user_information.linkedin = null; // setup in server
-		            commondata.user_information.facebook = null;
-		           
-		            profilelistactdata.putString("userprofession", commondata.user_information.profession);
-		            profilelistactdata.putString("userworksat", commondata.user_information.worksat);
-		            profilelistactdata.putString("usercurrentcity", commondata.user_information.currentcity);
-					
-		            SetupUIdata();
-	//----------------------------------
-			if(Userslist.numberofusers.isEmpty()) 
-			{
-				Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
-			}else {
-				final String[] accountnumbers = Userslist.numberofusers.split("#%-->");
-				Userslist.user_count = accountnumbers.length;
-				Userslist.user_count --;
-			}
 					        
 //-----------------------------------------------------------------------> Button Actions	            
 	            //------------------------------------- meet someone
@@ -300,31 +264,6 @@ public class Login extends Activity {
 			final Animation animScale = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
 		        //find = (Button) findViewById(R.id.buttonmeet);
 		        rend_button_obj = (Button) findViewById(R.id.Rend);
-		        /*
-		        //----------------------------------------------------------------      
-		        find.setOnClickListener(new View.OnClickListener() {
-		        	public void onClick(View v) {
-							v.startAnimation(animScale);			
-							new Thread(new Runnable() { 
-					            public void run(){
-					            	SystemClock.sleep(2000);
-					            	
-					            	if(Userslist.user_count > 0){
-										stopRepeatingTask();
-										locationManager.removeUpdates(locationListener);
-										Intent intentprofilelist = new Intent( Login.this, ProfilelistActivity.class);
-										intentprofilelist.putExtras(profilelistactdata);
-						        		startActivity(intentprofilelist);
-										}
-										else{
-											//Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT).show();
-										}
-					            }
-					    }).start();						
-					}//on click
-		        });
-		        */	        
-		      //---------------------------------------------------------------	
 		      //------------------------------------- Rend      
 		        rend_button_obj.setOnClickListener(new View.OnClickListener() {
 			        	public void onClick(View v) {
@@ -344,6 +283,8 @@ public class Login extends Activity {
 						}//on click
 			        });	        
 			      //---------------------------------------------------------------	
+		        
+		        SetupUIdata();
 				
 	}//on create
 	//------------------------------------- update profile
@@ -355,9 +296,9 @@ public class Login extends Activity {
 		//----------- Section 1
 		TextView fname = (TextView)findViewById(R.id.FirstName);
 		fname.startAnimation(animTimeChange);
-        fname.setText((String)commondata.user_information.firstname);
+        fname.setText((String)commondata.facebook_details.name);
         TextView lname = (TextView)findViewById(R.id.LastName); 
-        lname.setText((String)commondata.user_information.lastname);
+        lname.setText((String)commondata.facebook_details.name);
         lname.startAnimation(animTimeChange);
         TextView prof = (TextView)findViewById(R.id.Profession); 
         prof.setText((String)commondata.user_information.addressline);
@@ -369,12 +310,14 @@ public class Login extends Activity {
         //TextView locacity = (TextView)findViewById(R.id.YourLocationcity); 
         //locacity.setText((String)addrs.cityName);
         //----------- Section Profile Image
+        
         if (commondata.user_information.profileimage!=null){
             byte[] decodedString = Base64.decode(commondata.user_information.profileimage, Base64.DEFAULT);
 	             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 	             	ImageButton imageButton =(ImageButton)findViewById(R.id.ProfileImage);
 	                imageButton.setImageBitmap(decodedByte);
               }
+            
         //----------- Section Maps
         GoogleMap map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.visitormap)).getMap();
@@ -383,6 +326,7 @@ public class Login extends Activity {
 
         map.setMyLocationEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
+        map.getUiSettings().setZoomControlsEnabled(false);
         
 //-------------------------------------------------------------------------------------------- 
 		

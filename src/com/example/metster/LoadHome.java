@@ -73,10 +73,7 @@ public class LoadHome extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_load_home);
 		setupActionBar();
-		//final View controlsView = findViewById(R.id.fullscreen_content_controls);
 		final View contentView = findViewById(R.id.fullscreen_content);
-		// Set up an instance of SystemUiHider to control the system UI for
-		// this activity.
 		mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
 		mSystemUiHider.setup();
 		mSystemUiHider.setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
@@ -216,17 +213,6 @@ public class LoadHome extends Activity {
 		        	  locationManager.removeUpdates(locationListener);
 		    }
 		    }, 1000 * 60 * 15);//15mins
-
-//--------------------------------> Read user ID
-		    String AccountNumber = readfile("accounts.txt");
-		    commondata.user_information.account_number = AccountNumber;
-		    
-		    String TokenNumber = readfile("token.txt");
-		    commondata.user_information.token_number = TokenNumber;
-		    
-		    String ImageInfo = readfile("image.txt");
-		    commondata.user_information.profileimage = ImageInfo;
-//----------------------------------------------------------------
 				
 				//-- create a check statement here.. if play service fails
 				//-- prompt and ask them to activate
@@ -239,23 +225,23 @@ public class LoadHome extends Activity {
 		            gcm = GoogleCloudMessaging.getInstance(this);
 		            regid = getRegistrationId(context);
 		            Log.w("regisid",regid);
-		            try {
-		   	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/register_gcm.php",commondata.user_information.account_number,regid,"1","1","1","1","1"
-		   			, "1", "1", "1", "1", "1", "1").get();
-		   			} catch (InterruptedException e) {
-		   							// TODO Auto-generated catch block
-		   				e.printStackTrace();
-		   			} catch (ExecutionException e) {
-		   							// TODO Auto-generated catch block
-		   				e.printStackTrace();
-		   			}
 		            if (regid.isEmpty()) {
 		                registerInBackground();
-		            	
+		            }else{
+		            	try {
+				   	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/register_gcm.php",commondata.facebook_details.facebook,regid,"1","1","1","1","1"
+				   			, "1", "1", "1", "1", "1", "1").get();
+				   	    	 System.out.println("exis"+server_resp);
+				   			} catch (InterruptedException e) {
+				   							// TODO Auto-generated catch block
+				   				e.printStackTrace();
+				   			} catch (ExecutionException e) {
+				   							// TODO Auto-generated catch block
+				   				e.printStackTrace();
+				   			}
 		            }
 		        } 
 		        
-		        new LongOperation().execute("");
 		        Runnable mRunnable;
 		        Handler mHandler = new Handler();
 		        mRunnable = new Runnable() {
@@ -264,7 +250,7 @@ public class LoadHome extends Activity {
 		            	locationManager.removeUpdates(locationListener);
 		            	try{
 		                Intent serviceIntent = new Intent(LoadHome.this, Login.class);
-		                //LoadHome.this.startService(serviceIntent);
+		                LoadHome.this.startService(serviceIntent);
 		                startActivity(serviceIntent);
 		                finish();
 		            	}catch(Exception e){
@@ -279,35 +265,6 @@ public class LoadHome extends Activity {
 		        
 	}//on create
 	
-	private String readfile(String fname){
-		StringBuilder stringBuilder = null;
-		FileInputStream inputStream;
-		BufferedReader bufferedReader;
-		try {
-            inputStream = openFileInput(fname);
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                stringBuilder = new StringBuilder();
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append(receiveString);
-                }
-                inputStream.close();
-            }
-        }
-        catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-            .show();
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-            .show();
-        }	
-		return stringBuilder.toString();
-	}
-
 	
 	private String getRegistrationId(Context context) {
 	    final SharedPreferences prefs = getGCMPreferences(context);
@@ -470,7 +427,7 @@ public class LoadHome extends Activity {
 	                // so it can use GCM/HTTP or CCS to send messages to your app.
 	                // The request to your server should be authenticated if your app
 	                // is using accounts.
-	                sendRegistrationIdToBackend(regid);
+	                //sendRegistrationIdToBackend(regid);
 
 	                // For this demo: we don't need to send it because the device
 	                // will send upstream messages to a server that echo back the
@@ -489,53 +446,14 @@ public class LoadHome extends Activity {
 
 	        
 			protected void onPostExecute(String msg) {
-	            mDisplay.append(msg + "\n");
-	            Log.w("registered",mDisplay.toString());
+	            //mDisplay.append(msg + "\n");
+	            Log.w("registered",msg);
 	        }
 
 	    }.execute(null, null, null);
 	   
 	}
-	
-	
-	private class LongOperation extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-        	//----       
-	        
-	        String msg = "";
-            try {
-                Bundle data = new Bundle();
-                    data.putString("my_message", "Hello World");
-                    data.putString("my_action",
-                            "com.google.android.gcm.demo.app.ECHO_NOW");
-                    String id = Integer.toString(msgId.incrementAndGet());
-                    gcm.send(SENDER_ID + "@gcm.googleapis.com", id, data);
-                    msg = "Sent message";
-                    Log.w("meassage","send");
-            } catch (IOException ex) {
-                msg = "Error :" + ex.getMessage();
-                Log.w("meassage",msg);
-            }
-//----
-            return "Executed";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            //
-        }
-
-        @Override
-        protected void onPreExecute() {}
-
-        @Override
-        protected void onProgressUpdate(Void... values) {}
-    }
-	
-	
-	
+		
 	/**
 	 * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP
 	 * or CCS to send messages to your app. Not needed for this demo since the
@@ -543,15 +461,19 @@ public class LoadHome extends Activity {
 	 * using the 'from' address in the message.
 	 */
 	private void sendRegistrationIdToBackend(String regid) {
+		System.out.println("resigtering the gcm");
 	    // Your implementation here.
 		try {
-	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/register_gcm.php",commondata.user_information.account_number,regid,"1","1","1","1","1"
+	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/register_gcm.php",commondata.facebook_details.facebook,regid,"1","1","1","1","1"
 			, "1", "1", "1", "1", "1", "1").get();
+	    	 System.out.println("backhand" + server_resp);
 			} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
+				System.out.println("backhander");
 				e.printStackTrace();
 			} catch (ExecutionException e) {
 							// TODO Auto-generated catch block
+				System.out.println("backhander");
 				e.printStackTrace();
 			}
 	}

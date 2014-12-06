@@ -1,11 +1,6 @@
 package com.example.metster;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
@@ -25,10 +20,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
@@ -55,130 +48,111 @@ public class HomescreenActivity extends Activity {
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_homescreen);
 		String APP_ID = getString(R.string.facebook_app_id);
 		Firebase.setAndroidContext(getApplicationContext());
 		
-        fb=new Facebook(APP_ID);
-        
-        if(fb.isSessionValid()){
-        	System.out.println( "fb" +
-        	fb.getAccessToken()
-        	);}else{
-        		System.out.println("no");
-        		
-				fb.authorize(this, new String[] {"email", "public_profile"}, new DialogListener(){
+		//-------------------------------
+		
+		boolean stat = haveNetworkConnection();
+        if(stat){// network check ok
+        	fb=new Facebook(APP_ID);
+        	if(fb.isSessionValid()){
+            	// if valid login
+        		//Intent serviceIntent = new Intent(LoadHome.this, Login.class);
+                //LoadHome.this.startService(serviceIntent);
+                //startActivity(serviceIntent);
+                //finish();
+            }else{
+            	System.out.println("no");
+            	fb.authorize(this, new String[] {"email", "public_profile"}, new DialogListener(){
 
-					@Override
-					public void onComplete(Bundle values) {
-						// TODO Auto-generated method stub
-						System.out.println("yes bab" + fb.getAccessToken() );
-						new RetrieveFeedTask().execute();
-						
-					}
+    					@Override
+    					public void onComplete(Bundle values) {
+    						new RetrieveFeedTask().execute();
+    					}
 
-					@Override
-					public void onFacebookError(FacebookError e) {
-						// TODO Auto-generated method stub
-						System.out.println("no bab");
-					}
+    					@Override
+    					public void onFacebookError(FacebookError e) {
+    						// TODO Auto-generated method stub
+    						System.out.println("no bab");
+    					}
 
-					@Override
-					public void onError(DialogError e) {
-						// TODO Auto-generated method stub
-						System.out.println("y bab");
-					}
+    					@Override
+    					public void onError(DialogError e) {
+    						// TODO Auto-generated method stub
+    						System.out.println("y bab");
+    					}
 
-					@Override
-					public void onCancel() {
-						// TODO Auto-generated method stub
-						System.out.println("yer bab");
-					}
-        			
-        		});
-        	}
-        
-        
+    					@Override
+    					public void onCancel() {
+    						// TODO Auto-generated method stub
+    						System.out.println("yer bab");
+    					}
+            			
+            		});
+            	}
+        	
+        	
+        }else{// network error
+        	AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        
-       
-        
-        
-		//---------------------------------------------------> if account set then login
-        try {
-            FileInputStream inputStream = openFileInput("accounts.txt");
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
+			alert.setTitle("Connection Error");
+			alert.setMessage("Please check your network settings");
 
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append(receiveString);
-                }
+			alert.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				Intent intent = new Intent(HomescreenActivity.this, HomescreenActivity.class);
+            	startActivity(intent);
+            	finish();
+			  }
+			});
 
-                inputStream.close();
-                stringBuilder.toString();
-                
-                boolean stat = haveNetworkConnection();
-                if(stat){
-                	Intent intent = new Intent(this, LoadHome.class);
-                	startActivity(intent);
-                	finish();
-                }else{
-                	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+				  finish();
+			  }
+			});
 
-        			alert.setTitle("Connection Error");
-        			alert.setMessage("Please check your network settings");
-
-        			alert.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-        			public void onClick(DialogInterface dialog, int whichButton) {
-        				Intent intent = new Intent(HomescreenActivity.this, HomescreenActivity.class);
-                    	startActivity(intent);
-                    	finish();
-        			  }
-        			});
-
-        			alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
-        			  public void onClick(DialogInterface dialog, int whichButton) {
-        				  finish();
-        			  }
-        			});
-
-        			alert.show();
-                }
-                
-        		
-            }
-            
-            else{
-            	Toast.makeText(this, "Login using your Metster account", Toast.LENGTH_SHORT)
-                .show();
-            }
+			alert.show();
         }
-        catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-            
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-            
-        }
-		//------------------------------------------------------------------------------
+		
+		
+		//-------------------------------
 	}
 	
 	
-	class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
+	class RetrieveFeedTask extends AsyncTask<Void, Void, Void> {
 
 	    private Exception exception;
+	    private String response;
 
-	    protected void onPostExecute() {
-	        // TODO: check this.exception 
-	        // TODO: do something with the feed
+	    protected void onPostExecute(Void result) {
+	        //create account
+	    	super.onPostExecute(result);
+	    	System.out.println("on post");
+	    	try {
+	  	    	 response = new RequestTask().execute("http://54.183.113.236/metster/setup_account.php",commondata.facebook_details.facebook,commondata.facebook_details.name,commondata.facebook_details.email,"1","1","1","1","1"
+	  			, "1", "1", "1", "1", "1", "1").get();
+	  	    	 System.out.println(response.toString());
+	  			} catch (InterruptedException e) {
+	  							// TODO Auto-generated catch block
+	  				e.printStackTrace();
+	  			} catch (ExecutionException e) {
+	  							// TODO Auto-generated catch block
+	  				e.printStackTrace();
+	  			}
+	    	
+	    	Intent serviceIntent = new Intent(HomescreenActivity.this, LoadHome.class);
+            HomescreenActivity.this.startService(serviceIntent);
+            startActivity(serviceIntent);
+            finish();
 	    }
 
 		@Override
-		protected Void doInBackground(String... params) {
+		protected Void doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			try {
 	        	getProfileInformation();
@@ -196,9 +170,19 @@ public class HomescreenActivity extends Activity {
          fb.authorizeCallback(requestCode, resultCode, data);
      }
 	 
+	 public String BitMapToString(Bitmap bitmap){
+	     ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+	     bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+	     byte [] b=baos.toByteArray();
+	     String temp=Base64.encodeToString(b, Base64.DEFAULT);
+	     return temp;
+	}
 	 
-	 public void getProfileInformation() {
-
+	 /*
+	  * This method will fetch the facebook details
+	  */
+	 
+	 private void getProfileInformation() {
 
 		    try {
 
@@ -211,13 +195,15 @@ public class HomescreenActivity extends Activity {
 		        
 		        URL img_value = new URL("https://graph.facebook.com/"+mUserId+"/picture?type=large");
 		        final Bitmap mIcon1 = BitmapFactory.decodeStream(img_value.openConnection().getInputStream());
-		       
-		        //----
 		        
 		        
-		        
-		        
-		        //----
+		        commondata.facebook_details.facebook = mUserId;
+		        commondata.facebook_details.name = mUserName;
+		        commondata.facebook_details.email = mUserEmail;
+		        commondata.facebook_details.profile_image = mIcon1;
+		        System.out.println(Integer.toString(commondata.facebook_details.profile_image.getHeight()));
+		        commondata.user_information.profileimage = BitMapToString(mIcon1);
+		       /*
 		        runOnUiThread(new Runnable() {
 
 		            public void run() {
@@ -233,6 +219,7 @@ public class HomescreenActivity extends Activity {
 		            }
 
 		        });
+		        */
 
 		    } catch (FacebookError e) {
 
@@ -250,6 +237,7 @@ public class HomescreenActivity extends Activity {
 
 		}
 	
+	 
 	@Override
 	public void onBackPressed() {
 	    new AlertDialog.Builder(this)
@@ -258,6 +246,7 @@ public class HomescreenActivity extends Activity {
 	           .setCancelable(false)
 	           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 	               public void onClick(DialogInterface dialog, int id) {
+	            	   
 	                   HomescreenActivity.this.finish();
 	               }
 	           })
@@ -265,25 +254,13 @@ public class HomescreenActivity extends Activity {
 	           .show();
 	}
 	
-	/** Called when the user clicks the Sign Up button */
-	public void Signupaccount(View view) {
-		
-		boolean stat = haveNetworkConnection();
-		
-		if(stat){
-			File file = new File("token.txt");//delete files just before submit not here
-			file.delete();
-			file = new File("accounts.txt");
-			file.delete();
-			Intent intent = new Intent(this, SignUpActivity.class);
-			startActivity(intent);
-		}else{
-			Toast.makeText(getApplicationContext(), "Unable to connect to Internet.", Toast.LENGTH_SHORT).show();
-		}
-	}
 	
 	
 	
+	/*
+	 * This method will check if network connection exists
+	 * Returns boolean 
+	 */
 	private boolean haveNetworkConnection() {
 	    boolean haveConnectedWifi = false;
 	    boolean haveConnectedMobile = false;
@@ -300,161 +277,6 @@ public class HomescreenActivity extends Activity {
 	    }
 	    return haveConnectedWifi || haveConnectedMobile;
 	}
-	
-	
-	public void loginprocess(String Email, String Password){
-		Log.w("lgin","good to login");
-		String server_response = "hello";
-		String appkey = "n1a1v2e3e5n8m13y21s34o55r89e"; 
-		
-		 try {
-		    	server_response = new RequestTask().execute("http://54.183.113.236/metster/loginprocess.php", appkey, Email, Password,"1","1", "1", "1"
-						, "1", "1", "1", "1", "1", "1" ).get();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		 
-		 Log.w("reponse",server_response);
-		 
-		 if(server_response.contentEquals("noemail")){
-			 Toast.makeText(getApplicationContext(), "Please check your email and try again", Toast.LENGTH_SHORT).show();
-		 }
-		 else{
-			 if(server_response.contentEquals("invalidpassword")){
-				 Toast.makeText(getApplicationContext(), "Please check your password and try again", Toast.LENGTH_SHORT).show();
-			 }
-			 else{
-				 String[] separated = server_response.split("#%-->");
-				 String accountnumber = separated[0];
-			     String token = separated[1];
-			     String image = separated[2];
-			     setuplogin(accountnumber, token,image);
-			 }
-		 }
-		 
-		 
-	}
-	
-	
-	public void setuplogin(String accountnumber, String token, String image){	
-    	String filetoken = "token.txt";
-    	String fileaccount = "accounts.txt";
-    	String fileimage = "image.txt";
-        FileOutputStream outputStream;
-        //-------------------------------------- write token to file
-        try {
-          outputStream = openFileOutput(fileaccount, Context.MODE_PRIVATE);
-          outputStream.write(accountnumber.getBytes());
-          outputStream.close();
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        
-       catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
-            if( t instanceof ExecutionException ) {
-                t = t.getCause();
-            }
-        }
-      //-------------------------------------- write account to file 
-        try {
-          outputStream = openFileOutput(filetoken, Context.MODE_PRIVATE);
-          outputStream.write(token.getBytes());
-          outputStream.close();
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        
-       catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
-            if( t instanceof ExecutionException ) {
-                t = t.getCause();
-            }
-        }
-      //-------------------------------------- write image to file 
-        try {
-          outputStream = openFileOutput(fileimage, Context.MODE_PRIVATE);
-          outputStream.write(image.getBytes());
-          outputStream.close();
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        
-       catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
-            if( t instanceof ExecutionException ) {
-                t = t.getCause();
-            }
-        }
-	}
-	
-	
-	/** Called when the user clicks the Login button */
-	public void logintoaccount(View view) {
-		
-		//------------------------------------->
-        boolean stat = haveNetworkConnection();
-      		
-		if(stat){
-			EditText email = (EditText)  findViewById(R.id.Email) ;
-			EditText password = (EditText)  findViewById(R.id.Password) ;
-			final String Email = email.getText().toString();
-			final String Password = password.getText().toString();
-			Log.w("email",Email);
-			Log.w("password",Password);
-		
-		if(Email.isEmpty()){
-			Toast.makeText(getApplicationContext(), "Please enter your email", Toast.LENGTH_SHORT).show();
-		}else{
-			if(Password.isEmpty()){
-				Toast.makeText(getApplicationContext(), "Please enter your password", Toast.LENGTH_SHORT).show();
-			}else{
-				loginprocess( Email, Password);
-			}
-		}
 		
 		
-        try {
-            FileInputStream inputStream = openFileInput("accounts.txt");
-
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append(receiveString);
-                }
-
-                inputStream.close();
-                stringBuilder.toString();
-                
-        		Intent intent = new Intent(this, LoadHome.class);
-        		startActivity(intent);
-        		finish();
-            }
-        }
-        catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-            .show();
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-            Toast.makeText(this, "Please create an account first", Toast.LENGTH_SHORT)
-            .show();
-        }
-	
-		}
-		else{
-			Toast.makeText(getApplicationContext(), "Unable to connect to Internet.", Toast.LENGTH_SHORT).show();
-		}
-		
-		//-------------------------------------->
-		 
-	}
-	
-		
-
 }

@@ -2,8 +2,16 @@ package com.example.metster;
 
 import java.util.ArrayList;
 
+import android.graphics.Bitmap;
+
 public class commondata {
 
+	public static class facebook_details{
+		static String facebook;
+		static String name;
+		static String email;
+		static Bitmap profile_image;
+	}
 	public static class keys{
 		static String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";
 	}

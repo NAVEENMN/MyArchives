@@ -4,101 +4,21 @@
     android:layout_height="match_parent"
     android:background="#B3B0B0"
     tools:context=".HomescreenActivity" >
-    
 
     <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="bottom"
-    android:background="@drawable/welcome">
-    
-    
-        <LinearLayout
-                tools:context=".MainActivity"
-		        android:id="@+id/linearLayout2"
-		        android:gravity="bottom"
-		        android:layout_width="fill_parent"
-		        android:background="#CC5F04B4"
-		        android:layout_height="140dp"
-		        android:orientation="vertical">
-		
-           <LinearLayout 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/welcome"
+        android:gravity="bottom" >
 
-    <com.facebook.widget.LoginButton
-        android:id="@+id/authButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        />
-
-</LinearLayout> 
-            
-		<TextView
-			    android:id="@+id/line1"
-			    style="?android:attr/listSeparatorTextViewStyle"
-			    android:background="#CC08088A"
-			    android:layout_width="match_parent"
-			    android:layout_height="2dp" />
-		
-		<EditText
-		       android:id="@+id/Email"
-		       android:layout_width="match_parent"
-		       android:layout_height="wrap_content"
-		       android:hint="@string/Email"
-		       android:inputType="textEmailAddress" />
-
-		   <EditText
-		       android:id="@+id/Password"
-		       android:layout_width="match_parent"
-		       android:layout_height="wrap_content"
-		       android:hint="@string/Password"
-		       android:inputType="textPassword" />
-		
-        
-       <LinearLayout
-		        android:id="@+id/linearLayout3"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:gravity="bottom"
-		        android:orientation="horizontal">     
-			    <Button
-			        android:id="@+id/button2"
-			        style="?android:attr/buttonStyleSmall"
-			        android:layout_width="0dip"
-			        android:layout_weight="1"
-			        android:layout_height="60dp"
-			        android:background = "@drawable/buttonclicker"
-			        android:textColor="#F2F2F2"
-			        android:textSize="15sp"
-			        android:textStyle="bold"
-			        android:text="@string/LogIn" 
-			        android:onClick="logintoaccount"/> 
-			        
-			    <Button
-			        android:id="@+id/button1"
-			        style="?android:attr/buttonStyleSmall"
-			        android:layout_width="0dip"
-			        android:layout_weight="1"
-			        android:layout_height="60dp"
-			        android:background = "@drawable/buttonclicker"
-			        android:textColor="#F2F2F2"
-			        android:textSize="15sp"
-			        android:textStyle="bold"
-			        android:text="@string/SignUp" 
-			        android:onClick="Signupaccount"/>
-			        
-        </LinearLayout>
-        
-        </LinearLayout> 
-        
-        
-
-</RelativeLayout>
-
-   
+            <com.facebook.widget.LoginButton
+                android:id="@+id/authButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center" />
+  
+    </RelativeLayout>
 
 </FrameLayout>
