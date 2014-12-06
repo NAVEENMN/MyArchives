@@ -10,7 +10,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    android:background="@drawable/basebg">
+    android:background="@drawable/welcome">
     
     
         <LinearLayout
@@ -18,14 +18,29 @@
 		        android:id="@+id/linearLayout2"
 		        android:gravity="bottom"
 		        android:layout_width="fill_parent"
-		        android:background="#5F04B4"
+		        android:background="#CC5F04B4"
 		        android:layout_height="140dp"
 		        android:orientation="vertical">
 		
+           <LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.facebook.widget.LoginButton
+        android:id="@+id/authButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        />
+
+</LinearLayout> 
+            
 		<TextView
 			    android:id="@+id/line1"
 			    style="?android:attr/listSeparatorTextViewStyle"
-			    android:background="#08088A"
+			    android:background="#CC08088A"
 			    android:layout_width="match_parent"
 			    android:layout_height="2dp" />
 		

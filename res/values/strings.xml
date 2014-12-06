@@ -27,6 +27,7 @@
     <string name="FirstName">First Name</string>
     <string name="LastName">Last Name</string>
     <string name="Email">Email</string>
+    <string name="ContactNumber">Contact Number</string>
     <string name="email_hint">Email</string>
     <string name="DateofBirthLable">Date of Birth</string>
     <string name="Password">Password</string>
@@ -78,6 +79,7 @@
     <string name="MyPassion">My Passion in life</string>
     <string name="AboutMe">About Me</string>
     <string name="Update">Update</string> <!-- Button Update -->
+    <string name="facebook_app_id">1500888230193192</string>
     <!-- ******************************************************** -->
 
 

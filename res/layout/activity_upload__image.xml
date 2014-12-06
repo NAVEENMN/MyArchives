@@ -67,7 +67,7 @@
 			        android:gravity="center"
 			        android:paddingTop="10dip"
 			        android:drawableTop="@drawable/ic_action_upload"
-			        android:onClick="update_image"
+			        android:onClick="updateimage"
 			        />
     </LinearLayout>
 

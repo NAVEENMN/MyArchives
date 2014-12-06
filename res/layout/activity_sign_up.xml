@@ -2,14 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B3B0B0"
+    android:background="#088A85"
     tools:context=".SignUpActivity" >
 
     <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom"
-    android:background="@drawable/basebg" >
+    android:gravity="top"
+    android:background="#CEF6F5" >
        
      <LinearLayout
 	        android:id="@+id/imagenamesection"
@@ -50,12 +50,14 @@
 			       android:layout_width="match_parent"
 			       android:layout_height="wrap_content"
 			       android:hint="@string/FirstName"
+			       android:textColor="#0B2F3A"
 			       android:inputType="textPersonName" /> 
 	   		<EditText
 			       android:id="@+id/LastName"
 			       android:layout_width="match_parent"
 			       android:layout_height="wrap_content"
 			       android:hint="@string/LastName"
+			       android:textColor="#0B2F3A"
 			       android:inputType="textPersonName" /> 
           
 		   <EditText
@@ -63,13 +65,22 @@
 		       android:layout_width="match_parent"
 		       android:layout_height="wrap_content"
 		       android:hint="@string/Email"
+		       android:textColor="#0B2F3A"
 		       android:inputType="textEmailAddress" />
+		   <EditText
+		       android:id="@+id/Contact"
+		       android:layout_width="match_parent"
+		       android:layout_height="wrap_content"
+		       android:hint="@string/ContactNumber"
+		       android:textColor="#0B2F3A"
+		       android:inputType="text" />
 
 		   <EditText
 		       android:id="@+id/Password"
 		       android:layout_width="match_parent"
 		       android:layout_height="wrap_content"
 		       android:hint="@string/Password"
+		       android:textColor="#0B2F3A"
 		       android:inputType="textPassword" />
 
 		   <EditText
@@ -77,37 +88,10 @@
 		       android:layout_width="match_parent"
 		       android:layout_height="wrap_content"
 		       android:hint="@string/RetypePassword"
+		       android:textColor="#0B2F3A"
 		       android:inputType="textPassword" />
-		 
 		   
-		   <LinearLayout
-		        android:id="@+id/linearLayout4"
-		        android:layout_width="match_parent"
-		        android:layout_height="match_parent"
-		        android:background="@drawable/loginbg"
-		    	android:gravity="bottom"
-		        android:orientation="horizontal">
-		   <RadioButton
-		       android:id="@+id/radioButton1"
-		       android:layout_width="wrap_content"
-		       android:layout_height="wrap_content"
-		       android:textColor="#848484"
-	           android:textSize="12sp"
-	           android:textStyle="bold"
-		       android:text="@string/male"
-		       android:onClick="radio1_onClick" />
 
-   			<RadioButton
-		       android:id="@+id/radioButton2"
-		       android:layout_width="wrap_content"
-		       android:layout_height="wrap_content"
-		       android:textColor="#848484"
-	           android:textSize="12sp"
-	           android:textStyle="bold"
-		       android:text="@string/female"
-		       android:onClick="radio2_onClick" />
-   			
-   			</LinearLayout> 
    			<CheckBox
 		       android:id="@+id/checkBox1"
 		       android:layout_width="match_parent"
@@ -116,18 +100,15 @@
 		       android:textSize="12sp"
 		       android:textStyle="bold"
 		       android:text="@string/terms" />
+
    			<Button
-		        android:id="@+id/button3"
-		        style="?android:attr/buttonStyleSmall"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:background = "@drawable/curvedbuttonhandler"
-		        android:textColor="#4E4E4E"
-		        android:textSize="12sp"
-		        android:textStyle="bold"
-		        android:gravity="center"
-		        android:text="@string/SignUp" 
-		        android:onClick="Signupaccount"/>
+   			    android:id="@+id/button3"
+   			    style="?android:attr/buttonStyleSmall"
+   			    android:layout_width="wrap_content"
+   			    android:layout_height="wrap_content"
+   			    android:background="@drawable/signup"
+   			    android:gravity="center"
+   			    android:onClick="Signupaccount" />
              
      </LinearLayout>
      

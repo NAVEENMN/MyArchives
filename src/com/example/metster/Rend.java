@@ -688,7 +688,7 @@ public class Rend extends ActionBarActivity {
 	public void create_event_notfication(){
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-		alert.setTitle("New Event");
+		alert.setTitle("New Event Tracer");
 		alert.setMessage("Set Event name");
 
 		// Set an EditText view to get user input 

@@ -29,6 +29,9 @@ public class Settings extends Activity {
         		File dir = getFilesDir();
         		File file = new File(dir, "accounts.txt");
         		boolean deleted = file.delete();
+        		File dir2 = getFilesDir();
+        		File file2 = new File(dir2, "metster_event_info.txt");
+        		file2.delete();
         		startActivity(intent2);
         		finish();
             }

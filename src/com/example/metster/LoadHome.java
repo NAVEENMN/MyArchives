@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.annotation.TargetApi;
@@ -195,6 +196,7 @@ public class LoadHome extends Activity {
 	        	if(isGPSEnabled){
 	        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 			        pos = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			      
 			        commondata.user_information.latitude = pos.getLatitude();
 			        commondata.user_information.longitude = pos.getLongitude();
 	        	}else{
@@ -237,6 +239,16 @@ public class LoadHome extends Activity {
 		            gcm = GoogleCloudMessaging.getInstance(this);
 		            regid = getRegistrationId(context);
 		            Log.w("regisid",regid);
+		            try {
+		   	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/register_gcm.php",commondata.user_information.account_number,regid,"1","1","1","1","1"
+		   			, "1", "1", "1", "1", "1", "1").get();
+		   			} catch (InterruptedException e) {
+		   							// TODO Auto-generated catch block
+		   				e.printStackTrace();
+		   			} catch (ExecutionException e) {
+		   							// TODO Auto-generated catch block
+		   				e.printStackTrace();
+		   			}
 		            if (regid.isEmpty()) {
 		                registerInBackground();
 		            	
@@ -458,7 +470,7 @@ public class LoadHome extends Activity {
 	                // so it can use GCM/HTTP or CCS to send messages to your app.
 	                // The request to your server should be authenticated if your app
 	                // is using accounts.
-	                sendRegistrationIdToBackend();
+	                sendRegistrationIdToBackend(regid);
 
 	                // For this demo: we don't need to send it because the device
 	                // will send upstream messages to a server that echo back the
@@ -530,8 +542,18 @@ public class LoadHome extends Activity {
 	 * device sends upstream messages to a server that echoes back the message
 	 * using the 'from' address in the message.
 	 */
-	private void sendRegistrationIdToBackend() {
+	private void sendRegistrationIdToBackend(String regid) {
 	    // Your implementation here.
+		try {
+	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/register_gcm.php",commondata.user_information.account_number,regid,"1","1","1","1","1"
+			, "1", "1", "1", "1", "1", "1").get();
+			} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+							// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	}
 	
 	/**

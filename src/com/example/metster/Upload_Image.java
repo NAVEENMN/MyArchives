@@ -19,7 +19,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
@@ -217,7 +216,7 @@ public class Upload_Image extends Activity {
                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                            public void onClick(DialogInterface dialog, int id) {
                                System.gc();
-                               Intent I = new Intent(Upload_Image.this, Upload_Image.class);
+                               Intent I = new Intent(Upload_Image.this, LoadHome.class);
                                startActivity(I);
                                finish();
                            }
@@ -230,58 +229,6 @@ public class Upload_Image extends Activity {
             }catch( Throwable t ) { //Exception handling of nested exceptions is painfully clumsy in Java
                 
             }
-	}
-	
-	
-	public void update_image(final View v) {
-		v.setEnabled(false);
-		AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-			
-			@Override
-			protected void onPreExecute() {
-			    pd = new ProgressDialog(Upload_Image.this);
-				pd.setTitle("Processing...");
-				pd.setMessage("Please wait.");
-				pd.setCancelable(false);
-				pd.setIndeterminate(true);
-				pd.show();
-				Log.w("pre","executed");
-			}
-				
-			@Override
-			protected Void doInBackground(Void... arg0) {
-				
-			
-		            	try {
-							server_response = new RequestTask().execute("http://54.183.113.236/metster/profiledataupdate.php", appkey, info.useraccnumber, "1", info.userstayingin, info.userprofession, info.userworksat,info.userfacebook,
-				            		info.userlinkedin, "1", "1", info.userabout, image_str, "1").get();
-							Log.w("back","doing");
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (ExecutionException e) {
-							// TODO Auto-generated catch block
-							Log.w("update","failed");
-							e.printStackTrace();
-						}
-
-
-		      
-				
-				return null;
-			}
-			
-			@Override
-			protected void onPostExecute(Void result) {
-				if (pd!=null) {
-					Log.w("post","run");
-					pd.dismiss();
-					v.setEnabled(true);
-				}
-			}
-				
-		};
-		task.execute((Void[])null);
 	}
 	
 	@Override

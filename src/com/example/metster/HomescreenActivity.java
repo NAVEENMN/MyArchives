@@ -6,20 +6,36 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.ExecutionException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.facebook.android.DialogError;
+import com.facebook.android.Facebook;
+import com.facebook.android.Facebook.DialogListener;
+import com.facebook.android.FacebookError;
+import com.facebook.android.Util;
+import com.firebase.client.Firebase;
 
 /*
  * 	This class opens up when the App starts
@@ -34,10 +50,61 @@ public class HomescreenActivity extends Activity {
 	
 	String val;
 	int userid;
+	Facebook fb;
+	SharedPreferences sp;
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_homescreen);
+		String APP_ID = getString(R.string.facebook_app_id);
+		Firebase.setAndroidContext(getApplicationContext());
+		
+        fb=new Facebook(APP_ID);
+        
+        if(fb.isSessionValid()){
+        	System.out.println( "fb" +
+        	fb.getAccessToken()
+        	);}else{
+        		System.out.println("no");
+        		
+				fb.authorize(this, new String[] {"email", "public_profile"}, new DialogListener(){
+
+					@Override
+					public void onComplete(Bundle values) {
+						// TODO Auto-generated method stub
+						System.out.println("yes bab" + fb.getAccessToken() );
+						new RetrieveFeedTask().execute();
+						
+					}
+
+					@Override
+					public void onFacebookError(FacebookError e) {
+						// TODO Auto-generated method stub
+						System.out.println("no bab");
+					}
+
+					@Override
+					public void onError(DialogError e) {
+						// TODO Auto-generated method stub
+						System.out.println("y bab");
+					}
+
+					@Override
+					public void onCancel() {
+						// TODO Auto-generated method stub
+						System.out.println("yer bab");
+					}
+        			
+        		});
+        	}
+        
+        
+
+        
+       
+        
+        
 		//---------------------------------------------------> if account set then login
         try {
             FileInputStream inputStream = openFileInput("accounts.txt");
@@ -92,15 +159,96 @@ public class HomescreenActivity extends Activity {
         }
         catch (FileNotFoundException e) {
             Log.e("login activity", "File not found: " + e.toString());
-            Toast.makeText(this, "Welcome to Metster", Toast.LENGTH_SHORT)
-            .show();
+            
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());
-            Toast.makeText(this, "Welcome to Metster", Toast.LENGTH_SHORT)
-            .show();
+            
         }
 		//------------------------------------------------------------------------------
 	}
+	
+	
+	class RetrieveFeedTask extends AsyncTask<String, Void, Void> {
+
+	    private Exception exception;
+
+	    protected void onPostExecute() {
+	        // TODO: check this.exception 
+	        // TODO: do something with the feed
+	    }
+
+		@Override
+		protected Void doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			try {
+	        	getProfileInformation();
+	        } catch (Exception e) {
+	            this.exception = e;
+	        }
+			return null;
+		}
+	}
+	
+	 @Override
+     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+         // TODO Auto-generated method stub
+         super.onActivityResult(requestCode, resultCode, data);
+         fb.authorizeCallback(requestCode, resultCode, data);
+     }
+	 
+	 
+	 public void getProfileInformation() {
+
+
+		    try {
+
+		        JSONObject profile = Util.parseJson(fb.request("me"));
+		        Log.e("Profile", "" + profile);
+
+		        final String mUserId = profile.getString("id");
+		        final String mUserName = profile.getString("name");
+		        final String mUserEmail = profile.getString("email");
+		        
+		        URL img_value = new URL("https://graph.facebook.com/"+mUserId+"/picture?type=large");
+		        final Bitmap mIcon1 = BitmapFactory.decodeStream(img_value.openConnection().getInputStream());
+		       
+		        //----
+		        
+		        
+		        
+		        
+		        //----
+		        runOnUiThread(new Runnable() {
+
+		            public void run() {
+		            	System.out.println(mIcon1.toString());
+		                Log.e("FaceBook_Profile",""+mUserName+"\n"+"\n"+mUserEmail+"\n"+mUserEmail);
+
+		                Toast.makeText(getApplicationContext(),
+		                        "Name: " + mUserName + "\nEmail: " + mUserEmail,
+		                        Toast.LENGTH_LONG).show();
+
+
+
+		            }
+
+		        });
+
+		    } catch (FacebookError e) {
+
+		        e.printStackTrace();
+		    } catch (MalformedURLException e) {
+
+		        e.printStackTrace();
+		    } catch (JSONException e) {
+
+		        e.printStackTrace();
+		    } catch (IOException e) {
+
+		        e.printStackTrace();
+		    }
+
+		}
 	
 	@Override
 	public void onBackPressed() {
@@ -185,7 +333,6 @@ public class HomescreenActivity extends Activity {
 			     String token = separated[1];
 			     String image = separated[2];
 			     setuplogin(accountnumber, token,image);
-				 Toast.makeText(getApplicationContext(), "Login ok", Toast.LENGTH_SHORT).show();
 			 }
 		 }
 		 

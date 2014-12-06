@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     
     <item  
-    android:id="@+id/person_icon"
-    android:icon="@drawable/ic_action_person"
-    android:title="@string/title_activity_person"
-    android:showAsAction="always"/>
-    <item  
     android:id="@+id/refresh_icon"
     android:icon="@drawable/ic_action_refresh"
     android:title="@string/title_activity_refresh"

@@ -360,11 +360,9 @@ public class Login extends Activity {
         lname.setText((String)commondata.user_information.lastname);
         lname.startAnimation(animTimeChange);
         TextView prof = (TextView)findViewById(R.id.Profession); 
-        prof.setText((String)commondata.user_information.profession);
-        TextView wat = (TextView)findViewById(R.id.Worksat); 
-        wat.setText((String)commondata.user_information.worksat);
+        prof.setText((String)commondata.user_information.addressline);
         TextView cc = (TextView)findViewById(R.id.CurrentCity); 
-        cc.setText((String)commondata.user_information.currentcity);
+        cc.setText((String)commondata.user_information.cityname);
         //----------- Section 2
         //TextView loca = (TextView)findViewById(R.id.YourLocation); 
         //loca.setText((String)addrs.addressline);
@@ -465,7 +463,7 @@ public class Login extends Activity {
         mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(commondata.user_information.latitude, commondata.user_information.longitude)) // visitor
-                .title(Integer.toString(Userslist.user_count))).showInfoWindow();
+                ).showInfoWindow();
 	
 	}
 	
@@ -559,10 +557,7 @@ public class Login extends Activity {
 
 			alert.show();
 			return true;
-			
-		case R.id.person_icon:
-			updateprofile(null);
-			return true;
+
 		case R.id.refresh_icon:
 			locationManager.removeUpdates(locationListener);
             Intent serviceIntent = new Intent(Login.this, Login.class);
@@ -573,7 +568,6 @@ public class Login extends Activity {
 			locationManager.removeUpdates(locationListener);
             Intent settingsIntent = new Intent(Login.this, Settings.class);
             startActivity(settingsIntent);
-            finish();
 			return true;	
 			
 		}

@@ -69,18 +69,7 @@ public class SignUpActivity extends Activity {
 
 	    return bitmap;
 	}
-	
-	/*	public void sendEmail(String fEmail){
-	//SendGrid Integration
-	SendGrid sendgrid = new SendGrid("kaushalp88", "kaushal88");
-	sendgrid.addTo(fEmail);
-	sendgrid.setFrom("navimn1991@gmail.com");
-	sendgrid.setSubject("Welcome to Metster");
-	sendgrid.setText("Welcome to Metser. Thank you for signing up with metster.");
 
-	sendgrid.send();
-} */
-	
 	public boolean checkemail(String email)
 	{
 
@@ -90,21 +79,6 @@ public class SignUpActivity extends Activity {
 
 	}
 	
-	public void radio1_onClick(View v)
-	{
-	    CompoundButton b1=(CompoundButton)findViewById(R.id.radioButton1);
-	    CompoundButton b2=(CompoundButton)findViewById(R.id.radioButton2);
-	    b1.setChecked(true); /* light the button */
-	    b2.setChecked(false); /* unlight the button */
-	}
-	public void radio2_onClick(View v)
-	{
-	    CompoundButton b1=(CompoundButton)findViewById(R.id.radioButton1);
-	    CompoundButton b2=(CompoundButton)findViewById(R.id.radioButton2);
-	    b1.setChecked(false); /* light the button */
-	    b2.setChecked(true); /* unlight the button */
-	}
-
 	public void pickimage(View view) {
 		Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
@@ -114,18 +88,19 @@ public class SignUpActivity extends Activity {
 	public void Signupaccount(View view) {
 		
 		final CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox1);
-		CompoundButton b1=(CompoundButton)findViewById(R.id.radioButton1);
-	    CompoundButton b2=(CompoundButton)findViewById(R.id.radioButton2);
+		
 		//--------------------------------Data from fields-----------------------
     	EditText FirstName = (EditText)  findViewById(R.id.FirstName) ;
 		EditText LastName = (EditText)  findViewById(R.id.LastName) ;
 		EditText Email = (EditText)  findViewById(R.id.Email) ;
+		EditText Contact = (EditText)  findViewById(R.id.Contact) ;
 		EditText Password = (EditText)  findViewById(R.id.Password) ;
 		EditText RetypePassword = (EditText)  findViewById(R.id.RetypePassword) ;
         final String fFirstName = FirstName.getText().toString();
         final String fLastName = LastName.getText().toString();
         final String fBirthday = "NULL";
         final String fEmail = Email.getText().toString();
+        final String Contactnumber = Contact.getText().toString(); 
         final String fPassword = Password.getText().toString();
         final String fRetypePassword = RetypePassword.getText().toString();
         //-----------------------------------------------------------------------
@@ -146,6 +121,14 @@ public class SignUpActivity extends Activity {
             Toast.makeText(this, "Please enter your Email", Toast.LENGTH_SHORT).show();
             return;
         }
+        if(TextUtils.isEmpty(Contactnumber)) {
+            Toast.makeText(this, "Please enter your Contact Number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(Contactnumber.length() != 10 ) {
+            Toast.makeText(this, "Contact Number seems invalid", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(TextUtils.isEmpty(fPassword)) {
             Toast.makeText(this, "Please pick a Password", Toast.LENGTH_SHORT).show();
             return;
@@ -163,21 +146,7 @@ public class SignUpActivity extends Activity {
             return;
         }
         
-        if( b1.isChecked()){
-        	gender = "Male";
-        }
-        else{
-        	if(b2.isChecked()){
-        		gender = "Female";
-        	}
-        	else{
-        		gender = "Unknow";
-        	}
-        }
-        if(!(b1.isChecked()) && !(b2.isChecked()) ){
-        	Toast.makeText(this, "Please pick up a gender", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        gender = "unknown";
     	               
             //---------------------------------- image base64 compression 
              if(image_from_gallery){
@@ -198,12 +167,12 @@ public class SignUpActivity extends Activity {
             	  
               if(checkemail(fEmail)){
             	  server_response = new RequestTask().execute("http://54.183.113.236/metster/accountprocess.php", appkey, fFirstName, fLastName,fEmail,fPassword, image_str, gender
-              		, "1", "1", "1", "1", "1", "1" ).get();
+              		, Contactnumber, "1", "1", "1", "1", "1" ).get();
             	  String response = server_response.toString();
             	  Log.w("serversays",response);
             	  System.out.println(response.contains("no"));
             	  if(response.contains("no")){
-            		  Toast.makeText(getApplicationContext(), "This email seems to already in use!! Please try again.", Toast.LENGTH_SHORT).show();
+            		  Toast.makeText(getApplicationContext(), "This email or contact seems to already in use!! Please try again.", Toast.LENGTH_SHORT).show();
             	  }
             	  else{
               	//-------------------------------------> write usertoken to file
