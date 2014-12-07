@@ -276,7 +276,10 @@ public class GCM_handle extends Activity {
         	new logingcminback().execute();
         	
         	}
-		
+		System.out.println("brequest was from" + commondata.gcm_req.requester_name);
+		System.out.println("brequest for event" + commondata.gcm_req.event_id);
+		System.out.println("bvis me name is" + commondata.facebook_details.name );
+		System.out.println("bvis me name is" + commondata.facebook_details.facebook );
 		/*
 		 * first we need this users facebook id
 		 * second fetch the location
@@ -294,9 +297,31 @@ public class GCM_handle extends Activity {
 		System.out.println("request for event" + commondata.gcm_req.event_id);
 		System.out.println("vis me name is" + commondata.facebook_details.name );
 		System.out.println("vis me name is" + commondata.facebook_details.facebook );
+		Thread thread = new Thread()
+		{
+		    @Override
+		    public void run() {
+		    	if(commondata.gcm_req.event_id != null){
+		    		create_firebase_event_refrence(commondata.gcm_req.event_id);
+		    		try {
+		    	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/updateevent.php",commondata.facebook_details.facebook,commondata.gcm_req.event_id,"1","1","1","1","1"
+		    			, "1", "1", "1", "1", "1", "1").get();
+		    	    	 System.out.println("backhand" + server_resp);
+		    			} catch (InterruptedException e) {
+		    							// TODO Auto-generated catch block
+		    				System.out.println("backhander");
+		    				e.printStackTrace();
+		    			} catch (ExecutionException e) {
+		    							// TODO Auto-generated catch block
+		    				System.out.println("backhander");
+		    				e.printStackTrace();
+		    			}
+		    		} 
+		    }
+		};
+
+		thread.start();
 		
-		if(commondata.gcm_req.event_id != null)
-		create_firebase_event_refrence(commondata.gcm_req.event_id);
 	}
 	//------------------------------------------------------------------
 	/*
@@ -308,7 +333,6 @@ public class GCM_handle extends Activity {
 				strBuilder.append(commondata.facebook_details.facebook);//for that event add me
 			    fb_event_ref.fbref = strBuilder.toString();
 			    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
-			    fb_event_ref.firebaseobj.setValue(commondata.facebook_details.name);// might have to relase on new thread
 			    fb_event_ref.firebaseobj.child("Latitude").setValue(commondata.user_information.latitude);
 			    fb_event_ref.firebaseobj.child("Longitude").setValue(commondata.user_information.longitude);
 	}
@@ -368,7 +392,6 @@ class logingcminback extends AsyncTask<Void, Void, Void>{
 	  	    	 response = new RequestTask().execute("http://54.183.113.236/metster/setup_account.php",commondata.facebook_details.facebook,commondata.facebook_details.name,commondata.facebook_details.email,"1","1","1","1","1"
 	  			, "1", "1", "1", "1", "1", "1").get();
 	  	    	 System.out.println(response.toString());
-	  	    	 commondata.facebook_details.contact = response.toString();
 	    		}
 	  			} catch (InterruptedException e) {
 	  							// TODO Auto-generated catch block
@@ -399,13 +422,6 @@ class logingcminback extends AsyncTask<Void, Void, Void>{
          fb.authorizeCallback(requestCode, resultCode, data);
      }
 	 
-	 public String BitMapToString(Bitmap bitmap){
-	     ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-	     bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-	     byte [] b=baos.toByteArray();
-	     String temp=Base64.encodeToString(b, Base64.DEFAULT);
-	     return temp;
-	}
 	 
 	 /*
 	  * This method will fetch the facebook details
@@ -422,16 +438,13 @@ class logingcminback extends AsyncTask<Void, Void, Void>{
 		        final String mUserName = profile.getString("name");
 		        final String mUserEmail = profile.getString("email");
 		        
-		        URL img_value = new URL("https://graph.facebook.com/"+mUserId+"/picture?type=large");
-		        final Bitmap mIcon1 = BitmapFactory.decodeStream(img_value.openConnection().getInputStream());
-		        
 		        
 		        commondata.facebook_details.facebook = mUserId;
 		        commondata.facebook_details.name = mUserName;
 		        commondata.facebook_details.email = mUserEmail;
-		        commondata.facebook_details.profile_image = mIcon1;
+		        
 		        System.out.println(Integer.toString(commondata.facebook_details.profile_image.getHeight()));
-		        commondata.user_information.profileimage = BitMapToString(mIcon1);
+		        
 		       /*
 		        runOnUiThread(new Runnable() {
 

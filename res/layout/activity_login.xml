@@ -122,6 +122,7 @@
             android:layout_centerHorizontal="true"
             android:background="@android:color/transparent"
             android:drawableTop="@drawable/addfriend"
+            android:onClick="AccessButton"
             />
     </RelativeLayout>
        

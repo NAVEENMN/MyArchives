@@ -588,7 +588,7 @@ int id com_facebook_usersettingsfragment_logo_image 0x7f0500b0
 int id com_facebook_usersettingsfragment_profile_name 0x7f0500b1
 int id container 0x7f050067
 int id default_activity_button 0x7f050045
-int id delete_icon 0x7f0500b9
+int id delete_icon 0x7f0500b7
 int id dialog 0x7f05002c
 int id disableHome 0x7f050026
 int id do_email_picker 0x7f050069
@@ -637,7 +637,7 @@ int id progress_circular 0x7f050035
 int id progress_horizontal 0x7f050036
 int id question 0x7f05006b
 int id radio 0x7f05004c
-int id refresh_icon 0x7f0500b7
+int id refresh_icon 0x7f0500b8
 int id refresh_icon1 0x7f0500ba
 int id right 0x7f05000b
 int id sandbox 0x7f050013
@@ -655,7 +655,7 @@ int id search_src_text 0x7f050054
 int id search_voice_btn 0x7f050058
 int id section_label 0x7f0500b3
 int id selectionDetails 0x7f050016
-int id settings_icon 0x7f0500b8
+int id settings_icon 0x7f0500b9
 int id shortcut 0x7f05004b
 int id showCustom 0x7f050025
 int id showHome 0x7f050022

@@ -319,6 +319,23 @@ public class Rend extends ActionBarActivity {
 		    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
 		    fb_event_ref.firebaseobj.removeValue();
 		    delete_event_file();
+		    
+		    try {
+		    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/resetevent.php",commondata.facebook_details.facebook,"event-"+commondata.facebook_details.facebook,"1","1","1","1","1"
+				, "1", "1", "1", "1", "1", "1").get();
+		    	 System.out.println("backhand" + server_resp);
+				} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+					System.out.println("backhander");
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+					System.out.println("backhander");
+					e.printStackTrace();
+				}
+		  
+		  
+	
 		//}
 	}
 	
@@ -708,6 +725,20 @@ public class Rend extends ActionBarActivity {
 		  pick_food_type();
 		  create_event_file();//update local file after food chosen
 		  event_tracer_is_setup = "yes";
+		  try {
+		    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/updateevent.php",commondata.facebook_details.facebook,"event-"+commondata.facebook_details.facebook,"1","1","1","1","1"
+				, "1", "1", "1", "1", "1", "1").get();
+		    	 System.out.println("backhand" + server_resp);
+				} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+					System.out.println("backhander");
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+					System.out.println("backhander");
+					e.printStackTrace();
+				}
+		  
 		  }
 		});
 

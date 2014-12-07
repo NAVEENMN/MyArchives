@@ -163,7 +163,15 @@ public class HomescreenActivity extends Activity {
 	  	    	 response = new RequestTask().execute("http://54.183.113.236/metster/setup_account.php",commondata.facebook_details.facebook,commondata.facebook_details.name,commondata.facebook_details.email,"1","1","1","1","1"
 	  			, "1", "1", "1", "1", "1", "1").get();
 	  	    	 System.out.println(response.toString());
-	  	    	 commondata.facebook_details.contact = response.toString();
+	  	    	 String[] dat = response.toString().split("-->");
+	  	    	 if(dat.length == 2){//it has both component
+	  	    		commondata.facebook_details.contact = dat[0];//contact
+		  	    	commondata.event_information.eventID = dat[1];
+	  	    	 }else{
+	  	    		commondata.facebook_details.contact = dat[0];//contact
+		  	    	commondata.event_information.eventID = null;
+	  	    	 }
+	  	    	 
 	    		}
 	  			} catch (InterruptedException e) {
 	  							// TODO Auto-generated catch block

@@ -1,5 +1,6 @@
 package com.example.metster;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -7,33 +8,48 @@ import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Point;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
+import android.os.Looper;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.Contacts;
 import android.text.Editable;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.metster.Rend.group;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -57,14 +73,36 @@ public class Login extends Activity {
 		static Boolean ok_to_load;
 	}
 		
-	
+	public static class event_info{
+		static String event_name;
+		static String food_type;
+		static String is_exist;
+		static String is_food_chosen;
+	}
 	public static class Userslist{
 		static String server_response;
 		static String numberofusers;
 		static int user_count;
 	};
+	public static class fb_event_ref{
+		static String fbref;
+		static Firebase firebaseobj;
+	}
+	private static class contact_info{
+		static String contact_name;
+		static String contact_number;
+	}
 	//----------------------------------------->
-		
+	//
+	private static final String TAG = Rend.class.getSimpleName();
+    private static final int REQUEST_CODE_PICK_CONTACTS = 1;
+    private Uri uriContact;
+    private String contactID;     // contacts unique ID
+    private String access_to_button;
+    private String event_tracer_is_setup;
+    private String initiate;
+	AlertDialog levelDialog = null;
+	private static final int CONTACT_PICKER_RESULT = 1001;
 	Geocoder gcd ;
 	GoogleMap mMap;
 	LocationManager locationManager;
@@ -83,6 +121,7 @@ public class Login extends Activity {
     Location postion_get;
     boolean isGPSEnabled;
     boolean isNetworkEnabled;
+    ValueEventListener listn;
   
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +131,11 @@ public class Login extends Activity {
 		commondata.user_information.status = "Hello There!!";
 		setTitle("Set your status");
 		Firebase.setAndroidContext(this);
-		//------ side bar
-		
-		if(commondata.facebook_details.contact.contains("nothing")){
+	
+		/*
+		 * if contact info is not present ask from user
+		 */
+		if(commondata.facebook_details.contact == null){
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
 			alert.setTitle("Contact Information needed.");
@@ -140,25 +181,27 @@ public class Login extends Activity {
     	}
 		//-------
 		
+		Button b1 = (Button) findViewById(R.id.Rend);
+		b1.setOnLongClickListener(new OnLongClickListener() { 
+	        @Override
+	        public boolean onLongClick(View v) {
+	            // TODO Auto-generated method stub
+	         System.out.println("long pressed");
+	            return true;
+	        }
+	    });
 		//-----------------------
         /*
          * check if event exists
          */
         
-        StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
-		strBuilder.append("event-" + commondata.facebook_details.facebook);
-	    String st = strBuilder.toString();
-	    final Firebase pt = new Firebase(st);
-	    System.out.println(pt.child("event-" + commondata.facebook_details.facebook));
-	    pt.addListenerForSingleValueEvent(new ValueEventListener() {
-	        @Override
-	        public void onDataChange(DataSnapshot snapshot) {
-	        	
-	            if(snapshot.hasChildren()){
-	            	/*
+		create_firebase_refrence();
+	        
+	   if(commondata.event_information.eventID != null){
+					/*
 	        	     * when someone moves find all location and print it
 	        	     */
-	        	    pt.addValueEventListener(new ValueEventListener() {
+		   fb_event_ref.firebaseobj.addValueEventListener(listn = new ValueEventListener() {
 
 	        			@Override
 	        			public void onCancelled(FirebaseError arg0) {
@@ -169,23 +212,31 @@ public class Login extends Activity {
 	        			public void onDataChange(DataSnapshot data) {
 	        				// TODO Auto-generated method stub
 	        				System.out.println("something changed");
-	        				
+	        				commondata.places_found.latitudes.clear();
+	        				commondata.places_found.longitudes.clear();
 	        				Iterator<DataSnapshot> children = data.getChildren().iterator();
 	        				while(children.hasNext()){
 	        					DataSnapshot child = children.next();
-	                			System.out.println(child.getName() + child.getValue());
-	        				}				
+	                			String[] temp1 =child.getValue().toString().split(" ");
+	                			String part0 = temp1[0];
+	                			String part1 = temp1[1];
+	                			String[] comp1 = part0.split("=");
+	                			String[] comp2 = part1.split("=");
+	                			String longitude = comp1[1].replace(",", "");
+	                			String latitude = comp2[1].replace("}", "");
+	                			commondata.places_found.latitudes.add(Double.parseDouble(latitude));
+	                			commondata.places_found.longitudes.add(Double.parseDouble(longitude));
+	        				}
+	        				System.out.println("latitudes " + commondata.places_found.latitudes.toString());
+	        				System.out.println("longitudes " + commondata.places_found.longitudes.toString());
+	        				set_up_map_view();
 	        			}
 	        	    	
 	        	    });
-	            }else{
-	            	
-	            }
-	        }
-	        @Override
-	        public void onCancelled(FirebaseError firebaseError) {
-	        }
-	    });
+	            
+	            	}
+	        
+	       
 	    
 	    
 		
@@ -332,39 +383,6 @@ public class Login extends Activity {
               e.printStackTrace();
           }
 
-  	//----------------------> Fire base reference creation
-		strBuilder = new StringBuilder("https://met-ster.firebaseio.com/");
-		strBuilder.append(commondata.user_information.zip);
-		strBuilder.append("/");
-	    strBuilder.append(commondata.facebook_details.facebook);
-	    fbdata.fbref = strBuilder.toString();
-	    fbdata.firebaseobj = new Firebase(fbdata.fbref);
-	    fbdata.firebaseobj.child("Status").setValue("Hello There!!");
-	    fbdata.firebaseobj.child("Latitude").setValue(commondata.user_information.latitude);
-	    fbdata.firebaseobj.child("Longitude").setValue(commondata.user_information.longitude);
-	    
-	    //---- find base place to add to add location to comman data are
-	    //---
-   
-       					        
-//-----------------------------------------------------------------------> Button Actions	            
-		        rend_button_obj = (Button) findViewById(R.id.Rend);     
-		        rend_button_obj.setOnClickListener(new View.OnClickListener() {
-			        	public void onClick(View v) {
-											
-								new Thread(new Runnable() { 
-						            public void run(){
-						            	SystemClock.sleep(2000);
-						            	
-											stopRepeatingTask();
-											locationManager.removeUpdates(locationListener);
-											Intent intentrend = new Intent( Login.this, Rend.class);			
-							        		startActivity(intentrend);
-											
-						            }
-						    }).start();						
-						}//on click
-			        });	        	
 //-----------------------------------------------------------------------> Button Actions
 		        SetupUIdata();
 				
@@ -407,10 +425,28 @@ public class Login extends Activity {
 		
 	}
 	
+	public void set_up_map_view(){
+		GoogleMap mMap;
+        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
+        mMap.clear();
+        try{
+        for(int i = 0; i< commondata.places_found.latitudes.size(); i++){
+        	mMap.addMarker(new MarkerOptions()
+            .position(new LatLng(commondata.places_found.latitudes.get(i), commondata.places_found.longitudes.get(i))) // visitor
+            .title("meet here!")).showInfoWindow();
+        }
+        mMap.setMyLocationEnabled(true);
+        LatLng currlocation = new LatLng(commondata.user_information.latitude, commondata.user_information.longitude);// yours
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 16));
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+        }catch(Exception e){
+        	System.out.println("something fishy");
+        	//ret_data();
+        }
+	}
+	
 	public void updatelocation(View view)
 	{
-		
-		Log.w("called","update_loc");
 		_handler.postDelayed(getData, 3000);
 		
 		if (!isGPSEnabled && !isNetworkEnabled) {
@@ -457,20 +493,10 @@ public class Login extends Activity {
 		/*
 		 * 	based on the new location update in firebase
 		 */
+		/*
     	fbdata.firebaseobj.child("Latitude").setValue(Double.toString(commondata.user_information.latitude));
     	fbdata.firebaseobj.child("Longitude").setValue(Double.toString(commondata.user_information.longitude));
-        
-        /*
-         *  set up map UI
-         */
-    	System.out.println("seee");
-        GoogleMap mMap;
-        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
-        mMap.clear();
-        mMap.getUiSettings().setZoomControlsEnabled(false);
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(commondata.user_information.latitude, commondata.user_information.longitude)) // visitor
-                ).showInfoWindow();
+        */
 	
 	}
 	
@@ -501,6 +527,7 @@ public class Login extends Activity {
             public void onClick(DialogInterface dialog, int id) {
             	stopRepeatingTask();
         		locationManager.removeUpdates(locationListener);
+        		fb_event_ref.firebaseobj.removeEventListener(listn);
         		Login.this.finish();
             }
         })
@@ -508,7 +535,523 @@ public class Login extends Activity {
         .show();	
 	}
 
+	//-----------------
+	//-----------------
 	
+	/*
+	 * This method will add a new member in firebase
+	 */
+	
+	public void add_a_member_to_fb(final String member_email){
+		
+		Thread thread = new Thread()
+		{
+		      @Override
+		      public void run() {
+		    	  Looper.prepare();
+					create_firebase_refrence();
+					Toast.makeText(getApplicationContext(), group.curr_person + " has been added", Toast.LENGTH_SHORT).show();
+					try {
+				    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/exe_gcm_send.php",commondata.facebook_details.facebook,member_email,"this is message","1","1","1","1"
+						, "1", "1", "1", "1", "1", "1").get();
+				    	 System.out.println("contact-"+member_email);
+				    	 System.out.println(server_resp);
+						} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+										// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+		      }
+		  };
+
+		thread.start();			
+	}
+	/*
+	 * this method prompts user to create a event
+	 */
+	public void create_event_notfication(){
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("New Event Tracer");
+		alert.setMessage("Set Event name");
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  Editable value = input.getText();
+		  event_info.event_name = value.toString();
+		  /*
+		   * add the host to firebase
+		   */
+		    create_firebase_refrence();
+		    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook).setValue(commondata.facebook_details.name);
+		    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook).child("Latitude").setValue(commondata.user_information.latitude);
+		    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook).child("Longitude").setValue(commondata.user_information.longitude);
+		   commondata.event_information.eventID = "event-"+commondata.facebook_details.facebook;
+		  pick_food_type();
+		  /*
+		   * store the event id on mysql
+		   */
+		  try {
+		    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/updateevent.php",commondata.facebook_details.facebook,"event-"+commondata.facebook_details.facebook,"1","1","1","1","1"
+				, "1", "1", "1", "1", "1", "1").get();
+		    	 System.out.println("backhand" + server_resp);
+				} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+					System.out.println("backhander");
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+					System.out.println("backhander");
+					e.printStackTrace();
+				}
+		  
+		  }
+		
+		
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+			  event_info.event_name = "Metster-event";
+			  setTitle("Create an Event");
+			  commondata.event_information.eventID = null;
+			  /*
+			   * reset the event
+			   */
+			  try {
+			    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/resetevent.php",commondata.facebook_details.facebook,"event-"+commondata.facebook_details.facebook,"1","1","1","1","1"
+					, "1", "1", "1", "1", "1", "1").get();
+			    	 System.out.println("backhand" + server_resp);
+					} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+						System.out.println("backhander");
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+									// TODO Auto-generated catch block
+						System.out.println("backhander");
+						e.printStackTrace();
+					}
+		  }
+		});
+
+		alert.show();
+	}
+	
+	private void confirm_add_this_person(){
+		
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+		final int height = size.y;
+		
+		ImageView image = new ImageView(this);
+        image.setImageResource(R.drawable.ic_home);
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Confirm");
+		alert.setMessage("Do you want to add " + contact_info.contact_name);
+		alert.setIcon(R.drawable.ic_action_add_person);
+		// Set an EditText view to get user input 
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		add_this_person();
+		  // add this person
+			Toast toast= Toast.makeText(getApplicationContext(), 
+					contact_info.contact_name + " has been added", Toast.LENGTH_SHORT);  
+					toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, height/4);
+					TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+					//v.setBackgroundColor(Color.TRANSPARENT);
+					v.setTextColor(Color.rgb(175, 250, 176));
+					toast.show();
+		  }
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+			  //just cancel it
+		  }
+		});
+
+		alert.show();
+		
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		
+		super.onActivityResult(requestCode, resultCode, data);
+		 
+        if (resultCode == RESULT_OK) {
+            Log.d(TAG, "onactivityres: " + data.toString());
+            uriContact = data.getData();
+ 
+            retrieveContactName();
+            retrieveContactNumber();
+            confirm_add_this_person();
+        }
+		
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * Contact functions
+	 */
+	 
+    private void retrieveContactNumber() {
+ 
+        String contactNumber = null;
+ 
+        // getting contacts ID
+        Cursor cursorID = getContentResolver().query(uriContact,
+                new String[]{ContactsContract.Contacts._ID},
+                null, null, null);
+ 
+        if (cursorID.moveToFirst()) {
+ 
+            contactID = cursorID.getString(cursorID.getColumnIndex(ContactsContract.Contacts._ID));
+        }
+ 
+        cursorID.close();
+ 
+        Log.d(TAG, "Contact ID: " + contactID);
+ 
+        // Using the contact ID now we will get contact phone number
+        Cursor cursorPhone = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
+ 
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND " +
+                        ContactsContract.CommonDataKinds.Phone.TYPE + " = " +
+                        ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE,
+ 
+                new String[]{contactID},
+                null);
+ 
+        if (cursorPhone.moveToFirst()) {
+            contactNumber = cursorPhone.getString(cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+        }
+ 
+        cursorPhone.close();
+        contactNumber = contactNumber.replace('(',' ');
+        contactNumber = contactNumber.replace(')',' ');
+        contactNumber = contactNumber.replace('-',' ');
+        contactNumber = contactNumber.replace(" ","");
+        Log.d(TAG, "Contact Phone Number: " + contactNumber);
+        contact_info.contact_number = contactNumber;
+    }
+ 
+    private void retrieveContactName() {
+ 
+        String contactName = null;
+ 
+        // querying contact data store
+        Cursor cursor = getContentResolver().query(uriContact, null, null, null, null);
+ 
+        if (cursor.moveToFirst()) {
+ 
+            // DISPLAY_NAME = The display name for the contact.
+            // HAS_PHONE_NUMBER =   An indicator of whether this contact has at least one phone number.
+ 
+            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+        }
+ 
+        cursor.close();
+ 
+        Log.d(TAG, "Contact Name: " + contactName);
+        contact_info.contact_name = contactName;
+    }	
+    
+    
+	public void AccessButton(View view) {
+		
+		if(commondata.event_information.eventID == null){//no event exist
+			create_event_notfication();
+		}else{//event exists
+			ContactPicker();
+		}
+		
+					
+				
+				
+			/*
+	
+		
+			
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+			alert.setTitle("Notification");
+			alert.setMessage("You cannot add more people to this tracer. Would you like to create a new tracer?");
+
+
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			  
+				delete_event();
+				Intent intent2 = new Intent(Login.this, Login.class);
+				startActivity(intent2);
+				finish();
+				
+			  }
+			});
+
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+			  }
+			});
+
+			alert.show();
+			
+			*/
+		
+	}
+	public void delete_event(){
+		//if(event_info.is_exist != null){ // verify later when we add file
+			StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+			strBuilder.append(commondata.facebook_details.facebook);
+		    fb_event_ref.fbref = strBuilder.toString();
+		    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
+		    fb_event_ref.firebaseobj.removeValue();
+		    
+		    try {
+		    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/resetevent.php",commondata.facebook_details.facebook,"event-"+commondata.facebook_details.facebook,"1","1","1","1","1"
+				, "1", "1", "1", "1", "1", "1").get();
+		    	 System.out.println("backhand" + server_resp);
+				} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+					System.out.println("backhander");
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+					System.out.println("backhander");
+					e.printStackTrace();
+				}
+		  
+		  
+	
+		//}
+	}
+	private void ContactPicker(){
+		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+	            Contacts.CONTENT_URI);
+	    startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
+	    //---
+	    
+	    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Notification");
+		alert.setMessage("Would you like to add more people to this tracer?");
+
+
+		alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  
+			ContactPicker();
+		  }
+		});
+
+		alert.setNegativeButton("No I am done", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+			  // 
+			  initiate = "yes";
+		  }
+		});
+
+		alert.show();
+		//---------
+	    
+	    //---
+	}
+	
+	private void add_this_person(){
+		
+		
+			group.curr_person = contact_info.contact_number;
+			Log.w("requesting",group.curr_person);
+			add_a_member_to_fb(group.curr_person);
+			set_up_map_view();
+	}
+	
+	public void pick_food_type(){
+		
+		// Strings to Show In Dialog with Radio Buttons
+		final CharSequence[] items = {" Chinese "," Coffee "," American ","Sea Food"," Pizza "," Asian ", " Japanese "," Mexican "," Italian ", " Indian", "Ice Cream"};
+		            
+		                // Creating and Building the Dialog 
+		                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		                builder.setTitle("Select food type");
+		                builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+		                public void onClick(DialogInterface dialog, int item) {
+		                   
+		                    
+		                    switch(item)
+		                    {
+		                        case 0:
+		                                event_info.food_type = "chinese";
+		                                event_info.is_food_chosen = "yes";
+		                                 break;
+		                        case 1:
+		                                // Your code when 2nd  option seletced
+		                        	event_info.food_type = "coffee";
+		                        	event_info.is_food_chosen = "yes";
+		                                break;
+		                        case 2:
+		                               // Your code when 3rd option seletced
+		                        	event_info.food_type = "american";
+		                        	event_info.is_food_chosen = "yes";
+		                                break;
+		                        case 3:
+		                                 // Your code when 4th  option seletced  
+		                        	event_info.food_type = "seafood";
+		                        	event_info.is_food_chosen = "yes";
+		                                break;
+		                        case 4:
+	                                // Your code when first option seletced
+		                        	event_info.food_type = "pizza";
+		                        	event_info.is_food_chosen = "yes";
+	                                 break;
+		                        case 5:
+		                        	event_info.food_type = "asian";
+		                        	event_info.is_food_chosen = "yes";
+	                                // Your code when 2nd  option seletced
+	                                break;
+		                        case 6:
+		                        	event_info.food_type = "japanese";
+		                        	event_info.is_food_chosen = "yes";
+	                               // Your code when 3rd option seletced
+	                                break;
+		                        case 7:
+		                        	event_info.food_type = "mexican";
+		                        	event_info.is_food_chosen = "yes";
+	                                 // Your code when 4th  option seletced            
+	                                break;
+		                        case 8:
+		                        	event_info.food_type = "italian";
+		                        	event_info.is_food_chosen = "yes";
+	                                // Your code when first option seletced
+	                                 break;
+		                        case 9:
+		                        	event_info.food_type = "indian";
+		                        	event_info.is_food_chosen = "yes";
+	                                // Your code when 2nd  option seletced
+	                                break;
+		                        case 10:
+		                        	event_info.food_type = "icecream";
+		                        	event_info.is_food_chosen = "yes";
+	                               // Your code when 3rd option seletced
+	                                break;   
+	                             default:
+	                            	 event_info.food_type = "american";
+	                            	 event_info.is_food_chosen = "no";
+	                            	 break;
+		                        
+		                    }
+		                    levelDialog.dismiss();
+		                    setTitle(event_info.event_name+ "  " + event_info.food_type);
+		                    Intent intent = new Intent(Login.this, Login.class);
+		                	startActivity(intent);
+		                	finish();
+		                    }
+		                });
+		                levelDialog = builder.create();
+		                levelDialog.show();
+	}
+	
+	public void get_places_mean_loc(Double mean_latitude, Double mean_longitude){
+		Firebase myFirebaseflag = new Firebase("https://met-ster-control.firebaseio.com/");
+		myFirebaseflag.child("dataready").setValue("no");
+		String req_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+mean_latitude+","+mean_longitude+"&radius=5000&types=food&keyword="+event_info.food_type+"&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE";
+		 try {
+			ArrayList<Restaurant> run_places = new GetRestaurantAsyncTask().execute(req_url).get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//set_up_map_for_places();
+
+		myFirebaseflag.child("dataready").addValueEventListener(new ValueEventListener() {
+
+			  @Override
+			  public void onDataChange(DataSnapshot snapshot) {
+			    System.out.println("get_places"+snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
+			    //set_up_map_for_places();
+			    list_rest();
+			  }
+
+			  @Override public void onCancelled(FirebaseError error) { }
+
+			});
+		//Log.w("plcea",commondata.places_found.places.get(0));
+		
+	}
+	
+	public void list_rest(){
+		//--------
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Best Matching places");
+
+		ListView modeList = new ListView(this);
+		ArrayList<String> stringArray = new ArrayList<String>();
+		for(int i =0 ; i< commondata.places_found.places.size();i++)
+		stringArray.add(commondata.places_found.places.get(i));
+		//String[] stringArray = new String[] { "Bright Mode", "Normal Mode" };
+		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, stringArray);
+		modeList.setAdapter(modeAdapter);
+
+		builder.setView(modeList);
+		final Dialog dialog = builder.create();
+
+		dialog.show();
+
+	}
+	
+	public void create_firebase_refrence(){
+		StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+		strBuilder.append(commondata.event_information.eventID);
+	    fb_event_ref.fbref = strBuilder.toString();
+	    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
+}
+
+	public void find_places(View v){
+		/*
+		Double temp_lat = 0.0;
+		Double temp_long = 0.0;
+		for(int i = 0;i< latitudes.size();i++){
+			temp_lat += latitudes.get(i);
+		}
+		for (int i = 0; i < longitudes.size(); i++){
+			temp_long += longitudes.get(i);
+		}
+		temp_lat = temp_lat / latitudes.size();
+		temp_long = temp_long / latitudes.size();
+		latitudes.add(temp_lat);
+		longitudes.add(temp_long);
+		group_list.add("mean");// mean is the last point equivalent for group_list content
+		Log.w("meanlat",Double.toString(temp_lat));
+		Log.w("meanlon",Double.toString(temp_long));
+		
+		create_firebase_refrence();
+		fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count+1)).setValue("user");
+		fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count+1)).child("latitudes").setValue(temp_lat);
+		fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count+1)).child("longitudes").setValue(temp_long);
+		
+		set_up_map_view();
+		get_places_mean_loc(temp_lat, temp_long);
+		*/
+	}
+	//-----------------
+	//-----------------
+	//-----------------
 	
 	/**
 	 * Set up the {@link android.app.ActionBar}.
@@ -565,7 +1108,31 @@ public class Login extends Activity {
             Intent serviceIntent = new Intent(Login.this, Login.class);
             startActivity(serviceIntent);
             finish();
-			return true;	
+			return true;
+			
+		case R.id.delete_icon:
+			locationManager.removeUpdates(locationListener);
+			fb_event_ref.firebaseobj.removeEventListener(listn);
+			fb_event_ref.firebaseobj.removeValue();
+			
+			commondata.event_information.eventID = null;
+			 try {
+		    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/resetevent.php",commondata.facebook_details.facebook,"event-"+commondata.facebook_details.facebook,"1","1","1","1","1"
+				, "1", "1", "1", "1", "1", "1").get();
+		    	 System.out.println("backhand" + server_resp);
+				} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+					System.out.println("backhander");
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+					System.out.println("backhander");
+					e.printStackTrace();
+				}
+			 Intent intent = new Intent(Login.this, Login.class);
+         	startActivity(intent);
+         	finish();
+			return true;
 		case R.id.settings_icon:
 			locationManager.removeUpdates(locationListener);
             Intent settingsIntent = new Intent(Login.this, Settings.class);

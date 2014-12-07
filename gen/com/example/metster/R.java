@@ -1908,7 +1908,7 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f0500b1;
         public static final int container=0x7f050067;
         public static final int default_activity_button=0x7f050045;
-        public static final int delete_icon=0x7f0500b9;
+        public static final int delete_icon=0x7f0500b7;
         public static final int dialog=0x7f05002c;
         public static final int disableHome=0x7f050026;
         public static final int do_email_picker=0x7f050069;
@@ -1957,7 +1957,7 @@ containing a value of this type.
         public static final int progress_horizontal=0x7f050036;
         public static final int question=0x7f05006b;
         public static final int radio=0x7f05004c;
-        public static final int refresh_icon=0x7f0500b7;
+        public static final int refresh_icon=0x7f0500b8;
         public static final int refresh_icon1=0x7f0500ba;
         public static final int right=0x7f05000b;
         public static final int sandbox=0x7f050013;
@@ -1975,7 +1975,7 @@ containing a value of this type.
         public static final int search_voice_btn=0x7f050058;
         public static final int section_label=0x7f0500b3;
         public static final int selectionDetails=0x7f050016;
-        public static final int settings_icon=0x7f0500b8;
+        public static final int settings_icon=0x7f0500b9;
         public static final int shortcut=0x7f05004b;
         public static final int showCustom=0x7f050025;
         public static final int showHome=0x7f050022;
