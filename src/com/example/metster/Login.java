@@ -57,6 +57,7 @@ import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -462,11 +463,13 @@ public class Login extends Activity {
         for(int i = 0; i< commondata.places_found.latitudes.size(); i++){
         	mMap.addMarker(new MarkerOptions()
             .position(new LatLng(commondata.places_found.latitudes.get(i), commondata.places_found.longitudes.get(i))) // visitor
+            .snippet("hola")
+            .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin))
             .title("meet here!")).showInfoWindow();
         }
         mMap.setMyLocationEnabled(true);
         LatLng currlocation = new LatLng(commondata.user_information.latitude, commondata.user_information.longitude);// yours
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 16));
+        
         mMap.getUiSettings().setZoomControlsEnabled(false);
         }catch(Exception e){
         	System.out.println("something fishy");

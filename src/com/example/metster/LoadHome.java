@@ -130,6 +130,7 @@ public class LoadHome extends Activity {
 	            gcm = GoogleCloudMessaging.getInstance(this);
 	            regid = getRegistrationId(context);
 	            Log.w("regisid",regid);
+	            
 	            if (regid.isEmpty()) {
 	                registerInBackground();
 	            }else{
@@ -470,13 +471,14 @@ public class LoadHome extends Activity {
 	                    gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
 	                }
 	                regid = gcm.register(SENDER_ID);
+	                //gcm.unregister();
 	                msg = "Device registered, registration ID=" + regid;
 	                Log.i("GCM",  msg);
 	                // You should send the registration ID to your server over HTTP,
 	                // so it can use GCM/HTTP or CCS to send messages to your app.
 	                // The request to your server should be authenticated if your app
 	                // is using accounts.
-	                //sendRegistrationIdToBackend(regid);
+	                sendRegistrationIdToBackend(regid);
 
 	                // For this demo: we don't need to send it because the device
 	                // will send upstream messages to a server that echo back the
