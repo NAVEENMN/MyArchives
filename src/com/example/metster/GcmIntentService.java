@@ -138,7 +138,7 @@ public class GcmIntentService extends IntentService {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
         	commondata.gcm_req.requester_name = name;
-        	commondata.gcm_req.event_id = event_id;
+        	commondata.gcm_req.event_id = event_id.replace(",", "");
         	createNotification(null, name);
         
         

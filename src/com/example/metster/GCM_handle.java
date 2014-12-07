@@ -11,9 +11,15 @@ import org.json.JSONObject;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,15 +28,16 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
-import com.example.metster.HomescreenActivity.RetrieveFeedTask;
-import com.example.metster.HomescreenActivity.logininback;
+import com.example.metster.Rend.fb_event_ref;
 import com.example.metster.util.SystemUiHider;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
+import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 import com.facebook.android.Util;
-import com.facebook.android.Facebook.DialogListener;
+import com.firebase.client.Firebase;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -41,6 +48,8 @@ import com.facebook.android.Facebook.DialogListener;
 public class GCM_handle extends Activity {
 	
 	Facebook fb;
+	Location postion_get;
+	
 	/**
 	 * Whether or not the system UI should be auto-hidden after
 	 * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -72,7 +81,7 @@ public class GCM_handle extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		Firebase.setAndroidContext(this);
 		setContentView(R.layout.activity_gcm_handle);
 
 		final View controlsView = findViewById(R.id.fullscreen_content_controls);
@@ -141,6 +150,113 @@ public class GCM_handle extends Activity {
 		findViewById(R.id.dummy_button).setOnTouchListener(
 				mDelayHideTouchListener);
 		
+		//----------
+		
+		// Acquire a reference to the system Location Manager
+				LocationManager locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+		      //--------------------------------------------------------   
+			  // Define a listener that responds to location updates
+			  //---------------------------------------------------------
+				   LocationListener locationListener = new LocationListener() {
+				    public void onLocationChanged(Location location) {	
+				    	if(location != null){	
+				    	commondata.user_information.latitude = location.getLatitude();
+			        	commondata.user_information.longitude = location.getLongitude();
+				    	}else{
+				    		System.out.println("loca null");
+				    	}
+
+				    }
+					@SuppressWarnings("unused")
+					public void onStatusChanged(Location location) {
+						if(location != null ){
+						commondata.user_information.latitude = location.getLatitude();
+			        	commondata.user_information.longitude = location.getLongitude();
+						}else{
+							System.out.println("loc null");
+						}
+						
+				    }
+
+					@SuppressWarnings("unused")
+					public void onProviderEnabled(Location location) {
+						if(location != null){
+						commondata.user_information.latitude = location.getLatitude();
+			        	commondata.user_information.longitude = location.getLongitude();
+						}else{
+							System.out.println("loc null");
+						}
+				    }
+				    public void onProviderDisabled(String provider) {
+				    	
+				    }
+
+					@Override
+					public void onProviderEnabled(String provider) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onStatusChanged(String provider, int status,
+							Bundle extras) {
+						// TODO Auto-generated method stub
+
+					}
+				  };
+				//------------------------------------------------------------------------
+				// getting GPS and network status
+			    boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER); 
+		        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+		        if (!isGPSEnabled && !isNetworkEnabled) {
+		        	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+					alert.setTitle("Connection Error");
+					alert.setMessage("Please check your network settings");
+					alert.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						//Intent intent = new Intent(Login.this, HomescreenActivity.class);
+		            	//startActivity(intent);
+		            	//finish();
+					  }
+					});
+
+					alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+					  public void onClick(DialogInterface dialog, int whichButton) {
+						  finish();
+					  }
+					});
+					alert.show();
+		        } else {
+		        	
+					if(isNetworkEnabled){
+		        		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+				        postion_get = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+				        if(postion_get != null){
+				        commondata.user_information.latitude = postion_get.getLatitude();
+				        commondata.user_information.longitude = postion_get.getLongitude();
+				        System.out.println("loc from network ");
+				        }else{
+				        	System.out.println("loc from network error");
+				        }
+				        
+		        	}else{
+		        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+			        	postion_get = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			        	if(postion_get != null){
+			        	commondata.user_information.latitude = postion_get.getLatitude();
+			        	commondata.user_information.longitude = postion_get.getLongitude();
+			        	System.out.println("loc from gps ");
+			        	}else{
+			        		
+			        		System.out.println("loc from gps error");
+			        	}
+		        	}
+		        	
+		        }
+		
+		
+		
+		//----------
 		String APP_ID = getString(R.string.facebook_app_id);
 		setTitle("Invitation");
 		
@@ -171,7 +287,31 @@ public class GCM_handle extends Activity {
 		
 	}
 	
+	
+	public void handledata(View v){
+		//---- handle firebase here
+    	System.out.println("request was from" + commondata.gcm_req.requester_name);
+		System.out.println("request for event" + commondata.gcm_req.event_id);
+		System.out.println("vis me name is" + commondata.facebook_details.name );
+		System.out.println("vis me name is" + commondata.facebook_details.facebook );
+		
+		if(commondata.gcm_req.event_id != null)
+		create_firebase_event_refrence(commondata.gcm_req.event_id);
+	}
 	//------------------------------------------------------------------
+	/*
+	 * this method creates the firebase refrence
+	 */
+	public void create_firebase_event_refrence(String eventid){
+				StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+				strBuilder.append(commondata.gcm_req.event_id + "/");//eventid
+				strBuilder.append(commondata.facebook_details.facebook);//for that event add me
+			    fb_event_ref.fbref = strBuilder.toString();
+			    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
+			    fb_event_ref.firebaseobj.setValue(commondata.facebook_details.name);// might have to relase on new thread
+			    fb_event_ref.firebaseobj.child("Latitude").setValue(commondata.user_information.latitude);
+			    fb_event_ref.firebaseobj.child("Longitude").setValue(commondata.user_information.longitude);
+	}
 	
 class logingcminback extends AsyncTask<Void, Void, Void>{
 		
@@ -238,14 +378,6 @@ class logingcminback extends AsyncTask<Void, Void, Void>{
 	  				e.printStackTrace();
 	  			}
 	    	
-	    	
-	    	//---- handle firebase here
-	    	
-	    	System.out.println("request was from" + commondata.gcm_req.requester_name);
-			System.out.println("request for event" + commondata.gcm_req.event_id);
-			System.out.println("vis me name is" + commondata.facebook_details.name );
-			System.out.println("vis me name is" + commondata.facebook_details.facebook );
-	    	//----
 	    }
 
 		@Override

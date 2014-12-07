@@ -1,5 +1,6 @@
 package com.example.metster;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -33,7 +34,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -134,6 +138,56 @@ public class Login extends Activity {
 
 			alert.show();
     	}
+		//-------
+		
+		//-----------------------
+        /*
+         * check if event exists
+         */
+        
+        StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+		strBuilder.append("event-" + commondata.facebook_details.facebook);
+	    String st = strBuilder.toString();
+	    final Firebase pt = new Firebase(st);
+	    System.out.println(pt.child("event-" + commondata.facebook_details.facebook));
+	    pt.addListenerForSingleValueEvent(new ValueEventListener() {
+	        @Override
+	        public void onDataChange(DataSnapshot snapshot) {
+	        	
+	            if(snapshot.hasChildren()){
+	            	/*
+	        	     * when someone moves find all location and print it
+	        	     */
+	        	    pt.addValueEventListener(new ValueEventListener() {
+
+	        			@Override
+	        			public void onCancelled(FirebaseError arg0) {
+	        				// TODO Auto-generated method stub
+	        				
+	        			}
+	        			@Override
+	        			public void onDataChange(DataSnapshot data) {
+	        				// TODO Auto-generated method stub
+	        				System.out.println("something changed");
+	        				
+	        				Iterator<DataSnapshot> children = data.getChildren().iterator();
+	        				while(children.hasNext()){
+	        					DataSnapshot child = children.next();
+	                			System.out.println(child.getName() + child.getValue());
+	        				}				
+	        			}
+	        	    	
+	        	    });
+	            }else{
+	            	
+	            }
+	        }
+	        @Override
+	        public void onCancelled(FirebaseError firebaseError) {
+	        }
+	    });
+	    
+	    
 		
 		//--------
 		// Acquire a reference to the system Location Manager
@@ -279,7 +333,7 @@ public class Login extends Activity {
           }
 
   	//----------------------> Fire base reference creation
-		StringBuilder strBuilder = new StringBuilder("https://met-ster.firebaseio.com/");
+		strBuilder = new StringBuilder("https://met-ster.firebaseio.com/");
 		strBuilder.append(commondata.user_information.zip);
 		strBuilder.append("/");
 	    strBuilder.append(commondata.facebook_details.facebook);
@@ -288,7 +342,11 @@ public class Login extends Activity {
 	    fbdata.firebaseobj.child("Status").setValue("Hello There!!");
 	    fbdata.firebaseobj.child("Latitude").setValue(commondata.user_information.latitude);
 	    fbdata.firebaseobj.child("Longitude").setValue(commondata.user_information.longitude);
-	              					        
+	    
+	    //---- find base place to add to add location to comman data are
+	    //---
+   
+       					        
 //-----------------------------------------------------------------------> Button Actions	            
 		        rend_button_obj = (Button) findViewById(R.id.Rend);     
 		        rend_button_obj.setOnClickListener(new View.OnClickListener() {

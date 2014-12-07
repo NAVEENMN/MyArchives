@@ -101,7 +101,7 @@ public class Rend extends ActionBarActivity {
 		setupActionBar();
 		initiate = "no";
 		create_firebase_refrence();// this is base refrence
-		add_child_listener();
+		//add_child_listener();
 		check_if_event_exist();
 		try{
 			setup_initial_map();
@@ -114,6 +114,7 @@ public class Rend extends ActionBarActivity {
 			String file_contents = read_event_file("metster_event_info.txt");
 			String[] parts = file_contents.split("-->");
 			setTitle(parts[0]+"--"+parts[1]);
+			/*
 			Thread thread = new Thread()
 			{
 			      @Override
@@ -124,7 +125,7 @@ public class Rend extends ActionBarActivity {
 			  };
 
 			thread.start();
-			
+			*/
 			System.out.println("final;" + lat_lon.toString());
 		}else{//event doesnot exists
 			setTitle("Create an Event");
@@ -377,9 +378,6 @@ public class Rend extends ActionBarActivity {
 		    	  Looper.prepare();
 				  member_count ++ ;
 					create_firebase_refrence();
-					fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count)).setValue("user");
-					fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count)).child("latitudes").setValue(0.0);
-					fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count)).child("longitudes").setValue(0.0);
 					Toast.makeText(getApplicationContext(), group.curr_person + " has been added", Toast.LENGTH_SHORT).show();
 					try {
 				    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/exe_gcm_send.php",commondata.facebook_details.facebook,member_email,"this is message","1","1","1","1"
@@ -702,7 +700,10 @@ public class Rend extends ActionBarActivity {
 		  Editable value = input.getText();
 		  event_info.event_name = value.toString();
 		  create_firebase_refrence();
-		  fb_event_ref.firebaseobj.setValue(event_info.event_name);//update on firebase
+		    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook).setValue(commondata.facebook_details.name);
+		    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook).child("Latitude").setValue(commondata.user_information.latitude);
+		    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook).child("Longitude").setValue(commondata.user_information.longitude);
+		   
 		  create_event_file();//update local file
 		  pick_food_type();
 		  create_event_file();//update local file after food chosen
