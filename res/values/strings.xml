@@ -115,10 +115,10 @@
 
     <!-- ******************************************************** -->
     <string-array name="navigation_drawer_items_array">
-    <item>Create</item>
-    <item>Read</item>
-    <item>Help</item>
-</string-array>
+        <item>Create</item>
+        <item>Read</item>
+        <item>Help</item>
+    </string-array>
     <!-- ******************************************************** -->
 
 
@@ -148,5 +148,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
+    <string name="title_activity_getlocation">Getlocation</string>
+    <string name="title_activity_gcm_handle">GCM_handle</string>
 
 </resources>

@@ -1,9 +1,5 @@
 package com.example.metster;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -29,7 +25,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.metster.util.SystemUiHider;
 import com.google.android.gms.common.ConnectionResult;
@@ -56,6 +51,7 @@ public class LoadHome extends Activity {
     SharedPreferences prefs;
     Context context;
     String regid;
+    Location mCurrentLocation;
 	//-------
 	public static class gpslocation{
 
@@ -69,7 +65,6 @@ public class LoadHome extends Activity {
 		setTitle("Meet, Connect and Socialize");
 		final LocationManager locationManager;
 		final LocationListener locationListener;
-		Location pos = null ;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_load_home);
 		setupActionBar();
@@ -113,26 +108,73 @@ public class LoadHome extends Activity {
 //----------------------------------------------------------  Setup GPS reader here!!
 		super.onCreate(savedInstanceState);
 		// Acquire a reference to the system Location Manager
-			locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-	      //--------------------------------------------------------   
+			
+			
+			/*
+			 * 
+			 */
+
+			//-- create a check statement here.. if play service fails
+			//-- prompt and ask them to activate
+	        
+	        Context context = getApplicationContext();
+
+	        // Check device for Play Services APK.
+	        if (checkPlayServices()) {
+	           
+	            gcm = GoogleCloudMessaging.getInstance(this);
+	            regid = getRegistrationId(context);
+	            Log.w("regisid",regid);
+	            if (regid.isEmpty()) {
+	                registerInBackground();
+	            }else{
+	            	try {
+			   	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/register_gcm.php",commondata.facebook_details.facebook,regid,"1","1","1","1","1"
+			   			, "1", "1", "1", "1", "1", "1").get();
+			   	    	 System.out.println("exis"+server_resp);
+			   			} catch (InterruptedException e) {
+			   							// TODO Auto-generated catch block
+			   				e.printStackTrace();
+			   			} catch (ExecutionException e) {
+			   							// TODO Auto-generated catch block
+			   				e.printStackTrace();
+			   			}
+	            }
+	        } 
+			
+			//--------------------------------------------------------   
 		  // Define a listener that responds to location updates
 		  //---------------------------------------------------------
+	        locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
 			   locationListener = new LocationListener() {
 			    public void onLocationChanged(Location location) {	
+			    	if(location !=null){
 			    	commondata.user_information.latitude = location.getLatitude();
 		        	commondata.user_information.longitude = location.getLongitude();
+			    	}else{
+			    		System.out.println("loc is null");
+			    	}
+			    	
 
 			    }
 				@SuppressWarnings("unused")
 				public void onStatusChanged(Location location) {
+					if(location != null){
 					commondata.user_information.latitude = location.getLatitude();
 		        	commondata.user_information.longitude = location.getLongitude();
+					}else{
+						System.out.println("loca is null");
+					}
 			    }
 
 				@SuppressWarnings("unused")
 				public void onProviderEnabled(Location location) {
+					if(location != null){
 					commondata.user_information.latitude = location.getLatitude();
 		        	commondata.user_information.longitude = location.getLongitude();
+					}else{
+						System.out.println("locat is null");
+					}
 			    }
 			    public void onProviderDisabled(String provider) {
 			    	AlertDialog.Builder alert = new AlertDialog.Builder(LoadHome.this);
@@ -190,19 +232,48 @@ public class LoadHome extends Activity {
     			});
     			alert.show();
 	        } else {
-	        	if(isGPSEnabled){
-	        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-			        pos = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			      
-			        commondata.user_information.latitude = pos.getLatitude();
-			        commondata.user_information.longitude = pos.getLongitude();
-	        	}else{
+	        	if(isNetworkEnabled){
+	        		
 	        		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-		        	pos = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		        	commondata.user_information.latitude = pos.getLatitude();
-		        	commondata.user_information.longitude = pos.getLongitude();
+	        		mCurrentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			        
+			      if(mCurrentLocation!=null){
+			        commondata.user_information.latitude = mCurrentLocation.getLatitude();
+			        commondata.user_information.longitude = mCurrentLocation.getLongitude();
+			      }else{
+			    	  System.out.println("pos network is null");
+			      }
+	        	}else{
+	        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+	        		mCurrentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		        	if(mCurrentLocation!=null){
+		        	commondata.user_information.latitude = mCurrentLocation.getLatitude();
+		        	commondata.user_information.longitude = mCurrentLocation.getLongitude();
+		        	}else{
+		        		System.out.println("pos gps is null");
+		        	}
 	        	}
 	        	
+	        }
+	        
+	        if(mCurrentLocation == null){ // we were not able to fetch location
+	        	AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    			alert.setTitle("Connection Error");
+    			alert.setMessage("Unable to fecth your location");
+    			alert.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+    			public void onClick(DialogInterface dialog, int whichButton) {
+    				Intent intent = new Intent(LoadHome.this, HomescreenActivity.class);
+                	startActivity(intent);
+                	finish();
+    			  }
+    			});
+
+    			alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+    			  public void onClick(DialogInterface dialog, int whichButton) {
+    				  finish();
+    			  }
+    			});
+    			alert.show();
 	        }
 
 		       //---------------------------------------------------------------------
@@ -214,33 +285,6 @@ public class LoadHome extends Activity {
 		    }
 		    }, 1000 * 60 * 15);//15mins
 				
-				//-- create a check statement here.. if play service fails
-				//-- prompt and ask them to activate
-		        
-		        Context context = getApplicationContext();
-
-		        // Check device for Play Services APK.
-		        if (checkPlayServices()) {
-		           
-		            gcm = GoogleCloudMessaging.getInstance(this);
-		            regid = getRegistrationId(context);
-		            Log.w("regisid",regid);
-		            if (regid.isEmpty()) {
-		                registerInBackground();
-		            }else{
-		            	try {
-				   	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/register_gcm.php",commondata.facebook_details.facebook,regid,"1","1","1","1","1"
-				   			, "1", "1", "1", "1", "1", "1").get();
-				   	    	 System.out.println("exis"+server_resp);
-				   			} catch (InterruptedException e) {
-				   							// TODO Auto-generated catch block
-				   				e.printStackTrace();
-				   			} catch (ExecutionException e) {
-				   							// TODO Auto-generated catch block
-				   				e.printStackTrace();
-				   			}
-		            }
-		        } 
 		        
 		        Runnable mRunnable;
 		        Handler mHandler = new Handler();
@@ -257,7 +301,7 @@ public class LoadHome extends Activity {
 		            		System.out.println("Error on load");		            	}
 		            }
 		        };
-		        mHandler.postDelayed(mRunnable, 1000 * 4 );
+		        mHandler.postDelayed(mRunnable, 1000 * 2 );
 
 		//-----------------------------------------------------------------------------------
 

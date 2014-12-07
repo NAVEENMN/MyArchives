@@ -7,10 +7,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -33,9 +34,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -314,7 +313,7 @@ public class Rend extends ActionBarActivity {
 	public void delete_event(){
 		//if(event_info.is_exist != null){ // verify later when we add file
 			StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
-			strBuilder.append(commondata.user_information.account_number);
+			strBuilder.append(commondata.facebook_details.facebook);
 		    fb_event_ref.fbref = strBuilder.toString();
 		    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
 		    fb_event_ref.firebaseobj.removeValue();
@@ -355,10 +354,12 @@ public class Rend extends ActionBarActivity {
         }
 		
 	}
-	
+	/*
+	 * this method creates the firebase refrence
+	 */
 	public void create_firebase_refrence(){
 				StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
-				strBuilder.append(commondata.user_information.account_number);
+				strBuilder.append("event-" + commondata.facebook_details.facebook);
 			    fb_event_ref.fbref = strBuilder.toString();
 			    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
 	}
@@ -381,8 +382,10 @@ public class Rend extends ActionBarActivity {
 					fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count)).child("longitudes").setValue(0.0);
 					Toast.makeText(getApplicationContext(), group.curr_person + " has been added", Toast.LENGTH_SHORT).show();
 					try {
-				    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/exe_gcm_send.php",commondata.user_information.account_number,member_email,Integer.toString(member_count),"1","1","1","1"
+				    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/exe_gcm_send.php",commondata.facebook_details.facebook,member_email,"this is message","1","1","1","1"
 						, "1", "1", "1", "1", "1", "1").get();
+				    	 System.out.println("contact-"+member_email);
+				    	 System.out.println(server_resp);
 						} catch (InterruptedException e) {
 										// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -549,7 +552,6 @@ public class Rend extends ActionBarActivity {
 			longitudes.add(commondata.user_information.longitude);
 			add_a_member_to_fb(group.curr_person);
 			set_up_map_view();
-		
 	}
 	
 	public void pick_food_type(){

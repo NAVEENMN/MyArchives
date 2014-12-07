@@ -2,23 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B3B0B0"
+    android:background="@drawable/welcome"
     tools:context=".HomescreenActivity" >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/welcome"
-        android:gravity="bottom" >
 
-            <com.facebook.widget.LoginButton
-                android:id="@+id/authButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:gravity="center" />
-  
-    </RelativeLayout>
 
 </FrameLayout>

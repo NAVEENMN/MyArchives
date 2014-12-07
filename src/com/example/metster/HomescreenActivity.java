@@ -20,9 +20,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.metster.Login.fbdata;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
@@ -65,34 +69,14 @@ public class HomescreenActivity extends Activity {
                 //LoadHome.this.startService(serviceIntent);
                 //startActivity(serviceIntent);
                 //finish();
+        		
+        		System.out.println("session is valid");
+        		
             }else{
             	System.out.println("no");
-            	fb.authorize(this, new String[] {"email", "public_profile"}, new DialogListener(){
-
-    					@Override
-    					public void onComplete(Bundle values) {
-    						new RetrieveFeedTask().execute();
-    					}
-
-    					@Override
-    					public void onFacebookError(FacebookError e) {
-    						// TODO Auto-generated method stub
-    						System.out.println("no bab");
-    					}
-
-    					@Override
-    					public void onError(DialogError e) {
-    						// TODO Auto-generated method stub
-    						System.out.println("y bab");
-    					}
-
-    					@Override
-    					public void onCancel() {
-    						// TODO Auto-generated method stub
-    						System.out.println("yer bab");
-    					}
-            			
-            		});
+            	
+            	new logininback().execute();
+            	
             	}
         	
         	
@@ -121,6 +105,47 @@ public class HomescreenActivity extends Activity {
 		
 		
 		//-------------------------------
+       
+	}
+	
+	class logininback extends AsyncTask<Void, Void, Void>{
+		
+		@SuppressWarnings("deprecation")
+		@Override
+		protected Void doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			
+        	fb.authorize(HomescreenActivity.this, new String[] {"email", "public_profile"}, new DialogListener(){
+
+            	
+					@Override
+					public void onComplete(Bundle values) {
+						new RetrieveFeedTask().execute();
+					}
+
+					@Override
+					public void onFacebookError(FacebookError e) {
+						// TODO Auto-generated method stub
+						System.out.println("no bab");
+					}
+
+					@Override
+					public void onError(DialogError e) {
+						// TODO Auto-generated method stub
+						System.out.println("y bab");
+					}
+
+					@Override
+					public void onCancel() {
+						// TODO Auto-generated method stub
+						System.out.println("yer bab");
+					}
+        			
+        		});
+			
+			return null;
+		}
+		
 	}
 	
 	
@@ -134,9 +159,12 @@ public class HomescreenActivity extends Activity {
 	    	super.onPostExecute(result);
 	    	System.out.println("on post");
 	    	try {
+	    		if(commondata.facebook_details.facebook != null){
 	  	    	 response = new RequestTask().execute("http://54.183.113.236/metster/setup_account.php",commondata.facebook_details.facebook,commondata.facebook_details.name,commondata.facebook_details.email,"1","1","1","1","1"
 	  			, "1", "1", "1", "1", "1", "1").get();
 	  	    	 System.out.println(response.toString());
+	  	    	 commondata.facebook_details.contact = response.toString();
+	    		}
 	  			} catch (InterruptedException e) {
 	  							// TODO Auto-generated catch block
 	  				e.printStackTrace();
@@ -144,6 +172,7 @@ public class HomescreenActivity extends Activity {
 	  							// TODO Auto-generated catch block
 	  				e.printStackTrace();
 	  			}
+	    	
 	    	
 	    	Intent serviceIntent = new Intent(HomescreenActivity.this, LoadHome.class);
             HomescreenActivity.this.startService(serviceIntent);

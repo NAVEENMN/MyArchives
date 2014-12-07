@@ -28,13 +28,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -85,7 +82,6 @@ public class Login extends Activity {
   
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		System.out.println("hey!!");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		setupActionBar();// Show the Up button in the action bar.
@@ -93,6 +89,52 @@ public class Login extends Activity {
 		setTitle("Set your status");
 		Firebase.setAndroidContext(this);
 		//------ side bar
+		
+		if(commondata.facebook_details.contact.contains("nothing")){
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+			alert.setTitle("Contact Information needed.");
+			alert.setMessage("Hi, your friends need you contact information to add to events.");
+
+			// Set an EditText view to get user input 
+			final EditText input = new EditText(this);
+			alert.setView(input);
+
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			  Editable value = input.getText();
+			  commondata.facebook_details.contact = value.toString();
+			  commondata.facebook_details.contact = commondata.facebook_details.contact.replace('(',' ');
+			  commondata.facebook_details.contact = commondata.facebook_details.contact.replace(')',' ');
+			  commondata.facebook_details.contact = commondata.facebook_details.contact.replace('-',' ');
+			  commondata.facebook_details.contact = commondata.facebook_details.contact.replace(" ","");
+			  // update contact on server - we need to verify contact number
+			  try {
+			    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/register_contact.php",commondata.facebook_details.facebook,commondata.facebook_details.contact,"1","1","1","1","1"
+					, "1", "1", "1", "1", "1", "1").get();
+			    	 System.out.println("backhand" + server_resp);
+					} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+						System.out.println("backhander");
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+									// TODO Auto-generated catch block
+						System.out.println("backhander");
+						e.printStackTrace();
+					}
+			  // Do something with value!
+			  }
+			});
+
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+			    // Canceled.
+			  }
+			});
+
+			alert.show();
+    	}
+		
 		//--------
 		// Acquire a reference to the system Location Manager
 		locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
@@ -101,20 +143,36 @@ public class Login extends Activity {
 	  //---------------------------------------------------------
 		   locationListener = new LocationListener() {
 		    public void onLocationChanged(Location location) {	
+		    	if(location != null){
+		    	updatelocation(null);	
 		    	commondata.user_information.latitude = location.getLatitude();
 	        	commondata.user_information.longitude = location.getLongitude();
+		    	}else{
+		    		System.out.println("loca null");
+		    	}
 
 		    }
 			@SuppressWarnings("unused")
 			public void onStatusChanged(Location location) {
+				if(location != null ){
+					updatelocation(null);
 				commondata.user_information.latitude = location.getLatitude();
 	        	commondata.user_information.longitude = location.getLongitude();
+				}else{
+					System.out.println("loc null");
+				}
+				
 		    }
 
 			@SuppressWarnings("unused")
 			public void onProviderEnabled(Location location) {
+				if(location != null){
+					updatelocation(null);
 				commondata.user_information.latitude = location.getLatitude();
 	        	commondata.user_information.longitude = location.getLongitude();
+				}else{
+					System.out.println("loc null");
+				}
 		    }
 		    public void onProviderDisabled(String provider) {
 		    	AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
@@ -172,16 +230,28 @@ public class Login extends Activity {
 			});
 			alert.show();
         } else {
-        	if(isGPSEnabled){
-        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-		        postion_get = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        	if(isNetworkEnabled){
+        		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		        postion_get = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		        if(postion_get != null){
 		        commondata.user_information.latitude = postion_get.getLatitude();
 		        commondata.user_information.longitude = postion_get.getLongitude();
+		        System.out.println("loc from network ");
+		        }else{
+		        	System.out.println("loc from network error");
+		        }
+		        
         	}else{
-        		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-	        	postion_get = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+	        	postion_get = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+	        	if(postion_get != null){
 	        	commondata.user_information.latitude = postion_get.getLatitude();
 	        	commondata.user_information.longitude = postion_get.getLongitude();
+	        	System.out.println("loc from gps ");
+	        	}else{
+	        		
+	        		System.out.println("loc from gps error");
+	        	}
         	}
         	
         }
@@ -216,74 +286,28 @@ public class Login extends Activity {
 	    fbdata.fbref = strBuilder.toString();
 	    fbdata.firebaseobj = new Firebase(fbdata.fbref);
 	    fbdata.firebaseobj.child("Status").setValue("Hello There!!");
-	    
-	    //---- find base place to add to add location to comman data are
-	    //---
-    
-    getData = new Runnable(){
-            	@Override
-            	public void run(){
-                updatelocation(null);
-            	}
-    			};
-    
-    final Handler handler_remove_location_updates = new Handler();
-    handler_remove_location_updates.postDelayed(new Runnable() {
-      @Override
-      public void run() {
-    	  locationManager.removeUpdates(locationListener);
-      }
-    }, 1000 * 60 * 3);//3mins
-    
-    final Handler handler_delete_location = new Handler();
-    handler_delete_location.postDelayed(new Runnable() {
-      @Override
-      public void run() { // Might have to kill this thread on refresh
-    	  stopRepeatingTask();
-    	  Toast.makeText(getApplicationContext(), "Location will be deleted.", Toast.LENGTH_SHORT).show();
-    	  fbdata.firebaseobj.child("Latitude").removeValue();
-    	  fbdata.firebaseobj.child("Longitude").removeValue();
-    	  fbdata.firebaseobj.child("Status").removeValue();
-    	  try {
-  	    	 new RequestTask().execute("http://54.183.113.236/metster/deletelocation.php",commondata.keys.appkey,commondata.user_information.account_number,"1","1","1","1","1"
-  			, "1", "1", "1", "1", "1", "1").get();
-  			} catch (InterruptedException e) {
-  							// TODO Auto-generated catch block
-  				e.printStackTrace();
-  			} catch (ExecutionException e) {
-  							// TODO Auto-generated catch block
-  				e.printStackTrace();
-  			}
-      }
-    }, 1000 * 60* 3);//3mins
-     
-					        
+	    fbdata.firebaseobj.child("Latitude").setValue(commondata.user_information.latitude);
+	    fbdata.firebaseobj.child("Longitude").setValue(commondata.user_information.longitude);
+	              					        
 //-----------------------------------------------------------------------> Button Actions	            
-	            //------------------------------------- meet someone
-			
-			final Animation animScale = AnimationUtils.loadAnimation(this, R.anim.anim_alpha);
-		        //find = (Button) findViewById(R.id.buttonmeet);
-		        rend_button_obj = (Button) findViewById(R.id.Rend);
-		      //------------------------------------- Rend      
+		        rend_button_obj = (Button) findViewById(R.id.Rend);     
 		        rend_button_obj.setOnClickListener(new View.OnClickListener() {
 			        	public void onClick(View v) {
-								v.startAnimation(animScale);			
+											
 								new Thread(new Runnable() { 
 						            public void run(){
 						            	SystemClock.sleep(2000);
 						            	
 											stopRepeatingTask();
 											locationManager.removeUpdates(locationListener);
-											Intent intentrend = new Intent( Login.this, Rend.class);
-											intentrend.putExtras(profilelistactdata);
+											Intent intentrend = new Intent( Login.this, Rend.class);			
 							        		startActivity(intentrend);
 											
 						            }
 						    }).start();						
 						}//on click
-			        });	        
-			      //---------------------------------------------------------------	
-		        
+			        });	        	
+//-----------------------------------------------------------------------> Button Actions
 		        SetupUIdata();
 				
 	}//on create
@@ -291,24 +315,17 @@ public class Login extends Activity {
 	
 	public void SetupUIdata(){
 		
-//-----------------------------------------------------------> Setup the GUI with data acquired
-		 Animation animTimeChange = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left); 
+//-----------------------------------------------------------> Setup the GUI with data acquired 
 		//----------- Section 1
 		TextView fname = (TextView)findViewById(R.id.FirstName);
-		fname.startAnimation(animTimeChange);
-        fname.setText((String)commondata.facebook_details.name);
+		String[] f = commondata.facebook_details.name.split(" ");// some name may not split will come back later
+        fname.setText(f[0]);
         TextView lname = (TextView)findViewById(R.id.LastName); 
-        lname.setText((String)commondata.facebook_details.name);
-        lname.startAnimation(animTimeChange);
+        lname.setText(f[1]);
         TextView prof = (TextView)findViewById(R.id.Profession); 
         prof.setText((String)commondata.user_information.addressline);
         TextView cc = (TextView)findViewById(R.id.CurrentCity); 
         cc.setText((String)commondata.user_information.cityname);
-        //----------- Section 2
-        //TextView loca = (TextView)findViewById(R.id.YourLocation); 
-        //loca.setText((String)addrs.addressline);
-        //TextView locacity = (TextView)findViewById(R.id.YourLocationcity); 
-        //locacity.setText((String)addrs.cityName);
         //----------- Section Profile Image
         
         if (commondata.user_information.profileimage!=null){
@@ -360,13 +377,21 @@ public class Login extends Activity {
         	if(isGPSEnabled){
         		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 		        postion_get = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		        if(postion_get != null){
 		        commondata.user_information.latitude = postion_get.getLatitude();
 		        commondata.user_information.longitude = postion_get.getLongitude();
+		        }else{
+		        	System.out.println("loc error");
+		        }
         	}else{
         		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 	        	postion_get = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+	        	if(postion_get != null){
 	        	commondata.user_information.latitude = postion_get.getLatitude();
 	        	commondata.user_information.longitude = postion_get.getLongitude();
+	        	}else{
+	        		System.out.println("loc error");
+	        	}
         	}
         	
         }
@@ -376,31 +401,11 @@ public class Login extends Activity {
 		 */
     	fbdata.firebaseobj.child("Latitude").setValue(Double.toString(commondata.user_information.latitude));
     	fbdata.firebaseobj.child("Longitude").setValue(Double.toString(commondata.user_information.longitude));
-        try {
-        	new RequestTask().execute("http://54.183.113.236/metster/updatedash.php",commondata.user_information.account_number,commondata.keys.appkey,commondata.user_information.zip,Double.toString(commondata.user_information.latitude),Double.toString(commondata.user_information.longitude), commondata.user_information.status,"1",
- 					"1", "1", "1", "1", "1", "1").get();
-        	 Userslist.numberofusers = new RequestTask().execute("http://54.183.113.236/metster/numberofusers.php",commondata.user_information.account_number,commondata.keys.appkey,commondata.user_information.zip,Double.toString(commondata.user_information.latitude),Double.toString(commondata.user_information.longitude), "1","1",
-					"1", "1", "1", "1", "1", "1").get();
-        	 profilelistactdata.putString("accountnumberlist", Userslist.numberofusers);
-		     if(Userslist.numberofusers.isEmpty()) {
-					//Toast.makeText(getApplicationContext(), "Oops no metster users around you.", Toast.LENGTH_SHORT).show();
-			  }else {
-					final String[] accountnumb = Userslist.numberofusers.split("#%-->");
-					Userslist.user_count = accountnumb.length;
-					Userslist.user_count --;
-			}
-               
-        } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-		} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-		}
         
         /*
          *  set up map UI
          */
+    	System.out.println("seee");
         GoogleMap mMap;
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getMap();
         mMap.clear();
@@ -419,17 +424,12 @@ public class Login extends Activity {
      }
 	
 	public void updateprofile(View view){
-		stopRepeatingTask();
-    	Intent intent2 = new Intent( Login.this, Profession_info.class);
-    	intent2.putExtras(profilelistactdata);
-		startActivity(intent2);
+		
     }
 	
 	
 	public void on_image_click(View view){
-		//
-		Intent intentprofilelist = new Intent( Login.this, Upload_Image.class);
-		startActivity(intentprofilelist);
+		
 	}
 	
 	@Override
