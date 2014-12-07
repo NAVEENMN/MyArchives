@@ -150,5 +150,6 @@
     <string name="action_example">Example action</string>
     <string name="title_activity_getlocation">Getlocation</string>
     <string name="title_activity_gcm_handle">GCM_handle</string>
+    <string name="title_activity_accept_invite">Accept_invite</string>
 
 </resources>

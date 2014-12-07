@@ -41,6 +41,7 @@ public class commondata {
 		static ArrayList<String> places = new ArrayList<String>();
 		static ArrayList<Double> latitudes = new ArrayList<Double>();
 		static ArrayList<Double> longitudes = new ArrayList<Double>();
+		static ArrayList<String> names = new ArrayList<String>();
 	}
 	
 	public static class gcm_incoming{

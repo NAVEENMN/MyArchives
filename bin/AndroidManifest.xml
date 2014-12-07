@@ -186,6 +186,10 @@
             android:label="@string/title_activity_gcm_handle"
             android:theme="@style/FullscreenTheme" >
         </activity>
+        <activity
+            android:name=".Accept_invite"
+            android:label="@string/title_activity_accept_invite" >
+        </activity>
     </application>
 
 </manifest>

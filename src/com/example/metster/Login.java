@@ -178,9 +178,12 @@ public class Login extends Activity {
 	        				System.out.println("something changed");
 	        				commondata.places_found.latitudes.clear();
 	        				commondata.places_found.longitudes.clear();
+	        				commondata.places_found.names.clear();
 	        				Iterator<DataSnapshot> children = data.getChildren().iterator();
 	        				while(children.hasNext()){// handle cases here like if no latitude etc
 	        					DataSnapshot child = children.next();
+	        					String rawname = child.getName();
+	        					String[] rawdata = rawname.split("--");//rawdata[1] will have name
 	        					try{
 	                			String[] temp1 =child.getValue().toString().split(" ");
 	                			String part0 = temp1[0];
@@ -191,6 +194,7 @@ public class Login extends Activity {
 	                			String latitude = comp2[1].replace("}", "");
 	                			commondata.places_found.latitudes.add(Double.parseDouble(latitude));
 	                			commondata.places_found.longitudes.add(Double.parseDouble(longitude));
+	                			commondata.places_found.names.add(rawdata[1]);
 	        					}catch(Exception e){
 	        						System.out.println("pair error");
 	        					}
@@ -279,8 +283,8 @@ public class Login extends Activity {
 	        	if(commondata.event_information.eventID != null){
 	    			System.out.println("gets called" + commondata.event_information.eventID);
 	    		create_firebase_refrence();
-	    		fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook).child("Latitude").setValue(commondata.user_information.latitude);
-	    	    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook).child("Longitude").setValue(commondata.user_information.longitude);
+	    		fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook+"--"+commondata.facebook_details.name).child("Latitude").setValue(commondata.user_information.latitude);
+	    	    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook+"--"+commondata.facebook_details.name).child("Longitude").setValue(commondata.user_information.longitude);
 	    		}
 		    	}else{
 		    		System.out.println("loca null");
@@ -463,9 +467,8 @@ public class Login extends Activity {
         for(int i = 0; i< commondata.places_found.latitudes.size(); i++){
         	mMap.addMarker(new MarkerOptions()
             .position(new LatLng(commondata.places_found.latitudes.get(i), commondata.places_found.longitudes.get(i))) // visitor
-            .snippet("hola")
             .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin))
-            .title("meet here!")).showInfoWindow();
+            .title(commondata.places_found.names.get(i)));
         }
         mMap.setMyLocationEnabled(true);
         LatLng currlocation = new LatLng(commondata.user_information.latitude, commondata.user_information.longitude);// yours
@@ -618,9 +621,9 @@ public class Login extends Activity {
 		   */
 		    commondata.event_information.eventID = "event-"+commondata.facebook_details.facebook;
 		    create_firebase_refrence();
-		    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook).setValue(commondata.facebook_details.name);
-		    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook).child("Latitude").setValue(commondata.user_information.latitude);
-		    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook).child("Longitude").setValue(commondata.user_information.longitude);
+		    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook+"--"+commondata.facebook_details.name).setValue(commondata.facebook_details.name);
+		    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook+"--"+commondata.facebook_details.name).child("Latitude").setValue(commondata.user_information.latitude);
+		    fb_event_ref.firebaseobj.child(commondata.facebook_details.facebook+"--"+commondata.facebook_details.name).child("Longitude").setValue(commondata.user_information.longitude);
 		  pick_food_type();
 		  /*
 		   * store the event id on mysql
@@ -926,7 +929,7 @@ public class Login extends Activity {
 	public void delete_event(){
 		//if(event_info.is_exist != null){ // verify later when we add file
 			StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
-			strBuilder.append(commondata.facebook_details.facebook);
+			strBuilder.append(commondata.facebook_details.facebook+"--"+commondata.facebook_details.name);
 		    fb_event_ref.fbref = strBuilder.toString();
 		    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
 		    fb_event_ref.firebaseobj.removeValue();
@@ -1227,7 +1230,7 @@ public class Login extends Activity {
 			fb_event_ref.firebaseobj.removeEventListener(listn);
 			
 			StringBuilder strBuildertmp = new StringBuilder("https://met-ster-event.firebaseio.com/");
-			strBuildertmp.append(commondata.event_information.eventID+"/"+commondata.facebook_details.facebook);
+			strBuildertmp.append(commondata.event_information.eventID+"/"+commondata.facebook_details.facebook+"--"+commondata.facebook_details.name);
 		    String tempref = strBuildertmp.toString();
 		    Firebase tempfb = new Firebase(tempref);
 			tempfb.removeValue();

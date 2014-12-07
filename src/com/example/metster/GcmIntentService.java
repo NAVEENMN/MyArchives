@@ -115,7 +115,7 @@ public class GcmIntentService extends IntentService {
 	    // Prepare intent which is triggered if the
 	    // notification is selected
 	    Intent intent = new Intent(this, Login.class);
-	    PendingIntent pIntent = PendingIntent.getActivity(this, 0, new Intent(this, GCM_handle.class), 0);
+	    PendingIntent pIntent = PendingIntent.getActivity(this, 0, new Intent(this, Accept_invite.class), 0);
 	    
 	    // Build notification
 	    // Actions are just fake
