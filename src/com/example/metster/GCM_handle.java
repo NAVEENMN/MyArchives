@@ -17,6 +17,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -26,9 +28,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.metster.Rend.fb_event_ref;
 import com.example.metster.util.SystemUiHider;
@@ -302,7 +307,7 @@ public class GCM_handle extends Activity {
 		    @Override
 		    public void run() {
 		    	if(commondata.gcm_req.event_id != null){
-		    		create_firebase_event_refrence(commondata.gcm_req.event_id);
+		    		create_firebase_event_refrence(commondata.gcm_req.event_id);//firebase update
 		    		try {
 		    	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/updateevent.php",commondata.facebook_details.facebook,commondata.gcm_req.event_id,"1","1","1","1","1"
 		    			, "1", "1", "1", "1", "1", "1").get();
@@ -316,7 +321,21 @@ public class GCM_handle extends Activity {
 		    				System.out.println("backhander");
 		    				e.printStackTrace();
 		    			}
-		    		} 
+		    		finish();
+		    		} else{//event id null
+		    			 Display display = getWindowManager().getDefaultDisplay();
+		    				Point size = new Point();
+		    				display.getSize(size);
+		    				int width = size.x;
+		    				final int height = size.y;
+		    			Toast toast= Toast.makeText(getApplicationContext(), 
+		   					 "Oops something went wrong, request your friend to add.", Toast.LENGTH_SHORT);  
+		   					toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, height/4);
+		   					TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+		   					//v.setBackgroundColor(Color.TRANSPARENT);
+		   					v.setTextColor(Color.rgb(175, 250, 176));
+		   					toast.show();
+		    		}
 		    }
 		};
 

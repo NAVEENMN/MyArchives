@@ -57,7 +57,7 @@ public class HomescreenActivity extends Activity {
 		setContentView(R.layout.activity_homescreen);
 		String APP_ID = getString(R.string.facebook_app_id);
 		Firebase.setAndroidContext(getApplicationContext());
-		
+		commondata.event_information.eventID = null;
 		//-------------------------------
 		
 		boolean stat = haveNetworkConnection();
@@ -164,13 +164,14 @@ public class HomescreenActivity extends Activity {
 	  			, "1", "1", "1", "1", "1", "1").get();
 	  	    	 System.out.println(response.toString());
 	  	    	 String[] dat = response.toString().split("-->");
-	  	    	 if(dat.length == 2){//it has both component
-	  	    		commondata.facebook_details.contact = dat[0];//contact
-		  	    	commondata.event_information.eventID = dat[1];
-	  	    	 }else{
-	  	    		commondata.facebook_details.contact = dat[0];//contact
-		  	    	commondata.event_information.eventID = null;
-	  	    	 }
+	  	    	commondata.facebook_details.contact  = dat[1];//contact
+	  	    	if(dat[2].isEmpty() || dat[2] == null){
+	  	    		commondata.event_information.eventID = null;
+	  	    	}else{
+	  	    	commondata.event_information.eventID = dat[2];//eventid	
+	  	    	}
+	  	    	System.out.println("contact" +  commondata.facebook_details.contact);
+	  	    	System.out.println("eventid"+commondata.event_information.eventID);
 	  	    	 
 	    		}
 	  			} catch (InterruptedException e) {

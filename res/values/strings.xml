@@ -131,8 +131,8 @@
 
     <string name="title_activity_profiles">Profiles</string>
     <string name="title_activity_load_home">LoadHome</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="dummy_button">Accept</string>
+    <string name="dummy_content">METSTER</string>
     <string name="title_activity_profession_info">Profession_info</string>
     <string name="title_activity_loading_screen">Loading_screen</string>
     <string name="title_activity_upload__image">Upload_Image</string>
