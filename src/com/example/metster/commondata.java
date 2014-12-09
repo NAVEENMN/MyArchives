@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import android.graphics.Bitmap;
 
+import com.facebook.android.Facebook;
+
 public class commondata {
 
 	public static class facebook_details{
@@ -12,6 +14,7 @@ public class commondata {
 		static String email;
 		static Bitmap profile_image;
 		static String contact;
+		static Facebook fb;
 	}
 	public static class keys{
 		static String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";
@@ -35,6 +38,7 @@ public class commondata {
 	
 	public static class event_information{
 		static String eventID;
+		static String host;
 	}
 		
 	public static class places_found{

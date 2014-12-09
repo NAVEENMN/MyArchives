@@ -47,7 +47,6 @@ public class HomescreenActivity extends Activity {
 	
 	String val;
 	int userid;
-	Facebook fb;
 	SharedPreferences sp;
 	@SuppressWarnings("deprecation")
 	@Override
@@ -62,8 +61,8 @@ public class HomescreenActivity extends Activity {
 		
 		boolean stat = haveNetworkConnection();
         if(stat){// network check ok
-        	fb=new Facebook(APP_ID);
-        	if(fb.isSessionValid()){
+        	commondata.facebook_details.fb=new Facebook(APP_ID);
+        	if(commondata.facebook_details.fb.isSessionValid()){
             	// if valid login
         		//Intent serviceIntent = new Intent(LoadHome.this, Login.class);
                 //LoadHome.this.startService(serviceIntent);
@@ -115,7 +114,7 @@ public class HomescreenActivity extends Activity {
 		protected Void doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			
-        	fb.authorize(HomescreenActivity.this, new String[] {"email", "public_profile"}, new DialogListener(){
+			commondata.facebook_details.fb.authorize(HomescreenActivity.this, new String[] {"email", "public_profile"}, new DialogListener(){
 
             	
 					@Override
@@ -205,7 +204,7 @@ public class HomescreenActivity extends Activity {
      protected void onActivityResult(int requestCode, int resultCode, Intent data) {
          // TODO Auto-generated method stub
          super.onActivityResult(requestCode, resultCode, data);
-         fb.authorizeCallback(requestCode, resultCode, data);
+         commondata.facebook_details.fb.authorizeCallback(requestCode, resultCode, data);
      }
 	 
 	 public String BitMapToString(Bitmap bitmap){
@@ -224,7 +223,7 @@ public class HomescreenActivity extends Activity {
 
 		    try {
 
-		        JSONObject profile = Util.parseJson(fb.request("me"));
+		        JSONObject profile = Util.parseJson(commondata.facebook_details.fb.request("me"));
 		        Log.e("Profile", "" + profile);
 
 		        final String mUserId = profile.getString("id");

@@ -151,5 +151,8 @@
     <string name="title_activity_getlocation">Getlocation</string>
     <string name="title_activity_gcm_handle">GCM_handle</string>
     <string name="title_activity_accept_invite">Accept_invite</string>
+    <string name="new_event">Do you want to setup a new event?</string>
+    <string name="new_contact">Do you want add more people?</string>
+     <string name="exit">Do you want to exit?</string>
 
 </resources>

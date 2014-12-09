@@ -13,15 +13,16 @@
         android:baselineAligned="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#0B3B2E"
+        android:background="#2E9AFE"
         android:gravity="top"
         android:orientation="horizontal" >
         
         <LinearLayout
             android:layout_width="0dip"
+            android:id="@+id/ProfileImagebackground"
 			android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:background="#0B3B2E"
+            android:background="#1C1C1C"
             android:paddingLeft="5dp"
             android:orientation="vertical" >
                
@@ -45,9 +46,7 @@
             android:paddingLeft="2dp"
 			android:paddingTop="10dp"
             android:orientation="vertical" >
-            
-         
-            
+       
       
             <TextView
                 android:id="@+id/FirstName"
@@ -94,7 +93,7 @@
     android:layout_below="@+id/Profiledata"
     android:layout_width="match_parent"
     android:layout_height="3dp"
-    android:background="#088A85" /> 
+    android:background="#2E9AFE" /> 
     
      <!--  ****************************************************************** Information area        -->
     <RelativeLayout
