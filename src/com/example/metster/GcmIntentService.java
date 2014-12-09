@@ -1,7 +1,5 @@
 package com.example.metster;
 
-import java.util.Random;
-
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -34,7 +32,7 @@ public class GcmIntentService extends IntentService {
         // The getMessageType() intent parameter must be the intent you received
         // in your BroadcastReceiver.
         String messageType = gcm.getMessageType(intent);
-
+        
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
             /*
              * Filter messages based on message type. Since it is likely that GCM
@@ -121,12 +119,13 @@ public class GcmIntentService extends IntentService {
 	    // Actions are just fake
 	    Notification noti = new Notification.Builder(this)
 	        .setContentTitle("Metster")
-	        .setContentText(message + " is requesting your location.").setSmallIcon(R.drawable.ic_action_group)
+	        .setContentText(message + " is requesting your location.").setSmallIcon(R.drawable.logo)
 	        .addAction(R.drawable.ic_action_next_item, "Send location", pIntent).build();
 	    
 	    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	    // hide the notification after its selected
 	    noti.flags |= Notification.FLAG_AUTO_CANCEL;
+	    noti.defaults |= Notification.DEFAULT_VIBRATE;
 	    notificationManager.notify(0, noti);
 
 	  }
