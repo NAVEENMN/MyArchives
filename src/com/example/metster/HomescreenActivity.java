@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.metster.Login.fbdata;
+import com.facebook.Session;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
@@ -69,9 +70,11 @@ public class HomescreenActivity extends Activity {
                 //startActivity(serviceIntent);
                 //finish();
         		
+        		
         		System.out.println("session is valid");
         		
             }else{
+           
             	System.out.println("no");
             	
             	new logininback().execute();
@@ -113,6 +116,7 @@ public class HomescreenActivity extends Activity {
 		@Override
 		protected Void doInBackground(Void... params) {
 			// TODO Auto-generated method stub
+		
 			
 			commondata.facebook_details.fb.authorize(HomescreenActivity.this, new String[] {"email", "public_profile"}, new DialogListener(){
 
@@ -290,9 +294,6 @@ public class HomescreenActivity extends Activity {
 	           .setNegativeButton("No", null)
 	           .show();
 	}
-	
-	
-	
 	
 	/*
 	 * This method will check if network connection exists

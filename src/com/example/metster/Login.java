@@ -58,9 +58,11 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Login extends Activity {
@@ -162,6 +164,27 @@ public class Login extends Activity {
 	        public boolean onLongClick(View v) {
 	            // TODO Auto-generated method stub
 	         System.out.println("long pressed");
+	         
+	         /*
+	          * remove if mp exist
+	          */
+	        
+	         fb_event_ref.firebaseobj.child("70909141991*799--center").removeValue();
+	         
+	         try {
+		    	 String server_resp = new RequestTask().execute("http://54.183.113.236:8000",commondata.facebook_details.facebook,"event-"+commondata.facebook_details.facebook,"1","1","1","1","1"
+				, "1", "1", "1", "1", "1", "1").get();
+		    	 System.out.println("noderes" + server_resp);
+				} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+					System.out.println("backhander");
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+					System.out.println("backhander");
+					e.printStackTrace();
+				}
+	         
 	            return true;
 	        }
 	    });
@@ -557,10 +580,27 @@ public class Login extends Activity {
         mMap.clear();
         try{
         for(int i = 0; i< commondata.places_found.latitudes.size(); i++){
+        	if(commondata.places_found.names.get(i).equals("center")){//for center button
+        		mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+					
+					@Override
+					public boolean onMarkerClick(Marker arg0) {
+						// TODO Auto-generated method stub
+						System.out.println("exploring");
+						return false;
+					}
+				});
+        		mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(commondata.places_found.latitudes.get(i), commondata.places_found.longitudes.get(i))) // visitor
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.mp))
+                .title("explore neighbourhood"));
+        		
+        	}else{
         	mMap.addMarker(new MarkerOptions()
             .position(new LatLng(commondata.places_found.latitudes.get(i), commondata.places_found.longitudes.get(i))) // visitor
             .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin))
             .title(commondata.places_found.names.get(i)));
+        	}
         }
         mMap.setMyLocationEnabled(true);
         LatLng currlocation = new LatLng(commondata.user_information.latitude, commondata.user_information.longitude);// yours
