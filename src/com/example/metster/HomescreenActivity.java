@@ -64,12 +64,6 @@ public class HomescreenActivity extends Activity {
         if(stat){// network check ok
         	commondata.facebook_details.fb=new Facebook(APP_ID);
         	if(commondata.facebook_details.fb.isSessionValid()){
-            	// if valid login
-        		//Intent serviceIntent = new Intent(LoadHome.this, Login.class);
-                //LoadHome.this.startService(serviceIntent);
-                //startActivity(serviceIntent);
-                //finish();
-        		
         		
         		System.out.println("session is valid");
         		

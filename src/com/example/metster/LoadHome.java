@@ -115,13 +115,7 @@ public class LoadHome extends Activity {
 		// Acquire a reference to the system Location Manager
 			
 		Firebase.setAndroidContext(this);
-			/*
-			 * 
-			 */
-
-			//-- create a check statement here.. if play service fails
-			//-- prompt and ask them to activate
-	        
+	
 	        Context context = getApplicationContext();
 
 	        // Check device for Play Services APK.

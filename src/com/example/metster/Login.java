@@ -92,6 +92,7 @@ public class Login extends Activity {
 		static String food_type;
 		static String is_exist;
 		static String is_food_chosen;
+		static Boolean is_host;
 	}
 	public static class Userslist{
 		static String server_response;
@@ -148,6 +149,7 @@ public class Login extends Activity {
 		Firebase.setAndroidContext(this);
 	    listnerflag = true;
 	    event_info.food_type = "american";
+	    event_info.is_host = false;//by default no host access
 		/*
 		 * if contact info is not present ask from user
 		 * verify contact
@@ -179,20 +181,28 @@ public class Login extends Activity {
 	          */
 	        
 	         fb_event_ref.firebaseobj.child("70909141991*799--center").removeValue();
+	         Thread thread = new Thread()
+	         {
+	             @Override
+	             public void run() {
+	            	 try {
+	    		    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/exe_get_loc.php",commondata.event_information.eventID,"event-"+commondata.facebook_details.facebook,"1","1","1","1","1"
+	    				, "1", "1", "1", "1", "1", "1").get();
+	    		    	 System.out.println("noderes" + server_resp);
+	    				} catch (InterruptedException e) {
+	    								// TODO Auto-generated catch block
+	    					System.out.println("backhander");
+	    					e.printStackTrace();
+	    				} catch (ExecutionException e) {
+	    								// TODO Auto-generated catch block
+	    					System.out.println("backhander");
+	    					e.printStackTrace();
+	    				}
+	             }
+	         };
+
+	         thread.start();
 	         
-	         try {
-		    	 String server_resp = new RequestTask().execute("http://54.183.113.236:8000",commondata.facebook_details.facebook,"event-"+commondata.facebook_details.facebook,"1","1","1","1","1"
-				, "1", "1", "1", "1", "1", "1").get();
-		    	 System.out.println("noderes" + server_resp);
-				} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-					System.out.println("backhander");
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-								// TODO Auto-generated catch block
-					System.out.println("backhander");
-					e.printStackTrace();
-				}
 	         
 	            return true;
 	        }
@@ -208,7 +218,14 @@ public class Login extends Activity {
 					/*
 	        	     * when someone moves find all location and print it
 	        	     */
-		   
+		   /*
+		     * check if this user is host or not
+		     */
+		    if(commondata.event_information.eventID.contains(commondata.facebook_details.facebook)){
+		    	event_info.is_host = true;
+		    }else{
+		    	event_info.is_host = false;
+		    }
 		   
 		fb_event_ref.firebaseobj.addChildEventListener(child_listner = new ChildEventListener() {
 
@@ -256,6 +273,7 @@ public class Login extends Activity {
 							//v.setBackgroundColor(Color.TRANSPARENT);
 							v.setTextColor(Color.rgb(175, 250, 176));
 							toast.show();
+							drop_event();
 				}else{
 					Toast toast= Toast.makeText(getApplicationContext(), 
 							 name[1] + " has left the event", Toast.LENGTH_SHORT);  
@@ -1048,32 +1066,10 @@ public class Login extends Activity {
 			*/
 		
 	}
-	public void delete_event(){
-		//if(event_info.is_exist != null){ // verify later when we add file
-			StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
-			strBuilder.append(commondata.facebook_details.facebook+"--"+commondata.facebook_details.name);
-		    fb_event_ref.fbref = strBuilder.toString();
-		    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
-		    fb_event_ref.firebaseobj.removeValue();
-		    
-		    try {
-		    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/resetevent.php",commondata.facebook_details.facebook,"event-"+commondata.facebook_details.facebook,"1","1","1","1","1"
-				, "1", "1", "1", "1", "1", "1").get();
-		    	 System.out.println("backhand" + server_resp);
-				} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-					System.out.println("backhander");
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-								// TODO Auto-generated catch block
-					System.out.println("backhander");
-					e.printStackTrace();
-				}
-		  
+	
 		  
 	
 		//}
-	}
 	private void ContactPicker(){
 		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
 	            Contacts.CONTENT_URI);
@@ -1244,36 +1240,6 @@ public class Login extends Activity {
 	    fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
 }
 
-	public void find_places(View v){
-		/*
-		Double temp_lat = 0.0;
-		Double temp_long = 0.0;
-		for(int i = 0;i< latitudes.size();i++){
-			temp_lat += latitudes.get(i);
-		}
-		for (int i = 0; i < longitudes.size(); i++){
-			temp_long += longitudes.get(i);
-		}
-		temp_lat = temp_lat / latitudes.size();
-		temp_long = temp_long / latitudes.size();
-		latitudes.add(temp_lat);
-		longitudes.add(temp_long);
-		group_list.add("mean");// mean is the last point equivalent for group_list content
-		Log.w("meanlat",Double.toString(temp_lat));
-		Log.w("meanlon",Double.toString(temp_long));
-		
-		create_firebase_refrence();
-		fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count+1)).setValue("user");
-		fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count+1)).child("latitudes").setValue(temp_lat);
-		fb_event_ref.firebaseobj.child("member-"+Integer.toString(member_count+1)).child("longitudes").setValue(temp_long);
-		
-		set_up_map_view();
-		get_places_mean_loc(temp_lat, temp_long);
-		*/
-	}
-	//-----------------
-	//-----------------
-	//-----------------
 	
 	private void drop_event(){
 		if(commondata.event_information.eventID != null){
@@ -1284,14 +1250,19 @@ public class Login extends Activity {
 			}
 		fb_event_ref.firebaseobj.removeEventListener(listn);
 		fb_event_ref.firebaseobj.removeEventListener(child_listner);
-		//fb_event_ref.firebaseobj.removeEventListener(listener);
 		
 		StringBuilder strBuildertmp = new StringBuilder("https://met-ster-event.firebaseio.com/");
-		strBuildertmp.append(commondata.event_information.eventID+"/"+commondata.facebook_details.facebook+"--"+commondata.facebook_details.name);
+		if(event_info.is_host){
+			strBuildertmp.append(commondata.event_information.eventID);
+		}else{
+			strBuildertmp.append(commondata.event_information.eventID+"/"+commondata.facebook_details.facebook+"--"+commondata.facebook_details.name);
+		}
+	
 	    String tempref = strBuildertmp.toString();
 	    Firebase tempfb = new Firebase(tempref);
 		tempfb.removeValue();
 		commondata.event_information.eventID = null;
+		
 		 try {
 	    	 String server_resp = new RequestTask().execute("http://54.183.113.236/metster/resetevent.php",commondata.facebook_details.facebook,"event-"+commondata.facebook_details.facebook,"1","1","1","1","1"
 			, "1", "1", "1", "1", "1", "1").get();
