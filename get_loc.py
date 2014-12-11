@@ -1,10 +1,11 @@
 from numpy import *
 import random
+import scipy
 from scipy.spatial import *
 import urllib2
 import json
 from firebase import firebase
-import time
+import sys
 
 '''
     mp: meet point
@@ -126,10 +127,10 @@ def initialize_mp_node(nodes):
     return mpnode
 
 def add_node_to_fb(eventid, node):
-    fb.put(eventid,"34112121014--mp", {'Latitude': node.latitude, 'Longitude': node.longitude})
+    fb.put(eventid,"70909141991*799--center", {'Latitude': node.latitude, 'Longitude': node.longitude})
 
 def main():
-    event_id = "event-859842507380812/" # this you will get from app
+    event_id = str(sys.argv[1])+"/" # this you will get from app
     fb_res =  fb.get(event_id, None)#get data from firebase
     number_of_nodes = len(fb_res.keys()) # get the number of nodes
     nodes = create_dummy_nodes(number_of_nodes) #create dummy n nodes
