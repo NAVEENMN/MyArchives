@@ -77,9 +77,11 @@ public class GetRestaurantAsyncTask extends AsyncTask<String,Void,ArrayList<Rest
 			commondata.places_found.longitudes.add(result.get(i).getLongitude());
 		}
 		Log.d("doneman",commondata.places_found.places.get(0));
-		Firebase myFirebaseflag = new Firebase("https://met-ster-control.firebaseio.com/");
-		myFirebaseflag.child("dataready").setValue("ok");
+		Login lg  = new Login();
+		lg.list_rest();
 	}
+	
+	
 
 
 }

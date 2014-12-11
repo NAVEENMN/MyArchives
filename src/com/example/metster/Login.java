@@ -1,10 +1,18 @@
 package com.example.metster;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+
+import org.json.JSONException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,6 +33,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -581,15 +590,6 @@ public class Login extends Activity {
         try{
         for(int i = 0; i< commondata.places_found.latitudes.size(); i++){
         	if(commondata.places_found.names.get(i).equals("center")){//for center button
-        		mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
-					
-					@Override
-					public boolean onMarkerClick(Marker arg0) {
-						// TODO Auto-generated method stub
-						System.out.println("exploring");
-						return false;
-					}
-				});
         		mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(commondata.places_found.latitudes.get(i), commondata.places_found.longitudes.get(i))) // visitor
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.mp))
@@ -604,7 +604,19 @@ public class Login extends Activity {
         }
         mMap.setMyLocationEnabled(true);
         LatLng currlocation = new LatLng(commondata.user_information.latitude, commondata.user_information.longitude);// yours
-        
+        mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+			
+			@Override
+			public boolean onMarkerClick(Marker point) {
+				// TODO Auto-generated method stub
+				
+				if(point.getTitle().equals("explore neighbourhood")){// action for click on center
+					System.out.println("exploring"+point.getTitle().toString());
+					get_places_mean_loc(point.getPosition().latitude,point.getPosition().longitude);
+				}
+				return false;
+			}
+		});
         mMap.getUiSettings().setZoomControlsEnabled(false);
         }catch(Exception e){
         	System.out.println("something fishy");
@@ -1192,7 +1204,7 @@ public class Login extends Activity {
 		myFirebaseflag.child("dataready").setValue("no");
 		String req_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+mean_latitude+","+mean_longitude+"&radius=5000&types=food&keyword="+event_info.food_type+"&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE";
 		 try {
-			ArrayList<Restaurant> run_places = new GetRestaurantAsyncTask().execute(req_url).get();
+			ArrayList<Restaurant> run_places = new GetRestraunts().execute(req_url).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1201,19 +1213,6 @@ public class Login extends Activity {
 			e.printStackTrace();
 		}
 		//set_up_map_for_places();
-
-		myFirebaseflag.child("dataready").addValueEventListener(new ValueEventListener() {
-
-			  @Override
-			  public void onDataChange(DataSnapshot snapshot) {
-			    System.out.println("get_places"+snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
-			    //set_up_map_for_places();
-			    list_rest();
-			  }
-
-			  @Override public void onCancelled(FirebaseError error) { }
-
-			});
 		//Log.w("plcea",commondata.places_found.places.get(0));
 		
 	}
@@ -1321,6 +1320,63 @@ public class Login extends Activity {
 
 	}
 
+    private class GetRestraunts extends AsyncTask<String,Void,ArrayList<Restaurant>> {
+    	
+    	protected ArrayList<Restaurant>  doInBackground(String... arg0) {
+        	try {
+    			URL url = new URL(arg0[0]);
+    			
+    			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+    			con.setRequestMethod("GET");
+    			con.connect();
+    			int statuscode = con.getResponseCode();
+    			if(statuscode == HttpURLConnection.HTTP_OK){
+    				BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+    				StringBuilder sb = new StringBuilder();
+    				String line = reader.readLine();
+    				
+    				while(line!=null){
+    					sb.append(line);
+    					line = reader.readLine();
+    				}
+    				
+    				Log.d("demo",sb.toString());
+    				return RestaurantUtil.RestaurantsJSONParser.parseRestaurants(sb.toString());
+    			}
+    			
+    		} catch (MalformedURLException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		} catch (ProtocolException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		} catch (IOException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		} catch (JSONException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		} 
+    		return null;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Restaurant> result) {
+    		super.onPostExecute(result);
+    		for (int i=0; i< result.size(); i++){
+    			commondata.places_found.places.add(result.get(i).getName());
+    			commondata.places_found.latitudes.add(result.get(i).getLatitude());
+    			Log.w("string",result.get(i).toString());
+    			commondata.places_found.longitudes.add(result.get(i).getLongitude());
+    		}
+    		Log.d("doneman",commondata.places_found.places.get(0));
+
+    		list_rest();
+        }
+
+       
+    }
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		//getMenuInflater().inflate(R.menu.login, menu);
