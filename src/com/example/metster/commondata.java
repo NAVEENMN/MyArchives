@@ -33,12 +33,16 @@ public class commondata {
 		static String country;
 		static String zip;
 		static String addressline;
-		static String status;
 	}
 	
 	public static class event_information{
 		static String eventID;
 		static String host;
+	}
+	
+	public static class prefrences{
+		static Double travel;
+		static float price;
 	}
 		
 	public static class places_found{
