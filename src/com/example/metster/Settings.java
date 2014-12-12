@@ -1,13 +1,13 @@
 package com.example.metster;
 
-import java.io.File;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.facebook.Session;
 
 public class Settings extends Activity {
 
@@ -25,29 +25,33 @@ public class Settings extends Activity {
         .setCancelable(false)
         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-            	Intent intent2 = new Intent( Settings.this, HomescreenActivity.class);
-        		File dir = getFilesDir();
-        		File file = new File(dir, "accounts.txt");
-        		boolean deleted = file.delete();
-        		File dir2 = getFilesDir();
-        		File file2 = new File(dir2, "metster_event_info.txt");
-        		file2.delete();
-        		startActivity(intent2);
-        		finish();
+            	
+            	Session session = Session.getActiveSession();
+            	if (session != null) {
+
+                    if (!session.isClosed()) {
+                        session.closeAndClearTokenInformation();
+                        //clear your preferences if saved
+                    }
+                } else {
+
+                    session = new Session(getBaseContext());
+                    Session.setActiveSession(session);
+
+                    session.closeAndClearTokenInformation();
+                        //clear your preferences if saved
+                }
+            	
+            	Intent intent = new Intent(Settings.this,HomescreenActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            	finish();
+            	System.exit(2);
             }
         })
         .setNegativeButton("No", null)
         .show();
 		
 	}
-	
-	@Override
-	public void onBackPressed() {
-	 
-		Intent intent2 = new Intent( Settings.this, Login.class);
-		startActivity(intent2);
-		finish();
-			
-	}
+
 	
 }

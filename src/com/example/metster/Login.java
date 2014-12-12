@@ -14,7 +14,6 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,6 +27,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -64,7 +64,6 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -130,12 +129,8 @@ public class Login extends Activity {
 	// ----------------------------------------->
 	//
 	private static final String TAG = Rend.class.getSimpleName();
-	private static final int REQUEST_CODE_PICK_CONTACTS = 1;
 	private Uri uriContact;
 	private String contactID; // contacts unique ID
-	private String access_to_button;
-	private String event_tracer_is_setup;
-	private String initiate;
 	AlertDialog levelDialog = null;
 	private static final int CONTACT_PICKER_RESULT = 1001;
 	Geocoder gcd;
@@ -146,8 +141,6 @@ public class Login extends Activity {
 	Location position;
 	String provider;
 	List<Address> addresses;
-	private Button find;
-	private Button rend_button_obj;
 	private final Handler _handler = new Handler();
 	Runnable getData;
 	Criteria criteria = new Criteria();
@@ -159,7 +152,6 @@ public class Login extends Activity {
 	ValueEventListener listn;
 	ChildEventListener child_listner;
 	Boolean listnerflag;
-	private SeekBar seekBar;
 	RadioGroup travelchoice;
 
 	@Override
@@ -173,8 +165,8 @@ public class Login extends Activity {
 		event_info.food_type = "american";
 		event_info.is_host = false;// by default no host access
 		create_firebase_refrence();// this is event refernce setup
-
-		if (commondata.facebook_details.contact.isEmpty()) {
+		toast_info("Welcome");
+		if (commondata.facebook_details.contact == null) {
 			req_contact();
 		}
 
@@ -642,11 +634,16 @@ public class Login extends Activity {
 				Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.TOP
 				| Gravity.CENTER_HORIZONTAL, 0,
-				height / 4);
+				height / 3);
 		TextView v = (TextView) toast.getView()
 				.findViewById(android.R.id.message);
-		// v.setBackgroundColor(Color.TRANSPARENT);
-		v.setTextColor(Color.rgb(175, 250, 176));
+		v.setBackgroundColor(Color.TRANSPARENT);
+		v.setTextColor(Color.rgb(66, 66, 66));
+		v.setTextSize((float) 20.0);
+		v.setTypeface(null, Typeface.BOLD);
+		v.setTypeface(Typeface.SANS_SERIF);
+		View vw = toast.getView();
+		vw.setBackgroundColor(Color.TRANSPARENT);
 		toast.show();
 	}
 
@@ -816,7 +813,7 @@ public class Login extends Activity {
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
 								stopRepeatingTask();
-								locationManager.removeUpdates(locationListener);
+								remove_location_listners();
 								try {
 									/*
 									 * while existing remove firebase listners
@@ -840,6 +837,12 @@ public class Login extends Activity {
 				.removeEventListener(listn);
 		fb_event_ref.firebaseobj
 				.removeEventListener(child_listner);
+	}
+	/*
+	 * This method removes all location listners
+	 */
+	private void remove_location_listners(){
+		locationManager.removeUpdates(locationListener);
 	}
 	
 	/*
@@ -915,7 +918,7 @@ public class Login extends Activity {
 				(ViewGroup) findViewById(R.id.new_event_root));
 		AlertDialog.Builder alert = new AlertDialog.Builder(this)
 				.setView(layout);
-		AlertDialog alertDialog = alert.create();
+		alert.create();
 		commondata.event_information.eventID = null;
 		RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.pricelevel);
 		ratingBar.setRating((float) 2.5);
@@ -984,14 +987,13 @@ public class Login extends Activity {
 							"event-" + commondata.facebook_details.facebook,
 							"1", "1", "1", "1", "1", "1", "1", "1", "1", "1",
 							"1").get();
-					System.out.println("backhand" + server_resp);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
-					System.out.println("backhander");
+					System.out.println("error on server while updating event info");
 					e.printStackTrace();
 				} catch (ExecutionException e) {
 					// TODO Auto-generated catch block
-					System.out.println("backhander");
+					System.out.println("error on server while updating event info");
 					e.printStackTrace();
 				}
 
@@ -1113,13 +1115,7 @@ public class Login extends Activity {
 	}
 
 	private void confirm_add_this_person() {
-
-		Display display = getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		int width = size.x;
-		final int height = size.y;
-
+		
 		ImageView image = new ImageView(this);
 		image.setImageResource(R.drawable.ic_home);
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -1235,6 +1231,9 @@ public class Login extends Activity {
 		contact_info.contact_name = contactName;
 	}
 
+	/*
+	 * Home button triggers this function
+	 */
 	public void AccessButton(View view) {
 
 		if (commondata.event_information.eventID == null) {// no event exist
@@ -1245,7 +1244,9 @@ public class Login extends Activity {
 
 	}
 
-	// }
+	/*
+	 * This method triggers contact picker intent
+	 */
 	private void ContactPicker() {
 		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
 				Contacts.CONTENT_URI);
@@ -1253,9 +1254,8 @@ public class Login extends Activity {
 	}
 
 	private void add_this_person() {
-
 		group.curr_person = contact_info.contact_number;
-		Log.w("requesting", group.curr_person);
+		Log.w("Adding this person", group.curr_person);
 		add_a_member_to_fb(group.curr_person);
 	}
 
@@ -1335,8 +1335,7 @@ public class Login extends Activity {
 
 						}
 						levelDialog.dismiss();
-						setTitle(event_info.event_name + "  "
-								+ event_info.food_type);
+						remove_location_listners();
 						Intent intent = new Intent(Login.this, Login.class);
 						startActivity(intent);
 						finish();
@@ -1347,14 +1346,15 @@ public class Login extends Activity {
 	}
 
 	public void get_places_mean_loc(Double mean_latitude, Double mean_longitude) {
-		Firebase myFirebaseflag = new Firebase(
-				"https://met-ster-control.firebaseio.com/");
-		myFirebaseflag.child("dataready").setValue("no");
+		
+		/*
+		 * food type radius get it from firebase group profile
+		 */
 		String req_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 				+ mean_latitude
 				+ ","
 				+ mean_longitude
-				+ "&radius=5000&types=food&keyword="
+				+ "&radius=2000&types=food&keyword="
 				+ event_info.food_type
 				+ "&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE";
 		try {
@@ -1367,8 +1367,6 @@ public class Login extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// set_up_map_for_places();
-		// Log.w("plcea",commondata.places_found.places.get(0));
 
 	}
 
@@ -1454,7 +1452,7 @@ public class Login extends Activity {
 	 */
 	private void setupActionBar() {
 
-		// getActionBar().setDisplayHomeAsUpEnabled(true);
+		 getActionBar().setDisplayHomeAsUpEnabled(true);
 
 	}
 
@@ -1481,7 +1479,7 @@ public class Login extends Activity {
 						line = reader.readLine();
 					}
 
-					Log.d("demo", sb.toString());
+					//Log.d("demo", sb.toString());
 					return RestaurantUtil.RestaurantsJSONParser
 							.parseRestaurants(sb.toString());
 				}
@@ -1509,11 +1507,9 @@ public class Login extends Activity {
 				commondata.places_found.places.add(result.get(i).getName());
 				commondata.places_found.latitudes.add(result.get(i)
 						.getLatitude());
-				Log.w("string", result.get(i).toString());
 				commondata.places_found.longitudes.add(result.get(i)
 						.getLongitude());
 			}
-			Log.d("doneman", commondata.places_found.places.get(0));
 
 			list_rest();
 		}

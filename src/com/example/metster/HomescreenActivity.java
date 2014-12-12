@@ -8,26 +8,24 @@ import java.util.concurrent.ExecutionException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.view.View;
 
-import com.example.metster.Login.fbdata;
-import com.facebook.Session;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
@@ -56,22 +54,33 @@ public class HomescreenActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_homescreen);
 		String APP_ID = getString(R.string.facebook_app_id);
+		commondata.facebook_details.fb=new Facebook(APP_ID);
 		Firebase.setAndroidContext(getApplicationContext());
 		commondata.event_information.eventID = null;
+		sp = getPreferences(MODE_PRIVATE);// save share preferences to private
+		String access_token = sp.getString("access_token", null);//look for string access_token if you dont find it set it to null
+		long expires = sp.getLong("access_expires", 0);
+		if(getIntent().getBooleanExtra("finishApplication", false)){
+			   finish();
+			}
 		//-------------------------------
+		if(access_token != null){
+			commondata.facebook_details.fb.setAccessToken(access_token);
+		}
+		if(expires != 0 ){
+			commondata.facebook_details.fb.setAccessExpires(expires);
+		}
 		
 		boolean stat = haveNetworkConnection();
         if(stat){// network check ok
-        	commondata.facebook_details.fb=new Facebook(APP_ID);
+        	
         	if(commondata.facebook_details.fb.isSessionValid()){
         		
-        		System.out.println("session is valid");
+        		new RetrieveFeedTask().execute();
         		
             }else{
            
             	System.out.println("no");
-            	
-            	new logininback().execute();
             	
             	}
         	
@@ -99,52 +108,8 @@ public class HomescreenActivity extends Activity {
 			alert.show();
         }
 		
-		
-		//-------------------------------
        
 	}
-	
-	class logininback extends AsyncTask<Void, Void, Void>{
-		
-		@SuppressWarnings("deprecation")
-		@Override
-		protected Void doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-		
-			
-			commondata.facebook_details.fb.authorize(HomescreenActivity.this, new String[] {"email", "public_profile"}, new DialogListener(){
-
-            	
-					@Override
-					public void onComplete(Bundle values) {
-						new RetrieveFeedTask().execute();
-					}
-
-					@Override
-					public void onFacebookError(FacebookError e) {
-						// TODO Auto-generated method stub
-						System.out.println("no bab");
-					}
-
-					@Override
-					public void onError(DialogError e) {
-						// TODO Auto-generated method stub
-						System.out.println("y bab");
-					}
-
-					@Override
-					public void onCancel() {
-						// TODO Auto-generated method stub
-						System.out.println("yer bab");
-					}
-        			
-        		});
-			
-			return null;
-		}
-		
-	}
-	
 	
 	class RetrieveFeedTask extends AsyncTask<Void, Void, Void> {
 
@@ -212,6 +177,44 @@ public class HomescreenActivity extends Activity {
 	     String temp=Base64.encodeToString(b, Base64.DEFAULT);
 	     return temp;
 	}
+	 
+	 /*
+	  *login to facebook method 
+	  */
+	 @SuppressWarnings("deprecation")
+	public void login_to_facebook(View v){
+		 commondata.facebook_details.fb.authorize(HomescreenActivity.this, new String[] {"email", "public_profile"}, new DialogListener(){
+
+         	
+				@SuppressLint("CommitPrefEdits") @Override
+				public void onComplete(Bundle values) {
+					Editor editor = sp.edit();
+					editor.putString("access_token", commondata.facebook_details.fb.getAccessToken());
+					editor.putLong("access_expires", commondata.facebook_details.fb.getAccessExpires());
+					editor.commit();
+					new RetrieveFeedTask().execute();
+				}
+
+				@Override
+				public void onFacebookError(FacebookError e) {
+					// TODO Auto-generated method stub
+					System.out.println("no bab");
+				}
+
+				@Override
+				public void onError(DialogError e) {
+					// TODO Auto-generated method stub
+					System.out.println("y bab");
+				}
+
+				@Override
+				public void onCancel() {
+					// TODO Auto-generated method stub
+					System.out.println("yer bab");
+				}
+ 			
+ 		});
+	 }
 	 
 	 /*
 	  * This method will fetch the facebook details

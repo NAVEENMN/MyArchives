@@ -5,6 +5,11 @@
     android:background="@drawable/welcome"
     tools:context=".HomescreenActivity" >
 
-
+ <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/do_email_picker"
+        android:drawableTop="@drawable/ic_action_new"
+        android:onClick="login_to_facebook"></Button>
 
 </FrameLayout>
