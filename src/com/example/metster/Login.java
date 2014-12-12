@@ -1543,10 +1543,12 @@ public class Login extends Activity {
 			locationManager.removeUpdates(locationListener);
 			Intent settingsIntent = new Intent(Login.this, Settings.class);
 			startActivity(settingsIntent);
+			finish();
 			return true;
 
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
 
 }

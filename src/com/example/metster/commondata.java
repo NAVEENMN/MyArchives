@@ -2,6 +2,7 @@ package com.example.metster;
 
 import java.util.ArrayList;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 import com.facebook.android.Facebook;
@@ -38,6 +39,10 @@ public class commondata {
 	public static class event_information{
 		static String eventID;
 		static String host;
+	}
+	
+	public static class prefrence{
+		static SharedPreferences sp;
 	}
 	
 	public static class prefrences{

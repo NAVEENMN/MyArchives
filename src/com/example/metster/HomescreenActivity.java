@@ -26,6 +26,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 
+import com.facebook.Session;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
@@ -58,33 +59,26 @@ public class HomescreenActivity extends Activity {
 		Firebase.setAndroidContext(getApplicationContext());
 		commondata.event_information.eventID = null;
 		sp = getPreferences(MODE_PRIVATE);// save share preferences to private
+		commondata.prefrence.sp = sp;//keep a copy to logout
 		String access_token = sp.getString("access_token", null);//look for string access_token if you dont find it set it to null
 		long expires = sp.getLong("access_expires", 0);
 		if(getIntent().getBooleanExtra("finishApplication", false)){
 			   finish();
 			}
 		//-------------------------------
-		if(access_token != null){
-			commondata.facebook_details.fb.setAccessToken(access_token);
-		}
-		if(expires != 0 ){
-			commondata.facebook_details.fb.setAccessExpires(expires);
-		}
+		
+		
 		
 		boolean stat = haveNetworkConnection();
         if(stat){// network check ok
         	
-        	if(commondata.facebook_details.fb.isSessionValid()){
+        	if(access_token != null && expires != 0){
+    			commondata.facebook_details.fb.setAccessToken(access_token);
+    			commondata.facebook_details.fb.setAccessExpires(expires);
+    			commondata.facebook_details.fb.setSession(commondata.facebook_details.fb.getSession());
+    			new RetrieveFeedTask().execute();
+    		}
         		
-        		new RetrieveFeedTask().execute();
-        		
-            }else{
-           
-            	System.out.println("no");
-            	
-            	}
-        	
-        	
         }else{// network error
         	AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
