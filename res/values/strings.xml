@@ -78,7 +78,7 @@
     <string name="Books">Books</string>
     <string name="MyPassion">My Passion in life</string>
     <string name="AboutMe">About Me</string>
-    <string name="Update">Update</string> <!-- Button Update -->
+    <string name="Update">Submit</string> <!-- Button Update -->
     <string name="facebook_app_id">1500888230193192</string>
     <!-- ******************************************************** -->
 
@@ -137,6 +137,7 @@
     <string name="Travel_public">bus/tram</string>
     <string name="Travel_bike">Bike</string>
     <string name="Travel_walk">Walk</string>
+    <string name="Time_to_meet">Preferred time</string>
     <!-- ******************************************************** -->
 
     <string name="title_activity_profiles">Profiles</string>

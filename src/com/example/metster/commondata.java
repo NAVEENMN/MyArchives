@@ -48,6 +48,9 @@ public class commondata {
 	public static class prefrences{
 		static Double travel;
 		static float price;
+		static int hour;
+		static int minute;
+		static String food;
 	}
 		
 	public static class places_found{

@@ -12,7 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 
-import com.example.metster.Rend.fb_event_ref;
+import com.example.metster.Login.fb_event_ref;
 import com.firebase.client.Firebase;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -120,7 +120,8 @@ public class GcmIntentService extends IntentService {
 	    Notification noti = new Notification.Builder(this)
 	        .setContentTitle("Metster")
 	        .setContentText(message + " is requesting your location.").setSmallIcon(R.drawable.logo)
-	        .addAction(R.drawable.ic_action_next_item, "Send location", pIntent).build();
+	        .setAutoCancel(true)
+	        .setContentIntent(pIntent).build();
 	    
 	    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	    // hide the notification after its selected

@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -65,9 +66,10 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
 
-import com.example.metster.Rend.group;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -83,7 +85,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Login extends Activity {
-
+	
+	public static class group{
+		static String curr_person;
+	}
 	public static class fbdata {
 
 		static String fbref;
@@ -91,7 +96,7 @@ public class Login extends Activity {
 
 	};
 
-	public static class fbprofiledata {
+	public static class fb_pref_ref {
 
 		static String fbref;
 		static Firebase firebaseobj;
@@ -128,8 +133,8 @@ public class Login extends Activity {
 
 	// ----------------------------------------->
 	//
-	private static final String TAG = Rend.class.getSimpleName();
 	private Uri uriContact;
+	private static final String TAG = Login.class.getSimpleName();
 	private String contactID; // contacts unique ID
 	AlertDialog levelDialog = null;
 	private static final int CONTACT_PICKER_RESULT = 1001;
@@ -159,13 +164,22 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		setupActionBar();// Show the Up button in the action bar.
+		getActionBar().setIcon(
+				new ColorDrawable(getResources().getColor(
+						android.R.color.transparent)));
 		setTitle("New Event");
 		Firebase.setAndroidContext(this);
 		listnerflag = true;
 		event_info.food_type = "american";
+		commondata.prefrences.price = (float) 2.5;
+		commondata.prefrences.travel = 5.0;
+		commondata.prefrences.hour = 0;
+		commondata.prefrences.minute = 0;
+		commondata.prefrences.food = "american";
+
 		event_info.is_host = false;// by default no host access
 		create_firebase_refrence();// this is event refernce setup
-		toast_info("Welcome");
+		// toast_info("Welcome");
 		if (commondata.facebook_details.contact == null) {
 			req_contact();
 		}
@@ -221,7 +235,7 @@ public class Login extends Activity {
 		});
 		// ----------------------- long pressed ends here
 		/*
-		 * check  if you are on any event
+		 * check if you are on any event
 		 */
 		if (commondata.event_information.eventID != null) {// this will be set
 															// from res of mysql
@@ -235,8 +249,7 @@ public class Login extends Activity {
 				event_info.is_host = false;
 			}
 			/*
-			 * setup the listeners
-			 * this listens to child modification events
+			 * setup the listeners this listens to child modification events
 			 */
 			fb_event_ref.firebaseobj
 					.addChildEventListener(child_listner = new ChildEventListener() {
@@ -269,7 +282,7 @@ public class Login extends Activity {
 						@Override
 						public void onChildRemoved(DataSnapshot child) {
 							// TODO Auto-generated method stub
-							
+
 							System.out.println("changed" + child.getName());
 							String rawname = child.getName();
 							String[] name = rawname.split("--");// name[0] will
@@ -284,11 +297,13 @@ public class Login extends Activity {
 								 */
 								drop_event();
 							} else {
-								if(!name[1].equals("center")) 
-								/* center point will be dropped every time we find new center point
-								 * so need of displaying it
-								 */
-								toast_info(name[1] + " has left the event");
+								if (!name[1].equals("center"))
+									/*
+									 * center point will be dropped every time
+									 * we find new center point so need of
+									 * displaying it
+									 */
+									toast_info(name[1] + " has left the event");
 							}
 
 						}
@@ -296,8 +311,7 @@ public class Login extends Activity {
 					});
 
 			/*
-			 * value listeners
-			 * this listens to child value modifications
+			 * value listeners this listens to child value modifications
 			 */
 
 			fb_event_ref.firebaseobj
@@ -314,7 +328,8 @@ public class Login extends Activity {
 												// data
 							if (data.hasChildren()) {// members are present
 								// TODO Auto-generated method stub
-								System.out.println("something child value changed");
+								System.out
+										.println("something child value changed");
 								/*
 								 * clear all values and recapture the values
 								 */
@@ -329,7 +344,13 @@ public class Login extends Activity {
 															// latitude etc
 									DataSnapshot child = children.next();
 									String rawname = child.getName();
-									String[] rawdata = rawname.split("--"); //rawdata[0] has id and rawdata[1] has name
+									String[] rawdata = rawname.split("--"); // rawdata[0]
+																			// has
+																			// id
+																			// and
+																			// rawdata[1]
+																			// has
+																			// name
 									if (commondata.event_information.eventID
 											.contains(rawdata[0])) {// then he
 																	// is the
@@ -339,7 +360,7 @@ public class Login extends Activity {
 												+ commondata.event_information.host);
 									}
 									try {
-										
+
 										String[] temp1 = child.getValue()
 												.toString().split(" ");
 										String part0 = temp1[0];
@@ -364,7 +385,8 @@ public class Login extends Activity {
 								// after the loop if host is still null then
 								// host has left
 								/*
-								 * update map only if we have correct pair of latitude and longitude
+								 * update map only if we have correct pair of
+								 * latitude and longitude
 								 */
 								if (commondata.places_found.latitudes.size() != 0
 										&& commondata.places_found.longitudes
@@ -392,8 +414,8 @@ public class Login extends Activity {
 													"1", "1", "1", "1", "1",
 													"1", "1", "1", "1", "1",
 													"1").get();
-									System.out
-											.println("non members exists" + server_resp);
+									System.out.println("non members exists"
+											+ server_resp);
 								} catch (InterruptedException e) {
 									// TODO Auto-generated catch block
 									System.out.println("backhander");
@@ -621,22 +643,17 @@ public class Login extends Activity {
 	/*
 	 * This method is used to toast the information
 	 */
-	
-	private void toast_info(String info){
-		Display display = getWindowManager()
-				.getDefaultDisplay();
+
+	private void toast_info(String info) {
+		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
 		final int height = size.y;
-		Toast toast = Toast.makeText(
-				getApplicationContext(),
-				info,
+		Toast toast = Toast.makeText(getApplicationContext(), info,
 				Toast.LENGTH_SHORT);
-		toast.setGravity(Gravity.TOP
-				| Gravity.CENTER_HORIZONTAL, 0,
-				height / 3);
-		TextView v = (TextView) toast.getView()
-				.findViewById(android.R.id.message);
+		toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, height / 3);
+		TextView v = (TextView) toast.getView().findViewById(
+				android.R.id.message);
 		v.setBackgroundColor(Color.TRANSPARENT);
 		v.setTextColor(Color.rgb(66, 66, 66));
 		v.setTextSize((float) 20.0);
@@ -659,11 +676,11 @@ public class Login extends Activity {
 		/*
 		 * for some name we might not have second name so handle exception
 		 */
-		try{
+		try {
 			String[] name = commondata.facebook_details.name.split(" ");
 			first_name = name[0];
 			last_name = name[1];
-		}catch(Exception e){
+		} catch (Exception e) {
 			first_name = commondata.facebook_details.name;
 			last_name = " ";
 		}
@@ -773,8 +790,8 @@ public class Login extends Activity {
 	}
 
 	/*
-	 * This method is called on clicking image
-	 * this sets the ui color and controls location listeners
+	 * This method is called on clicking image this sets the ui color and
+	 * controls location listeners
 	 */
 	public void on_image_click(View view) {
 		if (listnerflag) {
@@ -799,8 +816,9 @@ public class Login extends Activity {
 
 	/*
 	 * (non-Javadoc)
-	 * @see android.app.Activity#onBackPressed()
-	 * This method is for existing safely 
+	 * 
+	 * @see android.app.Activity#onBackPressed() This method is for existing
+	 * safely
 	 */
 	@Override
 	public void onBackPressed() {
@@ -828,23 +846,21 @@ public class Login extends Activity {
 						}).setNegativeButton("No", null).show();
 	}
 
-
 	/*
 	 * This method removes all firebase listners
 	 */
-	private void remove_firebase_listners(){
-		fb_event_ref.firebaseobj
-				.removeEventListener(listn);
-		fb_event_ref.firebaseobj
-				.removeEventListener(child_listner);
+	private void remove_firebase_listners() {
+		fb_event_ref.firebaseobj.removeEventListener(listn);
+		fb_event_ref.firebaseobj.removeEventListener(child_listner);
 	}
+
 	/*
 	 * This method removes all location listners
 	 */
-	private void remove_location_listners(){
+	private void remove_location_listners() {
 		locationManager.removeUpdates(locationListener);
 	}
-	
+
 	/*
 	 * This method will add a new member in firebase
 	 */
@@ -858,41 +874,44 @@ public class Login extends Activity {
 				try {
 					String server_resp = new RequestTask().execute(
 							"http://54.183.113.236/metster/exe_gcm_send.php",
-							commondata.facebook_details.facebook, 	member_contact,
-							"this is message", "1", "1", "1", "1", "1", "1",
-							"1", "1", "1", "1").get();
+							commondata.facebook_details.facebook,
+							member_contact, "this is message", "1", "1", "1",
+							"1", "1", "1", "1", "1", "1", "1").get();
 					System.out.println("contact-" + member_contact);
-					if(server_resp.contains("doesnot-exist")){
+					if (server_resp.contains("doesnot-exist")) {
 						runOnUiThread(new Runnable() {
 
-					        @Override
-					        public void run() {
-					        	toast_info(contact_info.contact_name +" seems to not have a Metster account!!");
-					        }
-					    });
-						
-					}else{
+							@Override
+							public void run() {
+								toast_info(contact_info.contact_name
+										+ " seems to not have a Metster account!!");
+							}
+						});
+
+					} else {
 						int offst = server_resp.indexOf("success");
-						System.out.println("index at " + server_resp.indexOf("success"));
-						char response_of_gcm = server_resp.charAt(offst+9);
-						if(response_of_gcm == '1'){
+						System.out.println("index at "
+								+ server_resp.indexOf("success"));
+						char response_of_gcm = server_resp.charAt(offst + 9);
+						if (response_of_gcm == '1') {
 							runOnUiThread(new Runnable() {
 
-						        @Override
-						        public void run() {
-						        	toast_info("invite has been sent to "+contact_info.contact_name);
-						        }
-						    });
-							
-						}else{
+								@Override
+								public void run() {
+									toast_info("invite has been sent to "
+											+ contact_info.contact_name);
+								}
+							});
+
+						} else {
 							runOnUiThread(new Runnable() {
 
-						        @Override
-						        public void run() {
-						        	toast_info("We encountered some error while adding this person!!");
-						        }
-						    });
-							
+								@Override
+								public void run() {
+									toast_info("We encountered some error while adding this person!!");
+								}
+							});
+
 						}
 					}
 					System.out.println(server_resp);
@@ -919,6 +938,9 @@ public class Login extends Activity {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this)
 				.setView(layout);
 		alert.create();
+		/*
+		 * fetch all data from the the dialog
+		 */
 		commondata.event_information.eventID = null;
 		RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.pricelevel);
 		ratingBar.setRating((float) 2.5);
@@ -951,11 +973,32 @@ public class Login extends Activity {
 			}
 		});
 
+		TimePicker timePicker = (TimePicker) layout
+				.findViewById(R.id.timePicker);
+		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
+
+			@Override
+			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+				// TODO Auto-generated method stub
+				commondata.prefrences.hour = hourOfDay;
+				commondata.prefrences.minute = minute;
+			}
+		});
+		ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
+
+			@Override
+			public void onRatingChanged(RatingBar ratingBar, float rating,
+					boolean fromUser) {
+				commondata.prefrences.price = (float) ratingBar.getRating();
+
+			}
+		});
 		alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				/*
-				 * add the host to firebase
+				 * add the host to firebase met-ster-event
 				 */
+
 				commondata.event_information.eventID = "event-"
 						+ commondata.facebook_details.facebook;
 				create_firebase_refrence();
@@ -973,10 +1016,34 @@ public class Login extends Activity {
 								+ commondata.facebook_details.name)
 						.child("Longitude")
 						.setValue(commondata.user_information.longitude);
+
+				create_firebase_pref_refrence();
+	
+				fb_pref_ref.firebaseobj
+						.child(commondata.facebook_details.facebook + "--"
+								+ commondata.facebook_details.name)
+						.child("price").setValue(commondata.prefrences.price);
+				fb_pref_ref.firebaseobj
+						.child(commondata.facebook_details.facebook + "--"
+								+ commondata.facebook_details.name)
+						.child("travel").setValue(commondata.prefrences.travel);
+				fb_pref_ref.firebaseobj
+						.child(commondata.facebook_details.facebook + "--"
+								+ commondata.facebook_details.name)
+						.child("hour").setValue(commondata.prefrences.hour);
+				fb_pref_ref.firebaseobj
+						.child(commondata.facebook_details.facebook + "--"
+								+ commondata.facebook_details.name)
+						.child("minute").setValue(commondata.prefrences.minute);
 				/*
 				 * add preferences to firbase
 				 */
+
+				/*
+				 * call pick food dialog
+				 */
 				pick_food_type();
+
 				/*
 				 * store the event id on mysql
 				 */
@@ -989,11 +1056,13 @@ public class Login extends Activity {
 							"1").get();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
-					System.out.println("error on server while updating event info");
+					System.out
+							.println("error on server while updating event info");
 					e.printStackTrace();
 				} catch (ExecutionException e) {
 					// TODO Auto-generated catch block
-					System.out.println("error on server while updating event info");
+					System.out
+							.println("error on server while updating event info");
 					e.printStackTrace();
 				}
 
@@ -1002,15 +1071,7 @@ public class Login extends Activity {
 		});
 
 		alert.show();
-		ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
-
-			@Override
-			public void onRatingChanged(RatingBar ratingBar, float rating,
-					boolean fromUser) {
-				commondata.prefrences.price = (float) ratingBar.getRating();
-
-			}
-		});
+		
 
 	}
 
@@ -1115,7 +1176,7 @@ public class Login extends Activity {
 	}
 
 	private void confirm_add_this_person() {
-		
+
 		ImageView image = new ImageView(this);
 		image.setImageResource(R.drawable.ic_home);
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -1275,61 +1336,109 @@ public class Login extends Activity {
 
 						switch (item) {
 						case 0:
-							event_info.food_type = "chinese";
+							commondata.prefrences.food = "chinese";
+							fb_pref_ref.firebaseobj
+							.child(commondata.facebook_details.facebook + "--"
+									+ commondata.facebook_details.name)
+							.child("food").setValue(commondata.prefrences.food);
 							event_info.is_food_chosen = "yes";
 							break;
 						case 1:
 							// Your code when 2nd option seletced
-							event_info.food_type = "coffee";
+							commondata.prefrences.food = "coffee";
+							fb_pref_ref.firebaseobj
+							.child(commondata.facebook_details.facebook + "--"
+									+ commondata.facebook_details.name)
+							.child("food").setValue(commondata.prefrences.food);
 							event_info.is_food_chosen = "yes";
 							break;
 						case 2:
 							// Your code when 3rd option seletced
-							event_info.food_type = "american";
+							commondata.prefrences.food = "american";
+							fb_pref_ref.firebaseobj
+							.child(commondata.facebook_details.facebook + "--"
+									+ commondata.facebook_details.name)
+							.child("food").setValue(commondata.prefrences.food);
 							event_info.is_food_chosen = "yes";
 							break;
 						case 3:
 							// Your code when 4th option seletced
-							event_info.food_type = "seafood";
+							commondata.prefrences.food = "seafood";
+							fb_pref_ref.firebaseobj
+							.child(commondata.facebook_details.facebook + "--"
+									+ commondata.facebook_details.name)
+							.child("food").setValue(commondata.prefrences.food);
 							event_info.is_food_chosen = "yes";
 							break;
 						case 4:
 							// Your code when first option seletced
-							event_info.food_type = "pizza";
+							commondata.prefrences.food= "pizza";
+							fb_pref_ref.firebaseobj
+							.child(commondata.facebook_details.facebook + "--"
+									+ commondata.facebook_details.name)
+							.child("food").setValue(commondata.prefrences.food);
 							event_info.is_food_chosen = "yes";
 							break;
 						case 5:
-							event_info.food_type = "asian";
+							commondata.prefrences.food = "asian";
+							fb_pref_ref.firebaseobj
+							.child(commondata.facebook_details.facebook + "--"
+									+ commondata.facebook_details.name)
+							.child("food").setValue(commondata.prefrences.food);
 							event_info.is_food_chosen = "yes";
 							// Your code when 2nd option seletced
 							break;
 						case 6:
-							event_info.food_type = "japanese";
+							commondata.prefrences.food = "japanese";
+							fb_pref_ref.firebaseobj
+							.child(commondata.facebook_details.facebook + "--"
+									+ commondata.facebook_details.name)
+							.child("food").setValue(commondata.prefrences.food);
 							event_info.is_food_chosen = "yes";
 							// Your code when 3rd option seletced
 							break;
 						case 7:
-							event_info.food_type = "mexican";
+							commondata.prefrences.food = "mexican";
+							fb_pref_ref.firebaseobj
+							.child(commondata.facebook_details.facebook + "--"
+									+ commondata.facebook_details.name)
+							.child("food").setValue(commondata.prefrences.food);
 							event_info.is_food_chosen = "yes";
 							// Your code when 4th option seletced
 							break;
 						case 8:
-							event_info.food_type = "italian";
+							commondata.prefrences.food = "italian";
+							fb_pref_ref.firebaseobj
+							.child(commondata.facebook_details.facebook + "--"
+									+ commondata.facebook_details.name)
+							.child("food").setValue(commondata.prefrences.food);
 							event_info.is_food_chosen = "yes";
 							// Your code when first option seletced
 							break;
 						case 9:
-							event_info.food_type = "indian";
+							commondata.prefrences.food = "indian";
+							fb_pref_ref.firebaseobj
+							.child(commondata.facebook_details.facebook + "--"
+									+ commondata.facebook_details.name)
+							.child("food").setValue(commondata.prefrences.food);
 							event_info.is_food_chosen = "yes";
 							// Your code when 2nd option seletced
 							break;
 						case 10:
-							event_info.food_type = "icecream";
+							commondata.prefrences.food = "icecream";
+							fb_pref_ref.firebaseobj
+							.child(commondata.facebook_details.facebook + "--"
+									+ commondata.facebook_details.name)
+							.child("food").setValue(commondata.prefrences.food);
 							event_info.is_food_chosen = "yes";
 							// Your code when 3rd option seletced
 							break;
 						default:
-							event_info.food_type = "american";
+							commondata.prefrences.food = "american";
+							fb_pref_ref.firebaseobj
+							.child(commondata.facebook_details.facebook + "--"
+									+ commondata.facebook_details.name)
+							.child("food").setValue(commondata.prefrences.food);
 							event_info.is_food_chosen = "no";
 							break;
 
@@ -1346,7 +1455,7 @@ public class Login extends Activity {
 	}
 
 	public void get_places_mean_loc(Double mean_latitude, Double mean_longitude) {
-		
+
 		/*
 		 * food type radius get it from firebase group profile
 		 */
@@ -1400,6 +1509,14 @@ public class Login extends Activity {
 		fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
 	}
 
+	private void create_firebase_pref_refrence() {
+		StringBuilder strBuilder = new StringBuilder(
+				"https://met-ster.firebaseio.com/");
+		strBuilder.append(commondata.event_information.eventID);
+		fb_pref_ref.fbref = strBuilder.toString();
+		fb_pref_ref.firebaseobj = new Firebase(fb_pref_ref.fbref);
+	}
+
 	private void drop_event() {
 		if (commondata.event_information.eventID != null) {
 			try {
@@ -1407,22 +1524,32 @@ public class Login extends Activity {
 			} catch (Exception e) {
 
 			}
-			
-			remove_firebase_listners();//before dropping event stop firebase listners
+
+			remove_firebase_listners();// before dropping event stop firebase
+										// listners
 
 			StringBuilder strBuildertmp = new StringBuilder(
 					"https://met-ster-event.firebaseio.com/");
+			StringBuilder strBuilderpref = new StringBuilder(
+					"https://met-ster.firebaseio.com/");
 			if (event_info.is_host) {
 				strBuildertmp.append(commondata.event_information.eventID);
+				strBuilderpref.append(commondata.event_information.eventID);
 			} else {
 				strBuildertmp.append(commondata.event_information.eventID + "/"
+						+ commondata.facebook_details.facebook + "--"
+						+ commondata.facebook_details.name);
+				strBuilderpref.append(commondata.event_information.eventID + "/"
 						+ commondata.facebook_details.facebook + "--"
 						+ commondata.facebook_details.name);
 			}
 
 			String tempref = strBuildertmp.toString();
+			String pref = strBuilderpref.toString();
 			Firebase tempfb = new Firebase(tempref);
+			Firebase tempfbpref = new Firebase(pref);
 			tempfb.removeValue();
+			tempfbpref.removeValue();
 			commondata.event_information.eventID = null;
 
 			try {
@@ -1452,7 +1579,7 @@ public class Login extends Activity {
 	 */
 	private void setupActionBar() {
 
-		 getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 	}
 
@@ -1479,7 +1606,7 @@ public class Login extends Activity {
 						line = reader.readLine();
 					}
 
-					//Log.d("demo", sb.toString());
+					// Log.d("demo", sb.toString());
 					return RestaurantUtil.RestaurantsJSONParser
 							.parseRestaurants(sb.toString());
 				}
@@ -1549,6 +1676,5 @@ public class Login extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
 
 }

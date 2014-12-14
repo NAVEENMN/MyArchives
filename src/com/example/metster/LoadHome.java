@@ -1,10 +1,10 @@
 package com.example.metster;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -28,10 +28,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.metster.util.SystemUiHider;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -73,6 +70,8 @@ public class LoadHome extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_load_home);
 		setupActionBar();
+		ActionBar actionBar = getActionBar();
+		actionBar.hide();
 		final View contentView = findViewById(R.id.fullscreen_content);
 		mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
 		mSystemUiHider.setup();

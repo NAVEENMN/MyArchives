@@ -5,11 +5,56 @@
     android:background="@drawable/welcome"
     tools:context=".HomescreenActivity" >
 
- <Button
-        android:layout_width="wrap_content"
+    <ViewFlipper
+        android:id="@+id/view_flipper"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:background="#F2F2F2"
+        android:baselineAligned="false"
+        android:gravity="center" >
+
+        <!-- View #1 -->
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/desc"
+            android:src="@drawable/eiffle" />
+
+        <!-- View #2 -->
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/desc"
+            android:src="@drawable/welcome" />
+    </ViewFlipper>
+
+    <RelativeLayout
+        android:id="@+id/login_section"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/do_email_picker"
-        android:drawableTop="@drawable/ic_action_new"
-        android:onClick="login_to_facebook"></Button>
+        android:layout_gravity="bottom"
+        android:background="#FE642E"
+        android:orientation="horizontal" >
+
+        <View
+            android:id="@+id/Dividerimagelogin"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_gravity="top"
+            android:background="#2E9AFE" />
+
+        <com.facebook.widget.LoginButton
+            android:id="@+id/authButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:onClick="login_to_facebook" />
+    </RelativeLayout>
 
 </FrameLayout>
