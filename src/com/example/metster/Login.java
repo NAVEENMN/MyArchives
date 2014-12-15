@@ -54,6 +54,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -103,15 +105,9 @@ public class Login extends Activity {
 
 	};
 
-	public static class loading_token {
-		static Boolean ok_to_load;
-	}
-
 	public static class event_info {
 		static String event_name;
 		static String food_type;
-		static String is_exist;
-		static String is_food_chosen;
 		static Boolean is_host;
 	}
 
@@ -158,6 +154,7 @@ public class Login extends Activity {
 	ChildEventListener child_listner;
 	Boolean listnerflag;
 	RadioGroup travelchoice;
+	ArrayList<Restaurant> restlist;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -179,6 +176,7 @@ public class Login extends Activity {
 
 		event_info.is_host = false;// by default no host access
 		create_firebase_refrence();// this is event refernce setup
+		create_firebase_pref_refrence();
 		// toast_info("Welcome");
 		if (commondata.facebook_details.contact == null) {
 			req_contact();
@@ -324,8 +322,7 @@ public class Login extends Activity {
 
 						@Override
 						public void onDataChange(DataSnapshot data) {
-							set_up_map_view();// map is updated for previous
-												// data
+							
 							if (data.hasChildren()) {// members are present
 								// TODO Auto-generated method stub
 								System.out
@@ -336,6 +333,7 @@ public class Login extends Activity {
 								commondata.places_found.latitudes.clear();
 								commondata.places_found.longitudes.clear();
 								commondata.places_found.names.clear();
+								commondata.places_found.tokens.clear();
 								Iterator<DataSnapshot> children = data
 										.getChildren().iterator();
 								commondata.event_information.host = null;
@@ -378,6 +376,7 @@ public class Login extends Activity {
 												.parseDouble(longitude));
 										commondata.places_found.names
 												.add(rawdata[1]);
+										commondata.places_found.tokens.add(rawdata[0]);
 									} catch (Exception e) {
 										System.out.println("pair error");
 									}
@@ -721,11 +720,28 @@ public class Login extends Activity {
 	 */
 	public void set_up_map_view() {
 		GoogleMap mMap;
+		try{
 		mMap = ((MapFragment) getFragmentManager().findFragmentById(
 				R.id.visitormap)).getMap();
 		mMap.clear();
 		try {
 			for (int i = 0; i < commondata.places_found.latitudes.size(); i++) {
+				if(commondata.places_found.tokens.get(i).contains("rest")){//they are restraunts
+					
+					mMap.addMarker(new MarkerOptions()
+					.position(
+							new LatLng(
+									commondata.places_found.latitudes
+											.get(i),
+									commondata.places_found.longitudes
+											.get(i)))
+					// viitor
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.flag))
+					.snippet("votes:" + commondata.places_found.tokens.get(i).replace("rest*", ""))
+					.title(commondata.places_found.names.get(i)));
+				}else{
+				
 				if (commondata.places_found.names.get(i).equals("center")) {// for
 																			// center
 																			// button
@@ -755,6 +771,7 @@ public class Login extends Activity {
 							.title(commondata.places_found.names.get(i)));
 				}
 			}
+			}
 			mMap.setMyLocationEnabled(true);
 			LatLng currlocation = new LatLng(
 					commondata.user_information.latitude,
@@ -782,6 +799,9 @@ public class Login extends Activity {
 		} catch (Exception e) {
 			System.out.println("something fishy in setting up map");
 			// ret_data();
+		}
+		}catch(Exception e){
+			System.out.println("unable to put maps");
 		}
 	}
 
@@ -1341,7 +1361,7 @@ public class Login extends Activity {
 							.child(commondata.facebook_details.facebook + "--"
 									+ commondata.facebook_details.name)
 							.child("food").setValue(commondata.prefrences.food);
-							event_info.is_food_chosen = "yes";
+							
 							break;
 						case 1:
 							// Your code when 2nd option seletced
@@ -1350,7 +1370,7 @@ public class Login extends Activity {
 							.child(commondata.facebook_details.facebook + "--"
 									+ commondata.facebook_details.name)
 							.child("food").setValue(commondata.prefrences.food);
-							event_info.is_food_chosen = "yes";
+							
 							break;
 						case 2:
 							// Your code when 3rd option seletced
@@ -1359,7 +1379,7 @@ public class Login extends Activity {
 							.child(commondata.facebook_details.facebook + "--"
 									+ commondata.facebook_details.name)
 							.child("food").setValue(commondata.prefrences.food);
-							event_info.is_food_chosen = "yes";
+							
 							break;
 						case 3:
 							// Your code when 4th option seletced
@@ -1368,7 +1388,7 @@ public class Login extends Activity {
 							.child(commondata.facebook_details.facebook + "--"
 									+ commondata.facebook_details.name)
 							.child("food").setValue(commondata.prefrences.food);
-							event_info.is_food_chosen = "yes";
+							
 							break;
 						case 4:
 							// Your code when first option seletced
@@ -1377,7 +1397,7 @@ public class Login extends Activity {
 							.child(commondata.facebook_details.facebook + "--"
 									+ commondata.facebook_details.name)
 							.child("food").setValue(commondata.prefrences.food);
-							event_info.is_food_chosen = "yes";
+							
 							break;
 						case 5:
 							commondata.prefrences.food = "asian";
@@ -1385,7 +1405,7 @@ public class Login extends Activity {
 							.child(commondata.facebook_details.facebook + "--"
 									+ commondata.facebook_details.name)
 							.child("food").setValue(commondata.prefrences.food);
-							event_info.is_food_chosen = "yes";
+						
 							// Your code when 2nd option seletced
 							break;
 						case 6:
@@ -1394,7 +1414,7 @@ public class Login extends Activity {
 							.child(commondata.facebook_details.facebook + "--"
 									+ commondata.facebook_details.name)
 							.child("food").setValue(commondata.prefrences.food);
-							event_info.is_food_chosen = "yes";
+							
 							// Your code when 3rd option seletced
 							break;
 						case 7:
@@ -1403,7 +1423,7 @@ public class Login extends Activity {
 							.child(commondata.facebook_details.facebook + "--"
 									+ commondata.facebook_details.name)
 							.child("food").setValue(commondata.prefrences.food);
-							event_info.is_food_chosen = "yes";
+							
 							// Your code when 4th option seletced
 							break;
 						case 8:
@@ -1412,7 +1432,7 @@ public class Login extends Activity {
 							.child(commondata.facebook_details.facebook + "--"
 									+ commondata.facebook_details.name)
 							.child("food").setValue(commondata.prefrences.food);
-							event_info.is_food_chosen = "yes";
+							
 							// Your code when first option seletced
 							break;
 						case 9:
@@ -1421,7 +1441,7 @@ public class Login extends Activity {
 							.child(commondata.facebook_details.facebook + "--"
 									+ commondata.facebook_details.name)
 							.child("food").setValue(commondata.prefrences.food);
-							event_info.is_food_chosen = "yes";
+						
 							// Your code when 2nd option seletced
 							break;
 						case 10:
@@ -1430,7 +1450,7 @@ public class Login extends Activity {
 							.child(commondata.facebook_details.facebook + "--"
 									+ commondata.facebook_details.name)
 							.child("food").setValue(commondata.prefrences.food);
-							event_info.is_food_chosen = "yes";
+						
 							// Your code when 3rd option seletced
 							break;
 						default:
@@ -1439,7 +1459,7 @@ public class Login extends Activity {
 							.child(commondata.facebook_details.facebook + "--"
 									+ commondata.facebook_details.name)
 							.child("food").setValue(commondata.prefrences.food);
-							event_info.is_food_chosen = "no";
+							
 							break;
 
 						}
@@ -1488,18 +1508,40 @@ public class Login extends Activity {
 		ArrayList<String> stringArray = new ArrayList<String>();
 		for (int i = 0; i < commondata.places_found.places.size(); i++)
 			stringArray.add(commondata.places_found.places.get(i));
-		// String[] stringArray = new String[] { "Bright Mode", "Normal Mode" };
 		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, android.R.id.text1,
 				stringArray);
 		modeList.setAdapter(modeAdapter);
+		modeList.setOnItemClickListener(new OnItemClickListener() {
 
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Iterator<Restaurant> res = restlist.iterator();
+				while(res.hasNext()){
+					Restaurant tempres = res.next();
+					if(tempres.getName().equals(arg0.getItemAtPosition(arg2))){
+						create_firebase_refrence();
+						fb_event_ref.firebaseobj.child("rest*0--"+arg0.getItemAtPosition(arg2)).child("Latitude").setValue(tempres.getLatitude());
+						fb_event_ref.firebaseobj.child("rest*0--"+arg0.getItemAtPosition(arg2)).child("Longitude").setValue(tempres.getLongitude());
+					
+					}
+				}
+				
+				// TODO Auto-generated method stub
+				System.out.println("selected" + arg0.getItemAtPosition(arg2));
+				System.out.println("in array" + commondata.places_found.places.get(arg2));
+			}
+			
+		});
 		builder.setView(modeList);
 		final Dialog dialog = builder.create();
 
 		dialog.show();
 
 	}
+	
+	
 
 	public void create_firebase_refrence() {
 		StringBuilder strBuilder = new StringBuilder(
@@ -1606,7 +1648,7 @@ public class Login extends Activity {
 						line = reader.readLine();
 					}
 
-					// Log.d("demo", sb.toString());
+					 Log.d("demo", sb.toString());
 					return RestaurantUtil.RestaurantsJSONParser
 							.parseRestaurants(sb.toString());
 				}
@@ -1630,12 +1672,14 @@ public class Login extends Activity {
 		@Override
 		protected void onPostExecute(ArrayList<Restaurant> result) {
 			super.onPostExecute(result);
-			for (int i = 0; i < result.size(); i++) {
-				commondata.places_found.places.add(result.get(i).getName());
-				commondata.places_found.latitudes.add(result.get(i)
-						.getLatitude());
-				commondata.places_found.longitudes.add(result.get(i)
-						.getLongitude());
+			restlist = result;
+			Iterator<Restaurant> res = result.iterator();
+			while(res.hasNext()){
+				Restaurant re = res.next();
+				commondata.places_found.places.add(re.getName());
+				commondata.places_found.latitudes.add(re.getLatitude());
+				commondata.places_found.longitudes.add(re.getLongitude());
+				System.out.println(re.getName() + ": " + re.getLatitude() +" " + re.getLongitude());
 			}
 
 			list_rest();

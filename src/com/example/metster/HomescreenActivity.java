@@ -14,6 +14,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,7 +30,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ViewFlipper;
 
 import com.facebook.android.DialogError;
@@ -95,11 +95,6 @@ public class HomescreenActivity extends Activity {
 				commondata.facebook_details.fb.setAccessExpires(expires);
 				commondata.facebook_details.fb
 						.setSession(commondata.facebook_details.fb.getSession());
-				AlertDialog.Builder alert = new AlertDialog.Builder(this);
-				
-				alert.setTitle("Loading");
-
-				alert.show();
 				//
 				new RetrieveFeedTask().execute();
 			}
@@ -172,6 +167,13 @@ public class HomescreenActivity extends Activity {
 
 		private Exception exception;
 		private String response;
+		private ProgressDialog progress = new ProgressDialog(HomescreenActivity.this);
+		
+		protected void onPreExecute(){
+			this.progress.setTitle("Loading your profile");
+			this.progress.setMessage("please wait...");
+			this.progress.show();	
+		}
 
 		protected void onPostExecute(Void result) {
 			// create account
@@ -206,7 +208,7 @@ public class HomescreenActivity extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+			this.progress.dismiss();
 			Intent serviceIntent = new Intent(HomescreenActivity.this,
 					LoadHome.class);
 			HomescreenActivity.this.startService(serviceIntent);

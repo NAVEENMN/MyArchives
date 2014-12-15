@@ -535,61 +535,61 @@ public class Accept_invite extends Activity {
 						switch (item) {
 						case 0:
 							commondata.prefrences.food = "chinese";
-							event_info.is_food_chosen = "yes";
+							
 							break;
 						case 1:
 							// Your code when 2nd option seletced
 							commondata.prefrences.food = "coffee";
-							event_info.is_food_chosen = "yes";
+							
 							break;
 						case 2:
 							// Your code when 3rd option seletced
 							commondata.prefrences.food = "american";
-							event_info.is_food_chosen = "yes";
+							
 							break;
 						case 3:
 							// Your code when 4th option seletced
 							commondata.prefrences.food = "seafood";
-							event_info.is_food_chosen = "yes";
+							
 							break;
 						case 4:
 							// Your code when first option seletced
 							commondata.prefrences.food= "pizza";
-							event_info.is_food_chosen = "yes";
+							
 							break;
 						case 5:
 							commondata.prefrences.food = "asian";
-							event_info.is_food_chosen = "yes";
+							
 							// Your code when 2nd option seletced
 							break;
 						case 6:
 							commondata.prefrences.food = "japanese";
-							event_info.is_food_chosen = "yes";
+							
 							// Your code when 3rd option seletced
 							break;
 						case 7:
 							commondata.prefrences.food = "mexican";
-							event_info.is_food_chosen = "yes";
+							
 							// Your code when 4th option seletced
 							break;
 						case 8:
 							commondata.prefrences.food = "italian";
-							event_info.is_food_chosen = "yes";
+							
 							// Your code when first option seletced
 							break;
 						case 9:
 							commondata.prefrences.food = "indian";
-							event_info.is_food_chosen = "yes";
+			
 							// Your code when 2nd option seletced
 							break;
 						case 10:
 							commondata.prefrences.food = "icecream";
-							event_info.is_food_chosen = "yes";
+					
 							// Your code when 3rd option seletced
 							break;
 						default:
 							commondata.prefrences.food = "american";
-							event_info.is_food_chosen = "no";
+							
 							break;
 
 						}

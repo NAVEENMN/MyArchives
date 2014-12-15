@@ -25,14 +25,13 @@ public class RestaurantUtil {
 			for(int i=0;i<restaurantsJSONArray.length();i++){
 				JSONObject restaurantsJsonObject = restaurantsJSONArray.getJSONObject(i);
 				Restaurant restaurant = new Restaurant();
-				
-				//Restaurant restaurant = Restaurant.createRestaurant(restaurantsJsonObject);
+			
 				restaurant.setName(restaurantsJsonObject.getString("name"));
 				
-				Double lon = restaurantsJSONArray.getJSONObject(0)
+				Double lon = restaurantsJSONArray.getJSONObject(i)
 		                .getJSONObject("geometry").getJSONObject("location")
 		                .getDouble("lng");
-				Double lat = restaurantsJSONArray.getJSONObject(0)
+				Double lat = restaurantsJSONArray.getJSONObject(i)
 			                .getJSONObject("geometry").getJSONObject("location")
 			                .getDouble("lat");
 				restaurant.setLatitude(lat);

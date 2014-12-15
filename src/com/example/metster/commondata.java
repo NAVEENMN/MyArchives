@@ -58,6 +58,7 @@ public class commondata {
 		static ArrayList<Double> latitudes = new ArrayList<Double>();
 		static ArrayList<Double> longitudes = new ArrayList<Double>();
 		static ArrayList<String> names = new ArrayList<String>();
+		static ArrayList<String> tokens = new ArrayList<String>();
 	}
 	
 	public static class gcm_incoming{

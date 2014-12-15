@@ -64,7 +64,6 @@ public class LoadHome extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		setTitle("Meet, Connect and Socialize");
 		final LocationManager locationManager;
 		final LocationListener locationListener;
 		super.onCreate(savedInstanceState);
