@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -79,6 +80,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -87,10 +89,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Login extends Activity {
-	
-	public static class group{
+
+	public static class group {
 		static String curr_person;
 	}
+
 	public static class fbdata {
 
 		static String fbref;
@@ -286,10 +289,14 @@ public class Login extends Activity {
 							String[] name = rawname.split("--");// name[0] will
 																// have id and
 																// name[1] will
-																// have name
-
-							if (commondata.event_information.eventID
-									.contains(name[0])) {// host has left
+							boolean stat = false; // have name
+							try {
+								stat = commondata.event_information.eventID
+										.contains(name[0]);
+							} catch (Exception e) {
+								drop_event();
+							}
+							if (stat) {// host has left
 								/*
 								 * host has left safely drop the event
 								 */
@@ -322,7 +329,7 @@ public class Login extends Activity {
 
 						@Override
 						public void onDataChange(DataSnapshot data) {
-							
+
 							if (data.hasChildren()) {// members are present
 								// TODO Auto-generated method stub
 								System.out
@@ -374,9 +381,16 @@ public class Login extends Activity {
 														.parseDouble(latitude));
 										commondata.places_found.longitudes.add(Double
 												.parseDouble(longitude));
+										String restrauntname = rawdata[1]
+												.replace(".", "")
+												.replace("#", "")
+												.replace("$", "")
+												.replace("[", "")
+												.replace("]", "");
 										commondata.places_found.names
-												.add(rawdata[1]);
-										commondata.places_found.tokens.add(rawdata[0]);
+												.add(restrauntname);
+										commondata.places_found.tokens
+												.add(rawdata[0]);
 									} catch (Exception e) {
 										System.out.println("pair error");
 									}
@@ -720,87 +734,142 @@ public class Login extends Activity {
 	 */
 	public void set_up_map_view() {
 		GoogleMap mMap;
-		try{
-		mMap = ((MapFragment) getFragmentManager().findFragmentById(
-				R.id.visitormap)).getMap();
-		mMap.clear();
 		try {
-			for (int i = 0; i < commondata.places_found.latitudes.size(); i++) {
-				if(commondata.places_found.tokens.get(i).contains("rest")){//they are restraunts
+			mMap = ((MapFragment) getFragmentManager().findFragmentById(
+					R.id.visitormap)).getMap();
+			mMap.clear();
+			try {
+				for (int i = 0; i < commondata.places_found.latitudes.size(); i++) {
 					
-					mMap.addMarker(new MarkerOptions()
-					.position(
-							new LatLng(
-									commondata.places_found.latitudes
-											.get(i),
-									commondata.places_found.longitudes
-											.get(i)))
-					// viitor
-					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.flag))
-					.snippet("votes:" + commondata.places_found.tokens.get(i).replace("rest*", ""))
-					.title(commondata.places_found.names.get(i)));
-				}else{
-				
-				if (commondata.places_found.names.get(i).equals("center")) {// for
-																			// center
-																			// button
-					mMap.addMarker(new MarkerOptions()
-							.position(
-									new LatLng(
-											commondata.places_found.latitudes
-													.get(i),
-											commondata.places_found.longitudes
-													.get(i)))
-							// visitor
-							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.mp))
-							.title("explore neighbourhood"));
+					if(commondata.places_found.tokens.get(i).contains("final")){
+						mMap.addMarker(new MarkerOptions()
+						.position(
+								new LatLng(
+										commondata.places_found.latitudes
+												.get(i),
+										commondata.places_found.longitudes
+												.get(i)))
 
-				} else {
-					mMap.addMarker(new MarkerOptions()
-							.position(
-									new LatLng(
-											commondata.places_found.latitudes
-													.get(i),
-											commondata.places_found.longitudes
-													.get(i)))
-							// visitor
-							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.pin))
-							.title(commondata.places_found.names.get(i)));
-				}
-			}
-			}
-			mMap.setMyLocationEnabled(true);
-			LatLng currlocation = new LatLng(
-					commondata.user_information.latitude,
-					commondata.user_information.longitude);// yours
-			mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+						.icon(BitmapDescriptorFactory
+								.fromResource(R.drawable.finalpoint))
+						.title(commondata.places_found.names.get(i)));
+					}else{
+					
+					if (commondata.places_found.tokens.get(i).contains("rest")) {// they
+																					// are
+																					// restraunts
 
-				@Override
-				public boolean onMarkerClick(Marker point) {
-					// TODO Auto-generated method stub
+						mMap.addMarker(new MarkerOptions()
+								.position(
+										new LatLng(
+												commondata.places_found.latitudes
+														.get(i),
+												commondata.places_found.longitudes
+														.get(i)))
 
-					if (point.getTitle().equals("explore neighbourhood")) {// action
-																			// for
-																			// click
-																			// on
-																			// center
-						System.out.println("exploring"
-								+ point.getTitle().toString());
-						get_places_mean_loc(point.getPosition().latitude,
-								point.getPosition().longitude);
+								.icon(BitmapDescriptorFactory
+										.fromResource(R.drawable.flag))
+								.snippet(
+										"votes:"
+												+ commondata.places_found.tokens
+														.get(i).replace(
+																"rest*", ""))
+								.title(commondata.places_found.names.get(i)));
+						if (event_info.is_host) {
+							mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+
+								@Override
+								public void onInfoWindowClick(Marker arg0) {
+									// TODO Auto-generated method stub
+									AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
+									final Marker picked = arg0;
+									System.out.println(arg0.getTitle());
+									alert.setTitle("Finalize Meet Up");
+									alert.setMessage("Do you want to finalize " + arg0.getTitle() + " ?");
+									// Set an EditText view to get user input
+
+									alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+										public void onClick(DialogInterface dialog, int whichButton) {
+										
+											finalize_place(picked.getTitle().toString());
+										}
+									});
+
+									alert.setNegativeButton("Cancel",
+											new DialogInterface.OnClickListener() {
+												public void onClick(DialogInterface dialog, int whichButton) {
+													// just cancel it
+												}
+											});
+
+									alert.show();
+
+								}
+							});
+						}
+					} else {
+
+						if (commondata.places_found.names.get(i).equals(
+								"center")) {// for
+											// center
+											// button
+							mMap.addMarker(new MarkerOptions()
+									.position(
+											new LatLng(
+													commondata.places_found.latitudes
+															.get(i),
+													commondata.places_found.longitudes
+															.get(i)))
+									// visitor
+									.icon(BitmapDescriptorFactory
+											.fromResource(R.drawable.mp))
+									.title("explore neighbourhood"));
+
+						} else {
+							mMap.addMarker(new MarkerOptions()
+									.position(
+											new LatLng(
+													commondata.places_found.latitudes
+															.get(i),
+													commondata.places_found.longitudes
+															.get(i)))
+									// visitor
+									.icon(BitmapDescriptorFactory
+											.fromResource(R.drawable.pin))
+									.title(commondata.places_found.names.get(i)));
+						}
 					}
-					return false;
 				}
-			});
-			mMap.getUiSettings().setZoomControlsEnabled(false);
+				}
+				mMap.setMyLocationEnabled(true);
+				LatLng currlocation = new LatLng(
+						commondata.user_information.latitude,
+						commondata.user_information.longitude);// yours
+				mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+
+					@Override
+					public boolean onMarkerClick(Marker point) {
+						// TODO Auto-generated method stub
+
+						if (point.getTitle().equals("explore neighbourhood")) {// action
+																				// for
+																				// click
+																				// on
+																				// center
+							System.out.println("exploring"
+									+ point.getTitle().toString());
+							get_places_mean_loc(point.getPosition().latitude,
+									point.getPosition().longitude);
+						}
+						return false;
+					}
+				});
+				mMap.getUiSettings().setZoomControlsEnabled(false);
+			} catch (Exception e) {
+				System.out.println("something fishy in setting up map");
+				// ret_data();
+			}
 		} catch (Exception e) {
-			System.out.println("something fishy in setting up map");
-			// ret_data();
-		}
-		}catch(Exception e){
 			System.out.println("unable to put maps");
 		}
 	}
@@ -1038,7 +1107,7 @@ public class Login extends Activity {
 						.setValue(commondata.user_information.longitude);
 
 				create_firebase_pref_refrence();
-	
+
 				fb_pref_ref.firebaseobj
 						.child(commondata.facebook_details.facebook + "--"
 								+ commondata.facebook_details.name)
@@ -1091,7 +1160,6 @@ public class Login extends Activity {
 		});
 
 		alert.show();
-		
 
 	}
 
@@ -1198,7 +1266,6 @@ public class Login extends Activity {
 	private void confirm_add_this_person() {
 
 		ImageView image = new ImageView(this);
-		image.setImageResource(R.drawable.ic_home);
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
 		alert.setTitle("Confirm");
@@ -1340,6 +1407,7 @@ public class Login extends Activity {
 		add_a_member_to_fb(group.curr_person);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void pick_food_type() {
 
 		// Strings to Show In Dialog with Radio Buttons
@@ -1358,108 +1426,132 @@ public class Login extends Activity {
 						case 0:
 							commondata.prefrences.food = "chinese";
 							fb_pref_ref.firebaseobj
-							.child(commondata.facebook_details.facebook + "--"
-									+ commondata.facebook_details.name)
-							.child("food").setValue(commondata.prefrences.food);
-							
+									.child(commondata.facebook_details.facebook
+											+ "--"
+											+ commondata.facebook_details.name)
+									.child("food")
+									.setValue(commondata.prefrences.food);
+
 							break;
 						case 1:
 							// Your code when 2nd option seletced
 							commondata.prefrences.food = "coffee";
 							fb_pref_ref.firebaseobj
-							.child(commondata.facebook_details.facebook + "--"
-									+ commondata.facebook_details.name)
-							.child("food").setValue(commondata.prefrences.food);
-							
+									.child(commondata.facebook_details.facebook
+											+ "--"
+											+ commondata.facebook_details.name)
+									.child("food")
+									.setValue(commondata.prefrences.food);
+
 							break;
 						case 2:
 							// Your code when 3rd option seletced
 							commondata.prefrences.food = "american";
 							fb_pref_ref.firebaseobj
-							.child(commondata.facebook_details.facebook + "--"
-									+ commondata.facebook_details.name)
-							.child("food").setValue(commondata.prefrences.food);
-							
+									.child(commondata.facebook_details.facebook
+											+ "--"
+											+ commondata.facebook_details.name)
+									.child("food")
+									.setValue(commondata.prefrences.food);
+
 							break;
 						case 3:
 							// Your code when 4th option seletced
 							commondata.prefrences.food = "seafood";
 							fb_pref_ref.firebaseobj
-							.child(commondata.facebook_details.facebook + "--"
-									+ commondata.facebook_details.name)
-							.child("food").setValue(commondata.prefrences.food);
-							
+									.child(commondata.facebook_details.facebook
+											+ "--"
+											+ commondata.facebook_details.name)
+									.child("food")
+									.setValue(commondata.prefrences.food);
+
 							break;
 						case 4:
 							// Your code when first option seletced
-							commondata.prefrences.food= "pizza";
+							commondata.prefrences.food = "pizza";
 							fb_pref_ref.firebaseobj
-							.child(commondata.facebook_details.facebook + "--"
-									+ commondata.facebook_details.name)
-							.child("food").setValue(commondata.prefrences.food);
-							
+									.child(commondata.facebook_details.facebook
+											+ "--"
+											+ commondata.facebook_details.name)
+									.child("food")
+									.setValue(commondata.prefrences.food);
+
 							break;
 						case 5:
 							commondata.prefrences.food = "asian";
 							fb_pref_ref.firebaseobj
-							.child(commondata.facebook_details.facebook + "--"
-									+ commondata.facebook_details.name)
-							.child("food").setValue(commondata.prefrences.food);
-						
+									.child(commondata.facebook_details.facebook
+											+ "--"
+											+ commondata.facebook_details.name)
+									.child("food")
+									.setValue(commondata.prefrences.food);
+
 							// Your code when 2nd option seletced
 							break;
 						case 6:
 							commondata.prefrences.food = "japanese";
 							fb_pref_ref.firebaseobj
-							.child(commondata.facebook_details.facebook + "--"
-									+ commondata.facebook_details.name)
-							.child("food").setValue(commondata.prefrences.food);
-							
+									.child(commondata.facebook_details.facebook
+											+ "--"
+											+ commondata.facebook_details.name)
+									.child("food")
+									.setValue(commondata.prefrences.food);
+
 							// Your code when 3rd option seletced
 							break;
 						case 7:
 							commondata.prefrences.food = "mexican";
 							fb_pref_ref.firebaseobj
-							.child(commondata.facebook_details.facebook + "--"
-									+ commondata.facebook_details.name)
-							.child("food").setValue(commondata.prefrences.food);
-							
+									.child(commondata.facebook_details.facebook
+											+ "--"
+											+ commondata.facebook_details.name)
+									.child("food")
+									.setValue(commondata.prefrences.food);
+
 							// Your code when 4th option seletced
 							break;
 						case 8:
 							commondata.prefrences.food = "italian";
 							fb_pref_ref.firebaseobj
-							.child(commondata.facebook_details.facebook + "--"
-									+ commondata.facebook_details.name)
-							.child("food").setValue(commondata.prefrences.food);
-							
+									.child(commondata.facebook_details.facebook
+											+ "--"
+											+ commondata.facebook_details.name)
+									.child("food")
+									.setValue(commondata.prefrences.food);
+
 							// Your code when first option seletced
 							break;
 						case 9:
 							commondata.prefrences.food = "indian";
 							fb_pref_ref.firebaseobj
-							.child(commondata.facebook_details.facebook + "--"
-									+ commondata.facebook_details.name)
-							.child("food").setValue(commondata.prefrences.food);
-						
+									.child(commondata.facebook_details.facebook
+											+ "--"
+											+ commondata.facebook_details.name)
+									.child("food")
+									.setValue(commondata.prefrences.food);
+
 							// Your code when 2nd option seletced
 							break;
 						case 10:
 							commondata.prefrences.food = "icecream";
 							fb_pref_ref.firebaseobj
-							.child(commondata.facebook_details.facebook + "--"
-									+ commondata.facebook_details.name)
-							.child("food").setValue(commondata.prefrences.food);
-						
+									.child(commondata.facebook_details.facebook
+											+ "--"
+											+ commondata.facebook_details.name)
+									.child("food")
+									.setValue(commondata.prefrences.food);
+
 							// Your code when 3rd option seletced
 							break;
 						default:
 							commondata.prefrences.food = "american";
 							fb_pref_ref.firebaseobj
-							.child(commondata.facebook_details.facebook + "--"
-									+ commondata.facebook_details.name)
-							.child("food").setValue(commondata.prefrences.food);
-							
+									.child(commondata.facebook_details.facebook
+											+ "--"
+											+ commondata.facebook_details.name)
+									.child("food")
+									.setValue(commondata.prefrences.food);
+
 							break;
 
 						}
@@ -1518,30 +1610,65 @@ public class Login extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				Iterator<Restaurant> res = restlist.iterator();
-				while(res.hasNext()){
+				while (res.hasNext()) {
 					Restaurant tempres = res.next();
-					if(tempres.getName().equals(arg0.getItemAtPosition(arg2))){
+					if (tempres.getName().equals(arg0.getItemAtPosition(arg2))) {
 						create_firebase_refrence();
-						fb_event_ref.firebaseobj.child("rest*0--"+arg0.getItemAtPosition(arg2)).child("Latitude").setValue(tempres.getLatitude());
-						fb_event_ref.firebaseobj.child("rest*0--"+arg0.getItemAtPosition(arg2)).child("Longitude").setValue(tempres.getLongitude());
-					
+
+						fb_event_ref.firebaseobj
+								.child("rest*0--"
+										+ arg0.getItemAtPosition(arg2)
+												.toString().replace(".", ""))
+								.child("Latitude")
+								.setValue(tempres.getLatitude());
+						fb_event_ref.firebaseobj
+								.child("rest*0--"
+										+ arg0.getItemAtPosition(arg2)
+												.toString().replace(".", ""))
+								.child("Longitude")
+								.setValue(tempres.getLongitude());
+
 					}
 				}
-				
+
 				// TODO Auto-generated method stub
 				System.out.println("selected" + arg0.getItemAtPosition(arg2));
-				System.out.println("in array" + commondata.places_found.places.get(arg2));
+				System.out.println("in array"
+						+ commondata.places_found.places.get(arg2));
 			}
-			
+
 		});
 		builder.setView(modeList);
 		final Dialog dialog = builder.create();
-
 		dialog.show();
 
 	}
 	
-	
+	private void finalize_place(String name){
+		System.out.println("checkgin" + name);
+		for(int i=0; i<commondata.places_found.names.size();i++){
+			String temp = commondata.places_found.names.get(i);
+			if(temp.contains(name)){
+				Double latitude = commondata.places_found.latitudes.get(i);
+				Double longitude = commondata.places_found.longitudes.get(i);
+				System.out.println("updating" + name);
+				create_firebase_refrence();
+
+				fb_event_ref.firebaseobj
+						.child("final*0--"
+								+ name.replace(".", ""))
+						.child("Latitude")
+						.setValue(latitude);
+				fb_event_ref.firebaseobj
+						.child("final*0--"
+								+ name.replace(".", ""))
+						.child("Longitude")
+						.setValue(longitude);
+				
+				fb_event_ref.firebaseobj.child("rest*0--"+name.replace(".", "")).removeValue();
+			}
+		}
+	}
 
 	public void create_firebase_refrence() {
 		StringBuilder strBuilder = new StringBuilder(
@@ -1581,8 +1708,8 @@ public class Login extends Activity {
 				strBuildertmp.append(commondata.event_information.eventID + "/"
 						+ commondata.facebook_details.facebook + "--"
 						+ commondata.facebook_details.name);
-				strBuilderpref.append(commondata.event_information.eventID + "/"
-						+ commondata.facebook_details.facebook + "--"
+				strBuilderpref.append(commondata.event_information.eventID
+						+ "/" + commondata.facebook_details.facebook + "--"
 						+ commondata.facebook_details.name);
 			}
 
@@ -1648,7 +1775,7 @@ public class Login extends Activity {
 						line = reader.readLine();
 					}
 
-					 Log.d("demo", sb.toString());
+					Log.d("demo", sb.toString());
 					return RestaurantUtil.RestaurantsJSONParser
 							.parseRestaurants(sb.toString());
 				}
@@ -1674,12 +1801,13 @@ public class Login extends Activity {
 			super.onPostExecute(result);
 			restlist = result;
 			Iterator<Restaurant> res = result.iterator();
-			while(res.hasNext()){
+			while (res.hasNext()) {
 				Restaurant re = res.next();
 				commondata.places_found.places.add(re.getName());
 				commondata.places_found.latitudes.add(re.getLatitude());
 				commondata.places_found.longitudes.add(re.getLongitude());
-				System.out.println(re.getName() + ": " + re.getLatitude() +" " + re.getLongitude());
+				System.out.println(re.getName() + ": " + re.getLatitude() + " "
+						+ re.getLongitude());
 			}
 
 			list_rest();
@@ -1703,7 +1831,7 @@ public class Login extends Activity {
 
 			return true;
 
-		case R.id.refresh_icon:
+		case R.id.about_icon:
 
 			return true;
 
@@ -1714,7 +1842,6 @@ public class Login extends Activity {
 			locationManager.removeUpdates(locationListener);
 			Intent settingsIntent = new Intent(Login.this, Settings.class);
 			startActivity(settingsIntent);
-			finish();
 			return true;
 
 		}

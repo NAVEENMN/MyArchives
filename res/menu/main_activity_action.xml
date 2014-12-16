@@ -7,16 +7,14 @@
     android:title="@string/title_activity_refresh"
     android:showAsAction="always"/>
     <item  
-    android:id="@+id/refresh_icon"
-    android:icon="@drawable/ic_action_refresh"
+    android:id="@+id/about_icon"
+    android:icon="@drawable/ic_action_about"
     android:title="@string/title_activity_refresh"
     android:showAsAction="always"/>
     <item  
     android:id="@+id/settings_icon"
     android:icon="@drawable/ic_action_settings"
     android:title="@string/title_activity_settings"
-    android:showAsAction="always"/>
-
-    
+    android:showAsAction="always"/>    
     
 </menu>

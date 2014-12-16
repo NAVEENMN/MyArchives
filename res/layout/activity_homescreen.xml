@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/welcome"
+    android:background="#F2F2F2"
     tools:context=".HomescreenActivity" >
 
     <ViewFlipper
         android:id="@+id/view_flipper"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#F2F2F2"
         android:baselineAligned="false"
@@ -18,18 +18,18 @@
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:contentDescription="@string/desc"
-            android:src="@drawable/eiffle" />
+            android:background="@drawable/coffee" />
 
         <!-- View #2 -->
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:contentDescription="@string/desc"
-            android:src="@drawable/welcome" />
+            android:background="@drawable/loadingbackground" />
     </ViewFlipper>
 
     <RelativeLayout
@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="#FE642E"
+        android:background="#EFFBFB"
         android:orientation="horizontal" >
 
         <View
