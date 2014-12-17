@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -1385,7 +1387,8 @@ public class Login extends Activity {
 		if (commondata.event_information.eventID == null) {// no event exist
 			create_event_notfication();
 		} else {// event exists
-			ContactPicker();
+			//ContactPicker();
+			list_friends();
 		}
 
 	}
@@ -1589,6 +1592,106 @@ public class Login extends Activity {
 
 	}
 
+	private void list_friends(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Add a friend");
+		ListView modeList = new ListView(this);
+		final ArrayList<String> friendname = new ArrayList<String>();
+		final ArrayList<String> friendid = new ArrayList<String>();
+		friendname.clear();
+		friendid.clear();
+		JSONArray frnd_list = commondata.facebook_details.friends;
+		for(int i=0;i<frnd_list.length();i++){
+
+            JSONObject json_data = null;
+			try {
+				json_data = frnd_list.getJSONObject(i);
+				friendname.add(json_data.get("name").toString());
+				friendid.add(json_data.get("id").toString());
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+     }
+		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, android.R.id.text1,
+				friendname);
+		modeList.setAdapter(modeAdapter);
+		modeList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				final int it = arg2;
+				// TODO Auto-generated method stub
+				System.out.println("selected" + arg0.getItemAtPosition(arg2));
+				System.out.println("selected id" + friendid.get(arg2));
+				Thread thread = new Thread() {
+					@Override
+					public void run() {
+						Looper.prepare();
+						try {
+							String server_resp = new RequestTask().execute(
+									"http://54.183.113.236/metster/exe_gcm_send.php",
+									commondata.facebook_details.facebook,
+									friendid.get(it).toString(), "this is message", "1", "1", "1",
+									"1", "1", "1", "1", "1", "1", "1").get();
+							if (server_resp.contains("doesnot-exist")) {
+								runOnUiThread(new Runnable() {
+
+									@Override
+									public void run() {
+										toast_info(contact_info.contact_name
+												+ " seems to not have a Metster account!!");
+									}
+								});
+
+							} else {
+								int offst = server_resp.indexOf("success");
+								System.out.println("index at "
+										+ server_resp.indexOf("success"));
+								char response_of_gcm = server_resp.charAt(offst + 9);
+								if (response_of_gcm == '1') {
+									runOnUiThread(new Runnable() {
+
+										@Override
+										public void run() {
+											toast_info("invite has been sent to "
+													+ contact_info.contact_name);
+										}
+									});
+
+								} else {
+									runOnUiThread(new Runnable() {
+
+										@Override
+										public void run() {
+											toast_info("We encountered some error while adding this person!!");
+										}
+									});
+
+								}
+							}
+							System.out.println(server_resp);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				};
+				thread.start();
+				
+			}
+
+		});
+		builder.setView(modeList);
+		final Dialog dialog = builder.create();
+		dialog.show();
+	}
+	
 	public void list_rest() {
 		// --------
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);

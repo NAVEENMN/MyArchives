@@ -2,6 +2,8 @@ package com.example.metster;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
@@ -16,6 +18,7 @@ public class commondata {
 		static Bitmap profile_image;
 		static String contact;
 		static Facebook fb;
+		static JSONArray friends;
 	}
 	public static class keys{
 		static String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";

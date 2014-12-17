@@ -4,9 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,7 +38,6 @@ import android.widget.ViewFlipper;
 import com.facebook.Request;
 import com.facebook.Request.GraphUserListCallback;
 import com.facebook.Response;
-import com.facebook.Session;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
@@ -179,6 +180,8 @@ public class HomescreenActivity extends Activity {
 			this.progress.setTitle("Loading your profile");
 			this.progress.setMessage("please wait...");
 			this.progress.show();	
+			this.progress.setCancelable(false);
+			this.progress.setCanceledOnTouchOutside(false);
 		}
 
 		protected void onPostExecute(Void result) {
@@ -309,7 +312,15 @@ public class HomescreenActivity extends Activity {
 					.request("me/friends"));
 			
 			Log.e("Profile", "" + profile);
-			Log.e("ProfileFriends", "" + profilefriends.keys());
+			JSONArray jArray = profilefriends.getJSONArray("data");
+			commondata.facebook_details.friends = profilefriends.getJSONArray("data");
+            for(int i=0;i<jArray.length();i++){
+
+                    JSONObject json_data = jArray.getJSONObject(i);
+                    System.out.println(json_data.get("name").toString());
+                    
+                    Log.v("THIS IS DATA", i+" : "+jArray.getJSONObject(i));
+             }
 			final String mUserId = profile.getString("id");
 			final String mUserName = profile.getString("name");
 			final String mUserEmail = profile.getString("email");
