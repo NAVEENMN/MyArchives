@@ -92,7 +92,7 @@
     android:id="@+id/Dividerone"
     android:layout_below="@+id/Profiledata"
     android:layout_width="match_parent"
-    android:layout_height="3dp"
+    android:layout_height="4dp"
     android:background="#2E9AFE" /> 
     
      <!--  ****************************************************************** Information area        -->

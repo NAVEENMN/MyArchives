@@ -21,7 +21,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -81,6 +80,7 @@ import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -179,7 +179,6 @@ public class Login extends Activity {
 
 		event_info.is_host = false;// by default no host access
 		create_firebase_refrence();// this is event refernce setup
-		create_firebase_pref_refrence();
 		// toast_info("Welcome");
 		if (commondata.facebook_details.contact == null) {
 			req_contact();
@@ -194,7 +193,7 @@ public class Login extends Activity {
 			public boolean onLongClick(View v) {
 				// TODO Auto-generated method stub
 				System.out.println("long pressed");
-
+				toast_info("finding a convient place...");
 				/*
 				 * remove if mp data on firebase exist
 				 */
@@ -301,14 +300,6 @@ public class Login extends Activity {
 								 * host has left safely drop the event
 								 */
 								drop_event();
-							} else {
-								if (!name[1].equals("center"))
-									/*
-									 * center point will be dropped every time
-									 * we find new center point so need of
-									 * displaying it
-									 */
-									toast_info(name[1] + " has left the event");
 							}
 
 						}
@@ -365,22 +356,15 @@ public class Login extends Activity {
 												+ commondata.event_information.host);
 									}
 									try {
-
-										String[] temp1 = child.getValue()
-												.toString().split(" ");
-										String part0 = temp1[0];
-										String part1 = temp1[1];
-										String[] comp1 = part0.split("=");
-										String[] comp2 = part1.split("=");
-										String longitude = comp1[1].replace(
-												",", "");
-										String latitude = comp2[1].replace("}",
-												"");
-										commondata.places_found.latitudes
-												.add(Double
-														.parseDouble(latitude));
-										commondata.places_found.longitudes.add(Double
-												.parseDouble(longitude));
+										Iterable<DataSnapshot> kid = child.getChildren();
+										Iterator<DataSnapshot> ki = kid.iterator();
+										while(ki.hasNext()){
+											DataSnapshot par = ki.next();
+											System.out.println(par.getName() + " " + par.getValue());
+											if(par.getName().contains("Latitude")) commondata.places_found.latitudes.add(Double.parseDouble(par.getValue().toString()));
+											if(par.getName().contains("Longitude")) commondata.places_found.longitudes.add(Double.parseDouble(par.getValue().toString()));
+										}
+										
 										String restrauntname = rawdata[1]
 												.replace(".", "")
 												.replace("#", "")
@@ -813,6 +797,7 @@ public class Login extends Activity {
 								"center")) {// for
 											// center
 											// button
+							final int j = i;
 							mMap.addMarker(new MarkerOptions()
 									.position(
 											new LatLng(
@@ -824,6 +809,18 @@ public class Login extends Activity {
 									.icon(BitmapDescriptorFactory
 											.fromResource(R.drawable.mp))
 									.title("explore neighbourhood"));
+							
+							mMap.setOnMapLongClickListener(new OnMapLongClickListener() {
+								
+								@Override
+								public void onMapLongClick(LatLng arg0) {
+									// TODO Auto-generated method stub
+									get_places_mean_loc(commondata.places_found.latitudes
+											.get(j),
+											commondata.places_found.longitudes
+											.get(j));
+								}
+							});
 
 						} else {
 							mMap.addMarker(new MarkerOptions()
@@ -841,6 +838,9 @@ public class Login extends Activity {
 					}
 				}
 				}
+				
+				
+				
 				mMap.setMyLocationEnabled(true);
 				LatLng currlocation = new LatLng(
 						commondata.user_information.latitude,
@@ -1106,21 +1106,19 @@ public class Login extends Activity {
 						.child("Longitude")
 						.setValue(commondata.user_information.longitude);
 
-				create_firebase_pref_refrence();
-
-				fb_pref_ref.firebaseobj
+				fb_event_ref.firebaseobj
 						.child(commondata.facebook_details.facebook + "--"
 								+ commondata.facebook_details.name)
 						.child("price").setValue(commondata.prefrences.price);
-				fb_pref_ref.firebaseobj
+				fb_event_ref.firebaseobj
 						.child(commondata.facebook_details.facebook + "--"
 								+ commondata.facebook_details.name)
 						.child("travel").setValue(commondata.prefrences.travel);
-				fb_pref_ref.firebaseobj
+				fb_event_ref.firebaseobj
 						.child(commondata.facebook_details.facebook + "--"
 								+ commondata.facebook_details.name)
 						.child("hour").setValue(commondata.prefrences.hour);
-				fb_pref_ref.firebaseobj
+				fb_event_ref.firebaseobj
 						.child(commondata.facebook_details.facebook + "--"
 								+ commondata.facebook_details.name)
 						.child("minute").setValue(commondata.prefrences.minute);
@@ -1425,7 +1423,7 @@ public class Login extends Activity {
 						switch (item) {
 						case 0:
 							commondata.prefrences.food = "chinese";
-							fb_pref_ref.firebaseobj
+							fb_event_ref.firebaseobj
 									.child(commondata.facebook_details.facebook
 											+ "--"
 											+ commondata.facebook_details.name)
@@ -1436,7 +1434,7 @@ public class Login extends Activity {
 						case 1:
 							// Your code when 2nd option seletced
 							commondata.prefrences.food = "coffee";
-							fb_pref_ref.firebaseobj
+							fb_event_ref.firebaseobj
 									.child(commondata.facebook_details.facebook
 											+ "--"
 											+ commondata.facebook_details.name)
@@ -1447,7 +1445,7 @@ public class Login extends Activity {
 						case 2:
 							// Your code when 3rd option seletced
 							commondata.prefrences.food = "american";
-							fb_pref_ref.firebaseobj
+							fb_event_ref.firebaseobj
 									.child(commondata.facebook_details.facebook
 											+ "--"
 											+ commondata.facebook_details.name)
@@ -1458,7 +1456,7 @@ public class Login extends Activity {
 						case 3:
 							// Your code when 4th option seletced
 							commondata.prefrences.food = "seafood";
-							fb_pref_ref.firebaseobj
+							fb_event_ref.firebaseobj
 									.child(commondata.facebook_details.facebook
 											+ "--"
 											+ commondata.facebook_details.name)
@@ -1469,7 +1467,7 @@ public class Login extends Activity {
 						case 4:
 							// Your code when first option seletced
 							commondata.prefrences.food = "pizza";
-							fb_pref_ref.firebaseobj
+							fb_event_ref.firebaseobj
 									.child(commondata.facebook_details.facebook
 											+ "--"
 											+ commondata.facebook_details.name)
@@ -1479,7 +1477,7 @@ public class Login extends Activity {
 							break;
 						case 5:
 							commondata.prefrences.food = "asian";
-							fb_pref_ref.firebaseobj
+							fb_event_ref.firebaseobj
 									.child(commondata.facebook_details.facebook
 											+ "--"
 											+ commondata.facebook_details.name)
@@ -1490,7 +1488,7 @@ public class Login extends Activity {
 							break;
 						case 6:
 							commondata.prefrences.food = "japanese";
-							fb_pref_ref.firebaseobj
+							fb_event_ref.firebaseobj
 									.child(commondata.facebook_details.facebook
 											+ "--"
 											+ commondata.facebook_details.name)
@@ -1501,7 +1499,7 @@ public class Login extends Activity {
 							break;
 						case 7:
 							commondata.prefrences.food = "mexican";
-							fb_pref_ref.firebaseobj
+							fb_event_ref.firebaseobj
 									.child(commondata.facebook_details.facebook
 											+ "--"
 											+ commondata.facebook_details.name)
@@ -1512,7 +1510,7 @@ public class Login extends Activity {
 							break;
 						case 8:
 							commondata.prefrences.food = "italian";
-							fb_pref_ref.firebaseobj
+							fb_event_ref.firebaseobj
 									.child(commondata.facebook_details.facebook
 											+ "--"
 											+ commondata.facebook_details.name)
@@ -1523,7 +1521,7 @@ public class Login extends Activity {
 							break;
 						case 9:
 							commondata.prefrences.food = "indian";
-							fb_pref_ref.firebaseobj
+							fb_event_ref.firebaseobj
 									.child(commondata.facebook_details.facebook
 											+ "--"
 											+ commondata.facebook_details.name)
@@ -1534,7 +1532,7 @@ public class Login extends Activity {
 							break;
 						case 10:
 							commondata.prefrences.food = "icecream";
-							fb_pref_ref.firebaseobj
+							fb_event_ref.firebaseobj
 									.child(commondata.facebook_details.facebook
 											+ "--"
 											+ commondata.facebook_details.name)
@@ -1545,7 +1543,7 @@ public class Login extends Activity {
 							break;
 						default:
 							commondata.prefrences.food = "american";
-							fb_pref_ref.firebaseobj
+							fb_event_ref.firebaseobj
 									.child(commondata.facebook_details.facebook
 											+ "--"
 											+ commondata.facebook_details.name)
@@ -1597,7 +1595,8 @@ public class Login extends Activity {
 		builder.setTitle("Best Matching places");
 
 		ListView modeList = new ListView(this);
-		ArrayList<String> stringArray = new ArrayList<String>();
+		final ArrayList<String> stringArray = new ArrayList<String>();
+		stringArray.clear();
 		for (int i = 0; i < commondata.places_found.places.size(); i++)
 			stringArray.add(commondata.places_found.places.get(i));
 		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
@@ -1635,6 +1634,7 @@ public class Login extends Activity {
 				System.out.println("selected" + arg0.getItemAtPosition(arg2));
 				System.out.println("in array"
 						+ commondata.places_found.places.get(arg2));
+				
 			}
 
 		});
@@ -1676,14 +1676,6 @@ public class Login extends Activity {
 		strBuilder.append(commondata.event_information.eventID);
 		fb_event_ref.fbref = strBuilder.toString();
 		fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
-	}
-
-	private void create_firebase_pref_refrence() {
-		StringBuilder strBuilder = new StringBuilder(
-				"https://met-ster.firebaseio.com/");
-		strBuilder.append(commondata.event_information.eventID);
-		fb_pref_ref.fbref = strBuilder.toString();
-		fb_pref_ref.firebaseobj = new Firebase(fb_pref_ref.fbref);
 	}
 
 	private void drop_event() {

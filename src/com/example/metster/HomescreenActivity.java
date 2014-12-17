@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.json.JSONException;
@@ -32,11 +33,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ViewFlipper;
 
+import com.facebook.Request;
+import com.facebook.Request.GraphUserListCallback;
+import com.facebook.Response;
+import com.facebook.Session;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 import com.facebook.android.Util;
+import com.facebook.model.GraphUser;
 import com.firebase.client.Firebase;
 
 /*
@@ -251,7 +257,7 @@ public class HomescreenActivity extends Activity {
 	@SuppressWarnings("deprecation")
 	public void login_to_facebook(View v) {
 		commondata.facebook_details.fb.authorize(HomescreenActivity.this,
-				new String[] { "email", "public_profile" },
+				new String[] { "email", "public_profile","user_friends" },
 				new DialogListener() {
 
 					@SuppressLint("CommitPrefEdits")
@@ -292,14 +298,18 @@ public class HomescreenActivity extends Activity {
 	 * This method will fetch the facebook details
 	 */
 
+	@SuppressWarnings("deprecation")
 	private void getProfileInformation() {
 
 		try {
 
 			JSONObject profile = Util.parseJson(commondata.facebook_details.fb
 					.request("me"));
+			JSONObject profilefriends = Util.parseJson(commondata.facebook_details.fb
+					.request("me/friends"));
+			
 			Log.e("Profile", "" + profile);
-
+			Log.e("ProfileFriends", "" + profilefriends.keys());
 			final String mUserId = profile.getString("id");
 			final String mUserName = profile.getString("name");
 			final String mUserEmail = profile.getString("email");
@@ -317,22 +327,25 @@ public class HomescreenActivity extends Activity {
 					.toString(commondata.facebook_details.profile_image
 							.getHeight()));
 			commondata.user_information.profileimage = BitMapToString(mIcon1);
-			/*
-			 * runOnUiThread(new Runnable() {
-			 * 
-			 * public void run() { System.out.println(mIcon1.toString());
-			 * Log.e("FaceBook_Profile"
-			 * ,""+mUserName+"\n"+"\n"+mUserEmail+"\n"+mUserEmail);
-			 * 
-			 * Toast.makeText(getApplicationContext(), "Name: " + mUserName +
-			 * "\nEmail: " + mUserEmail, Toast.LENGTH_LONG).show();
-			 * 
-			 * 
-			 * 
-			 * }
-			 * 
-			 * });
-			 */
+			
+			Request.executeMyFriendsRequestAsync(commondata.facebook_details.fb.getSession(),
+	                new GraphUserListCallback() {
+
+	                    @Override
+	                    public void onCompleted(List<GraphUser> users,
+	                            Response response) {
+	                        Log.i("Response JSON", response.toString());
+	                        /*
+	                        names = new String[users.size()];
+	                        id = new String[users.size()];
+	                        for (int i=0; i<users.size();i++){
+	                            names[i] = users.get(i).getName();
+	                            id[i]= users.get(i).getId();                                
+	                        }  
+	                        */
+	                    }
+	                });
+			
 
 		} catch (FacebookError e) {
 
