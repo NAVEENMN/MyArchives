@@ -44,7 +44,7 @@ http.createServer(function(request, response) {
 	    console.log(par)
 
             response.writeHead(200, "OK", {'Content-Type': 'text/plain'});
-            response.end();
+            response.end('okok');
         });
     } else {
         response.writeHead(200, "OK", {'Content-Type': 'text/plain'});
