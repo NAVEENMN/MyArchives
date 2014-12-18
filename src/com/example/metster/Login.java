@@ -171,6 +171,13 @@ public class Login extends Activity {
 						android.R.color.transparent)));
 		setTitle("New Event");
 		Firebase.setAndroidContext(this);
+		
+		if(commondata.facebook_details.facebook == null){
+			Intent intent = new Intent(Login.this, HomescreenActivity.class);
+			startActivity(intent);
+			finish();
+		}
+		
 		listnerflag = true;
 		event_info.food_type = "american";
 		commondata.prefrences.price = (float) 2.5;
@@ -182,9 +189,6 @@ public class Login extends Activity {
 		event_info.is_host = false;// by default no host access
 		create_firebase_refrence();// this is event refernce setup
 		// toast_info("Welcome");
-		if (commondata.facebook_details.contact == null) {
-			req_contact();
-		}
 
 		/*
 		 * This method is triggered after long pressed of home button
@@ -195,7 +199,7 @@ public class Login extends Activity {
 			public boolean onLongClick(View v) {
 				// TODO Auto-generated method stub
 				System.out.println("long pressed");
-				toast_info("finding a convient place...");
+				toast_info("finding a meetup place...");
 				/*
 				 * remove if mp data on firebase exist
 				 */
@@ -771,7 +775,7 @@ public class Login extends Activity {
 									final Marker picked = arg0;
 									System.out.println(arg0.getTitle());
 									alert.setTitle("Finalize Meet Up");
-									alert.setMessage("Do you want to finalize " + arg0.getTitle() + " ?");
+									alert.setMessage("Do you want to finalize " + arg0.getTitle() + " as meetup area ?");
 									// Set an EditText view to get user input
 
 									alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -953,72 +957,6 @@ public class Login extends Activity {
 	}
 
 	/*
-	 * This method will add a new member in firebase
-	 */
-	public void add_a_member_to_fb(final String member_contact) {
-
-		Thread thread = new Thread() {
-			@Override
-			public void run() {
-				Looper.prepare();
-				create_firebase_refrence();
-				try {
-					String server_resp = new RequestTask().execute(
-							"http://54.183.113.236/metster/exe_gcm_send.php",
-							commondata.facebook_details.facebook,
-							member_contact, "this is message", "1", "1", "1",
-							"1", "1", "1", "1", "1", "1", "1").get();
-					System.out.println("contact-" + member_contact);
-					if (server_resp.contains("doesnot-exist")) {
-						runOnUiThread(new Runnable() {
-
-							@Override
-							public void run() {
-								toast_info(contact_info.contact_name
-										+ " seems to not have a Metster account!!");
-							}
-						});
-
-					} else {
-						int offst = server_resp.indexOf("success");
-						System.out.println("index at "
-								+ server_resp.indexOf("success"));
-						char response_of_gcm = server_resp.charAt(offst + 9);
-						if (response_of_gcm == '1') {
-							runOnUiThread(new Runnable() {
-
-								@Override
-								public void run() {
-									toast_info("invite has been sent to "
-											+ contact_info.contact_name);
-								}
-							});
-
-						} else {
-							runOnUiThread(new Runnable() {
-
-								@Override
-								public void run() {
-									toast_info("We encountered some error while adding this person!!");
-								}
-							});
-
-						}
-					}
-					System.out.println(server_resp);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		};
-		thread.start();
-	}
-
-	/*
 	 * this method prompts user to create a event
 	 */
 	public void create_event_notfication() {
@@ -1163,221 +1101,6 @@ public class Login extends Activity {
 
 	}
 
-	private void req_contact() {
-
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-		alert.setTitle("Contact Information needed.");
-		alert.setMessage("Hi, your friends need you contact information to add to events.");
-
-		// Set an EditText view to get user input
-		final EditText input = new EditText(this);
-		alert.setView(input);
-
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				Editable value = input.getText();
-				commondata.facebook_details.contact = value.toString();
-				commondata.facebook_details.contact = commondata.facebook_details.contact
-						.replace('(', ' ');
-				commondata.facebook_details.contact = commondata.facebook_details.contact
-						.replace(')', ' ');
-				commondata.facebook_details.contact = commondata.facebook_details.contact
-						.replace('-', ' ');
-				commondata.facebook_details.contact = commondata.facebook_details.contact
-						.replace(" ", "");
-
-				/*
-				 * verify the contact
-				 */
-				Boolean status = verify_contact(value.toString());
-				Display display = getWindowManager().getDefaultDisplay();
-				Point size = new Point();
-				display.getSize(size);
-				int width = size.x;
-				final int height = size.y;
-				if (status) {
-					// update contact on server - we need to verify contact
-					// number
-					try {
-						String server_resp = new RequestTask()
-								.execute(
-										"http://54.183.113.236/metster/register_contact.php",
-										commondata.facebook_details.facebook,
-										commondata.facebook_details.contact,
-										"1", "1", "1", "1", "1", "1", "1", "1",
-										"1", "1", "1").get();
-						System.out.println("backhand" + server_resp);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						System.out.println("backhander");
-						e.printStackTrace();
-					} catch (ExecutionException e) {
-						// TODO Auto-generated catch block
-						System.out.println("backhander");
-						e.printStackTrace();
-					}
-					Toast toast = Toast.makeText(getApplicationContext(),
-							"contact has been updated", Toast.LENGTH_SHORT);
-					toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL,
-							0, height / 4);
-					TextView v = (TextView) toast.getView().findViewById(
-							android.R.id.message);
-					// v.setBackgroundColor(Color.TRANSPARENT);
-					v.setTextColor(Color.rgb(175, 250, 176));
-					toast.show();
-					// Do something with value!
-				} else {
-
-					Toast toast = Toast.makeText(getApplicationContext(),
-							"some error in your contact number",
-							Toast.LENGTH_SHORT);
-					toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL,
-							0, height / 4);
-					TextView v = (TextView) toast.getView().findViewById(
-							android.R.id.message);
-					// v.setBackgroundColor(Color.TRANSPARENT);
-					v.setTextColor(Color.rgb(175, 250, 176));
-					toast.show();
-					req_contact();
-				}
-			}
-		});
-
-		alert.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						// Canceled.
-					}
-				});
-
-		alert.show();
-
-	}
-
-	private Boolean verify_contact(String contact) {
-		if (contact.length() == 10) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private void confirm_add_this_person() {
-
-		ImageView image = new ImageView(this);
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-
-		alert.setTitle("Confirm");
-		alert.setMessage("Do you want to add " + contact_info.contact_name);
-		alert.setIcon(R.drawable.ic_action_add_person);
-		// Set an EditText view to get user input
-
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				add_this_person();
-			}
-		});
-
-		alert.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						// just cancel it
-					}
-				});
-
-		alert.show();
-
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		super.onActivityResult(requestCode, resultCode, data);
-
-		if (resultCode == RESULT_OK) {
-			Log.d(TAG, "onactivityres: " + data.toString());
-			uriContact = data.getData();
-
-			retrieveContactName();
-			retrieveContactNumber();
-			confirm_add_this_person();
-		}
-
-	}
-
-	/*
-	 * (non-Javadoc) Contact functions
-	 */
-
-	private void retrieveContactNumber() {
-
-		String contactNumber = null;
-
-		// getting contacts ID
-		Cursor cursorID = getContentResolver().query(uriContact,
-				new String[] { ContactsContract.Contacts._ID }, null, null,
-				null);
-
-		if (cursorID.moveToFirst()) {
-
-			contactID = cursorID.getString(cursorID
-					.getColumnIndex(ContactsContract.Contacts._ID));
-		}
-
-		cursorID.close();
-
-		Log.d(TAG, "Contact ID: " + contactID);
-
-		// Using the contact ID now we will get contact phone number
-		Cursor cursorPhone = getContentResolver().query(
-				ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-				new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER },
-
-				ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ? AND "
-						+ ContactsContract.CommonDataKinds.Phone.TYPE + " = "
-						+ ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE,
-
-				new String[] { contactID }, null);
-
-		if (cursorPhone.moveToFirst()) {
-			contactNumber = cursorPhone
-					.getString(cursorPhone
-							.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-		}
-
-		cursorPhone.close();
-		contactNumber = contactNumber.replace('(', ' ');
-		contactNumber = contactNumber.replace(')', ' ');
-		contactNumber = contactNumber.replace('-', ' ');
-		contactNumber = contactNumber.replace(" ", "");
-		Log.d(TAG, "Contact Phone Number: " + contactNumber);
-		contact_info.contact_number = contactNumber;
-	}
-
-	private void retrieveContactName() {
-
-		String contactName = null;
-
-		// querying contact data store
-		Cursor cursor = getContentResolver().query(uriContact, null, null,
-				null, null);
-
-		if (cursor.moveToFirst()) {
-
-			// DISPLAY_NAME = The display name for the contact.
-			// HAS_PHONE_NUMBER = An indicator of whether this contact has at
-			// least one phone number.
-
-			contactName = cursor.getString(cursor
-					.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-		}
-
-		cursor.close();
-
-		Log.d(TAG, "Contact Name: " + contactName);
-		contact_info.contact_name = contactName;
-	}
 
 	/*
 	 * Home button triggers this function
@@ -1396,17 +1119,7 @@ public class Login extends Activity {
 	/*
 	 * This method triggers contact picker intent
 	 */
-	private void ContactPicker() {
-		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
-				Contacts.CONTENT_URI);
-		startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
-	}
-
-	private void add_this_person() {
-		group.curr_person = contact_info.contact_number;
-		Log.w("Adding this person", group.curr_person);
-		add_a_member_to_fb(group.curr_person);
-	}
+	
 
 	@SuppressWarnings("deprecation")
 	public void pick_food_type() {
@@ -1623,6 +1336,7 @@ public class Login extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				final int it = arg2;
+				 final String name = arg0.getItemAtPosition(arg2).toString();
 				// TODO Auto-generated method stub
 				System.out.println("selected" + arg0.getItemAtPosition(arg2));
 				System.out.println("selected id" + friendid.get(arg2));
@@ -1657,7 +1371,7 @@ public class Login extends Activity {
 										@Override
 										public void run() {
 											toast_info("invite has been sent to "
-													+ contact_info.contact_name);
+													+ name);
 										}
 									});
 

@@ -334,15 +334,6 @@ public class Accept_invite extends Activity {
 		fb_event_ref.firebaseobj.child("Longitude").setValue(
 				commondata.user_information.longitude);
 	}
-	public void create_firebase_pref_refrence(String eventid) {
-		StringBuilder strBuilder = new StringBuilder(
-				"https://met-ster.firebaseio.com/");
-		strBuilder.append(commondata.gcm_req.event_id + "/");// eventid
-		strBuilder.append(commondata.facebook_details.facebook + "--"
-				+ commondata.facebook_details.name);// for that event add me
-		fb_pref_ref.fbref = strBuilder.toString();
-		fb_pref_ref.firebaseobj = new Firebase(fb_pref_ref.fbref);
-	}
 
 	class logingcminback extends AsyncTask<Void, Void, Void> {
 
@@ -496,24 +487,22 @@ public class Accept_invite extends Activity {
 	
 	
 	public void fetch_prefrence(View v){
-		
-		create_firebase_pref_refrence(commondata.gcm_req.event_id);
 				/*
 				 * add the host to firebase met-ster-event
 				 */
-				fb_pref_ref.firebaseobj
+				fb_event_ref.firebaseobj
 						.child("price").setValue(commondata.prefrences.price);
-				fb_pref_ref.firebaseobj
+				fb_event_ref.firebaseobj
 						.child("travel").setValue(commondata.prefrences.travel);
-				fb_pref_ref.firebaseobj
+				fb_event_ref.firebaseobj
 						.child("hour").setValue(commondata.prefrences.hour);
-				fb_pref_ref.firebaseobj
+				fb_event_ref.firebaseobj
 						.child("minute").setValue(commondata.prefrences.minute);
 				/*
 				 * add preferences to firbase
 				 */
 
-				fb_pref_ref.firebaseobj
+				fb_event_ref.firebaseobj
 						.child("food").setValue(commondata.prefrences.food);
 			finish();
 	}

@@ -115,11 +115,12 @@ public class LoadHome extends Activity {
 		Firebase.setAndroidContext(this);
 	
 	        Context context = getApplicationContext();
-
+	        registerInBackground();
 	        // Check device for Play Services APK.
 	        if (checkPlayServices()) {
 	           
 	            gcm = GoogleCloudMessaging.getInstance(this);
+	            
 	            regid = getRegistrationId(context);
 	            Log.w("regisid",regid);
 	            
