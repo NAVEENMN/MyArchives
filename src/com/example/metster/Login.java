@@ -520,28 +520,7 @@ public class Login extends Activity {
 			}
 
 			public void onProviderDisabled(String provider) {
-				AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
-				alert.setTitle("Connection Error");
-				alert.setMessage("Please check your network settings");
-				alert.setPositiveButton("Retry",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								Intent intent = new Intent(Login.this,
-										HomescreenActivity.class);
-								startActivity(intent);
-								finish();
-							}
-						});
-
-				alert.setNegativeButton("Exit",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								finish();
-							}
-						});
-				alert.show();
+				
 			}
 
 			@Override

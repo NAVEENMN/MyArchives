@@ -35,9 +35,7 @@ import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
 
-import com.example.metster.Login.event_info;
 import com.example.metster.Login.fb_event_ref;
-import com.example.metster.Login.fb_pref_ref;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
@@ -51,6 +49,7 @@ public class Accept_invite extends Activity {
 	SharedPreferences sp;
 	AlertDialog levelDialog = null;
 	RadioGroup travelchoice;
+	Boolean invite_status ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +62,9 @@ public class Accept_invite extends Activity {
 		long expires = sp.getLong("access_expires", 0);
 		String APP_ID = getString(R.string.facebook_app_id);
 		fb = new Facebook(APP_ID);
+		invite_status = false;
 		setTitle("Invitation");
-		//----------
+		// ----------
 		/*
 		 * fetch all data from the the dialog
 		 */
@@ -102,7 +102,7 @@ public class Accept_invite extends Activity {
 			}
 		});
 
-		TimePicker timePicker = (TimePicker)findViewById(R.id.timePicker);
+		TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
 		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
 
 			@Override
@@ -122,139 +122,168 @@ public class Accept_invite extends Activity {
 
 			}
 		});
-		//----------
-		 boolean stat = haveNetworkConnection();
-			if (stat) {// network check ok
-				LocationManager locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-		      //--------------------------------------------------------   
-			  // Define a listener that responds to location updates
-			  //---------------------------------------------------------
-				   LocationListener locationListener = new LocationListener() {
-				    public void onLocationChanged(Location location) {	
-				    	if(location != null){	
-				    	commondata.user_information.latitude = location.getLatitude();
-			        	commondata.user_information.longitude = location.getLongitude();
-				    	}else{
-				    		System.out.println("loca null");
-				    	}
-
-				    }
-					@SuppressWarnings("unused")
-					public void onStatusChanged(Location location) {
-						if(location != null ){
-						commondata.user_information.latitude = location.getLatitude();
-			        	commondata.user_information.longitude = location.getLongitude();
-						}else{
-							System.out.println("loc null");
-						}
-						
-				    }
-
-					@SuppressWarnings("unused")
-					public void onProviderEnabled(Location location) {
-						if(location != null){
-						commondata.user_information.latitude = location.getLatitude();
-			        	commondata.user_information.longitude = location.getLongitude();
-						}else{
-							System.out.println("loc null");
-						}
-				    }
-				    public void onProviderDisabled(String provider) {
-				    	
-				    }
-
-					@Override
-					public void onProviderEnabled(String provider) {
-						// TODO Auto-generated method stub
-
+		// ----------
+		boolean stat = haveNetworkConnection();
+		if (stat) {// network check ok
+			LocationManager locationManager = (LocationManager) this
+					.getSystemService(Context.LOCATION_SERVICE);
+			// --------------------------------------------------------
+			// Define a listener that responds to location updates
+			// ---------------------------------------------------------
+			LocationListener locationListener = new LocationListener() {
+				public void onLocationChanged(Location location) {
+					if (location != null) {
+						commondata.user_information.latitude = location
+								.getLatitude();
+						commondata.user_information.longitude = location
+								.getLongitude();
+					} else {
+						System.out.println("loca null");
 					}
 
-					@Override
-					public void onStatusChanged(String provider, int status,
-							Bundle extras) {
-						// TODO Auto-generated method stub
-
-					}
-				  };
-				//------------------------------------------------------------------------
-				// getting GPS and network status
-			    boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER); 
-		        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-		        if (!isGPSEnabled && !isNetworkEnabled) {
-		        	AlertDialog.Builder alert = new AlertDialog.Builder(this);
-					alert.setTitle("Connection Error");
-					alert.setMessage("Please check your network settings");
-					alert.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						//Intent intent = new Intent(Login.this, HomescreenActivity.class);
-		            	//startActivity(intent);
-		            	//finish();
-					  }
-					});
-
-					alert.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
-					  public void onClick(DialogInterface dialog, int whichButton) {
-						  finish();
-					  }
-					});
-					alert.show();
-		        } else {
-		        	
-					if(isNetworkEnabled){
-		        		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-				        postion_get = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-				        if(postion_get != null){
-				        commondata.user_information.latitude = postion_get.getLatitude();
-				        commondata.user_information.longitude = postion_get.getLongitude();
-				        System.out.println("loc from network ");
-				        }else{
-				        	System.out.println("loc from network error");
-				        }
-				        
-		        	}else{
-		        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-			        	postion_get = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			        	if(postion_get != null){
-			        	commondata.user_information.latitude = postion_get.getLatitude();
-			        	commondata.user_information.longitude = postion_get.getLongitude();
-			        	System.out.println("loc from gps ");
-			        	}else{
-			        		
-			        		System.out.println("loc from gps error");
-			        	}
-		        	}
-		        	
-		        }
-	
-				//----------------------
-				
-		        if (access_token != null && expires != 0) {//login directl
-		        	/*
-					 * facebook login
-					 */
-			        commondata.facebook_details.fb.setAccessToken(access_token);
-					commondata.facebook_details.fb.setAccessExpires(expires);
-					commondata.facebook_details.fb
-							.setSession(commondata.facebook_details.fb.getSession());
-		        	System.out.println("brequest was from" + commondata.gcm_req.requester_name);
-					System.out.println("brequest for event" + commondata.gcm_req.event_id);
-					System.out.println("bvis me name is" + commondata.facebook_details.name );
-					System.out.println("bvis me name is" + commondata.facebook_details.facebook );
-					pick_food_type();
-					new RetrievegcmFeedTask().execute();
-					
-					
-				}else{//manually log him in
-					pick_food_type();
-					new logingcminback().execute();
 				}
-				
-			}else{//no active network connection
-				
+
+				@SuppressWarnings("unused")
+				public void onStatusChanged(Location location) {
+					if (location != null) {
+						commondata.user_information.latitude = location
+								.getLatitude();
+						commondata.user_information.longitude = location
+								.getLongitude();
+					} else {
+						System.out.println("loc null");
+					}
+
+				}
+
+				@SuppressWarnings("unused")
+				public void onProviderEnabled(Location location) {
+					if (location != null) {
+						commondata.user_information.latitude = location
+								.getLatitude();
+						commondata.user_information.longitude = location
+								.getLongitude();
+					} else {
+						System.out.println("loc null");
+					}
+				}
+
+				public void onProviderDisabled(String provider) {
+
+				}
+
+				@Override
+				public void onProviderEnabled(String provider) {
+					// TODO Auto-generated method stub
+
+				}
+
+				@Override
+				public void onStatusChanged(String provider, int status,
+						Bundle extras) {
+					// TODO Auto-generated method stub
+
+				}
+			};
+			// ------------------------------------------------------------------------
+			// getting GPS and network status
+			boolean isGPSEnabled = locationManager
+					.isProviderEnabled(LocationManager.GPS_PROVIDER);
+			boolean isNetworkEnabled = locationManager
+					.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+			if (!isGPSEnabled && !isNetworkEnabled) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(this);
+				alert.setTitle("Connection Error");
+				alert.setMessage("Please check your network settings");
+				alert.setPositiveButton("Retry",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// Intent intent = new Intent(Login.this,
+								// HomescreenActivity.class);
+								// startActivity(intent);
+								// finish();
+							}
+						});
+
+				alert.setNegativeButton("Exit",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								finish();
+							}
+						});
+				alert.show();
+			} else {
+
+				if (isNetworkEnabled) {
+					locationManager.requestLocationUpdates(
+							LocationManager.NETWORK_PROVIDER, 0, 0,
+							locationListener);
+					postion_get = locationManager
+							.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+					if (postion_get != null) {
+						commondata.user_information.latitude = postion_get
+								.getLatitude();
+						commondata.user_information.longitude = postion_get
+								.getLongitude();
+						System.out.println("loc from network ");
+					} else {
+						System.out.println("loc from network error");
+					}
+
+				} else {
+					locationManager.requestLocationUpdates(
+							LocationManager.GPS_PROVIDER, 0, 0,
+							locationListener);
+					postion_get = locationManager
+							.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+					if (postion_get != null) {
+						commondata.user_information.latitude = postion_get
+								.getLatitude();
+						commondata.user_information.longitude = postion_get
+								.getLongitude();
+						System.out.println("loc from gps ");
+					} else {
+
+						System.out.println("loc from gps error");
+					}
+				}
+
 			}
-		
+
+			// ----------------------
+
+			if (access_token != null && expires != 0) {// login directl
+				/*
+				 * facebook login
+				 */
+				commondata.facebook_details.fb.setAccessToken(access_token);
+				commondata.facebook_details.fb.setAccessExpires(expires);
+				commondata.facebook_details.fb
+						.setSession(commondata.facebook_details.fb.getSession());
+				System.out.println("brequest was from"
+						+ commondata.gcm_req.requester_name);
+				System.out.println("brequest for event"
+						+ commondata.gcm_req.event_id);
+				System.out.println("bvis me name is"
+						+ commondata.facebook_details.name);
+				System.out.println("bvis me name is"
+						+ commondata.facebook_details.facebook);
+				pick_food_type();
+				new RetrievegcmFeedTask().execute();
+
+			} else {// manually log him in
+				pick_food_type();
+				new logingcminback().execute();
+			}
+
+		} else {// no active network connection
+
+		}
+
 	}
-	
+
 	/*
 	 * This method puts data to firebase and mysql
 	 */
@@ -270,8 +299,9 @@ public class Accept_invite extends Activity {
 			@Override
 			public void run() {
 				if (commondata.gcm_req.event_id != null) {
-					create_firebase_event_refrence(commondata.gcm_req.event_id);// firebase location
-																				
+					create_firebase_event_refrence(commondata.gcm_req.event_id);// firebase
+																				// location
+
 					try {
 						String server_resp = new RequestTask()
 								.execute(
@@ -290,7 +320,7 @@ public class Accept_invite extends Activity {
 						System.out.println("backhander");
 						e.printStackTrace();
 					}
-					
+
 				} else {// event id null
 					Display display = getWindowManager().getDefaultDisplay();
 					Point size = new Point();
@@ -379,7 +409,7 @@ public class Accept_invite extends Activity {
 
 		private Exception exception;
 		private String response;
-
+		String[] id;
 		protected void onPostExecute(Void result) {
 			// create account
 			super.onPostExecute(result);
@@ -393,6 +423,8 @@ public class Accept_invite extends Activity {
 							commondata.facebook_details.email, "1", "1", "1",
 							"1", "1", "1", "1", "1", "1", "1", "1").get();
 					System.out.println(response.toString());
+					id = response.split("-->");
+					
 				}
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -401,7 +433,13 @@ public class Accept_invite extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			System.out.println("has" + id[2]);
+			if(id[2].isEmpty()){
 			handledata();
+			invite_status = true;
+			}else{
+			invite_status = false;	
+			}
 		}
 
 		@Override
@@ -415,7 +453,7 @@ public class Accept_invite extends Activity {
 			}
 			return null;
 		}
-		
+
 	}
 
 	@Override
@@ -483,30 +521,60 @@ public class Accept_invite extends Activity {
 		}
 		return haveConnectedWifi || haveConnectedMobile;
 	}
-	// -------------------------------------------------------------------
-	
-	
-	public void fetch_prefrence(View v){
-				/*
-				 * add the host to firebase met-ster-event
-				 */
-				fb_event_ref.firebaseobj
-						.child("price").setValue(commondata.prefrences.price);
-				fb_event_ref.firebaseobj
-						.child("travel").setValue(commondata.prefrences.travel);
-				fb_event_ref.firebaseobj
-						.child("hour").setValue(commondata.prefrences.hour);
-				fb_event_ref.firebaseobj
-						.child("minute").setValue(commondata.prefrences.minute);
-				/*
-				 * add preferences to firbase
-				 */
 
-				fb_event_ref.firebaseobj
-						.child("food").setValue(commondata.prefrences.food);
-			finish();
+	// -------------------------------------------------------------------
+
+	public void fetch_prefrence(View v) {
+		/*
+		 * add the host to firebase met-ster-event
+		 */
+		System.out.println("submit");
+		fb_event_ref.firebaseobj.child("price").setValue(
+				commondata.prefrences.price);
+		fb_event_ref.firebaseobj.child("travel").setValue(
+				commondata.prefrences.travel);
+		fb_event_ref.firebaseobj.child("hour").setValue(
+				commondata.prefrences.hour);
+		fb_event_ref.firebaseobj.child("minute").setValue(
+				commondata.prefrences.minute);
+		fb_event_ref.firebaseobj.child("food").setValue(
+				commondata.prefrences.food);
+		/*
+		 * add preferences to firbase
+		 */
+		ale();
 	}
-	
+
+	public void ale() {
+		if(invite_status){
+		AlertDialog.Builder alert = new AlertDialog.Builder(Accept_invite.this);
+		alert.setTitle("Invitation accepted");
+		alert.setMessage("Please login back to Metster to view this event");
+		alert.setCancelable(false);
+
+		alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+
+				finish();
+			}
+		});
+		alert.show();
+		}else{
+			AlertDialog.Builder alert = new AlertDialog.Builder(Accept_invite.this);
+			alert.setTitle("Invitation Rejected");
+			alert.setMessage("You are already in an event, please login back to drop it.");
+			alert.setCancelable(false);
+
+			alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+
+					finish();
+				}
+			});
+			alert.show();
+		}
+	}
+
 	public void pick_food_type() {
 
 		// Strings to Show In Dialog with Radio Buttons
@@ -524,61 +592,61 @@ public class Accept_invite extends Activity {
 						switch (item) {
 						case 0:
 							commondata.prefrences.food = "chinese";
-							
+
 							break;
 						case 1:
 							// Your code when 2nd option seletced
 							commondata.prefrences.food = "coffee";
-							
+
 							break;
 						case 2:
 							// Your code when 3rd option seletced
 							commondata.prefrences.food = "american";
-							
+
 							break;
 						case 3:
 							// Your code when 4th option seletced
 							commondata.prefrences.food = "seafood";
-							
+
 							break;
 						case 4:
 							// Your code when first option seletced
-							commondata.prefrences.food= "pizza";
-							
+							commondata.prefrences.food = "pizza";
+
 							break;
 						case 5:
 							commondata.prefrences.food = "asian";
-							
+
 							// Your code when 2nd option seletced
 							break;
 						case 6:
 							commondata.prefrences.food = "japanese";
-							
+
 							// Your code when 3rd option seletced
 							break;
 						case 7:
 							commondata.prefrences.food = "mexican";
-							
+
 							// Your code when 4th option seletced
 							break;
 						case 8:
 							commondata.prefrences.food = "italian";
-							
+
 							// Your code when first option seletced
 							break;
 						case 9:
 							commondata.prefrences.food = "indian";
-			
+
 							// Your code when 2nd option seletced
 							break;
 						case 10:
 							commondata.prefrences.food = "icecream";
-					
+
 							// Your code when 3rd option seletced
 							break;
 						default:
 							commondata.prefrences.food = "american";
-							
+
 							break;
 
 						}
