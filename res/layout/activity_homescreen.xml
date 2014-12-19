@@ -19,8 +19,8 @@
             android:id="@+id/imageView1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:contentDescription="@string/desc"
-            android:background="@drawable/coffee" />
+            android:background="@drawable/homeone"
+            android:contentDescription="@string/desc" />
 
         <!-- View #2 -->
 
@@ -28,8 +28,24 @@
             android:id="@+id/imageView2"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:contentDescription="@string/desc"
-            android:background="@drawable/loadingbackground" />
+            android:background="@drawable/hometwo"
+            android:contentDescription="@string/desc" />
+                <!-- View #2 -->
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/homethree"
+            android:contentDescription="@string/desc" />
+                <!-- View #2 -->
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/homefour"
+            android:contentDescription="@string/desc" />
     </ViewFlipper>
 
     <RelativeLayout
@@ -38,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="#EFFBFB"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <View
             android:id="@+id/Dividerimagelogin"
@@ -55,6 +71,18 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:onClick="login_to_facebook" />
+
+        <TextView
+            android:id="@+id/facebookpost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/authButton"
+            android:layout_centerHorizontal="true"
+            android:text="@string/facebookpost"
+            android:textColor="#585858"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
     </RelativeLayout>
 
 </FrameLayout>

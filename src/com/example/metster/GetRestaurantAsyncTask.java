@@ -69,6 +69,7 @@ public class GetRestaurantAsyncTask extends AsyncTask<String,Void,ArrayList<Rest
 	
 	protected void onPostExecute(ArrayList<Restaurant> result) {
 		// TODO Auto-generated method stub
+		
 		super.onPostExecute(result);
 		for (int i=0; i< result.size(); i++){
 			commondata.places_found.places.add(result.get(i).getName());

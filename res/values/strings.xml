@@ -164,6 +164,8 @@
     <string name="title_activity_accept_invite">Accept_invite</string>
     
     <string name="new_contact">Do you want add more people?</string>
+    <string name="facebookpost">*We do not post anything on facebook.</string>
+    <string name="infonext">Next</string>
     
      <string name="exit">Do you want to exit?</string>
 

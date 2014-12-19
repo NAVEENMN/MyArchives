@@ -258,7 +258,7 @@ public class LoadHome extends Activity {
 	        if(mCurrentLocation == null){ // we were not able to fetch location
 	        	AlertDialog.Builder alert = new AlertDialog.Builder(this);
     			alert.setTitle("Connection Error");
-    			alert.setMessage("Unable to fecth your location");
+    			alert.setMessage("Unable to fetch your location. Please turn your location service on.");
     			alert.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
     			public void onClick(DialogInterface dialog, int whichButton) {
     				Intent intent = new Intent(LoadHome.this, HomescreenActivity.class);
@@ -273,7 +273,7 @@ public class LoadHome extends Activity {
     			  }
     			});
     			alert.show();
-	        }
+	        }else{
 
 		       //---------------------------------------------------------------------
 	        final Handler handler = new Handler();
@@ -282,7 +282,7 @@ public class LoadHome extends Activity {
 		    public void run() {
 		        	  locationManager.removeUpdates(locationListener);
 		    }
-		    }, 1000 * 60 * 15);//15mins
+		    }, 1000 * 60 * 1);//15mins
 				
 		        
 		        Runnable mRunnable;
@@ -301,7 +301,7 @@ public class LoadHome extends Activity {
 		            }
 		        };
 		        mHandler.postDelayed(mRunnable, 1000 * 2 );
-
+	        }
 		//-----------------------------------------------------------------------------------
 
 		 

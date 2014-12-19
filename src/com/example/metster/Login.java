@@ -24,7 +24,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -37,14 +36,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.Contacts;
-import android.text.Editable;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
@@ -60,10 +55,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -129,16 +124,12 @@ public class Login extends Activity {
 
 	private static class contact_info {
 		static String contact_name;
-		static String contact_number;
 	}
 
 	// ----------------------------------------->
 	//
-	private Uri uriContact;
 	private static final String TAG = Login.class.getSimpleName();
-	private String contactID; // contacts unique ID
 	AlertDialog levelDialog = null;
-	private static final int CONTACT_PICKER_RESULT = 1001;
 	Geocoder gcd;
 	GoogleMap mMap;
 	LocationManager locationManager;
@@ -160,6 +151,7 @@ public class Login extends Activity {
 	Boolean listnerflag;
 	RadioGroup travelchoice;
 	ArrayList<Restaurant> restlist;
+	int infocounter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -171,13 +163,14 @@ public class Login extends Activity {
 						android.R.color.transparent)));
 		setTitle("New Event");
 		Firebase.setAndroidContext(this);
-		
-		if(commondata.facebook_details.facebook == null){
+
+		if (commondata.facebook_details.facebook == null) {
 			Intent intent = new Intent(Login.this, HomescreenActivity.class);
 			startActivity(intent);
 			finish();
 		}
-		
+
+		infocounter = 1;
 		listnerflag = true;
 		event_info.food_type = "american";
 		commondata.prefrences.price = (float) 2.5;
@@ -198,46 +191,52 @@ public class Login extends Activity {
 			@Override
 			public boolean onLongClick(View v) {
 				// TODO Auto-generated method stub
-				System.out.println("long pressed");
-				toast_info("finding a meetup place...");
-				/*
-				 * remove if mp data on firebase exist
-				 */
+				if (commondata.event_information.eventID != null) {
+					System.out.println("long pressed");
+					toast_info("finding a meetup place...");
 
-				fb_event_ref.firebaseobj.child("70909141991*799--center")
-						.removeValue();
-				/*
-				 * execute the get convience point algorithm on sever
-				 */
-				Thread thread = new Thread() {
-					@Override
-					public void run() {
-						try {
-							String server_resp = new RequestTask()
-									.execute(
-											"http://54.183.113.236/metster/exe_get_loc.php",
-											commondata.event_information.eventID,
-											"event-"
-													+ commondata.facebook_details.facebook,
-											"1", "1", "1", "1", "1", "1", "1",
-											"1", "1", "1", "1").get();
-							System.out.println("noderes" + server_resp);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							System.out.println("backhander");
-							e.printStackTrace();
-						} catch (ExecutionException e) {
-							// TODO Auto-generated catch block
-							System.out.println("backhander");
-							e.printStackTrace();
+					mMap.animateCamera(CameraUpdateFactory.zoomTo(12), 2000,
+							null);
+
+					/*
+					 * remove if mp data on firebase exist
+					 */
+
+					fb_event_ref.firebaseobj.child("70909141991*799--center")
+							.removeValue();
+					/*
+					 * execute the get convience point algorithm on sever
+					 */
+					Thread thread = new Thread() {
+						@Override
+						public void run() {
+							try {
+								String server_resp = new RequestTask()
+										.execute(
+												"http://54.183.113.236/metster/exe_get_loc.php",
+												commondata.event_information.eventID,
+												"event-"
+														+ commondata.facebook_details.facebook,
+												"1", "1", "1", "1", "1", "1",
+												"1", "1", "1", "1", "1").get();
+								System.out.println("noderes" + server_resp);
+
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								System.out.println("backhander");
+								e.printStackTrace();
+							} catch (ExecutionException e) {
+								// TODO Auto-generated catch block
+								System.out.println("backhander");
+								e.printStackTrace();
+							}
 						}
-					}
-				};
-
-				thread.start();
-
+					};
+					thread.start();
+				}
 				return true;
 			}
+
 		});
 		// ----------------------- long pressed ends here
 		/*
@@ -269,7 +268,11 @@ public class Login extends Activity {
 						@Override
 						public void onChildAdded(DataSnapshot arg0, String arg1) {
 							// TODO Auto-generated method stub
-
+							System.out.println("childadded"
+									+ arg0.getName().toString());
+							if (arg0.getName().contains("center")) {
+								toast_info("Long press the map to explore...");
+							}
 						}
 
 						@Override
@@ -362,15 +365,26 @@ public class Login extends Activity {
 												+ commondata.event_information.host);
 									}
 									try {
-										Iterable<DataSnapshot> kid = child.getChildren();
-										Iterator<DataSnapshot> ki = kid.iterator();
-										while(ki.hasNext()){
+										Iterable<DataSnapshot> kid = child
+												.getChildren();
+										Iterator<DataSnapshot> ki = kid
+												.iterator();
+										while (ki.hasNext()) {
 											DataSnapshot par = ki.next();
-											System.out.println(par.getName() + " " + par.getValue());
-											if(par.getName().contains("Latitude")) commondata.places_found.latitudes.add(Double.parseDouble(par.getValue().toString()));
-											if(par.getName().contains("Longitude")) commondata.places_found.longitudes.add(Double.parseDouble(par.getValue().toString()));
+											if (par.getName().contains(
+													"Latitude"))
+												commondata.places_found.latitudes.add(Double
+														.parseDouble(par
+																.getValue()
+																.toString()));
+											if (par.getName().contains(
+													"Longitude"))
+												commondata.places_found.longitudes.add(Double
+														.parseDouble(par
+																.getValue()
+																.toString()));
 										}
-										
+
 										String restrauntname = rawdata[1]
 												.replace(".", "")
 												.replace("#", "")
@@ -458,8 +472,6 @@ public class Login extends Activity {
 					commondata.user_information.longitude = location
 							.getLongitude();
 					if (commondata.event_information.eventID != null) {
-						System.out.println("gets called"
-								+ commondata.event_information.eventID);
 						create_firebase_refrence();
 						fb_event_ref.firebaseobj
 								.child(commondata.facebook_details.facebook
@@ -723,32 +735,16 @@ public class Login extends Activity {
 	 * This method is for setting up map UI
 	 */
 	public void set_up_map_view() {
-		GoogleMap mMap;
+
 		try {
 			mMap = ((MapFragment) getFragmentManager().findFragmentById(
 					R.id.visitormap)).getMap();
 			mMap.clear();
+			mMap.setTrafficEnabled(true);
 			try {
 				for (int i = 0; i < commondata.places_found.latitudes.size(); i++) {
-					
-					if(commondata.places_found.tokens.get(i).contains("final")){
-						mMap.addMarker(new MarkerOptions()
-						.position(
-								new LatLng(
-										commondata.places_found.latitudes
-												.get(i),
-										commondata.places_found.longitudes
-												.get(i)))
 
-						.icon(BitmapDescriptorFactory
-								.fromResource(R.drawable.finalpoint))
-						.title(commondata.places_found.names.get(i)));
-					}else{
-					
-					if (commondata.places_found.tokens.get(i).contains("rest")) {// they
-																					// are
-																					// restraunts
-
+					if (commondata.places_found.tokens.get(i).contains("final")) {
 						mMap.addMarker(new MarkerOptions()
 								.position(
 										new LatLng(
@@ -758,77 +754,20 @@ public class Login extends Activity {
 														.get(i)))
 
 								.icon(BitmapDescriptorFactory
-										.fromResource(R.drawable.flag))
-								.snippet(
-										"votes:"
-												+ commondata.places_found.tokens
-														.get(i).replace(
-																"rest*", ""))
+										.fromResource(R.drawable.finalpoint))
 								.title(commondata.places_found.names.get(i)));
-						if (event_info.is_host) {
-							mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
-
-								@Override
-								public void onInfoWindowClick(Marker arg0) {
-									// TODO Auto-generated method stub
-									AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
-									final Marker picked = arg0;
-									System.out.println(arg0.getTitle());
-									alert.setTitle("Finalize Meet Up");
-									alert.setMessage("Do you want to finalize " + arg0.getTitle() + " as meetup area ?");
-									// Set an EditText view to get user input
-
-									alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-										public void onClick(DialogInterface dialog, int whichButton) {
-										
-											finalize_place(picked.getTitle().toString());
-										}
-									});
-
-									alert.setNegativeButton("Cancel",
-											new DialogInterface.OnClickListener() {
-												public void onClick(DialogInterface dialog, int whichButton) {
-													// just cancel it
-												}
-											});
-
-									alert.show();
-
-								}
-							});
-						}
 					} else {
 
-						if (commondata.places_found.names.get(i).equals(
-								"center")) {// for
-											// center
-											// button
-							final int j = i;
-							mMap.addMarker(new MarkerOptions()
-									.position(
-											new LatLng(
-													commondata.places_found.latitudes
-															.get(i),
-													commondata.places_found.longitudes
-															.get(i)))
-									// visitor
-									.icon(BitmapDescriptorFactory
-											.fromResource(R.drawable.mp))
-									.title("explore neighbourhood"));
-							
-							mMap.setOnMapLongClickListener(new OnMapLongClickListener() {
-								
-								@Override
-								public void onMapLongClick(LatLng arg0) {
-									// TODO Auto-generated method stub
-									get_places_mean_loc(commondata.places_found.latitudes
-											.get(j),
-											commondata.places_found.longitudes
-											.get(j));
-								}
-							});
+						if (commondata.places_found.tokens.get(i).contains(
+								"rest")) {// they
+											// are
+											// restraunts
+							String price = commondata.places_found.price.get(i)
+									.toString();
+							if (price == "0.0") {
+								price = "no info";
+							}
 
-						} else {
 							mMap.addMarker(new MarkerOptions()
 									.position(
 											new LatLng(
@@ -836,17 +775,110 @@ public class Login extends Activity {
 															.get(i),
 													commondata.places_found.longitudes
 															.get(i)))
-									// visitor
+
 									.icon(BitmapDescriptorFactory
-											.fromResource(R.drawable.pin))
+											.fromResource(R.drawable.flag))
+									.snippet(
+											"ratings:"
+													+ commondata.places_found.ratings
+															.get(i) + "|"
+													+ "price: " + price)
 									.title(commondata.places_found.names.get(i)));
+							if (event_info.is_host) {
+								mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+
+									@Override
+									public void onInfoWindowClick(Marker arg0) {
+										// TODO Auto-generated method stub
+										AlertDialog.Builder alert = new AlertDialog.Builder(
+												Login.this);
+										final Marker picked = arg0;
+										System.out.println(arg0.getTitle());
+										alert.setTitle("Finalize Meet Up");
+										alert.setMessage("Do you want to finalize "
+												+ arg0.getTitle()
+												+ " as meetup area ?");
+										// Set an EditText view to get user
+										// input
+
+										alert.setPositiveButton(
+												"Ok",
+												new DialogInterface.OnClickListener() {
+													public void onClick(
+															DialogInterface dialog,
+															int whichButton) {
+
+														finalize_place(picked
+																.getTitle()
+																.toString());
+													}
+												});
+
+										alert.setNegativeButton(
+												"Cancel",
+												new DialogInterface.OnClickListener() {
+													public void onClick(
+															DialogInterface dialog,
+															int whichButton) {
+														// just cancel it
+													}
+												});
+
+										alert.show();
+
+									}
+								});
+							}
+						} else {
+
+							if (commondata.places_found.names.get(i).equals(
+									"center")) {// for
+												// center
+												// button
+								final int j = i;
+								mMap.addMarker(new MarkerOptions()
+										.position(
+												new LatLng(
+														commondata.places_found.latitudes
+																.get(i),
+														commondata.places_found.longitudes
+																.get(i)))
+										// visitor
+										.icon(BitmapDescriptorFactory
+												.fromResource(R.drawable.mp))
+										.title("explore neighbourhood"));
+
+								mMap.setOnMapLongClickListener(new OnMapLongClickListener() {
+
+									@Override
+									public void onMapLongClick(LatLng arg0) {
+										// TODO Auto-generated method stub
+										get_places_mean_loc(
+												commondata.places_found.latitudes
+														.get(j),
+												commondata.places_found.longitudes
+														.get(j));
+									}
+								});
+
+							} else {
+								mMap.addMarker(new MarkerOptions()
+										.position(
+												new LatLng(
+														commondata.places_found.latitudes
+																.get(i),
+														commondata.places_found.longitudes
+																.get(i)))
+										// visitor
+										.icon(BitmapDescriptorFactory
+												.fromResource(R.drawable.pin))
+										.title(commondata.places_found.names
+												.get(i)));
+							}
 						}
 					}
 				}
-				}
-				
-				
-				
+
 				mMap.setMyLocationEnabled(true);
 				LatLng currlocation = new LatLng(
 						commondata.user_information.latitude,
@@ -1101,7 +1133,6 @@ public class Login extends Activity {
 
 	}
 
-
 	/*
 	 * Home button triggers this function
 	 */
@@ -1110,7 +1141,7 @@ public class Login extends Activity {
 		if (commondata.event_information.eventID == null) {// no event exist
 			create_event_notfication();
 		} else {// event exists
-			//ContactPicker();
+			// ContactPicker();
 			list_friends();
 		}
 
@@ -1119,7 +1150,6 @@ public class Login extends Activity {
 	/*
 	 * This method triggers contact picker intent
 	 */
-	
 
 	@SuppressWarnings("deprecation")
 	public void pick_food_type() {
@@ -1289,8 +1319,7 @@ public class Login extends Activity {
 				+ mean_latitude
 				+ ","
 				+ mean_longitude
-				+ "&radius=2000&types=food&keyword="
-				+ event_info.food_type
+				+ "&radius=2000&types=food"
 				+ "&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE";
 		try {
 			ArrayList<Restaurant> run_places = new GetRestraunts().execute(
@@ -1305,7 +1334,7 @@ public class Login extends Activity {
 
 	}
 
-	private void list_friends(){
+	private void list_friends() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Add a friend");
 		ListView modeList = new ListView(this);
@@ -1314,9 +1343,9 @@ public class Login extends Activity {
 		friendname.clear();
 		friendid.clear();
 		JSONArray frnd_list = commondata.facebook_details.friends;
-		for(int i=0;i<frnd_list.length();i++){
+		for (int i = 0; i < frnd_list.length(); i++) {
 
-            JSONObject json_data = null;
+			JSONObject json_data = null;
 			try {
 				json_data = frnd_list.getJSONObject(i);
 				friendname.add(json_data.get("name").toString());
@@ -1325,7 +1354,7 @@ public class Login extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-     }
+		}
 		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, android.R.id.text1,
 				friendname);
@@ -1336,20 +1365,22 @@ public class Login extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				final int it = arg2;
-				 final String name = arg0.getItemAtPosition(arg2).toString();
+				final String name = arg0.getItemAtPosition(arg2).toString();
 				// TODO Auto-generated method stub
-				System.out.println("selected" + arg0.getItemAtPosition(arg2));
-				System.out.println("selected id" + friendid.get(arg2));
+
 				Thread thread = new Thread() {
 					@Override
 					public void run() {
 						Looper.prepare();
 						try {
-							String server_resp = new RequestTask().execute(
-									"http://54.183.113.236/metster/exe_gcm_send.php",
-									commondata.facebook_details.facebook,
-									friendid.get(it).toString(), "this is message", "1", "1", "1",
-									"1", "1", "1", "1", "1", "1", "1").get();
+							String server_resp = new RequestTask()
+									.execute(
+											"http://54.183.113.236/metster/exe_gcm_send.php",
+											commondata.facebook_details.facebook,
+											friendid.get(it).toString(),
+											"this is message", "1", "1", "1",
+											"1", "1", "1", "1", "1", "1", "1")
+									.get();
 							if (server_resp.contains("doesnot-exist")) {
 								runOnUiThread(new Runnable() {
 
@@ -1362,9 +1393,9 @@ public class Login extends Activity {
 
 							} else {
 								int offst = server_resp.indexOf("success");
-								System.out.println("index at "
-										+ server_resp.indexOf("success"));
-								char response_of_gcm = server_resp.charAt(offst + 9);
+
+								char response_of_gcm = server_resp
+										.charAt(offst + 9);
 								if (response_of_gcm == '1') {
 									runOnUiThread(new Runnable() {
 
@@ -1397,7 +1428,7 @@ public class Login extends Activity {
 					}
 				};
 				thread.start();
-				
+
 			}
 
 		});
@@ -1405,11 +1436,11 @@ public class Login extends Activity {
 		final Dialog dialog = builder.create();
 		dialog.show();
 	}
-	
+
 	public void list_rest() {
 		// --------
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Best Matching places");
+		builder.setTitle("Pick your choices");
 
 		ListView modeList = new ListView(this);
 		final ArrayList<String> stringArray = new ArrayList<String>();
@@ -1448,10 +1479,7 @@ public class Login extends Activity {
 				}
 
 				// TODO Auto-generated method stub
-				System.out.println("selected" + arg0.getItemAtPosition(arg2));
-				System.out.println("in array"
-						+ commondata.places_found.places.get(arg2));
-				
+
 			}
 
 		});
@@ -1460,29 +1488,26 @@ public class Login extends Activity {
 		dialog.show();
 
 	}
-	
-	private void finalize_place(String name){
-		System.out.println("checkgin" + name);
-		for(int i=0; i<commondata.places_found.names.size();i++){
+
+	private void finalize_place(String name) {
+
+		for (int i = 0; i < commondata.places_found.names.size(); i++) {
 			String temp = commondata.places_found.names.get(i);
-			if(temp.contains(name)){
+			if (temp.contains(name)) {
 				Double latitude = commondata.places_found.latitudes.get(i);
 				Double longitude = commondata.places_found.longitudes.get(i);
 				System.out.println("updating" + name);
 				create_firebase_refrence();
 
 				fb_event_ref.firebaseobj
-						.child("final*0--"
-								+ name.replace(".", ""))
-						.child("Latitude")
-						.setValue(latitude);
+						.child("final*0--" + name.replace(".", ""))
+						.child("Latitude").setValue(latitude);
 				fb_event_ref.firebaseobj
-						.child("final*0--"
-								+ name.replace(".", ""))
-						.child("Longitude")
-						.setValue(longitude);
-				
-				fb_event_ref.firebaseobj.child("rest*0--"+name.replace(".", "")).removeValue();
+						.child("final*0--" + name.replace(".", ""))
+						.child("Longitude").setValue(longitude);
+
+				fb_event_ref.firebaseobj.child(
+						"rest*0--" + name.replace(".", "")).removeValue();
 			}
 		}
 	}
@@ -1561,6 +1586,47 @@ public class Login extends Activity {
 
 	}
 
+	private void infowindow() {
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.infodialog,
+				(ViewGroup) findViewById(R.id.new_info_root));
+		final View lay = layout;
+		AlertDialog.Builder alert = new AlertDialog.Builder(this)
+				.setView(layout);
+		alert.create();
+		alert.show();
+		Button next = (Button) layout.findViewById(R.id.infobutton);
+		next.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				ImageView imgFp = (ImageView) lay.findViewById(R.id.infoview);
+				System.out.println("click" + infocounter);
+				infocounter = infocounter + 1;
+				switch (infocounter){
+				case 1:
+					imgFp.setImageResource(R.drawable.infoone);
+					break;
+				case 2:
+					imgFp.setImageResource(R.drawable.infotwo);
+					break;
+				case 3:
+					imgFp.setImageResource(R.drawable.infothree);
+					break;
+				case 4:
+					imgFp.setImageResource(R.drawable.infofour);
+					infocounter = 0;
+					break;
+				default:
+					imgFp.setImageResource(R.drawable.infoone);
+					infocounter = 0;
+					break;
+				}
+			}
+		});
+	}
+
 	private class GetRestraunts extends
 			AsyncTask<String, Void, ArrayList<Restaurant>> {
 
@@ -1612,11 +1678,12 @@ public class Login extends Activity {
 			Iterator<Restaurant> res = result.iterator();
 			while (res.hasNext()) {
 				Restaurant re = res.next();
+
 				commondata.places_found.places.add(re.getName());
 				commondata.places_found.latitudes.add(re.getLatitude());
 				commondata.places_found.longitudes.add(re.getLongitude());
-				System.out.println(re.getName() + ": " + re.getLatitude() + " "
-						+ re.getLongitude());
+				commondata.places_found.price.add(re.getprice());
+				commondata.places_found.ratings.add(re.getratings());
 			}
 
 			list_rest();
@@ -1635,13 +1702,16 @@ public class Login extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Button button;
 		switch (item.getItemId()) {
 		case android.R.id.home:
-
+			if (commondata.event_information.eventID != null) {
+				mMap.animateCamera(CameraUpdateFactory.zoomTo(12), 2000, null);
+			}
 			return true;
 
 		case R.id.about_icon:
-
+			infowindow();
 			return true;
 
 		case R.id.delete_icon:

@@ -376,17 +376,7 @@ public class HomescreenActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		new AlertDialog.Builder(this)
-				.setMessage("Do you want to exit?")
-				.setTitle("Metster")
-				.setCancelable(false)
-				.setPositiveButton("Yes",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-
-								HomescreenActivity.this.finish();
-							}
-						}).setNegativeButton("No", null).show();
+		HomescreenActivity.this.finish();
 	}
 
 	/*

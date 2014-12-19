@@ -12,7 +12,7 @@
         android:gravity="center"
         android:text="@string/setup_preferences"
         android:paddingBottom="10dp"
-        android:textColor="#819FF7"
+        android:textColor="#2E2E2E"
         android:textSize="28sp" />
 
     <View
@@ -21,7 +21,7 @@
         android:layout_height="3dp"
         android:paddingTop="20dp"
         android:layout_below="@+id/New_Event"
-        android:background="#FE642E"
+        android:background="#819FF7"
         android:gravity="bottom" />
 
     <TextView

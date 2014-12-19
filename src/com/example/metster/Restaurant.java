@@ -9,10 +9,12 @@ public class Restaurant {
 	String name;
 	double latitude;
 	double longitude;
+	double price;
+	double ratings;
 	@Override
 	public String toString() {
 		return "Restaurant [name=" + name + ", latitude=" + latitude
-				+ ", longitude=" + longitude + "]";
+				+ ", longitude=" + longitude + ", ratings=" + ratings + ", price=" + price +"]";
 	}
 
 	
@@ -57,7 +59,18 @@ public class Restaurant {
 		this.longitude = longitude;
 	}
 
-
+	public double getratings(){
+		return ratings;
+	}
+	public void setratings(double ratings){
+		this.ratings = ratings;
+	}
+	public double getprice(){
+		return price;
+	}
+	public void setprice(double price){
+		this.price = price;
+	}
 
 
 	public static Restaurant createRestaurant(JSONObject js) throws JSONException{
@@ -67,7 +80,8 @@ public class Restaurant {
 		restaurant.setName(js.getString("name"));
 		restaurant.setLatitude(js.getDouble("latitude"));
 		restaurant.setLongitude(js.getDouble("longitude"));
-		
+		restaurant.setratings(js.getDouble("ratings"));
+		restaurant.setprice(js.getDouble("price"));
 		return restaurant;
 
 }

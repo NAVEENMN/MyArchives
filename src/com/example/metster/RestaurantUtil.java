@@ -27,6 +27,16 @@ public class RestaurantUtil {
 				Restaurant restaurant = new Restaurant();
 			
 				restaurant.setName(restaurantsJsonObject.getString("name"));
+				try{
+				restaurant.setprice(restaurantsJsonObject.getDouble("price_level"));
+				}catch(Exception e){
+					restaurant.setprice(0.0);
+				}
+				try{
+				restaurant.setratings(restaurantsJsonObject.getDouble("rating"));
+				}catch(Exception e){
+					restaurant.setratings(0.0);
+				}
 				
 				Double lon = restaurantsJSONArray.getJSONObject(i)
 		                .getJSONObject("geometry").getJSONObject("location")
