@@ -25,6 +25,15 @@ class properties:
 			left_height = self.get_height(current_node.leftchild)
 			right_child = self.get_height(current_node.rightchild)
 			return max(left_height, right_child)+1
+	def mirror(self, current_node):
+		if current_node is None:
+			return
+		else:
+			self.mirror(current_node.leftchild)
+			self.mirror(current_node.rightchild)
+			temp = current_node.rightchild
+			current_node.rightchild = current_node.leftchild
+			current_node.leftchild = temp	
 
 class print_tree:
 	def inorder(self, current_node):#left->data->right
@@ -64,5 +73,8 @@ def main():
 	pt.postorder(root)
 	print "height"
 	print prop.get_height(root)
+	prop.mirror(root)
+	print "inorder after mirror"
+	pt.inorder(root)
 if __name__ == "__main__":
 	main()
