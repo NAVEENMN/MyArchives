@@ -133,7 +133,7 @@ int main(int argc, const char * argv[])
             	file_counter += 1;
         	}
     	}
-    	if(file_counter != 4){
+    	if(file_counter != argc-1){
         	for(int i = 0 ; i < argc ; i++ ){
                 if (epochs[i] > big_epoch){
                     big_epoch = epochs[i];
