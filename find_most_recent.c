@@ -1,8 +1,8 @@
 /*
  *  find_recently_used_file.c
  *  Developed for EMC Interview Screeing test
- *
  *  Created by Naveen Mysore on 2/5/15.
+ *  URL : https://github.com/NAVEENMN/emc_screening
  */
 
 /*

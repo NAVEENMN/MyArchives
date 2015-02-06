@@ -1,10 +1,10 @@
 '''
-//  find_recent.py
-//  Developed for EMC Interview Screeing test
-//
-//  Created by Naveen Mysore on 2/5/15.
+#  find_recent.py
+#  Developed for EMC Interview Screeing test
+#  Created by Naveen Mysore on 2/5/15.
 
-//  USAGE : get_recent.py [filepath and name] [filepath and name] ...
+#  USAGE : get_recent.py [filepath and name] [filepath and name] ...
+#  URL : https://github.com/NAVEENMN/emc_screening
 '''
 
 import os, time
