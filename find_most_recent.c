@@ -11,7 +11,7 @@
  *
  * @desc : This program finds the most recently accessed file in O(n) run time
  *         It collects year, month, date, hour, minute and seconds of all files
- *         then we calculate epochs (time elapsed since modified) for each file 
+ *         then we calculate epochs (time elapsed since 00:00:00 UTC till last file modified date/time) for each file 
  *	   we stored epoch`s in array and find the maximum epoch and its index
  *         uncomment all printf`s to see the execution
  */
