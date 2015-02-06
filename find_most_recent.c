@@ -11,10 +11,8 @@
  *
  * @desc : This program finds the most recently accessed file in O(n) run time
  *         It collects year, month, date, hour, minute and seconds of all files
- *         then we collect the files in most recent year removing all other files
- *         in the remaning files we collect all most recent month files and so on.
- *         All information about a file is held in a node in linked list.
- *
+ *         then we calculate epochs (time elapsed since modified) for each file 
+ *	   we stored epoch`s in array and find the maximum epoch and its index
  *         uncomment all printf`s to see the execution
  */
 
@@ -33,10 +31,10 @@
 
 
 /*
- *  This function extracts date and time information and inserts to linked list
+ *  This function extracts date and time information and calculates and retuens epochs of the file
  *  Input: @param1 - String - filename
- *         @param2 - file_ptr - pointer to tail to linked list
- *  Return: file_ptr - pointer to new tail
+ *         
+ *  Return: long - epoch value of the file since last modified
  */
 long get_epoch_of_file(char filename[]){
     char timeStr[ 100 ] = "";
