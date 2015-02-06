@@ -16,7 +16,8 @@ def look_up(data):
 		     'Jul' : 7,'Aug' : 8,'Sep' : 9,'Oct' : 10,'Nov' : 11,'Dec' : 12 
 		    }
 	return Month_Day[data]
-
+# here in the main function we calculate epochs for all files and find the highesh epoch file
+# and that should be the most recent one
 def main(argv):
 	files_list = list()
 	file_epochs = list()
