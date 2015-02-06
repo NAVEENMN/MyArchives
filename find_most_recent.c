@@ -31,226 +31,6 @@
 #include <sys/stat.h>
 #include <time.h>
 
-typedef struct file_list *file_list_ptr;
-typedef file_list_ptr file_ptr;
-struct file_list{
-    char* filename;
-    file_ptr NEXT;
-    int year;
-    int month;
-    int date;
-    int hour;
-    int minute;
-    int second;
-    int status;
-};
-
-/*
- *  This function creates a node and adds files information to it
- *  Input: @param1 - String - file name
- *         @param2 - Int - year
- *         @param3 - Int - month
- *         @param4 - Int - date
- *         @param5 - Int - hour
- *         @param6 - Int - minute
- *         @param6 - Int - seconds
- *  Return: file_ptr - pointer to new node
- */
-file_ptr file_list_insert(char* filename, int year, int month, int date, int hour, int minute, int seconds){
-    file_ptr new_node;
-    file_ptr end_node;
-    new_node = (file_ptr) malloc(sizeof(struct file_list));
-    new_node -> filename = filename;
-    new_node -> year = year;
-    new_node -> month = month;
-    new_node -> date = date;
-    new_node -> hour = hour;
-    new_node -> minute = minute;
-    new_node -> second = seconds;
-    new_node -> status = 1;
-    end_node = (file_ptr) malloc(sizeof(struct file_list));
-    end_node -> filename = "END";
-    end_node -> NEXT = NULL;
-    new_node -> NEXT = end_node;
-    return new_node;
-}
-
-/*
- *  This function prints the file list
- *  Input: @param1 - file_ptr - pointer to head of the linked list
- *  Return: void
- */
-void print_the_list(file_ptr head){
-    file_ptr node;
-    node = head -> NEXT;
-    while(node -> NEXT != NULL){
-        printf("filename: %s \n", node -> filename);
-        //printf("modified on: %d : %d : %d \n", node -> month, node -> date, node -> year);
-        //printf("modified at: %d : %d : %d \n", node -> hour, node -> minute, node -> second);
-        //printf("----------------------------------\n");
-        node = node -> NEXT;
-    }
-}
-
-/*
- *  This function removed a node from file list
- *  Input: @param1 - file_ptr- pointer to previous node of the node which needs
- *                   to be removed
- *  Return: void
- */
-void remove_a_node(file_ptr node){
-    file_ptr next_node = node -> NEXT -> NEXT;
-    free(node->NEXT);
-    node -> NEXT = next_node;
-}
-
-/*
- *  This function counts the number of nodes in file list
- *  Input: @param1 - file_ptr - pointer to head of the linked list
- *  Return: INT - number of nodes in the list
- */
-int number_of_files_in_list(file_ptr node){
-    int count = 0;
-    node = node -> NEXT;
-    while(node -> NEXT != NULL){
-        node = node -> NEXT;
-        count += 1;
-    }
-    return count;
-}
-
-/*
- *  This function finds and removes all the files which are not recent
- *  Input: @param1 - file_ptr - pointer to head of the linked list
- *  Return: INT - number of nodes in the list
- */
-void find_most_recent(file_ptr head){
-    file_ptr node;
-    int year = 0;
-    int month = 0;
-    int date = 0;
-    int hour = 0;
-    int minute = 0;
-    int second = 0;
-    
-    /* Step followed in this order
-     * Find most recent year -> remove all files from list which have year < recent year
-     * Find most recent month -> remove all files from list which have month < recent month
-     * Find most recent date -> remove all files from list which have date < recent date
-     * Find most recent hour -> remove all files from list which have hour < recent hour
-     * Find most recent minute -> remove all files from list which have minute < recent minute
-     * Find most recent seconds -> remove all files from list which have seconds < recent seconds
-     */
-    
-    /*
-     * Knock out all files which are not from most recent year
-     */
-    node = head -> NEXT;
-    while(node -> NEXT != NULL){
-        if (node -> year > year) year = node -> year ; // finds the recent year which is maximum
-        node = node -> NEXT;
-    }
-    node = head;
-    while(node -> NEXT != NULL){
-        if (node -> NEXT -> year < year && strncmp(node -> NEXT -> filename, "END", 3) != 0){
-            //printf("removing file: %s - not in recent year\n", node-> NEXT -> filename);
-            remove_a_node(node);
-        }else{
-            node = node -> NEXT;
-        }
-    }
-    /*
-     * Knock out all files which are not from most recent month
-     */
-    if(number_of_files_in_list(head) == 1) return;
-    node = head -> NEXT;
-    while(node -> NEXT != NULL){
-        if (node -> month > month) month = node -> month ; // finds the recent month which is maximum
-        node = node -> NEXT;
-    }
-    node = head;
-    while(node -> NEXT != NULL){
-        if (node -> NEXT -> month < month && strncmp(node -> NEXT -> filename, "END", 3) != 0){
-            //printf("removing file: %s - not in recent month \n", node-> NEXT -> filename);
-            remove_a_node(node);
-        }else{
-            node = node -> NEXT;
-        }
-    }
-    /*
-     * Knock out all files which are not from most recent date
-     */
-    if(number_of_files_in_list(head) == 1) return;
-    node = head -> NEXT;
-    while(node -> NEXT != NULL){
-        if (node -> date > date) date = node -> date ; // finds the recent date which is maximum
-        node = node -> NEXT;
-    }
-    node = head;
-    while(node -> NEXT != NULL){
-        if (node -> NEXT -> date < date && strncmp(node -> NEXT -> filename, "END", 3) != 0){
-            //printf("removing file: %s - not in recent date\n", node-> NEXT -> filename);
-            remove_a_node(node);
-        }else{
-            node = node -> NEXT;
-        }
-    }
-    /*
-     * Knock out all files which are not from most recent hour
-     */
-    if(number_of_files_in_list(head) == 1) return;
-    node = head -> NEXT;
-    while(node -> NEXT != NULL){
-        if (node -> hour > hour) hour = node -> hour ; // finds the recent hour which is maximum
-        node = node -> NEXT;
-    }
-    node = head;
-    while(node -> NEXT != NULL){
-        if (node -> NEXT -> hour < hour && strncmp(node -> NEXT -> filename, "END", 3) != 0){
-            //printf("removing file: %s - not in recent hour\n", node-> NEXT -> filename);
-            remove_a_node(node);
-        }else{
-            node = node -> NEXT;
-        }
-    }
-    /*
-     * Knock out all files which are not from most recent minute
-     */
-    if(number_of_files_in_list(head) == 1) return;
-    node = head -> NEXT;
-    while(node -> NEXT != NULL){
-        if (node -> minute > minute) minute = node -> minute ; // finds the recent minute which is maximum
-        node = node -> NEXT;
-    }
-    node = head;
-    while(node -> NEXT != NULL){
-        if (node -> NEXT -> minute < minute && strncmp(node -> NEXT -> filename, "END", 3) != 0){
-            //printf("removing file: %s \n - not in recent minute", node-> NEXT -> filename);
-            remove_a_node(node);
-        }else{
-            node = node -> NEXT;
-        }
-    }
-    /*
-     * Knock out all files which are not from most recent second
-     */
-    if(number_of_files_in_list(head) == 1) return;
-    node = head -> NEXT;
-    while(node -> NEXT != NULL){
-        if (node -> second > second) second = node -> second ; // finds the recent second which is maximum
-        node = node -> NEXT;
-    }
-    node = head;
-    while(node -> NEXT != NULL){
-        if (node -> NEXT -> second < second && strncmp(node -> NEXT -> filename, "END", 3) != 0){
-            //printf("removing file: %s - not in recent second\n", node-> NEXT -> filename);
-            remove_a_node(node);
-        }else{
-            node = node -> NEXT;
-        }
-    }
-    
-}
 
 /*
  *  This function extracts date and time information and inserts to linked list
@@ -258,9 +38,7 @@ void find_most_recent(file_ptr head){
  *         @param2 - file_ptr - pointer to tail to linked list
  *  Return: file_ptr - pointer to new tail
  */
-file_ptr insert_date_time_to_list(char filename[], file_ptr tail){
-    file_ptr node;
-    node = NULL;
+long get_epoch_of_file(char filename[]){
     char timeStr[ 100 ] = "";
     char temp[5];
     char tem[5];
@@ -271,6 +49,10 @@ file_ptr insert_date_time_to_list(char filename[], file_ptr tail){
     int hour = 0;
     int seconds = 0;
     struct stat buf;
+    struct tm t;
+    time_t t_of_day;
+    
+    
     if (!stat(filename, &buf)){
         strftime(timeStr, 100, "%d-%m-%Y %H:%M:%S", localtime( &buf.st_mtime));
         //printf("\nLast modified date and time = %s\n", timeStr);
@@ -312,25 +94,31 @@ file_ptr insert_date_time_to_list(char filename[], file_ptr tail){
         temp[ 2 ] = '\0';
         strncpy(tem, temp, 3);
         seconds = atoi(tem);
-        node = file_list_insert(filename, year, month, date, hour, minute, seconds);
-        tail -> NEXT = node;
         
+        t.tm_year = year;
+        t.tm_mon = month;         
+        t.tm_mday = date;         
+        t.tm_hour = hour;
+        t.tm_min = minute;
+        t.tm_sec = seconds;
+        t.tm_isdst = -1;     
+        t_of_day = mktime(&t);
+        // printf("seconds since the Epoch: %ld\n", (long) t_of_day);
+        return (long) t_of_day;
     }else{
         printf("error getting date/time\n");
     }
-     return node;
+    return (long) t_of_day;
 }
 
 int main(int argc, const char * argv[])
 {
-    file_ptr head;
-    file_ptr tail;
     FILE *file;
-    head = (file_ptr) malloc(sizeof(struct file_list));
-    head -> filename = "HEAD";
-    tail = head;
     char *file_names[argc-1];
     int file_counter = 0;
+    long epochs[argc-1];
+    long big_epoch = 0;
+    int index = 0;
     if(	argc < 2){
 	printf("usage : %s [path and filename] [path and filename] ... \n", argv[0] );
     }else{
@@ -340,18 +128,21 @@ int main(int argc, const char * argv[])
     	for(int i = 1; i < argc; i++){
         	file = fopen(file_names[i], "r");
         	if(file){
-            		tail = insert_date_time_to_list(file_names[i], tail);
+            		epochs[i] = get_epoch_of_file(file_names[i]);
             		fclose(file);
         	}else{
             		printf("file %s doesnot exists \n", file_names[i]);
             	file_counter += 1;
         	}
     	}
-    	//print_the_list(head);
     	if(file_counter != 4){
-        	find_most_recent(head);
-        	printf("The most recent file is: \n");
-        	print_the_list(head);
+        	for(int i = 0 ; i < argc ; i++ ){
+                if (epochs[i] > big_epoch){
+                    big_epoch = epochs[i];
+                    index = i;
+                }
+            }
+            printf("The most recent file is: %s\n", file_names[index]);
     	}else{
         	printf("All files were not found. \n");
     	}
