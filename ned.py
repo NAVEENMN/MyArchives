@@ -1,4 +1,4 @@
-# Copyright 2015. Naveen Mysore, Inc. All Rights Reserved.
+#Copyright 2015. Naveen Mysore, Inc. All Rights Reserved.
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -52,35 +52,61 @@ def edit_distance(s1, s2):
  
     return previous_row[-1] # return the last element in the final row
 
+'''
+String lcs(String, String)
+@desc : This functions finds the longest common subsequence
+	 It uses all rows and columns to backtrack and hence the table is stored
+@param1 : String - input A
+@param2 : String - input B
+return 	: String - longest common subsequence
+'''
 def lcs(a, b):
-    lengths = [[0 for j in range(len(b)+1)] for i in range(len(a)+1)]
-    # row 0 and column 0 are initialized to 0 already
-    for i, x in enumerate(a):
-        for j, y in enumerate(b):
-            if x == y:
-                lengths[i+1][j+1] = lengths[i][j] + 1
-            else:
-                lengths[i+1][j+1] = max(lengths[i+1][j], lengths[i][j+1])
-    # read the substring out from the matrix
-    result = ""
-    x, y = len(a), len(b)
-    while x != 0 and y != 0:
-        if lengths[x][y] == lengths[x-1][y]:
-            x -= 1
-        elif lengths[x][y] == lengths[x][y-1]:
-            y -= 1
-        else:
-            assert a[x-1] == b[y-1]
-            result = a[x-1] + result
-            x -= 1
-            y -= 1
-    return result
+	Matrix = [[0 for j in range(len(b)+1)]  for i in range(len(a)+1)] # row 0 and column 0 are initialized to 0
+	for y in range(0, len(b)+1):
+		Matrix[0][y] = y
+	for x in range(0, len(a)+1):
+		Matrix[x][0] = x
+	for i, x in enumerate(a, 1):
+        	for j, y in enumerate(b, 1):
+			insert_cost = Matrix[i-1][j]+1
+			delete_cost = Matrix[i][j-1]+1
+			if x == y:
+				substitute_cost = Matrix[i-1][j-1]
+			else:
+				substitute_cost = Matrix[i-1][j-1]+1
+			cell_cost = min(insert_cost, delete_cost, substitute_cost)
+                	Matrix[i][j] = cell_cost
 
+	# uncomment the below section to see the table
+	'''
+	row = list()
+	for x in range(0, len(a)+1):
+		for y in range(0, len(b)+1):
+			row.append(Matrix[x][y])
+		print row
+		del row[:]
+	'''		
+	# backtrack the subsequence from the matrix
+	result = ""
+	x, y = len(a), len(b)
+	while x != 0 and y != 0:
+		if a[x-1] == b[y-1]: # charcters match
+			result = result+a[x-1]
+			x = x-1
+			y = y-1
+		else:
+        		top = Matrix[x-1][y]
+			left = Matrix[x][y-1]
+			if left <= top:
+				y = y-1
+			else:
+				x = x-1
+				
+	return result[::-1]#reversing the string
+
+
+'''
 def lcsr(xstr, ystr):
-    """
-    >>> lcs('thisisatest', 'testing123testing')
-    'tsitest'
-    """
     if not xstr or not ystr:
         return ""
     x, xs, y, ys = xstr[0], xstr[1:], ystr[0], ystr[1:]
@@ -88,17 +114,43 @@ def lcsr(xstr, ystr):
         return x + lcsr(xs, ys)
     else:
         return max(lcsr(xstr, ys), lcsr(xs, ystr), key=len)
+'''
+def lcs_recursive(a, b, LCS):
+	if len(a) == 1:
+		for x in range(0, len(b)):
+			if a[0] == b[x]:
+				LCS.append(a[0])
+	elif len(b) == 1:
+		for y in range(0, len(a)):
+			if b[0] == a[x]:
+				LCS.append(b[0])
 
+	else:
+		#computing the middle row
+		middle = (len(a)/2)-1
+		Matrix = [[0 for j in range(len(b)+1)] for i in range(len(a)+1)] # row 0 and column 0 are initialized to 0
+
+    		for i, x in enumerate(a):
+        		for j, y in enumerate(b):
+				if i<= middle:
+            				if x == y:
+                				Matrix[i+1][j+1] = Matrix[i][j] + 1
+            				else:
+                				Matrix[i+1][j+1] = max(Matrix[i+1][j], Matrix[i][j+1])
+		
+
+		
 def main():
 	StringA = str(raw_input("Enter String A: "))
 	StringB = str(raw_input("Enter String B: "))
+	LCSR = list()
 	ed = float( edit_distance(StringA, StringB) )
 	total_length = float( len(StringA) + len(StringB) )
 	normalized_edit_distance = (total_length - ed)/(total_length)
 	print "Edit Distance: ", ed
 	print "Normalized Edit Distance: ", normalized_edit_distance
 	LCS = lcs(StringA, StringB)
-	LCSR = lcsr(StringA, StringB)
+	lcs_recursive(StringA, StringB, LCSR)
 	print "Longest Common Subsequence: ", LCS
 	print "Longest Common Subsequence recursive: ", LCSR
 if __name__ == "__main__":
