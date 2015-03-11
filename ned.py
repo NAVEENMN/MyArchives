@@ -104,31 +104,23 @@ def lcs(a, b):
 				
 	return result[::-1]#reversing the string
 
-
-'''
-def lcsr(xstr, ystr):
-    if not xstr or not ystr:
-        return ""
-    x, xs, y, ys = xstr[0], xstr[1:], ystr[0], ystr[1:]
-    if x == y:
-        return x + lcsr(xs, ys)
-    else:
-        return max(lcsr(xstr, ys), lcsr(xs, ystr), key=len)
-'''
-
-def lcs_recursive(a, b, LCS):
+def lcs_recursive(a, b, LCSR):
+	print "inputs are", a
+	print b
 	if len(a) == 1:
 		for x in range(0, len(b)):
 			if a[0] == b[x]:
-				LCS.append(a[0])
+				LCSR.append(a[0])
 	elif len(b) == 1:
 		for y in range(0, len(a)):
-			if b[0] == a[x]:
-				LCS.append(b[0])
+			if b[0] == a[y]:
+				LCSR.append(b[0])
 
 	else:
 		#computing the middle row
 		middle = (len(a)/2)-1
+		if middle == 0:
+			middle = 1
 		print "middle is : ", middle
 		Matrix = [[0 for j in range(len(b)+1)] for i in range(len(a)+1)] # row 0 and column 0 are initialized to 0
 		for y in range(0, len(b)+1):
@@ -199,10 +191,29 @@ def lcs_recursive(a, b, LCS):
 				row.append(BottomMatrix[x][y])
 			print row
 			del row[:]
-	
-		
-		
 
+		f_row = TopMatrix[middle]
+		print "bug ", len(BottomMatrix) - 1
+		t = BottomMatrix[len(BottomMatrix) - 1]
+		b_row = t[::-1]
+		print "forward : ", f_row
+		print "backward: ", b_row
+
+		#finding mimimum edit distance
+		pool = list()
+		for x in range(0, len(f_row)):
+			pool.append( f_row[x] + b_row[x] )
+		end =  pool.index(min(pool)) 
+		x_front = ''.join(b[0:end]) # 0 to end 
+		y_front = ''.join(a[0:middle]) # 0 to middle
+		x_back = ''.join(b[end:])
+		y_back = ''.join(a[middle:])
+		print "x_front",x_front, len(x_front)
+		print "y_front",y_front, len(y_front)
+		print "x_back",x_back, len(x_back)
+		print "y_back",y_back, len(y_back)
+		lcs_recursive(x_front, y_front, LCSR)
+		lcs_recursive(x_back, y_back, LCSR)	
 		
 def main():
 	StringA = str(raw_input("Enter String A: "))
@@ -216,6 +227,6 @@ def main():
 	LCS = lcs(StringA, StringB)
 	lcs_recursive(StringA, StringB, LCSR)
 	print "Longest Common Subsequence: ", LCS
-	print "Longest Common Subsequence recursive: ", LCSR
+	print "Longest Common Subsequence recursive: ", ''.join(LCSR)
 if __name__ == "__main__":
 	main()
