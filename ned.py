@@ -115,6 +115,7 @@ def lcsr(xstr, ystr):
     else:
         return max(lcsr(xstr, ys), lcsr(xs, ystr), key=len)
 '''
+
 def lcs_recursive(a, b, LCS):
 	if len(a) == 1:
 		for x in range(0, len(b)):
@@ -128,15 +129,78 @@ def lcs_recursive(a, b, LCS):
 	else:
 		#computing the middle row
 		middle = (len(a)/2)-1
+		print "middle is : ", middle
 		Matrix = [[0 for j in range(len(b)+1)] for i in range(len(a)+1)] # row 0 and column 0 are initialized to 0
+		for y in range(0, len(b)+1):
+			Matrix[0][y] = y
+		for x in range(0, len(a)+1):
+			Matrix[x][0] = x
+		for i, x in enumerate(a, 1):
+        		for j, y in enumerate(b, 1):
+				if x <= middle: #first half of matrix
+					insert_cost = Matrix[i-1][j]+1
+					delete_cost = Matrix[i][j-1]+1
+					if x == y:
+						substitute_cost = Matrix[i-1][j-1]
+					else:
+						substitute_cost = Matrix[i-1][j-1]+1
+					cell_cost = min(insert_cost, delete_cost, substitute_cost)
+                			Matrix[i][j] = cell_cost
+		#Top Matrix compute		
+		TopMatrix = [[0 for j in range(len(b)+1)] for i in range(0,middle+1)] # row 0 and column 0 are initialized to 0
+		BottomMatrix = [[0 for j in range(len(b)+1)] for i in range(0,len(a)-middle+1)] # row 0 and column 0 are initialized to 0
+		for y in range(0, len(b)+1):
+			TopMatrix[0][y] = y
+		for x in range(0, middle+1):
+			TopMatrix[x][0] = x
+		for y in range(0, len(b)+1):
+			BottomMatrix[0][y] = y
+		for x in range(0, len(a)-middle+1):
+			BottomMatrix[x][0] = x
+		for i, x in enumerate(a, 1):
+        		for j, y in enumerate(b, 1):
+				if i <= middle: #first half of matrix
+					insert_cost = TopMatrix[i-1][j]+1
+					delete_cost = TopMatrix[i][j-1]+1
+					if x == y:
+						substitute_cost = TopMatrix[i-1][j-1]
+					else:
+						substitute_cost = TopMatrix[i-1][j-1]+1
+					cell_cost = min(insert_cost, delete_cost, substitute_cost)
+                			TopMatrix[i][j] = cell_cost
+	
+		temp = a[middle:]
+		c = temp[::-1]
+		d = b[::-1]
+		print BottomMatrix
+		for i, x in enumerate(c, 1):
+        		for j, y in enumerate(d, 1):
+				insert_cost = BottomMatrix[i-1][j]+1
+				delete_cost = BottomMatrix[i][j-1]+1
+				if x == y:
+					substitute_cost = BottomMatrix[i-1][j-1]
+				else:
+					substitute_cost = BottomMatrix[i-1][j-1]+1
+				cell_cost = min(insert_cost, delete_cost, substitute_cost)
+                		BottomMatrix[i][j] = cell_cost
 
-    		for i, x in enumerate(a):
-        		for j, y in enumerate(b):
-				if i<= middle:
-            				if x == y:
-                				Matrix[i+1][j+1] = Matrix[i][j] + 1
-            				else:
-                				Matrix[i+1][j+1] = max(Matrix[i+1][j], Matrix[i][j+1])
+		# uncomment the below section to see the table
+		row = list()
+		for x in range(0, middle+1):
+			for y in range(0, len(b)+1):
+				row.append(TopMatrix[x][y])
+			print row
+			del row[:]
+		print " "
+		# uncomment the below section to see the table
+		row = list()
+		for x in range(0, len(c)+1):
+			for y in range(0, len(b)+1):
+				row.append(BottomMatrix[x][y])
+			print row
+			del row[:]
+	
+		
 		
 
 		
