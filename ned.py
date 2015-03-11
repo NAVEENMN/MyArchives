@@ -1,9 +1,8 @@
 # Author : Naveen Mysore
 # UNCC ID: 800812071
-# project url : https://github.com/NAVEENMN/normalized_edit_distance
+# project url : https://github.com/NAVEENMN/normalized_edit_distance 
+# USAGE: python ned.py [filea.txt] [fileb.txt]
 
-#Copyright 2015. Naveen Mysore, Inc. All Rights Reserved.
-# 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
