@@ -1,5 +1,6 @@
 # Author : Naveen Mysore
 # UNCC ID: 800812071
+# project url : https://github.com/NAVEENMN/normalized_edit_distance
 
 #Copyright 2015. Naveen Mysore, Inc. All Rights Reserved.
 # 
