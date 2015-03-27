@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>UNCC CISE Dashboard</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+   <link href="dashboard.css" rel="stylesheet">
+   <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+   <script src='Chart.min.js'></script>
+</head>
+<body>
+
+<script type='text/javascript'>
+	
+	function year_report_view(type) {
+    		//Create an input type dynamically. 
+    		var element = [document.createElement("input"),document.createElement("input")];
+   		 //Assign different attributes to the element. 
+    		element[0].type = 'button';
+    		element[0].value = '2010'; // Really? You want the default value to be the type string?
+    		element[0].name = 'year';  // And the name too?
+    		element[0].onclick = function() { // Note this is a function
+        		overall_display(document.getElementById('year'));
+    		};
+    		var foo = document.getElementById("dash");
+    		//Append the element in page (in span).  
+    		foo.appendChild(element[0]);
+		//Create an input type dynamically. 
+    		//var element[1] = document.createElement("input");
+   		 //Assign different attributes to the element. 
+    		element[1].type = 'button';
+    		element[1].value = '2011'; // Really? You want the default value to be the type string?
+    		element[1].name = 'year';  // And the name too?
+    		element[1].onclick = function() { // Note this is a function
+        		overall_display(document.getElementById('year'));
+    		};
+    		var foo = document.getElementById("dash");
+    		//Append the element in page (in span).  
+    		foo.appendChild(element[1]);
+
+	}
+
+	function overall_display(elem){
+            		var buyers = document.getElementById('buyers').getContext('2d');
+			new Chart(buyers).Line(buyerData);
+			elem.focus();
+            		var countries= document.getElementById("countries").getContext("2d");
+            		new Chart(countries).Pie(pieData, pieOptions);
+           		var income = document.getElementById("income").getContext("2d");
+            		new Chart(income).Bar(barData);
+			return true;
+	}
+</script>
+
+<div class="navbar navbar-inverse" >
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" onclick="overall_display('2010');" >Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+        </div>
+      </div>
+</div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li><a href="#" onclick="year_report_view('button');">Year Reports</a></li>
+            <li><a href="#" onclick="combined_report_view();">Combined Report</a></li>
+            <li><a href="#" onclick="analytics_view()">Analytics</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-md-10  main" id="dash">
+          <h1 class="page-header">Dashboard</h1>
+	 <form>
+		<select id="year">
+			<option>2014</option>
+			<option>2013</option>
+			<option>2012</option>
+			<option>2011</option>
+			<option>2010</option>
+		</select>
+		<input type='button'
+		       onclick = "overall_display(document.getElementById('year'))"
+		 value='submit'/>
+	</form>	
+	<!-- line chart canvas element -->
+        <canvas id="buyers" width="400" height="200"></canvas>
+        <!-- pie chart canvas element -->
+        <canvas id="countries" width="400" height="200"></canvas>
+        <!-- bar chart canvas element -->
+        <canvas id="income" width="400" height="200"></canvas>
+	<script>
+            // line chart data
+            var buyerData = {
+                labels : ["January","February","March","April","May","June"],
+                datasets : [
+                {
+                    fillColor : "rgba(172,194,132,0.4)",
+                    strokeColor : "#ACC26D",
+                    pointColor : "#fff",
+                    pointStrokeColor : "#9DB86D",
+                    data : [203,156,99,251,305,247]
+                }
+            ]
+            }
+            // get line chart canvas
+            //var buyers = document.getElementById('buyers').getContext('2d');
+            // draw line chart
+            //new Chart(buyers).Line(buyerData);
+            // pie chart data
+            var pieData = [
+                {
+                    value: 20,
+                    color:"#878BB6"
+                },
+                {
+                    value : 40,
+                    color : "#4ACAB4"
+                },
+                {
+                    value : 10,
+                    color : "#FF8153"
+                },
+                {
+                    value : 30,
+                    color : "#FFEA88"
+                }
+            ];
+            // pie chart options
+            var pieOptions = {
+                 segmentShowStroke : false,
+                 animateScale : true
+            }
+            // bar chart data
+            var barData = {
+                labels : ["January","February","March","April","May","June"],
+                datasets : [
+                    {
+                        fillColor : "#48A497",
+                        strokeColor : "#48A4D1",
+                        data : [456,479,324,569,702,600]
+                    },
+                    {
+                        fillColor : "rgba(73,188,170,0.4)",
+                        strokeColor : "rgba(72,174,209,0.4)",
+                        data : [364,504,605,400,345,320]
+                    }
+                ]
+            }
+         </script>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="../../assets/js/vendor/holder.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
