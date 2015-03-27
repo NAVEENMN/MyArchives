@@ -16,43 +16,43 @@
 <body>
 
 <script type='text/javascript'>
-	
-	function year_report_view(type) {
-    		//Create an input type dynamically. 
-    		var element = [document.createElement("input"),document.createElement("input")];
-   		 //Assign different attributes to the element. 
-    		element[0].type = 'button';
-    		element[0].value = '2010'; // Really? You want the default value to be the type string?
-    		element[0].name = 'year';  // And the name too?
-    		element[0].onclick = function() { // Note this is a function
-        		overall_display(document.getElementById('year'));
-    		};
-    		var foo = document.getElementById("dash");
-    		//Append the element in page (in span).  
-    		foo.appendChild(element[0]);
-		//Create an input type dynamically. 
-    		//var element[1] = document.createElement("input");
-   		 //Assign different attributes to the element. 
-    		element[1].type = 'button';
-    		element[1].value = '2011'; // Really? You want the default value to be the type string?
-    		element[1].name = 'year';  // And the name too?
-    		element[1].onclick = function() { // Note this is a function
-        		overall_display(document.getElementById('year'));
-    		};
-    		var foo = document.getElementById("dash");
-    		//Append the element in page (in span).  
-    		foo.appendChild(element[1]);
-
-	}
+	function select_view(type) {
+		switch(type){
+			case 'year':
+				document.getElementById("dash").innerHTML = "";
+    				//Create an input type dynamically. 
+				var button = new Array(4);
+				var base_year = 2010;
+				for(i=0; i< 6; i++){
+					button[i] = document.createElement("input");
+					button[i].type = 'button';
+					button[i].value = base_year.toString();
+					base_year += 1;
+					button[i].name = 'year';
+					button[i].onclick = function(){
+						overall_display(document.getElementById('year'));
+					}
+					var attach_button = document.getElementById("dash");
+					attach_button.appendChild(button[i]);
+				}//for
+				break;
+			case 'combined':
+				document.getElementById("dash").innerHTML = "";
+				break;
+			default:
+				document.getElementById("dash").innerHTML = "";
+				break;
+		}//switch
+	}//select view
 
 	function overall_display(elem){
             		var buyers = document.getElementById('buyers').getContext('2d');
 			new Chart(buyers).Line(buyerData);
-			elem.focus();
             		var countries= document.getElementById("countries").getContext("2d");
             		new Chart(countries).Pie(pieData, pieOptions);
            		var income = document.getElementById("income").getContext("2d");
             		new Chart(income).Bar(barData);
+			elem.focus();
 			return true;
 	}
 </script>
@@ -66,7 +66,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="#">CISE Analytics Tool</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -82,25 +82,13 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li><a href="#" onclick="year_report_view('button');">Year Reports</a></li>
-            <li><a href="#" onclick="combined_report_view();">Combined Report</a></li>
-            <li><a href="#" onclick="analytics_view()">Analytics</a></li>
+            <li><a href="#" onclick="select_view('year');">Year Reports</a></li>
+            <li><a href="#" onclick="select_view('combined');">Combined Report</a></li>
+            <li><a href="#" onclick="select_view('analytics');">Analytics</a></li>
           </ul>
         </div>
-        <div class="col-sm-9 col-md-10  main" id="dash">
-          <h1 class="page-header">Dashboard</h1>
-	 <form>
-		<select id="year">
-			<option>2014</option>
-			<option>2013</option>
-			<option>2012</option>
-			<option>2011</option>
-			<option>2010</option>
-		</select>
-		<input type='button'
-		       onclick = "overall_display(document.getElementById('year'))"
-		 value='submit'/>
-	</form>	
+        <div class="col-sm-9 col-md-10  main">
+          <h1 class="page-header" id = "dash" >Year</h1>
 	<!-- line chart canvas element -->
         <canvas id="buyers" width="400" height="200"></canvas>
         <!-- pie chart canvas element -->
