@@ -42,6 +42,7 @@
 				clear_canvas('gender');
 				clear_canvas('race');
 				clear_canvas('level');
+				clear_canvas('ugender');
 				break;
 			default:
 				document.getElementById("dash").innerHTML = "";
@@ -59,6 +60,9 @@
 	function load_canvas_data(type){
 		var myFirebaseRef = new Firebase("https://cise.firebaseio.com/");
 		var universities;
+		var umales;
+		var ufemales; 
+		var uunspecified;
 		// gender variables
 		var male;
 		var female;
@@ -78,7 +82,7 @@
 		var totalapplicants;
 		var uniqueapplicants;
 		// level variables
-		var graphs = new Array(8);
+		var graphs = new Array(10);
 		// Data from Firebase ------------------------------------
 		//------ GENDER
 		myFirebaseRef.child("Totals/2014/gender/Male").on("value", function(snapshot) {
@@ -125,6 +129,19 @@
 		});
 		myFirebaseRef.child("Totals/2014/total/total applicants").on("value", function(snapshot) {
   			totalapplicants = snapshot.val();
+		});
+		//-------- university ugender
+		myFirebaseRef.child("Totals/2014/universities/list").on("value", function(snapshot) {
+  			universities = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/MALES/listmales").on("value", function(snapshot) {
+  			umales = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/FEMALES/listfemales").on("value", function(snapshot) {
+  			ufemales = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/UNSPECIFIED/listunspecified").on("value", function(snapshot) {
+  			uunspecified = snapshot.val();
 		});
 
 		//---------------------------------------------------------
@@ -225,6 +242,24 @@
                  	 animateScale : true
             	}
 
+
+		var ugenderchart = {
+    			labels: universities,
+    			datasets: [
+        		{
+				label: "Males",
+            			fillColor: "#48A497",
+            			strokeColor: "#48A4D1",
+            			data: umales
+        		},
+       	 		{
+				label: "Females",
+            			fillColor: "rgba(73,188,170,0.4)",
+            			strokeColor: "rgba(151,187,205,0.8)",
+            			data: ufemales
+        		}
+    			]
+		}
             	
 		graphs[0] = genderData;
 		graphs[1] = genderOptions;
@@ -233,25 +268,28 @@
 		graphs[4] = levelData;
 		graphs[5] = levelOptions;
 		graphs[6] = totalapplicants;
-		graphs[7] = uniqueapplicants;
+		graphs[7] = ugenderchart;
+		graphs[8] = uniqueapplicants;
 		return graphs;
 	}
 
 	function overall_display(elem){
 			graphs = load_canvas_data("overall");
-			if(graphs[7] != null){
+			if(graphs[8] != null){
 				var applicants = document.getElementById('applicants').getContext('2d');
 				applicants.font = "25px Georgia";
 				applicants.fillText("Total Applicants: " + graphs[6], 10, 30);
 				var uniqueapplicants = document.getElementById('uniqueapplicants').getContext('2d');
 				uniqueapplicants.font = "25px Georgia";
-				uniqueapplicants.fillText("Total Unique Applicants: " + graphs[7], 10, 30);
+				uniqueapplicants.fillText("Total Unique Applicants: " + graphs[8], 10, 30);
             			var gender = document.getElementById('gender').getContext('2d');
 				new Chart(gender).Pie(graphs[0], graphs[1]);
             			var race= document.getElementById('race').getContext("2d");
             			new Chart(race).Doughnut(graphs[2], graphs[3]);
            			var level = document.getElementById('level').getContext("2d");
             			new Chart(level).Doughnut(graphs[4], graphs[5]);
+				var ugender = document.getElementById('ugender').getContext("2d");
+				new Chart(ugender).Bar(graphs[7]);
 				elem.focus();
 			}
 			return true;
@@ -300,6 +338,8 @@
         <canvas id="race" width="300" height="150"></canvas>
         <!-- bar chart canvas element -->
         <canvas id="level" width="300" height="150"></canvas>
+	<br>
+	<canvas id="ugender" width="800" height="600"></canvas>
         </div>
       </div>
     </div>
