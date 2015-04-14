@@ -25,6 +25,16 @@ look_up['universities'] = 0
 look_up['listmales'] = 0
 look_up['listfemales'] = 0
 look_up['listunspecified'] = 0
+look_up['listWhite'] = 0
+look_up['listAfroAmerican'] = 0
+look_up['listAsian'] = 0
+look_up['listHispanicLatino'] = 0
+look_up['listmulti'] = 0
+look_up['listothers'] = 0
+look_up['listfreshman'] = 0
+look_up['listjunior'] = 0
+look_up['listsophomore'] = 0
+look_up['listsenior'] = 0
 
 fb = firebase.FirebaseApplication('https://cise.firebaseio.com/', None)
 # This function takes care of setting up the workbook and returns boundaries
@@ -44,6 +54,16 @@ def find_boundries(rb):
 	malelist = list()
 	femalelist = list()
 	unspecifiedlist = list()
+	listWhite = list()
+	listAfroAmerican = list()
+	listAsian = list()
+	listHispanicLatino = list()
+	listmulti = list()
+	listtotals = list()
+	listfreshman = list()
+	listsophomore = list()
+	listjunior = list()
+	listsenior = list()
 	# compute y boundry
 	while(val != "end"):
 		val = rb.sheet_by_index(0).cell(ycount,0).value
@@ -51,12 +71,35 @@ def find_boundries(rb):
 		malelist.append(rb.sheet_by_index(0).cell(ycount,4).value)
 		femalelist.append(rb.sheet_by_index(0).cell(ycount,5).value)
 		unspecifiedlist.append(rb.sheet_by_index(0).cell(ycount,6).value)
+		listWhite.append(rb.sheet_by_index(0).cell(ycount,7).value)
+		listAfroAmerican.append(rb.sheet_by_index(0).cell(ycount,8).value)
+		listAsian.append(rb.sheet_by_index(0).cell(ycount,9).value)
+		listtotals.append(rb.sheet_by_index(0).cell(ycount,1).value)
+		listHispanicLatino.append(rb.sheet_by_index(0).cell(ycount,11).value)
+		listfreshman.append(rb.sheet_by_index(0).cell(ycount,12).value)
+		listsophomore.append(rb.sheet_by_index(0).cell(ycount,13).value)
+		listjunior.append(rb.sheet_by_index(0).cell(ycount,14).value)
+		listsenior.append(rb.sheet_by_index(0).cell(ycount,15).value)
+		listmulti.append(rb.sheet_by_index(0).cell(ycount,10).value)
+
 		ycount = ycount + 1
 
 	look_up['universities'] = univ
 	look_up['listmales'] = malelist
 	look_up['listfemales'] = femalelist
 	look_up['listunspecified'] = unspecifiedlist
+	look_up['listWhite'] = listWhite
+	look_up['listAfroAmerican'] = listAfroAmerican
+	look_up['listAsian'] = listAsian
+	look_up['listHispanicLatino'] = listHispanicLatino
+	look_up['listmulti'] = listmulti
+	look_up['listtotals'] = listtotals
+	look_up['listfreshman'] = listfreshman
+	look_up['listjunior'] = listjunior
+	look_up['listsophomore'] = listsophomore
+	look_up['listsenior'] = listsenior
+
+
 	ycount = ycount - 1 
 	val = 0
 	while(val != "end"):
@@ -76,11 +119,32 @@ def main():
 	males = look_up['listmales']
 	females = look_up['listfemales']
 	unspecified = look_up['listunspecified']
-	print look_up['listmales']
+	lwhite = look_up['listWhite']
+	lafro = look_up['listAfroAmerican']
+	lasian = look_up['listAsian']
+	lhisp = look_up['listHispanicLatino'] 
+	lmulti = look_up['listmulti']
+	lttls = look_up['listtotals']
+	lfrmn = look_up['listfreshman']
+	ljr = look_up['listjunior'] 
+	lspo = look_up['listsophomore'] 
+	lsnr = look_up['listsenior'] 
+
 	fb.put("Totals","2014/universities",{"list" : universities[1:len(universities)-3]})
 	fb.put("Totals","2014/MALES",{"listmales" : males[1:len(universities)-3]})
 	fb.put("Totals","2014/FEMALES",{"listfemales" : females[1:len(universities)-3]})
 	fb.put("Totals","2014/UNSPECIFIED",{"listunspecified" : unspecified[1:len(universities)-3]})
+	fb.put("Totals","2014/whites",{"listwhites" : lwhite[1:len(universities)-3]})
+	fb.put("Totals","2014/afros",{"listafros" : lafro[1:len(universities)-3]})
+	fb.put("Totals","2014/asians",{"listasians" : lasian[1:len(universities)-3]})
+	fb.put("Totals","2014/hisps",{"listhisps" : lhisp[1:len(universities)-3]})
+	fb.put("Totals","2014/multis",{"listmultis" : lmulti[1:len(universities)-3]})
+	fb.put("Totals","2014/ttls",{"listttls" : lttls[1:len(universities)-3]})
+	fb.put("Totals","2014/freshmans",{"listfreshmans" : lfrmn[1:len(universities)-3]})
+	fb.put("Totals","2014/sophomores",{"listsophomores" : ljr[1:len(universities)-3]})
+	fb.put("Totals","2014/juniors",{"listjuniors" : lspo[1:len(universities)-3]})
+	fb.put("Totals","2014/seniors",{"listseniors" : lsnr[1:len(universities)-3]})
+
 
 	fb.put("Totals","2014/total",{"total applicants" : look_up["total applicants"],
 					 "Total Unique applicants" : look_up["Total Unique applicants"]})
