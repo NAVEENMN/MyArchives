@@ -173,6 +173,9 @@ def main():
    	sen = ['123','142','295','345','359']
     	mal = ['500','615','1156','1503','1867']
     	fem = ['187','220','380','593','711']
+	unqap = ['697','851','1552','2144','2543']
+	apponeplus = ['309','254','375','761','81']
+	femalesbasedon = ['27','26','24','28','27']
 
     	fb.put("Totals","combined/years",{"list" : yer})
     	fb.put("Totals","combined/males",{"listmales" : mal})
@@ -185,6 +188,9 @@ def main():
 	fb.put("Totals","combined/sop",{"sophomore" : sop})
 	fb.put("Totals","combined/jun",{"juniour" : jun})
 	fb.put("Totals","combined/sen",{"seniour" : sen})
+	fb.put("Totals","combined/uniqueapplicants",{"unique" : unqap})
+	fb.put("Totals","combined/oneplus",{"onep" : apponeplus})
+	fb.put("Totals","combined/fem",{"fembased" : femalesbasedon})
 
 #-----------
 if __name__ == "__main__" :
