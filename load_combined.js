@@ -1,12 +1,15 @@
 function load_combined_data(type){
+
     var myFirebaseRef = new Firebase("https://cise.firebaseio.com/");
     var year; var umales; var ufemales;
     // racial variables
     var causian; var africanamerican; var asian; var hispanic;
     // level variables
     var freshman; var sopohomore; var junior; var senior;
-
+    // applicants
+    var unique; var oneplus;
     var graphs = new Array(10);
+    var fem;
     //-------- year ugender
     myFirebaseRef.child("Totals/combined/years/list").on("value", function(snapshot) {
                                                             year = snapshot.val();
@@ -45,10 +48,28 @@ function load_combined_data(type){
     myFirebaseRef.child("Totals/combined/sen/seniour").on("value", function(snapshot) {
                                                        senior = snapshot.val();
                                                        });
-
-
+    //------- applicants
+    
+    myFirebaseRef.child("Totals/combined/oneplus/onep").on("value", function(snapshot) {
+                                                          oneplus = snapshot.val();
+                                                          });
+    myFirebaseRef.child("Totals/combined/uniqueapplicants/unique").on("value", function(snapshot) {
+                                                          unique = snapshot.val();
+                                                          });
+    
+    myFirebaseRef.child("Totals/combined/fem/fembased").on("value", function(snapshot) {
+                                                                      fem = snapshot.val();
+                                                                      });
 
     var genderOptions = {
+        legendTemplate : '<ul>'
+        +'<% for (var i=0; i<datasets.length; i++) { %>'
+        +'<li>'
+        +'<span style=\"background-color:<%=datasets[i].lineColor%>\"></span>'
+        +'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+        +'</li>'
+        +'<% } %>'
+        +'</ul>',
         segmentShowStroke : false,
         animateScale : true
     }
@@ -131,10 +152,55 @@ function load_combined_data(type){
                ]
     }
     
+    
+    var comapp = {
+    labels: year,
+    datasets: [
+               {
+               label: "Total Unique Applicants",
+               fillColor: "rgba(220,220,220,0.2)",
+               strokeColor: "rgba(220,220,220,1)",
+               pointColor: "rgba(220,220,220,1)",
+               pointStrokeColor: "#fff",
+               pointHighlightFill: "#fff",
+               pointHighlightStroke: "rgba(220,220,220,1)",
+               data: unique
+               },
+               {
+               label: "Applicants applying for one plus sites",
+               fillColor: "rgba(151,187,205,0.2)",
+               strokeColor: "rgba(151,187,205,1)",
+               pointColor: "rgba(151,187,205,1)",
+               pointStrokeColor: "#fff",
+               pointHighlightFill: "#fff",
+               pointHighlightStroke: "rgba(151,187,205,1)",
+               data: oneplus
+               }
+               ]
+    };
+    
+    var fembasedon = {
+    labels: year,
+    datasets: [
+               {
+               label: "Females based on total number of applicants",
+               fillColor: "rgba(220,220,220,0.2)",
+               strokeColor: "rgba(220,220,220,1)",
+               pointColor: "rgba(220,220,220,1)",
+               pointStrokeColor: "#fff",
+               pointHighlightFill: "#fff",
+               pointHighlightStroke: "rgba(220,220,220,1)",
+               data: fem
+               }
+               ]
+    };
+    
     graphs[0] = ugenderchart;
     graphs[1] = genderOptions;
     graphs[2] = uracechart;
     graphs[3] = ulevelchart;
+    graphs[4] = comapp;
+    graphs[5] = fembasedon;
     
     return graphs;
 }

@@ -1,6 +1,9 @@
 function load_year_data(type){
+    //alert('hello');
     var myFirebaseRef = new Firebase("https://cise.firebaseio.com/");
     var universities; var umales; var ufemales; var uunspecified;
+    var utotals;
+    var uwhites; var uafros; var uasians; var uhisps; var multis;
     // gender variables
     var male; var female; var unspecified;
     // racial variables
@@ -10,7 +13,7 @@ function load_year_data(type){
     // applicants
     var totalapplicants; var uniqueapplicants;
     // level variables
-    var graphs = new Array(10);
+    var graphs = new Array(12);
     // Data from Firebase ------------------------------------
     //------ GENDER
     myFirebaseRef.child("Totals/2014/gender/Male").on("value", function(snapshot) {
@@ -71,6 +74,23 @@ function load_year_data(type){
     myFirebaseRef.child("Totals/2014/UNSPECIFIED/listunspecified").on("value", function(snapshot) {
                                                                       uunspecified = snapshot.val();
                                                                       });
+    
+    myFirebaseRef.child("Totals/2014/whites/listwhites").on("value", function(snapshot) {
+                                                          uwhites = snapshot.val();
+                                                          });
+    myFirebaseRef.child("Totals/2014/afros/listafros").on("value", function(snapshot) {
+                                                              uafros = snapshot.val();
+                                                              });
+    myFirebaseRef.child("Totals/2014/asians/listasians").on("value", function(snapshot) {
+                                                                      uasians = snapshot.val();
+                                                                      });
+    myFirebaseRef.child("Totals/2014/hisps/listhisps").on("value", function(snapshot) {
+                                                            uhisps = snapshot.val();
+                                                            });
+    myFirebaseRef.child("Totals/2014/multis/listmultis").on("value", function(snapshot) {
+                                                            umultis = snapshot.val();
+                                                            });
+
     
     //---------------------------------------------------------
     // gender pie graph data
@@ -188,7 +208,41 @@ function load_year_data(type){
                }
                ]
     }
-    
+
+/*
+    var uracechart = {
+    labels: universities,
+    datasets: [
+               {
+               label: "Caucasian",
+            			fillColor: "#48A497",
+            			strokeColor: "#48A4D1",
+            			data: uwhites
+               },
+               label: "Africanamerican",
+            			fillColor: "#48A457",
+            			strokeColor: "#4854D1",
+            			data: uwhites
+               },
+               label: "Asian",
+            			fillColor: "#48A457",
+            			strokeColor: "#45A4D1",
+            			data: uwhites
+               },
+               label: "HispanicLatino",
+            			fillColor: "#48A597",
+            			strokeColor: "#45A4D1",
+            			data: uwhites
+               },
+               {
+               label: "multiracial",
+            			fillColor: "rgba(73,188,170,0.4)",
+            			strokeColor: "rgba(151,187,205,0.8)",
+            			data: uwhites
+               }
+               ]
+    }
+*/
     graphs[0] = genderData;
     graphs[1] = genderOptions;
     graphs[2] = raceData;
@@ -197,6 +251,7 @@ function load_year_data(type){
     graphs[5] = levelOptions;
     graphs[6] = totalapplicants;
     graphs[7] = ugenderchart;
-    graphs[8] = uniqueapplicants;
+    //graphs[8] = uracechart;
+    graphs[9] = uniqueapplicants;
     return graphs;
 }
