@@ -54,23 +54,31 @@ public class driver {
         source.minDistance = 0.;
         PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>();
       	vertexQueue.add(source);
-
+      	System.out.println("starting at " + source.name);
 	while (!vertexQueue.isEmpty()) {
 	    Vertex u = vertexQueue.poll();
-
+	    //vertexQueue.clear();
+	    	System.out.println("poped " + u.name);
             // Visit each edge exiting u
             for (Edge e : u.adjacencies)
             {
+            	System.out.println("to " + e.target.name);
                 Vertex v = e.target;
                 double weight = e.weight;
                 double distanceThroughU = u.minDistance + weight;
-		if (distanceThroughU < v.minDistance) {
-		    vertexQueue.remove(v);
-		    v.minDistance = distanceThroughU ;
-		    v.previous = u;
-		    vertexQueue.add(v);
-		}
+				if (distanceThroughU < v.minDistance) {
+					System.out.println("updating " + distanceThroughU);
+					System.out.println("removing" + v.name);
+				    vertexQueue.remove(v);
+				    v.minDistance = distanceThroughU ;
+				    v.previous = u;
+				    System.out.println("adding" + v.name);
+				    vertexQueue.add(v);
+				}else{
+					System.out.println("skipping");
+				}
             }
+            System.out.println("Queue" + vertexQueue);
         }
     }
 	
@@ -84,20 +92,54 @@ public class driver {
     }
 	
 	/*
+	 * 
+	 */
+	private static boolean check_if_node_exist(current_network network, String node){
+		if (network.nodes.contains(node) ){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	/*
 	 * name : execute
 	 * @Params : String
 	 * @Return: Void
 	 * @desp: This function takes care of executing the
 	 * 		  the commands the user issues. 
 	 */
-	private static void execute(String command){
+	private static void execute(current_network curr_net, String command){
 		String[] params = command.split(" ");
 		switch(params[0]){
 		case "print":
 			System.out.println("Executing print..");
+			ArrayList<Vertex> vertex = curr_net.nodes;
+			for (Vertex v : vertex){
+				System.out.println(v);
+				Edge[] adjacents = v.adjacencies;
+				for(Edge e : adjacents){
+					System.out.println("	" + e.target.name + " " + e.weight);
+				}
+			}
 			break;
 		case "path":
-			System.out.println("Executing path..");
+			//if(check_if_node_exist(curr_net, params[1]) && check_if_node_exist(curr_net, params[2])){
+				System.out.println("Executing path..");
+				ArrayList<Vertex> vertices = curr_net.nodes;
+				computePaths(curr_net.node_vertex.get(params[1]));
+				List<Vertex> path = getShortestPathTo(curr_net.node_vertex.get(params[2]));
+			    System.out.println("Path: " + path);
+			    /*
+				for (Vertex v : vertices)
+				{
+				    System.out.println("Distance to " + v + ": " + v.minDistance);
+				    List<Vertex> path = getShortestPathTo(v);
+				    System.out.println("Path: " + path);
+				}
+				*/
+				
+			//}
 			break;
 		case "edgedown":
 			System.out.println("Executing edgedown..");
@@ -201,7 +243,6 @@ public class driver {
 	            // creating bi directional graph
 	            for(String edge : network.topology_cost.keySet()){
 	            	String[] node = edge.split("-->");
-	            	System.out.println(node[0]);
 	            	Set<String> existing_edges = network.topology.get(node[0]);
 		            	existing_edges.add(node[1]);
 		            	network.topology.put(node[0], existing_edges);
@@ -214,6 +255,7 @@ public class driver {
 		return;
 	}
 	
+	
 	private static void setup_graph(network network, current_network current_network){
 		
 		Set<String> nodes = new HashSet<>();
@@ -221,7 +263,6 @@ public class driver {
 			String[] node = key.split("-->");
 			nodes.add(node[0]);
 		}
-		// We now have all nodes in the graph
 		
 		/*
 		 * Setup vertices for calculation
@@ -237,7 +278,7 @@ public class driver {
 		 */
 		for(Vertex node : current_network.nodes){
 			Set<String> edges_for_current_node = network.topology.get(node.name);
-			System.out.println("edges for " + node.name + " are" + edges_for_current_node);
+			//System.out.println("edges for " + node.name + " are" + edges_for_current_node);
 			Edge[] edges_array = new Edge[edges_for_current_node.size()];
 			int i = 0;
 			for (String edge : edges_for_current_node){
@@ -251,22 +292,13 @@ public class driver {
 		return;	
 	}
 	
+	
 	public static void main(String[] args){
 		/*
 		 * This sections reads the network toplogy
 		 */
 		network network = new network();
 		current_network current_network = new current_network();
-		read_network(network, args[0]);
-		setup_graph(network, current_network);
-		ArrayList<Vertex> vertex = current_network.nodes;
-		computePaths(vertex.get(0));
-		for (Vertex v : vertex)
-		{
-		    System.out.println("Distance to " + v + ": " + v.minDistance);
-		    List<Vertex> path = getShortestPathTo(v);
-		    System.out.println("Path: " + path);
-		}
 		/*
 		 *  This sections tells user about the available commands
 		 *  and how they can use it
@@ -290,10 +322,12 @@ public class driver {
 		Scanner user_input = new Scanner(System.in);
 		String command = "start";
 		while(!command.contains("quit")){
+			read_network(network, args[0]);
+			setup_graph(network, current_network);
 			System.out.println("please enter your command: ");
 			command = user_input.nextLine();
 			if(!command.contains("quit")){
-				execute(command);
+				execute(current_network, command);
 			}
 		}
 		// User has chosen to quit
