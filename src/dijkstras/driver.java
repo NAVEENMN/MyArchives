@@ -109,7 +109,7 @@ public class driver {
 	 * @desp: This function takes care of executing the
 	 * 		  the commands the user issues. 
 	 */
-	private static void execute(current_network curr_net, String command){
+	private static void execute(network network, current_network curr_net, String command){
 		String[] params = command.split(" ");
 		switch(params[0]){
 		case "print":
@@ -126,20 +126,11 @@ public class driver {
 		case "path":
 			//if(check_if_node_exist(curr_net, params[1]) && check_if_node_exist(curr_net, params[2])){
 				System.out.println("Executing path..");
+				setup_graph(network, curr_net);
 				ArrayList<Vertex> vertices = curr_net.nodes;
 				computePaths(curr_net.node_vertex.get(params[1]));
 				List<Vertex> path = getShortestPathTo(curr_net.node_vertex.get(params[2]));
 			    System.out.println("Path: " + path);
-			    /*
-				for (Vertex v : vertices)
-				{
-				    System.out.println("Distance to " + v + ": " + v.minDistance);
-				    List<Vertex> path = getShortestPathTo(v);
-				    System.out.println("Path: " + path);
-				}
-				*/
-				
-			//}
 			break;
 		case "edgedown":
 			System.out.println("Executing edgedown..");
@@ -158,6 +149,17 @@ public class driver {
 			break;
 		case "addedge":
 			System.out.println("Executing addedge..");
+			Set<String> edges_of_head = network.topology.get(params[1]);
+			edges_of_head.add(params[2]);
+			network.topology.put(params[1], edges_of_head);
+			Set<String> edges_of_tail = network.topology.get(params[2]);
+			edges_of_tail.add(params[1]);
+			network.topology.put(params[2], edges_of_tail);
+			network.topology_cost.put(params[1]+"-->"+params[2], Double.parseDouble(params[3]));
+			network.topology_cost.put(params[2]+"-->"+params[1], Double.parseDouble(params[3]));
+			System.out.println(network.topology);
+			System.out.println(network.topology_cost);
+			setup_graph(network, curr_net);
 			break;
 		default:
 			System.out.println("Unrecognized command");
@@ -321,13 +323,13 @@ public class driver {
 		 */
 		Scanner user_input = new Scanner(System.in);
 		String command = "start";
+		read_network(network, args[0]);
+		setup_graph(network, current_network);
 		while(!command.contains("quit")){
-			read_network(network, args[0]);
-			setup_graph(network, current_network);
 			System.out.println("please enter your command: ");
 			command = user_input.nextLine();
 			if(!command.contains("quit")){
-				execute(current_network, command);
+				execute(network, current_network, command);
 			}
 		}
 		// User has chosen to quit
