@@ -16,7 +16,9 @@ import java.util.StringTokenizer;
 
 class network{
 	Map<String, Set<String>> topology = new HashMap<String, Set<String>>();
+	Map<String, Boolean> topology_status = new HashMap<String, Boolean>();
 	Map<String, Double> topology_cost = new HashMap<String, Double>();
+	Map<String, Boolean> topology_cost_status = new HashMap<String, Boolean>();
 }
 
 class current_network{
@@ -29,7 +31,7 @@ class Vertex implements Comparable<Vertex>
     public Edge[] adjacencies;
     public double minDistance = Double.POSITIVE_INFINITY;
     public Vertex previous;
-    public Vertex(String argName) { name = argName; }
+    public Vertex(String argName) { name = argName;}
     public String toString() { return name; }
     public int compareTo(Vertex other)
     {
@@ -42,7 +44,7 @@ class Edge
     public final Vertex target;
     public final double weight;
     public Edge(Vertex argTarget, double argWeight)
-    { target = argTarget; weight = argWeight; }
+    { target = argTarget; weight = argWeight;}
 }
 
 
@@ -62,6 +64,7 @@ public class driver {
             // Visit each edge exiting u
             for (Edge e : u.adjacencies)
             {
+            	if(e != null ){
             	System.out.println("to " + e.target.name);
                 Vertex v = e.target;
                 double weight = e.weight;
@@ -77,8 +80,8 @@ public class driver {
 				}else{
 					System.out.println("skipping");
 				}
+            	}
             }
-            System.out.println("Queue" + vertexQueue);
         }
     }
 	
@@ -118,8 +121,11 @@ public class driver {
 			for (Vertex v : vertex){
 				System.out.println(v);
 				Edge[] adjacents = v.adjacencies;
+				
 				for(Edge e : adjacents){
-					System.out.println("	" + e.target.name + " " + e.weight);
+					if(e != null){
+						System.out.println("	" + e.target.name + " " + e.weight);
+					}	
 				}
 			}
 			break;
@@ -134,18 +140,33 @@ public class driver {
 			break;
 		case "edgedown":
 			System.out.println("Executing edgedown..");
+			network.topology_cost_status.put(params[1]+"-->"+params[2], false);
+			network.topology_cost_status.put(params[2]+"-->"+params[1], false);
+			setup_graph(network, curr_net);
 			break;
 		case "vertexdown":
 			System.out.println("Executing vertexdown..");
 			break;
 		case "edgeup":
 			System.out.println("Executing edgeup..");
+			network.topology_cost_status.put(params[1]+"-->"+params[2], true);
+			network.topology_cost_status.put(params[2]+"-->"+params[1], true);
+			setup_graph(network, curr_net);
 			break;
 		case "vertexup":
 			System.out.println("Executing vertexup..");
 			break;
 		case "deleteedge":
 			System.out.println("Executing deleteedge..");
+			Set<String> edge_of_head = network.topology.get(params[1]);
+			edge_of_head.remove(params[2]);
+			network.topology.put(params[1], edge_of_head);
+			Set<String> edge_of_tail = network.topology.get(params[2]);
+			edge_of_tail.remove(params[1]);
+			network.topology.put(params[2], edge_of_tail);
+			network.topology_cost.remove(params[1]+"-->"+params[2]);
+			network.topology_cost.remove(params[2]+"-->"+params[1]);
+			setup_graph(network, curr_net);
 			break;
 		case "addedge":
 			System.out.println("Executing addedge..");
@@ -157,8 +178,6 @@ public class driver {
 			network.topology.put(params[2], edges_of_tail);
 			network.topology_cost.put(params[1]+"-->"+params[2], Double.parseDouble(params[3]));
 			network.topology_cost.put(params[2]+"-->"+params[1], Double.parseDouble(params[3]));
-			System.out.println(network.topology);
-			System.out.println(network.topology_cost);
 			setup_graph(network, curr_net);
 			break;
 		default:
@@ -208,6 +227,8 @@ public class driver {
 	                    	network.topology.put(source, edges);
 	                    	network.topology_cost.put(source + "-->" + dest, cost);
 	                    	network.topology_cost.put(dest + "-->" + source, cost);
+	                    	network.topology_cost_status.put(source + "-->" + dest, true);
+	                    	network.topology_cost_status.put(dest + "-->" + source, true);
 	                    }else{//new node to graph
 	                    	ArrayList<String> edge = new ArrayList<String>(
 	                    		    Arrays.asList(dest));
@@ -215,6 +236,8 @@ public class driver {
 	                    	network.topology.put(source, foo);
 	                    	network.topology_cost.put(source + "-->" + dest, cost);
 	                    	network.topology_cost.put(dest + "-->" + source, cost);
+	                    	network.topology_cost_status.put(source + "-->" + dest, true);
+	                    	network.topology_cost_status.put(dest + "-->" + source, true);
 	                    }                  
 	                }
 	                catch( NumberFormatException e )
@@ -286,7 +309,9 @@ public class driver {
 			for (String edge : edges_for_current_node){
 				Vertex v = current_network.node_vertex.get(edge);
 				Double cost = network.topology_cost.get(node.name + "-->" + edge);
-				edges_array[i] = new Edge(v, cost);
+				if(network.topology_cost_status.get(node.name + "-->" + edge)){
+					edges_array[i] = new Edge(v, cost); // add only if edge is up
+				}
 				i++;
 			}
 			node.adjacencies = edges_array;
