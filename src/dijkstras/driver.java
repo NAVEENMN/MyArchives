@@ -1,5 +1,19 @@
 package dijkstras;
-
+/*
+ * Author : Naveen Mysore (800812071)
+ * University of North Carolina at Charlotte
+ * ITCS 6114 Project 2
+ * Description : This is the implementation of Dijkstra`s Algorithm 
+ * 				 for dynamic network.
+ * 				 Status
+ * 			     Dijstra`s algorithm : Implemented
+ * 				 Graph based network changes:
+ * 											 aadedge and deleteedge: Implemented
+ * 											 edgedown and edgeup : Implemented
+ * 											 print : Prints all up vertcies and edges
+ * 											 queue using heap : Implemented
+ * 											 reachable : Implemented using breadth first search
+ */
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
