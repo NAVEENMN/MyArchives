@@ -340,7 +340,7 @@ public class driver {
 	    			String[] node = key.split("-->");
 	    			nodes.add(node[0]);
 	    		}
-	            // adding remaing nodes as keys
+	            // adding reaming nodes as keys
 	            for(String edge : network.topology_cost.keySet()){
 	            	String[] node = edge.split("-->");
 	            	Set<String> existing_edges = network.topology.get(node[0]);
