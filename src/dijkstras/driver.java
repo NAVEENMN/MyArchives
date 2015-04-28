@@ -56,29 +56,23 @@ public class driver {
         source.minDistance = 0.;
         PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>();
       	vertexQueue.add(source);
-      	System.out.println("starting at " + source.name);
 	while (!vertexQueue.isEmpty()) {
 	    Vertex u = vertexQueue.poll();
 	    //vertexQueue.clear();
-	    	System.out.println("poped " + u.name);
             // Visit each edge exiting u
             for (Edge e : u.adjacencies)
             {
             	if(e != null ){
-            	System.out.println("to " + e.target.name);
                 Vertex v = e.target;
                 double weight = e.weight;
                 double distanceThroughU = u.minDistance + weight;
 				if (distanceThroughU < v.minDistance) {
-					System.out.println("updating " + distanceThroughU);
-					System.out.println("removing" + v.name);
 				    vertexQueue.remove(v);
 				    v.minDistance = distanceThroughU ;
 				    v.previous = u;
-				    System.out.println("adding" + v.name);
 				    vertexQueue.add(v);
 				}else{
-					System.out.println("skipping");
+					//System.out.println("skipping");
 				}
             	}
             }
@@ -117,7 +111,9 @@ public class driver {
 		switch(params[0]){
 		case "print":
 			System.out.println("Executing print..");
+			setup_graph(network, curr_net);
 			ArrayList<Vertex> vertex = curr_net.nodes;
+			System.out.println(vertex.size());
 			for (Vertex v : vertex){
 				System.out.println(v);
 				Edge[] adjacents = v.adjacencies;
@@ -125,7 +121,7 @@ public class driver {
 				for(Edge e : adjacents){
 					if(e != null){
 						System.out.println("	" + e.target.name + " " + e.weight);
-					}	
+					} 	
 				}
 			}
 			break;
@@ -136,25 +132,27 @@ public class driver {
 				ArrayList<Vertex> vertices = curr_net.nodes;
 				computePaths(curr_net.node_vertex.get(params[1]));
 				List<Vertex> path = getShortestPathTo(curr_net.node_vertex.get(params[2]));
-			    System.out.println("Path: " + path);
+			    System.out.println("Path: " + path +" "+curr_net.node_vertex.get(params[2]).minDistance);
 			break;
 		case "edgedown":
 			System.out.println("Executing edgedown..");
 			network.topology_cost_status.put(params[1]+"-->"+params[2], false);
-			network.topology_cost_status.put(params[2]+"-->"+params[1], false);
 			setup_graph(network, curr_net);
 			break;
 		case "vertexdown":
 			System.out.println("Executing vertexdown..");
+			network.topology_status.put(params[1], false);
+			setup_graph(network, curr_net);
 			break;
 		case "edgeup":
 			System.out.println("Executing edgeup..");
 			network.topology_cost_status.put(params[1]+"-->"+params[2], true);
-			network.topology_cost_status.put(params[2]+"-->"+params[1], true);
 			setup_graph(network, curr_net);
 			break;
 		case "vertexup":
 			System.out.println("Executing vertexup..");
+			network.topology_status.put(params[1], true);
+			setup_graph(network, curr_net);
 			break;
 		case "deleteedge":
 			System.out.println("Executing deleteedge..");
@@ -179,6 +177,9 @@ public class driver {
 			network.topology_cost.put(params[1]+"-->"+params[2], Double.parseDouble(params[3]));
 			network.topology_cost.put(params[2]+"-->"+params[1], Double.parseDouble(params[3]));
 			setup_graph(network, curr_net);
+			break;
+		case "reachable":
+			
 			break;
 		default:
 			System.out.println("Unrecognized command");
@@ -271,7 +272,8 @@ public class driver {
 	            	Set<String> existing_edges = network.topology.get(node[0]);
 		            	existing_edges.add(node[1]);
 		            	network.topology.put(node[0], existing_edges);
-	            	
+		            	network.topology_status.put(node[0], true);
+		            	network.topology_status.put(node[1], true);
 	            }
 	            graphFile.close();
 	         }
@@ -292,10 +294,13 @@ public class driver {
 		/*
 		 * Setup vertices for calculation
 		 */
+		current_network.nodes.clear();
 		for (String node : nodes){
-			Vertex temp_node = new Vertex(node);
-			current_network.node_vertex.put(node, temp_node);
-			current_network.nodes.add(temp_node);// to retrive these nodes save them
+			if(network.topology_status.get(node)){
+				Vertex temp_node = new Vertex(node);
+				current_network.node_vertex.put(node, temp_node);
+				current_network.nodes.add(temp_node);// to retrive these nodes save them
+			}
 		}
 		
 		/*
@@ -361,6 +366,5 @@ public class driver {
 		System.out.println("Exiting the program...");
 		user_input.close();
 	}
-	
 	
 }
