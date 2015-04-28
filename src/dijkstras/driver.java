@@ -7,9 +7,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -31,6 +33,7 @@ class Vertex implements Comparable<Vertex>
     public Edge[] adjacencies;
     public double minDistance = Double.POSITIVE_INFINITY;
     public Vertex previous;
+    public Boolean visited;
     public Vertex(String argName) { name = argName;}
     public String toString() { return name; }
     public int compareTo(Vertex other)
@@ -51,19 +54,27 @@ class Edge
 
 public class driver {
 	
+	/*
+	 * name : computePaths
+	 * @Params : Vertex
+	 * @Return: Void
+	 * @desp: This function computes the graph path costs using Dijkstra`s algorithm. 
+	 */
 	public static void computePaths(Vertex source)
     {
         source.minDistance = 0.;
         PriorityQueue<Vertex> vertexQueue = new PriorityQueue<Vertex>();
+        heap<Vertex> hp = new heap<Vertex>();
       	vertexQueue.add(source);
-	while (!vertexQueue.isEmpty()) {
+      	hp.insert(source);
+      	while (!vertexQueue.isEmpty()) {
 	    Vertex u = vertexQueue.poll();
-	    //vertexQueue.clear();
-            // Visit each edge exiting u
+      	Vertex minimum_cost_node = hp.min();
             for (Edge e : u.adjacencies)
             {
             	if(e != null ){
                 Vertex v = e.target;
+                Vertex min = minimum_cost_node;
                 double weight = e.weight;
                 double distanceThroughU = u.minDistance + weight;
 				if (distanceThroughU < v.minDistance) {
@@ -71,6 +82,7 @@ public class driver {
 				    v.minDistance = distanceThroughU ;
 				    v.previous = u;
 				    vertexQueue.add(v);
+				    hp.insert(v);
 				}else{
 					//System.out.println("skipping");
 				}
@@ -79,17 +91,27 @@ public class driver {
         }
     }
 	
-	public static List<Vertex> getShortestPathTo(Vertex target)
+	/*
+	 * name : getShortestPathTo
+	 * @Params : Vertex
+	 * @Return: Void
+	 * @desp: This function retrieves the shortest path from a given node to
+	 * 		  queried node. 
+	 */
+	public static List<Vertex> getShortestPathTo(Vertex node)
     {
         List<Vertex> path = new ArrayList<Vertex>();
-        for (Vertex vertex = target; vertex != null; vertex = vertex.previous)
+        for (Vertex vertex = node; vertex != null; vertex = vertex.previous)
             path.add(vertex);
         Collections.reverse(path);
         return path;
     }
 	
 	/*
-	 * 
+	 * name : check_if_node_exist
+	 * @Params : String
+	 * @Return: boolean
+	 * @desp: This function checks if the given node name is correct or not . 
 	 */
 	private static boolean check_if_node_exist(current_network network, String node){
 		if (network.nodes.contains(node) ){
@@ -98,7 +120,46 @@ public class driver {
 			return false;
 		}
 	}
-	
+	/*
+	 * name : depth_first_search
+	 * @Params : Vertex
+	 * @Return: Void
+	 * @desp: This function finds all nodes reachable. 
+	 * 	      The run time of this algorithm is O(|V|+|E|)
+	 * 		  where is number of vertices present in this graph and E is 
+	 * 		  corresponding edges.
+	 */
+	private static void breadth_first_search(Vertex root, network network){
+		 //Since queue is a interface
+        Queue<Vertex> queue = new LinkedList<Vertex>();
+
+        if(root == null) return;
+
+        root.visited = true;
+         //Adds to end of queue
+        queue.add(root);
+        
+        while(!queue.isEmpty())
+        {
+            //removes from front of queue
+            Vertex r = queue.remove(); 
+            System.out.print("  "+r.name + "\n");
+
+            //Visit child first before grandchild
+            for( Edge edges : root.adjacencies)
+            {
+                if(! edges.target.visited)
+                {
+                
+                	if( network.topology_status.get(edges.target.name)){
+                		queue.add(edges.target);
+                	}
+                		edges.target.visited = true;
+                	
+                }
+            }
+        }
+	}
 	/*
 	 * name : execute
 	 * @Params : String
@@ -179,7 +240,19 @@ public class driver {
 			setup_graph(network, curr_net);
 			break;
 		case "reachable":
-			
+			setup_graph(network, curr_net);
+			for(Vertex nd :curr_net.nodes ){
+				nd.visited = false;
+			}
+			for(String node : network.topology.keySet()){
+				System.out.println(node);
+				if( network.topology_status.get(node)){
+					breadth_first_search(curr_net.node_vertex.get(node), network);
+            	}
+				for(Vertex nd :curr_net.nodes ){
+					nd.visited = false;
+				}
+			}
 			break;
 		default:
 			System.out.println("Unrecognized command");
@@ -304,7 +377,7 @@ public class driver {
 		}
 		
 		/*
-		 * Setup edges for calcutaion
+		 * Setup edges for calculation
 		 */
 		for(Vertex node : current_network.nodes){
 			Set<String> edges_for_current_node = network.topology.get(node.name);
