@@ -5,6 +5,8 @@ package dijkstras;
  * ITCS 6114 Project 2
  * Description : This is the implementation of Dijkstra`s Algorithm 
  * 				 for dynamic network.
+ * 				 Please follow the command format and node names which will be displayed
+ * 				 Error handling is not implement.
  * 				 Status
  * 			     Dijstra`s algorithm : Implemented
  * 				 Graph based network changes:
@@ -332,7 +334,7 @@ public class driver {
 	                  { System.err.println( "Skipping ill-formatted line " + line ); }
 	             }
 	            
-	            System.out.println(network.topology_cost);
+	            //System.out.println(network.topology_cost);
 	            Set<String> nodes = new HashSet<>();
 	    		for(String key : network.topology_cost.keySet()){
 	    			String[] node = key.split("-->");
@@ -422,7 +424,7 @@ public class driver {
 		 *  This sections tells user about the available commands
 		 *  and how they can use it
 		 */
-		/*
+		
 		System.out.println("Please use following commands"
 				+ "\nprint"
 				+ "\npath vertex1 vertex2"
@@ -434,7 +436,7 @@ public class driver {
 				+ "\ndeleteedge vertex1 vertex2"
 				+ "\naddedge vertex1 vertex2 cost"
 				+ "\nquit");
-				*/
+				
 		/*
 		 * Take command from user in this section
 		 */
