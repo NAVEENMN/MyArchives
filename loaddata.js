@@ -1,5 +1,4 @@
-function load_year_data(type){
-    //alert('hello');
+function load_year_data(year){
     var myFirebaseRef = new Firebase("https://cise.firebaseio.com/");
     var universities; var umales; var ufemales; var uunspecified;
     var utotals;
@@ -16,78 +15,78 @@ function load_year_data(type){
     var graphs = new Array(12);
     // Data from Firebase ------------------------------------
     //------ GENDER
-    myFirebaseRef.child("Totals/2014/gender/Male").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/gender/Male").on("value", function(snapshot) {
                                                       male = snapshot.val();
                                                       });
-    myFirebaseRef.child("Totals/2014/gender/Female").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/gender/Female").on("value", function(snapshot) {
                                                         female = snapshot.val();
                                                         });
-    myFirebaseRef.child("Totals/2014/gender/unspecified").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/gender/unspecified").on("value", function(snapshot) {
                                                              unspecified = snapshot.val();
                                                              });
     //------ RACIAL
-    myFirebaseRef.child("Totals/2014/race/White").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/race/White").on("value", function(snapshot) {
                                                      causian = snapshot.val();
                                                      });
-    myFirebaseRef.child("Totals/2014/race/Afro American").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/race/Afro American").on("value", function(snapshot) {
                                                              africanamerican = snapshot.val();
                                                              });
-    myFirebaseRef.child("Totals/2014/race/Asian").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/race/Asian").on("value", function(snapshot) {
                                                      asian = snapshot.val();
                                                      });
-    myFirebaseRef.child("Totals/2014/race/Hispanic").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/race/Hispanic").on("value", function(snapshot) {
                                                         hispanic = snapshot.val();
                                                         });
-    myFirebaseRef.child("Totals/2014/race/others").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/race/others").on("value", function(snapshot) {
                                                       multi = snapshot.val();
                                                       });
     //------- LEVEL
-    myFirebaseRef.child("Totals/2014/level/freshman").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/level/freshman").on("value", function(snapshot) {
                                                          freshman = snapshot.val();
                                                          });
-    myFirebaseRef.child("Totals/2014/level/sopohomore").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/level/sopohomore").on("value", function(snapshot) {
                                                            sopohomore = snapshot.val();
                                                            });
-    myFirebaseRef.child("Totals/2014/level/junior").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/level/junior").on("value", function(snapshot) {
                                                        junior = snapshot.val();
                                                        });
-    myFirebaseRef.child("Totals/2014/level/senior").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/level/senior").on("value", function(snapshot) {
                                                        senior = snapshot.val();
                                                        });
     //--------- applicants
-    myFirebaseRef.child("Totals/2014/total/Total Unique applicants").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/total/Total Unique applicants").on("value", function(snapshot) {
                                                                         uniqueapplicants = snapshot.val();
                                                                         });
-    myFirebaseRef.child("Totals/2014/total/total applicants").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/total/total applicants").on("value", function(snapshot) {
                                                                  totalapplicants = snapshot.val();
                                                                  });
     //-------- university ugender
-    myFirebaseRef.child("Totals/2014/universities/list").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/universities/list").on("value", function(snapshot) {
                                                             universities = snapshot.val();
                                                             });
-    myFirebaseRef.child("Totals/2014/MALES/listmales").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/MALES/listmales").on("value", function(snapshot) {
                                                           umales = snapshot.val();
                                                           });
-    myFirebaseRef.child("Totals/2014/FEMALES/listfemales").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/FEMALES/listfemales").on("value", function(snapshot) {
                                                               ufemales = snapshot.val();
                                                               });
-    myFirebaseRef.child("Totals/2014/UNSPECIFIED/listunspecified").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/UNSPECIFIED/listunspecified").on("value", function(snapshot) {
                                                                       uunspecified = snapshot.val();
                                                                       });
     
-    myFirebaseRef.child("Totals/2014/whites/listwhites").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/whites/listwhites").on("value", function(snapshot) {
                                                           uwhites = snapshot.val();
                                                           });
-    myFirebaseRef.child("Totals/2014/afros/listafros").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/afros/listafros").on("value", function(snapshot) {
                                                               uafros = snapshot.val();
                                                               });
-    myFirebaseRef.child("Totals/2014/asians/listasians").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/asians/listasians").on("value", function(snapshot) {
                                                                       uasians = snapshot.val();
                                                                       });
-    myFirebaseRef.child("Totals/2014/hisps/listhisps").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/hisps/listhisps").on("value", function(snapshot) {
                                                             uhisps = snapshot.val();
                                                             });
-    myFirebaseRef.child("Totals/2014/multis/listmultis").on("value", function(snapshot) {
+    myFirebaseRef.child("Totals/"+year+"/multis/listmultis").on("value", function(snapshot) {
                                                             umultis = snapshot.val();
                                                             });
 

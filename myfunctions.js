@@ -5,28 +5,84 @@ function select_view(type) {
             document.getElementById("dash").innerHTML = "";
             //Create an input type dynamically.
             var button = new Array(4);
-            var base_year = 2010;
-            for(i=0; i< 6; i++){
-                button[i] = document.createElement("input");
-                button[i].type = 'button';
-                button[i].value = base_year.toString();
-                base_year += 1;
-                button[i].name = 'year';
-                button[i].onclick = function(){
-                    $.when( overall_display('year') ).done(function() {
-                                           overall_display('year');
-                    });
-                    
-                }
-                var attach_button = document.getElementById("dash");
-                attach_button.appendChild(button[i]);
-            }//for
+            var base_year = 2014;
+            //---------- Button 2014
+            button[0] = document.createElement("input");
+            button[0].type = 'button';
+            button[0].id = base_year.toString();
+            button[0].value = base_year.toString();
+            base_year -= 1;
+            button[0].name = 'year2014';
+            button[0].onclick = function(){
+                var h = 2;
+                $.when( overall_display('year','2014') ).done(function(h) {
+                                                       alert(val.toString);
+                                                       overall_display();
+                                                       });
+                
+            }
+            var attach_button = document.getElementById("dash");
+            attach_button.appendChild(button[0]);
+            //---------- Button 2013
+            button[1] = document.createElement("input");
+            button[1].type = 'button';
+            button[1].id = base_year.toString();
+            button[1].value = base_year.toString();
+            base_year -= 1;
+            button[1].name = 'year2013';
+            button[1].onclick = function(){
+                var h = 2;
+                $.when( overall_display('year','2013') ).done(function(h) {
+                                                       alert(val.toString);
+                                                       overall_display();
+                                                       });
+                
+            }
+            var attach_button = document.getElementById("dash");
+            attach_button.appendChild(button[1]);
+            //----------------------
+            //---------- Button 2012
+            button[2] = document.createElement("input");
+            button[2].type = 'button';
+            button[2].id = base_year.toString();
+            button[2].value = base_year.toString();
+            base_year -= 1;
+            button[2].name = 'year2012';
+            button[2].onclick = function(){
+                var h = 2;
+                $.when( overall_display('year','2012') ).done(function(h) {
+                                                              alert(val.toString);
+                                                              overall_display();
+                                                              });
+                
+            }
+            var attach_button = document.getElementById("dash");
+            attach_button.appendChild(button[2]);
+            //----------------------
+            //---------- Button 2011
+            button[3] = document.createElement("input");
+            button[3].type = 'button';
+            button[3].id = base_year.toString();
+            button[3].value = base_year.toString();
+            base_year -= 1;
+            button[3].name = 'year2011';
+            button[3].onclick = function(){
+                var h = 2;
+                $.when( overall_display('year','2011') ).done(function(h) {
+                                                              alert(val.toString);
+                                                              overall_display();
+                                                              });
+                
+            }
+            var attach_button = document.getElementById("dash");
+            attach_button.appendChild(button[3]);
+            //----------------------
             break;
         case 'combined':
             clear_year_canvas();
             document.getElementById("dash").innerHTML = "";
             $.when( overall_display('combined') ).done(function() {
-                                                   overall_display('combined');
+                                                   overall_display('combined',0);
                                                    });
             
             break;
@@ -55,14 +111,16 @@ function clear_canvas(canvas_id){
     return true;
 }
 
-function overall_display(view_type){
+function overall_display(view_type, year){
     switch(view_type){
             case 'year':
-                        $.when( graphs = load_year_data("overall") ).done(function() {
+                        clear_year_canvas();
+                        $.when( graphs = load_year_data(year) ).done(function() {
                                 setup_year_views(graphs);
                         });
                         break;
             case 'combined':
+                        clear_year_canvas();
                         $.when( graphs = load_combined_data("combined") ).done(function() {
                                 setup_combined_views(graphs);
                         });
