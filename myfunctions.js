@@ -1,3 +1,12 @@
+
+
+var comgenchart;
+var comracechart;
+var comlevelchart;
+var comugenderchart;
+var comapp;
+var comfemapp;
+
 function select_view(type) {
     switch(type){
         case 'year':
@@ -115,6 +124,7 @@ function overall_display(view_type, year){
     switch(view_type){
             case 'year':
                         clear_year_canvas();
+            
                         graphs = load_year_data('2014');
                         graphs = load_year_data('2013');
                         graphs = load_year_data('2012');
@@ -128,12 +138,15 @@ function overall_display(view_type, year){
                         break;
             case 'combined':
                         clear_year_canvas();
+            
                         $.when( graphs = load_combined_data("combined") ).done(function() {
                                 setup_combined_views(graphs);
                         });
             
                         break;
     }
+    //if(view_type == 'year')
+    //clean_up_chart_instances();
     return true;
 }
 
@@ -147,18 +160,27 @@ function checkFlag(flag) {
     }
 }
 
-function setup_year_views(graphs){
+function clean_up_chart_instances(){
+    comgenchart.destroy();
+    comracechart.destroy();
+    comlevelchart.destroy();
+    comugenderchart.destroy();
+    comapp.destroy();
+    comfemapp.destroy();
+}
 
+function setup_year_views(graphs){
+    
     var applicants = document.getElementById('headline1').getContext('2d'); applicants.font = "25px Georgia"; applicants.fillText("Total Applicants: " + graphs[6], 10, 30);
     var uniqueapplicants = document.getElementById('headline2').getContext('2d'); uniqueapplicants.font = "25px Georgia"; uniqueapplicants.fillText("Total Unique Applicants: " + graphs[9], 10, 30);
     // pies
-    var gender = document.getElementById('sec1').getContext('2d'); var comgenchart = new Chart(gender).Pie(graphs[0], graphs[1]);
+    var gender = document.getElementById('sec1').getContext('2d'); comgenchart = new Chart(gender).Pie(graphs[0], graphs[1]);
     document.getElementById("sec1legend").innerHTML = comgenchart.generateLegend();
-    var race= document.getElementById('sec2').getContext("2d"); var comracechart = new Chart(race).Doughnut(graphs[2], graphs[3]);
+    var race= document.getElementById('sec2').getContext("2d"); comracechart = new Chart(race).Doughnut(graphs[2], graphs[3]);
     document.getElementById("sec2legend").innerHTML = comracechart.generateLegend();
-    var level = document.getElementById('sec3').getContext("2d"); var comlevelchart = new Chart(level).Doughnut(graphs[4], graphs[5]);
+    var level = document.getElementById('sec3').getContext("2d"); comlevelchart = new Chart(level).Doughnut(graphs[4], graphs[5]);
     document.getElementById("sec3legend").innerHTML = comlevelchart.generateLegend();
-    var ugender = document.getElementById('sec4').getContext("2d"); var comugenderchart = new Chart(ugender).Bar(graphs[7]);
+    var ugender = document.getElementById('sec4').getContext("2d"); comugenderchart = new Chart(ugender).Bar(graphs[7]);
     document.getElementById("sec4legend").innerHTML = comugenderchart.generateLegend();
     //var urace = document.getElementById('sec5').getContext("2d"); var comuracechart = new Chart(urace).Bar(graphs[8]);
     //document.getElementById("sec5legend").innerHTML = comuracechart.generateLegend();
@@ -168,17 +190,18 @@ function setup_year_views(graphs){
 
 function setup_combined_views(graphs){
     var headline = document.getElementById('headline1').getContext('2d'); headline.font = "25px Georgia"; headline.fillText("Cumilative report from 2010 onwards", 10, 30);
-    var comgender = document.getElementById('sec2').getContext('2d'); var comgenchart = new Chart(comgender).Bar(graphs[0], graphs[1]);
+    var comgender = document.getElementById('sec2').getContext('2d'); comgenchart = new Chart(comgender).Bar(graphs[0], graphs[1]);
     document.getElementById("sec2legend").innerHTML = comgenchart.generateLegend();
-    var comrace = document.getElementById('sec5').getContext('2d'); var comracechart = new Chart(comrace).Bar(graphs[2]);
+    var comrace = document.getElementById('sec5').getContext('2d'); comracechart = new Chart(comrace).Bar(graphs[2]);
     document.getElementById("sec5legend").innerHTML = comracechart.generateLegend();
-    var comlevel = document.getElementById('sec4').getContext('2d'); var comlevelchart = new Chart(comlevel).Bar(graphs[3]);
+    var comlevel = document.getElementById('sec4').getContext('2d'); comlevelchart = new Chart(comlevel).Bar(graphs[3]);
     document.getElementById("sec4legend").innerHTML = comlevelchart.generateLegend();
-    var comappicants = document.getElementById('sec1').getContext('2d'); var comapp = new Chart(comappicants).Line(graphs[4]);
+    var comappicants = document.getElementById('sec1').getContext('2d'); comapp = new Chart(comappicants).Line(graphs[4]);
     document.getElementById("sec1legend").innerHTML = comapp.generateLegend();
-    var comfem = document.getElementById('sec3').getContext('2d'); var comfemapp = new Chart(comfem).Line(graphs[5]);
+    var comfem = document.getElementById('sec3').getContext('2d'); comfemapp = new Chart(comfem).Line(graphs[5]);
     document.getElementById("sec3legend").innerHTML = comfemapp.generateLegend();
     
     elem.focus();
+    
 }
 
