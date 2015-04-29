@@ -115,7 +115,14 @@ function overall_display(view_type, year){
     switch(view_type){
             case 'year':
                         clear_year_canvas();
+                        graphs = load_year_data('2014');
+                        graphs = load_year_data('2013');
+                        graphs = load_year_data('2012');
+                        graphs = load_year_data('2011');
                         $.when( graphs = load_year_data(year) ).done(function() {
+                                if(graphs[6] == null){//data not yet loaded
+                                    graphs[6] = 'please double click';
+                                }
                                 setup_year_views(graphs);
                         });
                         break;
@@ -128,6 +135,16 @@ function overall_display(view_type, year){
                         break;
     }
     return true;
+}
+
+function checkFlag(flag) {
+    if(flag == null) {
+        clear_year_canvas();
+        window.setTimeout(overall_display, 100); /* this checks the flag every 100 milliseconds*/
+    } else {
+        /* do something*/
+        return;
+    }
 }
 
 function setup_year_views(graphs){
