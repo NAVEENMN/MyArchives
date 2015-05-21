@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.metster"
-    android:versionCode="1"
+    package="com.nmysore.metster"
+    android:versionCode="3"
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="17"
-        android:targetSdkVersion="18" />
+        android:minSdkVersion="16"
+        android:targetSdkVersion="21" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -23,16 +23,15 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
-        android:name="com.example.metster.permission.C2D_MESSAGE"
+        android:name="com.nmysore.metster.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.example.metster.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.nmysore.metster.permission.C2D_MESSAGE" />
 
     <application
         android:allowBackup="true"
@@ -40,20 +39,20 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <receiver
-            android:name=".GcmBroadcastReceiver"
+            android:name="com.nmysore.metster.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.example.metster" />
+                <category android:name="com.nmysore.metster" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".GcmIntentService" />
+        <service android:name="com.nmysore.metster.GcmIntentService" />
 
         <activity
-            android:name=".HomescreenActivity"
+            android:name="com.nmysore.metster.HomescreenActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme" >
@@ -63,25 +62,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SignUpActivity"
-            android:label="@string/title_activity_sign_up"
-            android:parentActivityName=".HomescreenActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/FullscreenTheme" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.metster.HomescreenActivity" />
-        </activity>
+   
         <activity android:name="com.facebook.LoginActivity" />
         <activity
-            android:name=".Login"
+            android:name="com.nmysore.metster.Login"
             android:label="@string/title_activity_login"
             android:parentActivityName=".HomescreenActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.metster.HomescreenActivity" />
+                android:value="com.nmysore.metster.HomescreenActivity" />
         </activity>
 
         <meta-data
@@ -89,106 +79,52 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyC460-cuQqQx-nF7xWfYFVXkov9ql7Q0kQ" />
+            android:value="AIzaSyDUL5JCD2DCnOROSKAnWhZ-q6Z8gn3PSnI" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity
-            android:name=".ProfilelistActivity"
-            android:label="@string/title_activity_profilelist"
-            android:parentActivityName=".Login"
-            android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.metster.Login" />
-        </activity>
+    
 
         <uses-library android:name="com.google.android.maps" />
 
+  
         <activity
-            android:name=".UpdateProfile"
-            android:label="@string/title_activity_update_profile"
-            android:parentActivityName=".Login"
-            android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.metster.Login" />
-        </activity>
-        <activity
-            android:name=".VisitorProfile"
-            android:label="@string/title_activity_visitor_profile"
-            android:parentActivityName=".ProfilelistActivity"
-            android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.metster.ProfilelistActivity" />
-        </activity>
-        <activity
-            android:name=".Profiles"
-            android:label="@string/title_activity_profiles" >
-        </activity>
-        <activity
-            android:name=".LoadHome"
+            android:name="com.nmysore.metster.LoadHome"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_load_home"
             android:parentActivityName=".HomescreenActivity"
             android:theme="@style/FullscreenTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.metster.HomescreenActivity" />
+                android:value="com.nmysore.metster.HomescreenActivity" />
         </activity>
         <activity
-            android:name=".Settings"
+            android:name="com.nmysore.metster.Settings"
             android:label="@string/title_activity_settings" >
         </activity>
+      
+     
         <activity
-            android:name=".Profession_info"
-            android:label="@string/title_activity_profession_info" >
-        </activity>
-        <activity
-            android:name=".Loading_screen"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_loading_screen"
-            android:theme="@style/FullscreenTheme" >
-        </activity>
-        <activity
-            android:name=".Upload_Image"
-            android:label="@string/title_activity_upload__image" >
-        </activity>
-        <activity
-            android:name=".Rend"
-            android:label="@string/title_activity_rend"
-            android:parentActivityName=".Login"
-            android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.metster.Login" />
-        </activity>
-        <activity
-            android:name=".MeetUp"
-            android:label="@string/title_activity_meet_up" >
-        </activity>
-        <activity
-            android:name=".ViewPlaces"
+            android:name="com.nmysore.metster.ViewPlaces"
             android:label="@string/title_activity_view_places" >
         </activity>
         <activity
-            android:name=".CentraDash"
+            android:name="com.nmysore.metster.CentraDash"
             android:label="@string/title_activity_centra_dash" >
         </activity>
         <activity
-            android:name=".Getlocation"
+            android:name="com.nmysore.metster.Getlocation"
             android:label="@string/title_activity_getlocation" >
         </activity>
         <activity
-            android:name=".GCM_handle"
+            android:name="com.nmysore.metster.GCM_handle"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_gcm_handle"
             android:theme="@style/FullscreenTheme" >
         </activity>
         <activity
-            android:name=".Accept_invite"
+            android:name="com.nmysore.metster.Accept_invite"
             android:label="@string/title_activity_accept_invite" >
         </activity>
     </application>

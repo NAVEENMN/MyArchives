@@ -113,16 +113,50 @@
           android:name="com.google.android.gms.maps.MapFragment"/>
 
 	<!-- ******************************************************************* Map region               -->
+	<LinearLayout 
+    	android:id="@+id/ActionButtons"
+    	style="?android:attr/buttonBarButtonStyle"
+        android:background="@android:color/transparent"
+        android:paddingTop="2dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    
+  
 
-	<Button
-	    android:id="@+id/Rend"
+   <Button
+	    android:id="@+id/create_a_new_event"
+	    style="?android:attr/buttonBarStyle"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_alignParentBottom="true"
-	    android:layout_centerHorizontal="true"
+	    android:background="@android:color/transparent"
+	    android:drawableTop="@drawable/buttoneventhandler"
+	    android:onClick="Create_A_New_Event" />
+   
+   <Button
+	    android:id="@+id/add_friends"
+	    style="?android:attr/buttonBarButtonStyle"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
 	    android:background="@android:color/transparent"
 	    android:drawableTop="@drawable/buttonhandler"
-	    android:onClick="AccessButton" />
+	    android:onClick="Add_Friends" />
+   
+   <Button
+	    android:id="@+id/meet_up"
+	    style="?android:attr/buttonBarStyle"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:background="@android:color/transparent"
+	    android:drawableTop="@drawable/buttonmeetuphandler"
+	    android:onClick="Meet_Up" />
+    
+</LinearLayout>
+
+	
 
     </RelativeLayout>
        
