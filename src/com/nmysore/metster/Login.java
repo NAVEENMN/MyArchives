@@ -1,18 +1,11 @@
 package com.nmysore.metster;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -52,7 +45,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -88,8 +80,6 @@ import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -593,11 +583,7 @@ public class Login extends Activity {
 
 		});
 		// ----------------------- long pressed ends here
-		
-		
-		
-		
-		
+	
 	}// on create
 
 	/*
@@ -683,7 +669,10 @@ public class Login extends Activity {
 	}
 
 	/*
-	 * This method is for setting up map UI
+	 * name : set_up_map_view
+	 * @params : None
+	 * @retun : void
+	 * @desp : This function sets up the initial map view 
 	 */
 	public void set_up_map_view() {
 
@@ -799,19 +788,6 @@ public class Login extends Activity {
 												.fromResource(R.drawable.mp))
 										.title("explore neighbourhood"));
 
-								mMap.setOnMapLongClickListener(new OnMapLongClickListener() {
-
-									@Override
-									public void onMapLongClick(LatLng arg0) {
-										// TODO Auto-generated method stub
-										System.out.println("long press called");
-										get_places_mean_loc(
-												commondata.places_found.latitudes
-														.get(j),
-												commondata.places_found.longitudes
-														.get(j));
-									}
-								});
 
 							} else {
 								mMap.addMarker(new MarkerOptions()
@@ -835,25 +811,6 @@ public class Login extends Activity {
 				LatLng currlocation = new LatLng(
 						commondata.user_information.latitude,
 						commondata.user_information.longitude);// yours
-				mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
-
-					@Override
-					public boolean onMarkerClick(Marker point) {
-						// TODO Auto-generated method stub
-
-						if (point.getTitle().equals("explore neighbourhood")) {// action
-																				// for
-																				// click
-																				// on
-																				// center
-							System.out.println("exploring"
-									+ point.getTitle().toString());
-							get_places_mean_loc(point.getPosition().latitude,
-									point.getPosition().longitude);
-						}
-						return false;
-					}
-				});
 				mMap.getUiSettings().setZoomControlsEnabled(false);
 			} catch (Exception e) {
 				System.out.println("something fishy in setting up map");
@@ -869,8 +826,12 @@ public class Login extends Activity {
 	}
 
 	/*
-	 * This method is called on clicking image this sets the ui color and
-	 * controls location listeners
+	 * name : on_image_click
+	 * @params : View view
+	 * @return : void
+	 * @desp : This function sets the the location listener for user
+	 * 		   This is a toggle function, If the color is red location listener is turned off
+	 * 		   If the color is blue then the application will keep pushing user location.
 	 */
 	public void on_image_click(View view) {
 		if (listnerflag) {
@@ -1078,20 +1039,6 @@ public class Login extends Activity {
 		});
 
 		alert.show();
-
-	}
-
-	/*
-	 * Home button triggers this function
-	 */
-	public void AccessButton(View view) {
-
-		if (commondata.event_information.eventID == null) {// no event exist
-			create_event_notfication();
-		} else {// event exists
-			// ContactPicker();
-			list_friends();
-		}
 
 	}
 
@@ -1384,31 +1331,12 @@ public class Login extends Activity {
 		levelDialog.show();
 	}
 
-	public void get_places_mean_loc(Double mean_latitude, Double mean_longitude) {
-		
-		/*
-		String req_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
-				+ mean_latitude
-				+ ","
-				+ mean_longitude
-				+ "&radius=2000&types=food"
-				+ "&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE";
-		try {
-			ArrayList<Restaurant> run_places = new GetRestraunts().execute(
-					req_url).get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		*/
-		System.out.println("This is called");
-		list_rest();
-	}
-
+	/*
+	 * name : list_friends
+	 * @params : None
+	 * @return : void
+	 * @desp : This function lists all Facebook friends and send invite upon click.
+	 */
 	private void list_friends() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Add a friend");
@@ -1719,72 +1647,6 @@ public class Login extends Activity {
 			}
 		});
 	}
-
-	private class GetRestraunts extends
-			AsyncTask<String, Void, ArrayList<Restaurant>> {
-
-		protected ArrayList<Restaurant> doInBackground(String... arg0) {
-			try {
-				URL url = new URL(arg0[0]);
-
-				HttpURLConnection con = (HttpURLConnection) url
-						.openConnection();
-				con.setRequestMethod("GET");
-				con.connect();
-				int statuscode = con.getResponseCode();
-				if (statuscode == HttpURLConnection.HTTP_OK) {
-					BufferedReader reader = new BufferedReader(
-							new InputStreamReader(con.getInputStream()));
-					StringBuilder sb = new StringBuilder();
-					String line = reader.readLine();
-
-					while (line != null) {
-						sb.append(line);
-						line = reader.readLine();
-					}
-
-					Log.d("demo", sb.toString());
-					return RestaurantUtil.RestaurantsJSONParser
-							.parseRestaurants(sb.toString());
-				}
-
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(ArrayList<Restaurant> result) {
-			super.onPostExecute(result);
-			restlist = result;
-			Iterator<Restaurant> res = result.iterator();
-			while (res.hasNext()) {
-				Restaurant re = res.next();
-
-				commondata.places_found.places.add(re.getName());
-				commondata.places_found.latitudes.add(re.getLatitude());
-				commondata.places_found.longitudes.add(re.getLongitude());
-				commondata.places_found.price.add(re.getprice());
-				commondata.places_found.ratings.add(re.getratings());
-			}
-
-			list_rest();
-		}
-
-	}
-	
-	
 	
 	private class NetworkOperation extends AsyncTask<String, Void, String> {
 
@@ -1813,7 +1675,12 @@ public class Login extends Activity {
     }
 
 	
-	
+	/*
+	 * name : postData
+	 * @params : String url, String, String
+	 * @return : String
+	 * @desp : This function makes http post request and returns the server response
+	 */
 	private String postData(String url, String param1, String param2) {
 	    // Create a new HttpClient and Post Header
 	    HttpClient httpclient = new DefaultHttpClient();
@@ -1863,7 +1730,6 @@ public class Login extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Button button;
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			if (commondata.event_information.eventID != null) {
