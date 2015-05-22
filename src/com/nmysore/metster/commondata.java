@@ -1,6 +1,7 @@
 package com.nmysore.metster;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.JSONArray;
 
@@ -64,6 +65,13 @@ public class commondata {
 		static ArrayList<Double> ratings = new ArrayList<Double>();
 		static ArrayList<String> names = new ArrayList<String>();
 		static ArrayList<String> tokens = new ArrayList<String>();
+		static ArrayList<String> rankedplaces = new ArrayList<String>();
+		static ArrayList<Double> rankedlatitudes = new ArrayList<Double>();
+		static ArrayList<Double> rankedlongitudes = new ArrayList<Double>();
+		static HashMap<Double, String> ranking_places = new HashMap<Double, String>(); // This hashmap links rank as key and place as value
+		static HashMap<String, Double> ranking_latitudes = new HashMap<String, Double>();// This hashmap gets place as key and latitude as value
+		static HashMap<String, Double> ranking_longitudes = new HashMap<String, Double>();// This hashmap gets place as key and longitudes as value
+		
 	}
 	
 	public static class gcm_incoming{

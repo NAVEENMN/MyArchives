@@ -478,6 +478,8 @@ public class Login extends Activity {
 				// TODO Auto-generated method stub
 
 			}
+			
+			
 		};
 		// ------------------------------------------------------------------------
 		// getting GPS and network status
@@ -574,11 +576,35 @@ public class Login extends Activity {
 		// ----------------------------------------------------------------------->
 		// Button Actions
 		SetupUIdata();
+		
+		/*
+		 * This method is triggered after long pressed of home button
+		 */
+		Button b1 = (Button) findViewById(R.id.meet_up);
+		b1.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
+				if (commondata.event_information.eventID != null) {
+					list_rest();
+				}
+				return true;
+			}
 
+		});
+		// ----------------------- long pressed ends here
+		
+		
+		
+		
+		
 	}// on create
 
 	/*
-	 * This method is used to toast the information
+	 * name : tost_info
+	 * @params : String
+	 * @return : void
+	 * @desp : This function prints the data on to the screen. location of the data can be tuned here.
 	 */
 
 	private void toast_info(String info) {
@@ -602,7 +628,10 @@ public class Login extends Activity {
 	}
 
 	/*
-	 * This method sets up the initial UI
+	 * name : SetupUIdata
+	 * @params : None
+	 * @return : void
+	 * @desp : This function is used to setup the initial screen upon loading. 
 	 */
 	public void SetupUIdata() {
 
@@ -775,6 +804,7 @@ public class Login extends Activity {
 									@Override
 									public void onMapLongClick(LatLng arg0) {
 										// TODO Auto-generated method stub
+										System.out.println("long press called");
 										get_places_mean_loc(
 												commondata.places_found.latitudes
 														.get(j),
@@ -1133,9 +1163,55 @@ public class Login extends Activity {
 				    @Override
 				    public void run() {
 				    	System.out.println("before");
-				    		postData("http://54.183.113.236/metster/exe_get_loc.php", commondata.event_information.eventID,
+				    		String ranked_list = postData("http://54.183.113.236/metster/exe_get_loc.php", commondata.event_information.eventID,
 				    			"event-"+ commondata.facebook_details.facebook);
-				    
+				    		try {
+								JSONObject rest_list = new JSONObject(ranked_list);
+								Iterator<String> places  = rest_list.keys();
+								
+								/*
+								 * This section reads the json data responded from the server
+								 * the data is in the form of place name as key and location and rank as values
+								 * example : Philz : [[15.7637, -80.896987],[2.0]]
+								 */
+								
+								while(places.hasNext()){
+									String place_name;
+									Double latitude = null;
+									Double longitude = null;
+									Double rank = null;
+									String place = places.next();
+									place_name = place;
+									JSONArray value = (JSONArray) rest_list.get(place);
+									for(int i=0; i< value.length(); i++){
+										if(i == 0){
+											JSONArray loc = (JSONArray) value.get(i);
+											latitude = loc.getDouble(0); // latitude
+											longitude = loc.getDouble(1); // longitude
+										}else{
+											rank = value.getDouble(i);
+										}
+									}
+									//System.out.println(place_name + "is at " + latitude +" " + longitude + "and ranks" + rank);
+									commondata.places_found.ranking_places.put(rank, place_name);
+									commondata.places_found.ranking_latitudes.put(place, latitude);
+									commondata.places_found.ranking_longitudes.put(place_name, longitude);
+								}
+								
+								/*
+								 * this section sets up the common data from the server in sorted order
+								 */
+								for(Double rnk = 0.0; rnk < commondata.places_found.ranking_places.size(); rnk = rnk + 1.0){
+									String current_place_name = commondata.places_found.ranking_places.get(rnk);
+									Double current_place_latitude = commondata.places_found.ranking_latitudes.get(current_place_name);
+									Double current_place_longitude = commondata.places_found.ranking_longitudes.get(current_place_name);
+									System.out.println(current_place_name + " "+ current_place_latitude + " "+current_place_longitude);
+								}
+								
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 				};
 
@@ -1309,10 +1385,8 @@ public class Login extends Activity {
 	}
 
 	public void get_places_mean_loc(Double mean_latitude, Double mean_longitude) {
-
+		
 		/*
-		 * food type radius get it from firebase group profile
-		 */
 		String req_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
 				+ mean_latitude
 				+ ","
@@ -1329,7 +1403,10 @@ public class Login extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		*/
+		System.out.println("This is called");
+		list_rest();
 	}
 
 	private void list_friends() {
@@ -1459,8 +1536,16 @@ public class Login extends Activity {
 		ListView modeList = new ListView(this);
 		final ArrayList<String> stringArray = new ArrayList<String>();
 		stringArray.clear();
-		for (int i = 0; i < commondata.places_found.places.size(); i++)
-			stringArray.add(commondata.places_found.places.get(i));
+		
+		/*
+		 * This section pulls the data from the dictonary in commondata and loads for display
+		 */
+		
+		for(Double rnk = 0.0 ; rnk < commondata.places_found.ranking_places.size(); rnk = rnk + 1){
+			String list_place = commondata.places_found.ranking_places.get(rnk); // this gives the place name
+			stringArray.add(list_place);
+		}
+		
 		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, android.R.id.text1,
 				stringArray);
@@ -1470,6 +1555,7 @@ public class Login extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
+				/*
 				Iterator<Restaurant> res = restlist.iterator();
 				while (res.hasNext()) {
 					Restaurant tempres = res.next();
@@ -1493,7 +1579,7 @@ public class Login extends Activity {
 				}
 
 				// TODO Auto-generated method stub
-
+				 */
 			}
 
 		});
