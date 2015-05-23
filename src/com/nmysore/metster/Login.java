@@ -705,7 +705,7 @@ public class Login extends Activity {
 			mMap.setTrafficEnabled(true);
 			try {
 				for (int i = 0; i < commondata.places_found.latitudes.size(); i++) {
-
+					System.out.println("setting up : " + commondata.places_found.latitudes.get(i) + ", " + commondata.places_found.longitudes.get(i) );
 					if (commondata.places_found.tokens.get(i).contains("final")) {
 						mMap.addMarker(new MarkerOptions()
 								.position(
@@ -723,13 +723,7 @@ public class Login extends Activity {
 						if (commondata.places_found.tokens.get(i).contains(
 								"rest")) {// they
 											// are
-											// restraunts
-							String price = commondata.places_found.price.get(i)
-									.toString();
-							if (price == "0.0") {
-								price = "no info";
-							}
-
+											// restraunt
 							mMap.addMarker(new MarkerOptions()
 									.position(
 											new LatLng(
@@ -740,12 +734,10 @@ public class Login extends Activity {
 
 									.icon(BitmapDescriptorFactory
 											.fromResource(R.drawable.flag))
-									.snippet(
-											"ratings:"
-													+ commondata.places_found.ratings
-															.get(i) + "|"
-													+ "price: " + price)
 									.title(commondata.places_found.names.get(i)));
+							
+							System.out.println("possible bug here");
+							
 							if (event_info.is_host) {
 								mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 
@@ -1178,8 +1170,13 @@ public class Login extends Activity {
 									node.price_level = price_level;
 									node.address = address;
 									node.contact = contact;
-									node.location = location;
-	
+									
+									// location is in this format [lat, lon] in string, bring it to double so we can use it
+									String[] tempclean = location.split(",");
+									System.out.println("lat " + tempclean[0]);
+									System.out.println("lon"+ tempclean[1]);
+									node.latitude = Double.parseDouble(tempclean[0].replace("[", ""));
+									node.longitude = Double.parseDouble(tempclean[1].replace("]", ""));
 									commondata.places_found.ranking_places.put(rank, place_refrence);
 									commondata.places_found.ranking_nodes.put(place_refrence, node);
 									
@@ -1533,33 +1530,32 @@ public class Login extends Activity {
 		modeList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+			public void onItemClick(AdapterView<?> items, View arg1, int order,
 					long arg3) {
-				/*
-				Iterator<Restaurant> res = restlist.iterator();
-				while (res.hasNext()) {
-					Restaurant tempres = res.next();
-					if (tempres.getName().equals(arg0.getItemAtPosition(arg2))) {
-						create_firebase_refrence();
-
-						fb_event_ref.firebaseobj
-								.child("rest*0--"
-										+ arg0.getItemAtPosition(arg2)
-												.toString().replace(".", ""))
-								.child("Latitude")
-								.setValue(tempres.getLatitude());
-						fb_event_ref.firebaseobj
-								.child("rest*0--"
-										+ arg0.getItemAtPosition(arg2)
-												.toString().replace(".", ""))
-								.child("Longitude")
-								.setValue(tempres.getLongitude());
-
-					}
-				}
-
-				// TODO Auto-generated method stub
-				 */
+				
+				System.out.println("selected " + items.getItemIdAtPosition(order)); // order is also traced to rank
+				
+				create_firebase_refrence();
+				
+				double rank = (double)items.getItemIdAtPosition(order); // we have to select item of that rank
+				
+				String current_place_refrence = commondata.places_found.ranking_places.get(rank);
+				place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
+				
+				
+			
+				
+				fb_event_ref.firebaseobj
+				.child("rest*0--"
+						+ node.place_name.replace(".", ""))
+				.child("Latitude")
+				.setValue(node.latitude);
+				fb_event_ref.firebaseobj
+				.child("rest*0--"
+						+ node.place_name.replace(".", ""))
+				.child("Longitude")
+				.setValue(node.longitude);
+			
 			}
 
 		});

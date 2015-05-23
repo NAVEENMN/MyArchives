@@ -83,7 +83,8 @@ public class commondata {
 		Double price_level;
 		String address;
 		String contact;
-		String location;
+		Double latitude;
+		Double longitude;
 		
 	}
 	
