@@ -258,8 +258,7 @@ def main():
         if(score > best_scores):
             add_node_to_fb(event_id, mpnode)
         else:
-            add_best_node_to_fb(event_id, lt, ln)
-
+            add_best_node_to_fb(event_id, lt, ln)		
 
 if __name__ == "__main__":
     main()

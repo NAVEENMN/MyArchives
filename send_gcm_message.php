@@ -16,7 +16,7 @@ $res = mysql_query("SELECT * FROM details
 $dat = mysql_fetch_array( $res );
 $sender_name  = $dat['name'];
 
-    define("GOOGLE_API_KEY", "AIzaSyDD4oVTLZlXbD7QkUrl7OAyqWRTs4C8fu4");
+    define("GOOGLE_API_KEY", "AIzaSyBfCAM-iEN1R2gYLuAIbeqpRRy0rnFjmhs");
     define("GOOGLE_GCM_URL", "https://android.googleapis.com/gcm/send");
 
     function send_gcm_notify($reg_id, $message) {
