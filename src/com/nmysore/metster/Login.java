@@ -40,7 +40,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -85,6 +84,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nmysore.metster.commondata.place_details;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class Login extends Activity {
 
@@ -153,7 +159,7 @@ public class Login extends Activity {
 	RadioGroup travelchoice;
 	ArrayList<Restaurant> restlist;
 	int infocounter;
-
+	ImageView imageView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -165,6 +171,22 @@ public class Login extends Activity {
 		setTitle("New Event");
 		Firebase.setAndroidContext(this);
 
+		
+		// UNIVERSAL IMAGE LOADER SETUP
+				DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+						.cacheOnDisc(true).cacheInMemory(true)
+						.imageScaleType(ImageScaleType.EXACTLY)
+						.displayer(new FadeInBitmapDisplayer(300)).build();
+
+				ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+						getApplicationContext())
+						.defaultDisplayImageOptions(defaultOptions)
+						.memoryCache(new WeakMemoryCache())
+						.discCacheSize(100 * 1024 * 1024).build();
+
+				ImageLoader.getInstance().init(config);
+				// END - UNIVERSAL IMAGE LOADER SETUP
+		
 		if (commondata.facebook_details.facebook == null) {
 			Intent intent = new Intent(Login.this, HomescreenActivity.class);
 			startActivity(intent);
@@ -399,7 +421,7 @@ public class Login extends Activity {
 		locationListener = new LocationListener() {
 			public void onLocationChanged(Location location) {
 				if (location != null) {
-
+					
 					commondata.user_information.latitude = location
 							.getLatitude();
 					commondata.user_information.longitude = location
@@ -856,9 +878,12 @@ public class Login extends Activity {
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onBackPressed() This method is for existing
-	 * safely
+	 * @see android.app.Activity#onBackPressed()
+	 * name : onBackPressed
+	 * @params : None
+	 * @return : void
+	 * @desp : This function takes care of functionalities when back button is pressed.
+	 * 			We need to clear all location listeners and firebase listners.
 	 */
 	@Override
 	public void onBackPressed() {
@@ -888,7 +913,10 @@ public class Login extends Activity {
 	}
 
 	/*
-	 * This method removes all firebase listners
+	 * name : removed_firebase_listners
+	 * @params : None
+	 * @return : void
+	 * @desp : this function removes all listners for firebase. 
 	 */
 	private void remove_firebase_listners() {
 		fb_event_ref.firebaseobj.removeEventListener(listn);
@@ -896,16 +924,23 @@ public class Login extends Activity {
 	}
 
 	/*
-	 * This method removes all location listners
+	 * name : remove_location_listners
+	 * @params : None
+	 * @return : void
+	 * @desp : this function removed the location updates 
 	 */
 	private void remove_location_listners() {
 		locationManager.removeUpdates(locationListener);
 	}
 
 	/*
-	 * this method prompts user to create a event
+	 * name : create_event_notification
+	 * @params : None
+	 * @return : void
+	 * @desp : this function creates the alert box for new event.
+	 * 		   It takes event details like transport, time and rate preferences.
 	 */
-	public void create_event_notfication() {
+	public void create_event_notification() {
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View layout = inflater.inflate(R.layout.custom_dialog,
@@ -1008,13 +1043,6 @@ public class Login extends Activity {
 						.child(commondata.facebook_details.facebook + "--"
 								+ commondata.facebook_details.name)
 						.child("minute").setValue(commondata.prefrences.minute);
-				/*
-				 * add preferences to firbase
-				 */
-
-				/*
-				 * call pick food dialog
-				 */
 				pick_food_type();
 				
 				Thread thread = new Thread() {
@@ -1025,14 +1053,6 @@ public class Login extends Activity {
 				};
 
 				thread.start();
-
-				/*
-				 * store the event id on mysql
-				 */
-				/*
-				 
-				
-				*/
 
 			}
 
@@ -1053,7 +1073,7 @@ public class Login extends Activity {
 	
 	public void Create_A_New_Event(View V) {
 		if (commondata.event_information.eventID == null) {// no event exist
-			create_event_notfication();
+			create_event_notification();
 		} else{
 			toast_info("You are already in an event.");
 		}
@@ -1119,40 +1139,65 @@ public class Login extends Activity {
 								/*
 								 * This section reads the json data responded from the server
 								 * the data is in the form of place name as key and location and rank as values
-								 * example : Philz : [[15.7637, -80.896987],[2.0]]
+								 * example : place_ref : [[15.7637, -80.896987],[2.0]]
 								 */
 								
 								while(places.hasNext()){
-									String place_name;
+									String place_refrence;
 									Double latitude = null;
 									Double longitude = null;
 									Double rank = null;
+									String id = null;
 									String place = places.next();
-									place_name = place;
-									JSONArray value = (JSONArray) rest_list.get(place);
-									for(int i=0; i< value.length(); i++){
-										if(i == 0){
-											JSONArray loc = (JSONArray) value.get(i);
-											latitude = loc.getDouble(0); // latitude
-											longitude = loc.getDouble(1); // longitude
-										}else{
-											rank = value.getDouble(i);
-										}
-									}
-									//System.out.println(place_name + "is at " + latitude +" " + longitude + "and ranks" + rank);
-									commondata.places_found.ranking_places.put(rank, place_name);
-									commondata.places_found.ranking_latitudes.put(place, latitude);
-									commondata.places_found.ranking_longitudes.put(place_name, longitude);
+									place_refrence = place;
+									String values = rest_list.getString(place_refrence);
+									
+									Double rating = 0.0;
+									String website = null;
+									String place_name = null;
+									Double price_level = 0.0;
+									String address = null;
+									String contact = null;
+									String location = null;
+									
+									JSONObject dats = new JSONObject(values);
+									
+									if (dats.has("rating")) rating = Double.parseDouble(dats.getString("rating"));
+									if (dats.has("website")) website = dats.getString("website");
+									if (dats.has("name")) place_name = dats.getString("name");
+									if (dats.has("price_level")) price_level = Double.parseDouble(dats.getString("price_level"));
+									if (dats.has("formatted_address")) address = dats.getString("formatted_address");
+									if (dats.has("international_phone_number")) contact = dats.getString("international_phone_number");
+									if (dats.has("location")) location = dats.getString("location");
+									rank = Double.parseDouble(dats.getString("rank"));
+									
+									place_details node = new commondata.place_details();
+									node.rating = rating;
+									node.website = website;
+									node.place_name = place_name;
+									node.price_level = price_level;
+									node.address = address;
+									node.contact = contact;
+									node.location = location;
+	
+									commondata.places_found.ranking_places.put(rank, place_refrence);
+									commondata.places_found.ranking_nodes.put(place_refrence, node);
+									
+									/*
+									 * The node structure is stored in this format
+									 * KEY : rank ; Value : place_refrence
+									 * KEY : Place_refrence ; Value : Node
+									 */
+									
 								}
 								
 								/*
 								 * this section sets up the common data from the server in sorted order
 								 */
 								for(Double rnk = 0.0; rnk < commondata.places_found.ranking_places.size(); rnk = rnk + 1.0){
-									String current_place_name = commondata.places_found.ranking_places.get(rnk);
-									Double current_place_latitude = commondata.places_found.ranking_latitudes.get(current_place_name);
-									Double current_place_longitude = commondata.places_found.ranking_longitudes.get(current_place_name);
-									System.out.println(current_place_name + " "+ current_place_latitude + " "+current_place_longitude);
+									String current_place_refrence = commondata.places_found.ranking_places.get(rnk);
+									place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
+									System.out.println(node.place_name + " "+ node.website);
 								}
 								
 							} catch (JSONException e) {
@@ -1163,16 +1208,24 @@ public class Login extends Activity {
 				};
 
 				thread.start();
+				try {
+					thread.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 	
 	
 	/*
-	 * This method triggers contact picker intent
+	 * name : pick_food_type
+	 * @params : None
+	 * @return : void
+	 * @desp : This function prompts a dialog for user to pick food type and the same is set in firebase.
 	 */
 
-	@SuppressWarnings("deprecation")
 	public void pick_food_type() {
 
 		// Strings to Show In Dialog with Radio Buttons
@@ -1369,9 +1422,7 @@ public class Login extends Activity {
 					long arg3) {
 				final int it = arg2;
 				final String name = arg0.getItemAtPosition(arg2).toString();
-				// TODO Auto-generated method stub
-
-				
+				// TODO Auto-generated method stub	
 				
 				Thread thread = new Thread() {
 					String server_resp;
@@ -1466,16 +1517,17 @@ public class Login extends Activity {
 		stringArray.clear();
 		
 		/*
-		 * This section pulls the data from the dictonary in commondata and loads for display
+		 * this section sets up the common data from the server in sorted order
 		 */
-		
-		for(Double rnk = 0.0 ; rnk < commondata.places_found.ranking_places.size(); rnk = rnk + 1){
-			String list_place = commondata.places_found.ranking_places.get(rnk); // this gives the place name
-			stringArray.add(list_place);
+		for(Double rnk = 0.0; rnk < commondata.places_found.ranking_places.size(); rnk = rnk + 1.0){
+			String current_place_refrence = commondata.places_found.ranking_places.get(rnk);
+			place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
+			stringArray.add(node.place_name + " " + node.address);
 		}
 		
+		
 		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, android.R.id.text1,
+				android.R.layout.simple_list_item_2, android.R.id.text2,
 				stringArray);
 		modeList.setAdapter(modeAdapter);
 		modeList.setOnItemClickListener(new OnItemClickListener() {
@@ -1513,6 +1565,7 @@ public class Login extends Activity {
 		});
 		builder.setView(modeList);
 		final Dialog dialog = builder.create();
+		
 		dialog.show();
 
 	}
@@ -1647,33 +1700,6 @@ public class Login extends Activity {
 			}
 		});
 	}
-	
-	private class NetworkOperation extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            for (int i = 0; i < 5; i++) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    Thread.interrupted();
-                }
-            }
-            return "Executed";
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            
-        }
-
-        @Override
-        protected void onPreExecute() {}
-
-        @Override
-        protected void onProgressUpdate(Void... values) {}
-    }
-
 	
 	/*
 	 * name : postData

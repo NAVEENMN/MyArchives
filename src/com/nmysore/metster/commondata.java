@@ -69,13 +69,22 @@ public class commondata {
 		static ArrayList<Double> rankedlatitudes = new ArrayList<Double>();
 		static ArrayList<Double> rankedlongitudes = new ArrayList<Double>();
 		static HashMap<Double, String> ranking_places = new HashMap<Double, String>(); // This hashmap links rank as key and place as value
-		static HashMap<String, Double> ranking_latitudes = new HashMap<String, Double>();// This hashmap gets place as key and latitude as value
-		static HashMap<String, Double> ranking_longitudes = new HashMap<String, Double>();// This hashmap gets place as key and longitudes as value
-		
+		static HashMap<String, place_details> ranking_nodes = new HashMap<String, place_details>();
 	}
 	
 	public static class gcm_incoming{
 		static String message;
+	}
+	
+	public  static class place_details{ 
+		Double rating;
+		String website;
+		String place_name;
+		Double price_level;
+		String address;
+		String contact;
+		String location;
+		
 	}
 	
 }
