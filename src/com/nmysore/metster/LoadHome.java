@@ -3,7 +3,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.http.HttpResponse;
@@ -25,6 +24,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.location.Location;
@@ -41,13 +41,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.nmysore.metster.util.SystemUiHider;
 import com.firebase.client.Firebase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.nmysore.metster.R;
-import com.nmysore.metster.util.SystemUiHiderBase;
+import com.nmysore.metster.util.SystemUiHider;
 
 public class LoadHome extends Activity {
 	public static final String EXTRA_MESSAGE = "message";
@@ -112,6 +110,22 @@ public class LoadHome extends Activity {
 		}
 		});
 
+		SharedPreferences prefs = getApplicationContext().getSharedPreferences("user_settings_prefrence", MODE_PRIVATE); 
+		String restoredText = prefs.getString("mode", null);
+		if (restoredText != null) {
+		  String mode = prefs.getString("mode", "bike");//"No name defined" is the default value.
+		  String cusine = prefs.getString("cusine", "american"); //0 is the default value.
+		  System.out.println("mode :"  + mode + "cusine : " + cusine);
+		}else{
+			System.out.println("no settings found - making default settings");
+			
+			 SharedPreferences.Editor editor = prefs.edit();
+			 editor.putString("mode", "bike");
+			 editor.putString("cusine", "american");
+			 editor.commit();
+		}
+		
+		
 		// Set up the user interaction to manually show or hide the system UI.
 		contentView.setOnClickListener(new View.OnClickListener() {
 			@Override

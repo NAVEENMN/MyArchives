@@ -28,6 +28,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -160,6 +161,9 @@ public class Login extends Activity {
 	ArrayList<Restaurant> restlist;
 	int infocounter;
 	ImageView imageView;
+	
+	public static final String USER_SETTINGS_PREFERENCE = "user_settings_prefrence";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -1767,6 +1771,14 @@ public class Login extends Activity {
 			drop_event();
 			return true;
 		case R.id.settings_icon:
+			
+			// dummy section need new ui
+			
+			SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences(USER_SETTINGS_PREFERENCE, MODE_PRIVATE).edit();
+			 editor.putString("mode", "car");
+			 editor.putString("cusine", "indian");
+			 editor.commit();
+			
 			locationManager.removeUpdates(locationListener);
 			Intent settingsIntent = new Intent(Login.this, Settings.class);
 			startActivity(settingsIntent);

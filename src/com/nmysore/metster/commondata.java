@@ -12,6 +12,7 @@ import com.facebook.android.Facebook;
 
 public class commondata {
 
+	
 	public static class facebook_details{
 		static String facebook;
 		static String name;
