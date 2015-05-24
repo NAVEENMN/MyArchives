@@ -63,6 +63,7 @@
 
     <!-- Settings -->
 
+	<string name="ProfileSettings">Profile Settings</string>
     <string name="AboutMetster">About Metster</string>
     <string name="Support">Support</string>
     <string name="Privacy">Privacy</string>

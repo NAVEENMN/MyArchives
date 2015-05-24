@@ -208,7 +208,6 @@ public class Login extends Activity {
 
 		event_info.is_host = false;// by default no host access
 		create_firebase_refrence();// this is event refernce setup
-		// toast_info("Welcome");
 
 		
 		/*
@@ -243,7 +242,7 @@ public class Login extends Activity {
 							System.out.println("childadded"
 									+ arg0.getName().toString());
 							if (arg0.getName().contains("center")) {
-								toast_info("Long press the map to explore...");
+								toast_info(" hold the meet button to explore...");
 							}
 						}
 

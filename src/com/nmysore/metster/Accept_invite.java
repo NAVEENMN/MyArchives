@@ -89,33 +89,11 @@ public class Accept_invite extends Activity {
 		commondata.prefrences.hour = 0;
 		commondata.prefrences.minute = 0;
 		commondata.prefrences.food = "american";
-		travelchoice = (RadioGroup) findViewById(R.id.Travel_Choice);
-		travelchoice.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		
 
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				// TODO Auto-generated method stub
-				switch (travelchoice.getCheckedRadioButtonId()) {
-				case R.id.radio_car:
-					commondata.prefrences.travel = (Double) 5.0;
-					break;
-
-				case R.id.radio_public:
-					commondata.prefrences.travel = (Double) 4.0;
-					break;
-
-				case R.id.radio_bike:
-					// do something
-					commondata.prefrences.travel = (Double) 3.0;
-					break;
-
-				case R.id.radio_walk:
-					commondata.prefrences.travel = (Double) 1.0;
-					break;
-				}
-			}
-		});
-
+		
+		// pull all the data from the shared pref 
+		
 		TimePicker timePicker = (TimePicker) findViewById(R.id.timePicker);
 		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
 
@@ -127,15 +105,7 @@ public class Accept_invite extends Activity {
 			}
 		});
 
-		ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
-
-			@Override
-			public void onRatingChanged(RatingBar ratingBar, float rating,
-					boolean fromUser) {
-				commondata.prefrences.price = (float) ratingBar.getRating();
-
-			}
-		});
+		
 		// ----------
 		boolean stat = haveNetworkConnection();
 		if (stat) {// network check ok
@@ -574,7 +544,7 @@ public class Accept_invite extends Activity {
 	public void ale() {
 		if(invite_status){
 		AlertDialog.Builder alert = new AlertDialog.Builder(Accept_invite.this);
-		alert.setTitle("Invitation accepted");
+		alert.setTitle("You have accepted the invite");
 		alert.setMessage("Please login back to Metster to view this event");
 		alert.setCancelable(false);
 

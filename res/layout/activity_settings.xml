@@ -8,12 +8,26 @@
 
     
     <Button
+       android:id="@+id/ProfileSettings"
+       style="?android:attr/buttonBarButtonStyle"
+       android:layout_width="match_parent"
+       android:gravity="center"
+       android:layout_height="65dip"
+       android:background="@drawable/settingsbuttonhandler"
+       android:text="@string/ProfileSettings"
+       android:textColor="#5882FA"
+       android:textSize="16sp"
+       android:textStyle="bold"
+       android:onClick="profile_settings" />
+    
+    <Button
        android:id="@+id/AboutMetster"
        style="?android:attr/buttonBarButtonStyle"
        android:layout_width="match_parent"
        android:gravity="center"
        android:layout_height="65dip"
        android:background="@drawable/settingsbuttonhandler"
+       android:layout_below="@+id/ProfileSettings"
        android:text="@string/AboutMetster"
        android:textColor="#5882FA"
        android:textSize="16sp"
@@ -24,28 +38,15 @@
         style="?android:attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="65dip"
-        android:layout_above="@+id/DeleteAccount"
         android:layout_alignParentLeft="true"
         android:background="@drawable/settingsbuttonhandler"
+        android:layout_below="@+id/AboutMetster"
         android:gravity="center"
         android:text="@string/Support"
         android:textColor="#5882FA"
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/Privacy"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="65dip"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/AboutMetster"
-        android:background="@drawable/settingsbuttonhandler"
-        android:gravity="center"
-        android:text="@string/Privacy"
-        android:textColor="#5882FA"
-        android:textSize="16sp"
-        android:textStyle="bold" />
 
     <Button
         android:id="@+id/FAQ"
@@ -53,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="65dip"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/Privacy"
+        android:layout_below="@+id/Support"
         android:background="@drawable/settingsbuttonhandler"
         android:gravity="center"
         android:text="@string/FAQ"

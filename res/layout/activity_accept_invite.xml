@@ -24,77 +24,12 @@
         android:background="#819FF7"
         android:gravity="bottom" />
 
-    <TextView
-        android:id="@+id/Price_Level"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Dividerevent"
-        android:gravity="top"
-        android:paddingTop="20dp"
-        android:text="@string/Price_Level"
-        android:textColor="#424242"
-        android:textSize="16sp" />
-
-    <RatingBar
-        android:id="@+id/pricelevel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Price_Level"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/Travel_Method"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pricelevel"
-        android:gravity="top"
-        android:paddingTop="20dp"
-        android:text="@string/Travel_Method"
-        android:textColor="#424242"
-        android:textSize="16sp" />
-
-    <RadioGroup
-        android:id="@+id/Travel_Choice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Travel_Method"
-        android:orientation="horizontal" >
-
-        <RadioButton
-            android:id="@+id/radio_car"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/Travel_car"
-            android:textColor="#424242" />
-
-        <RadioButton
-            android:id="@+id/radio_public"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Travel_public"
-            android:textColor="#424242" />
-
-        <RadioButton
-            android:id="@+id/radio_bike"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Travel_bike"
-            android:textColor="#424242" />
-
-        <RadioButton
-            android:id="@+id/radio_walk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Travel_walk"
-            android:textColor="#424242" />
-    </RadioGroup>
 
     <TextView
         android:id="@+id/Time_to_meet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Travel_Choice"
+        android:layout_below="@+id/Dividerevent"
         android:gravity="top"
         android:paddingTop="20dp"
         android:text="@string/Time_to_meet"
