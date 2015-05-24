@@ -82,8 +82,7 @@ public class Accept_invite extends Activity {
 		/*
 		 * fetch all data from the the dialog
 		 */
-		RatingBar ratingBar = (RatingBar) findViewById(R.id.pricelevel);
-		ratingBar.setRating((float) 2.5);
+		
 		commondata.prefrences.price = (float) 2.5;
 		commondata.prefrences.travel = (Double) 5.0;
 		commondata.prefrences.hour = 0;

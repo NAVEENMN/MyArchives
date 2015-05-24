@@ -24,7 +24,12 @@
         android:background="#819FF7"
         android:gravity="bottom" />
 
-
+	<EditText android:id="@+id/event_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/event_name" />
+    
+    
     <TextView
         android:id="@+id/Time_to_meet"
         android:layout_width="match_parent"
@@ -32,7 +37,7 @@
         android:layout_below="@+id/Dividerevent"
         android:gravity="top"
         android:paddingTop="20dp"
-        android:text="@string/Time_to_meet"
+        android:text="@string/setup_preferences"
         android:textColor="#424242"
         android:textSize="16sp" />
 

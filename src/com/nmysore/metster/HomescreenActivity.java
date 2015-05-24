@@ -4,8 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,10 +32,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -48,7 +42,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.facebook.Request;
@@ -401,7 +394,12 @@ public class HomescreenActivity extends Activity {
 
 	}
 
-	
+	/*
+	 * name : postData
+	 * @params : String url, String parameter, String parameter, String parameter
+	 * @return : String server_response
+	 * @desp : This function makes a http post request and returns the server response.
+	 */
 	private String postData(String url, String param1, String param2, String param3) {
 	    // Create a new HttpClient and Post Header
 	    HttpClient httpclient = new DefaultHttpClient();
@@ -446,7 +444,10 @@ public class HomescreenActivity extends Activity {
 	}
 
 	/*
-	 * This method will check if network connection exists Returns boolean
+	 * name : haveNetworkConnection
+	 * @params : None
+	 * @return :Boolean state
+	 * @desp : This function checks network connection status.
 	 */
 	private boolean haveNetworkConnection() {
 		boolean haveConnectedWifi = false;

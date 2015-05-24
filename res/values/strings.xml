@@ -86,6 +86,7 @@
     
     <!-- ******************************************************** -->
     <string name="new_event">Do you want to setup a new event?</string>
+    <string name="event_name"> Event Name </string>
     <string name="setup_preferences">Event Preferences</string>
     <string name="Price_Level">Select your price level</string>
     <string name="Travel_Method">How are you planning to travel?</string>
@@ -93,7 +94,8 @@
     <string name="Travel_public">bus/tram</string>
     <string name="Travel_bike">Bike</string>
     <string name="Travel_walk">Walk</string>
-    <string name="Time_to_meet">Preferred time</string>
+    <string name="Time_to_meet_start">Preferred start time</string>
+    <string name="Time_to_meet_end">Preferred end time</string>
     <!-- ******************************************************** -->
 
     <string name="title_activity_profiles">Profiles</string>

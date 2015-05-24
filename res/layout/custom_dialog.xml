@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android1="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android1="http://schemas.android.com/apk/res/android"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:android2="http://schemas.android.com/apk/res/android"
     android:id="@+id/new_event_root"
@@ -27,89 +26,55 @@
         android:background="#819FF7"
         android:gravity="bottom" />
 
+    <EditText
+        android2:id="@+id/event_name"
+        android2:layout_width="wrap_content"
+        android2:layout_height="wrap_content"
+        android2:layout_alignParentLeft="true"
+        android2:layout_below="@+id/Dividerevent"
+        android2:layout_marginLeft="25dp"
+        android2:inputType = "text"
+        android2:hint  = "@string/event_name"
+        android2:ems="10" />
+   
     <TextView
-        android:id="@+id/Price_Level"
+        android:id="@+id/Time_to_meet_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Dividerevent"
+        android:layout_below="@+id/event_name"
         android:gravity="top"
         android:paddingTop="20dp"
-        android:text="@string/Price_Level"
-        android:textColor="#424242"
-        android:textSize="16sp" />
-
-    <RatingBar
-        android:id="@+id/pricelevel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Price_Level"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/Travel_Method"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pricelevel"
-        android:gravity="top"
-        android:paddingTop="20dp"
-        android:text="@string/Travel_Method"
-        android:textColor="#424242"
-        android:textSize="16sp" />
-
-    <RadioGroup
-        android:id="@+id/Travel_Choice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Travel_Method"
-        android:orientation="horizontal" >
-
-        <RadioButton
-            android:id="@+id/radio_car"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/Travel_car"
-            android:textColor="#424242" />
-
-        <RadioButton
-            android:id="@+id/radio_public"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Travel_public"
-            android:textColor="#424242" />
-
-        <RadioButton
-            android:id="@+id/radio_bike"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Travel_bike"
-            android:textColor="#424242" />
-
-        <RadioButton
-            android:id="@+id/radio_walk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Travel_walk"
-            android:textColor="#424242" />
-    </RadioGroup>
-
-    <TextView
-        android:id="@+id/Time_to_meet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Travel_Choice"
-        android:gravity="top"
-        android:paddingTop="20dp"
-        android:text="@string/Time_to_meet"
+        android:text="@string/Time_to_meet_start"
         android:textColor="#424242"
         android:textSize="16sp" />
 
     <TimePicker
-        android:id="@+id/timePicker"
+        android:id="@+id/timePickerstart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Time_to_meet">
+        android:layout_below="@+id/Time_to_meet_start">
         <requestFocus />
-        </TimePicker>
+    </TimePicker>
+    
+   <TextView
+        android:id="@+id/Time_to_meet_end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timePickerstart"
+        android:gravity="top"
+        android:paddingTop="20dp"
+        android:text="@string/Time_to_meet_end"
+        android:textColor="#424242"
+        android:textSize="16sp" />
+
+    <TimePicker
+        android:id="@+id/timePickerend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Time_to_meet_end">
+        <requestFocus />
+    </TimePicker>
+
+
 
 </RelativeLayout>

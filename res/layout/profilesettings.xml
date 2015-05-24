@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android1="http://schemas.android.com/apk/res/android"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android2="http://schemas.android.com/apk/res/android"
+    android:id="@+id/profile_settings_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E6E6E6"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/New_Event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/setup_preferences"
+        android:paddingBottom="10dp"
+        android:textColor="#2E2E2E"
+        android:textSize="28sp" />
+
+    <View
+        android:id="@+id/Dividerevent"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:paddingTop="20dp"
+        android:layout_below="@+id/New_Event"
+        android:background="#819FF7"
+        android:gravity="bottom" />
+
+    <TextView
+        android:id="@+id/Price_Level"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Dividerevent"
+        android:gravity="top"
+        android:paddingTop="20dp"
+        android:text="@string/Price_Level"
+        android:textColor="#424242"
+        android:textSize="16sp" />
+
+    <RatingBar
+        android:id="@+id/pricelevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Price_Level"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/Travel_Method"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pricelevel"
+        android:gravity="top"
+        android:paddingTop="20dp"
+        android:text="@string/Travel_Method"
+        android:textColor="#424242"
+        android:textSize="16sp" />
+
+    <RadioGroup
+        android:id="@+id/Travel_Choice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Travel_Method"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radio_car"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/Travel_car"
+            android:textColor="#424242" />
+
+        <RadioButton
+            android:id="@+id/radio_public"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Travel_public"
+            android:textColor="#424242" />
+
+        <RadioButton
+            android:id="@+id/radio_bike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Travel_bike"
+            android:textColor="#424242" />
+
+        <RadioButton
+            android:id="@+id/radio_walk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Travel_walk"
+            android:textColor="#424242" />
+    </RadioGroup>
+
+ 
+   
+</RelativeLayout>

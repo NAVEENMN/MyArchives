@@ -35,6 +35,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -64,9 +65,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.RatingBar;
-import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
@@ -947,39 +945,10 @@ public class Login extends Activity {
 		 * fetch all data from the the dialog
 		 */
 		commondata.event_information.eventID = null;
-		RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.pricelevel);
-		ratingBar.setRating((float) 2.5);
-		commondata.prefrences.price = (float) 2.5;
-		commondata.prefrences.travel = (Double) 5.0;
-		travelchoice = (RadioGroup) layout.findViewById(R.id.Travel_Choice);
-		travelchoice.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				// TODO Auto-generated method stub
-				switch (travelchoice.getCheckedRadioButtonId()) {
-				case R.id.radio_car:
-					commondata.prefrences.travel = (Double) 5.0;
-					break;
-
-				case R.id.radio_public:
-					commondata.prefrences.travel = (Double) 4.0;
-					break;
-
-				case R.id.radio_bike:
-					// do something
-					commondata.prefrences.travel = (Double) 3.0;
-					break;
-
-				case R.id.radio_walk:
-					commondata.prefrences.travel = (Double) 1.0;
-					break;
-				}
-			}
-		});
+		
 
 		TimePicker timePicker = (TimePicker) layout
-				.findViewById(R.id.timePicker);
+				.findViewById(R.id.timePickerstart);
 		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
 
 			@Override
@@ -989,15 +958,7 @@ public class Login extends Activity {
 				commondata.prefrences.minute = minute;
 			}
 		});
-		ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
-
-			@Override
-			public void onRatingChanged(RatingBar ratingBar, float rating,
-					boolean fromUser) {
-				commondata.prefrences.price = (float) ratingBar.getRating();
-
-			}
-		});
+		
 		alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				/*
@@ -1525,10 +1486,46 @@ public class Login extends Activity {
 			stringArray.add(node.place_name + " " + node.address);
 		}
 		
-		
 		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_2, android.R.id.text2,
-				stringArray);
+				R.layout.listdisplay,
+				stringArray){
+		    ViewHolder holder;
+		    Drawable icon;
+
+		    class ViewHolder {
+		        ImageView icon;
+		        TextView title;
+		    }
+
+		    public View getView(int position, View convertView,
+		            ViewGroup parent) {
+		        final LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+		                .getSystemService(
+		                        Context.LAYOUT_INFLATER_SERVICE);
+
+		        if (convertView == null) {
+		            convertView = inflater.inflate(
+		                    R.layout.listdisplay, null);
+
+		            holder = new ViewHolder();
+		            holder.icon = (ImageView) convertView
+		                    .findViewById(R.id.icon);
+		            holder.title = (TextView) convertView
+		                    .findViewById(R.id.title);
+		            convertView.setTag(holder);
+		        } else {
+		            // view already defined, retrieve view holder
+		            holder = (ViewHolder) convertView.getTag();
+		        }       
+
+		        Drawable drawable = getResources().getDrawable(R.drawable.flag); //this is an image from the drawables folder
+
+		        holder.title.setText(stringArray.get(position));
+		        holder.icon.setImageDrawable(drawable);
+
+		        return convertView;
+		    }
+		};
 		modeList.setAdapter(modeAdapter);
 		modeList.setOnItemClickListener(new OnItemClickListener() {
 
