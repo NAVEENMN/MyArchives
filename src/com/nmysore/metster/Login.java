@@ -1474,8 +1474,23 @@ public class Login extends Activity {
 		builder.setTitle("Pick your choices");
 
 		ListView modeList = new ListView(this);
-		final ArrayList<String> stringArray = new ArrayList<String>();
-		stringArray.clear();
+		final ArrayList<String> listtitle = new ArrayList<String>();
+		final ArrayList<String> listaddress = new ArrayList<String>();
+		final ArrayList<String> listrating = new ArrayList<String>();
+		final ArrayList<String> listreview = new ArrayList<String>();
+		final ArrayList<String> listtype = new ArrayList<String>();
+		final ArrayList<String> listreviewscore = new ArrayList<String>();
+		final ArrayList<String> listdistance = new ArrayList<String>();
+		final ArrayList<String> listprice = new ArrayList<String>();
+		
+		listtitle.clear();
+		listaddress.clear();
+		listrating.clear();
+		listreview.clear();
+		listtype.clear();
+		listreviewscore.clear();
+		listdistance.clear();
+		listprice.clear();
 		
 		/*
 		 * this section sets up the common data from the server in sorted order
@@ -1483,18 +1498,22 @@ public class Login extends Activity {
 		for(Double rnk = 0.0; rnk < commondata.places_found.ranking_places.size(); rnk = rnk + 1.0){
 			String current_place_refrence = commondata.places_found.ranking_places.get(rnk);
 			place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
-			stringArray.add(node.place_name + " " + node.address);
+			listtitle.add(node.place_name);
+			listaddress.add(node.address);
+			listrating.add(node.rating.toString());
 		}
 		
 		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
 				R.layout.listdisplay,
-				stringArray){
+				listtitle){
 		    ViewHolder holder;
 		    Drawable icon;
 
 		    class ViewHolder {
 		        ImageView icon;
 		        TextView title;
+		        TextView placeaddress;
+		        TextView placeratings;
 		    }
 
 		    public View getView(int position, View convertView,
@@ -1512,6 +1531,7 @@ public class Login extends Activity {
 		                    .findViewById(R.id.icon);
 		            holder.title = (TextView) convertView
 		                    .findViewById(R.id.title);
+		            holder.placeaddress = (TextView) convertView.findViewById(R.id.placeaddress);
 		            convertView.setTag(holder);
 		        } else {
 		            // view already defined, retrieve view holder
@@ -1520,7 +1540,8 @@ public class Login extends Activity {
 
 		        Drawable drawable = getResources().getDrawable(R.drawable.flag); //this is an image from the drawables folder
 
-		        holder.title.setText(stringArray.get(position));
+		        holder.title.setText(listtitle.get(position));
+		        holder.placeaddress.setText(listaddress.get(position));
 		        holder.icon.setImageDrawable(drawable);
 
 		        return convertView;
@@ -1540,21 +1561,37 @@ public class Login extends Activity {
 				double rank = (double)items.getItemIdAtPosition(order); // we have to select item of that rank
 				
 				String current_place_refrence = commondata.places_found.ranking_places.get(rank);
-				place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
+				final place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
 				
 				
-			
+				AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
+    			alert.setTitle("Connection Error");
+    			alert.setMessage("Please check your network settings");
+    			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+    			public void onClick(DialogInterface dialog, int whichButton) {
+    				
+    			  }
+    			});
+
+    			alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+    			  public void onClick(DialogInterface dialog, int whichButton) {
+    				  
+    					fb_event_ref.firebaseobj
+    					.child("rest*0--"
+    							+ node.place_name.replace(".", ""))
+    					.child("Latitude")
+    					.setValue(node.latitude);
+    					fb_event_ref.firebaseobj
+    					.child("rest*0--"
+    							+ node.place_name.replace(".", ""))
+    					.child("Longitude")
+    					.setValue(node.longitude);
+    				  
+    				  
+    			  }
+    			});
+    			alert.show();
 				
-				fb_event_ref.firebaseobj
-				.child("rest*0--"
-						+ node.place_name.replace(".", ""))
-				.child("Latitude")
-				.setValue(node.latitude);
-				fb_event_ref.firebaseobj
-				.child("rest*0--"
-						+ node.place_name.replace(".", ""))
-				.child("Longitude")
-				.setValue(node.longitude);
 			
 			}
 

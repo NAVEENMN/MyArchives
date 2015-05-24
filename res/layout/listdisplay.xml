@@ -6,16 +6,82 @@
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/icon"
+        android:contentDescription="place_image"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="left" />
-
-    <TextView
-        android:id="@+id/title"
-        android:textColor="#0000FF"
-        android:text=""
-        android:paddingLeft="10dip"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    
+    
+   <LinearLayout
+        android:id="@+id/placesection"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FAFAFA"
+        android:gravity="top"
+        android:orientation="horizontal" >
+        
+       
+       <LinearLayout
+            android:id="@+id/placedetails"
+            android:layout_width="0dip"
+			android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingLeft="2dp"
+			android:paddingTop="10dp"
+            android:orientation="vertical" >
+       
+       		<TextView
+        		android:id="@+id/title"
+        		android:textColor="#424242"
+        		android:textSize="18sp"
+        		android:text=""
+        		android:layout_gravity="left"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content" />
+      
+            <TextView
+                android:id="@+id/placeaddress"
+                android:textColor="#848484"
+                android:textSize="9sp"
+                android:text="@string/Name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/placeratings"
+                android:textColor="#BDBDBD"
+                android:textSize="9sp"
+                android:text="@string/Name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            
+            <TextView
+                android:id="@+id/placereviews"
+                android:textColor="#D8D8D8"
+                android:textSize="9sp"
+                android:text="@string/StudentType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            
+            <TextView
+                android:id="@+id/reviewscore"
+                android:textColor="#D8D8D8"
+                android:textSize="9sp"
+                android:text="@string/Gender"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            
+            <TextView
+                android:id="@+id/placetype"
+                android:textColor="#D8D8D8"
+                android:textSize="9sp"
+                android:text="@string/Gender"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            
+        </LinearLayout>
+       
+       
+        </LinearLayout>
+    
 </LinearLayout>
