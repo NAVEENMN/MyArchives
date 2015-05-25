@@ -8,11 +8,11 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/New_Event"
+        android:id="@+id/Profile_Settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/setup_preferences"
+        android:text="@string/profile_settings"
         android:paddingBottom="10dp"
         android:textColor="#2E2E2E"
         android:textSize="28sp" />
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:paddingTop="20dp"
-        android:layout_below="@+id/New_Event"
+        android:layout_below="@+id/Profile_Settings"
         android:background="#819FF7"
         android:gravity="bottom" />
 
@@ -38,17 +38,17 @@
         android:textSize="16sp" />
 
     <RatingBar
-        android:id="@+id/pricelevel"
+        android:id="@+id/pricelevelpreference"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/Price_Level"
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:id="@+id/Travel_Method"
+        android:id="@+id/Travel_Method_Preference"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pricelevel"
+        android:layout_below="@+id/pricelevelpreference"
         android:gravity="top"
         android:paddingTop="20dp"
         android:text="@string/Travel_Method"
@@ -56,10 +56,10 @@
         android:textSize="16sp" />
 
     <RadioGroup
-        android:id="@+id/Travel_Choice"
+        android:id="@+id/Travel_Choice_Preference"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Travel_Method"
+        android:layout_below="@+id/Travel_Method_Preference"
         android:orientation="horizontal" >
 
         <RadioButton

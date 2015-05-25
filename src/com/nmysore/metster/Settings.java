@@ -12,15 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
-import android.widget.RatingBar;
-import android.widget.TimePicker;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
-import android.widget.TimePicker.OnTimeChangedListener;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.nmysore.metster.Login.fb_event_ref;
 
 public class Settings extends Activity {
 	SharedPreferences sp;
@@ -41,22 +38,54 @@ public class Settings extends Activity {
 	public void profile_settings(View view){
 		
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View layout = inflater.inflate(R.layout.custom_dialog,
-				(ViewGroup) findViewById(R.id.new_event_root));
+		View layout = inflater.inflate(R.layout.profilesettings,
+				(ViewGroup) findViewById(R.id.profile_settings_root));
 		AlertDialog.Builder alert = new AlertDialog.Builder(Settings.this)
 				.setView(layout);
 		alert.create();
 	
+		// dummy section need new ui
 		
-		TimePicker timePicker = (TimePicker) layout
-				.findViewById(R.id.timePicker);
-		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
+					 final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("user_settings_prefrence", MODE_PRIVATE).edit();
+					 
+		
+		// We have stars and bullet button
+		RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.pricelevelpreference);
+		ratingBar.setRating((float) 2.5);
+		ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
 
 			@Override
-			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+			public void onRatingChanged(RatingBar ratingBar, float rating,
+					boolean fromUser) {
+				float new_price = (float) ratingBar.getRating();
+				editor.putFloat("price_preference", new_price);
+
+			}
+		});
+		final RadioGroup travelchoice = (RadioGroup) layout.findViewById(R.id.Travel_Choice_Preference);
+		travelchoice.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				// TODO Auto-generated method stub
-				commondata.prefrences.hour = hourOfDay;
-				commondata.prefrences.minute = minute;
+				switch (travelchoice.getCheckedRadioButtonId()) {
+				case R.id.radio_car:
+					editor.putFloat("travel_prefernce", (float) 5.0);
+					break;
+
+				case R.id.radio_public:
+					editor.putFloat("travel_prefernce", (float) 4.0);
+					break;
+
+				case R.id.radio_bike:
+					// do something
+					editor.putFloat("travel_prefernce", (float) 3.0);
+					break;
+
+				case R.id.radio_walk:
+					editor.putFloat("travel_prefernce", (float) 1.0);
+					break;
+				}
 			}
 		});
 		
@@ -64,6 +93,8 @@ public class Settings extends Activity {
 			public void onClick(DialogInterface dialog, int whichButton) {
 			
 			// save data to shared pref	
+				
+				editor.commit();
 
 			}
 

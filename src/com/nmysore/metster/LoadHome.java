@@ -109,18 +109,18 @@ public class LoadHome extends Activity {
 		}
 		});
 
-		SharedPreferences prefs = getApplicationContext().getSharedPreferences("user_settings_prefrence", MODE_PRIVATE); 
-		String restoredText = prefs.getString("mode", null);
-		if (restoredText != null) {
-		  String mode = prefs.getString("mode", "bike");//"No name defined" is the default value.
-		  String cusine = prefs.getString("cusine", "american"); //0 is the default value.
-		  System.out.println("mode :"  + mode + "cusine : " + cusine);
+		SharedPreferences prefs = getApplicationContext().getSharedPreferences("user_settings_prefrence", MODE_PRIVATE);
+		
+		if (prefs.toString()!= null) {
+		  float price_preference = prefs.getFloat("price_preference", (float) 2.5);//"No name defined" is the default value.
+		  float travel_prefernce = prefs.getFloat("travel_preference", (float) 5.0); //0 is the default value.
+		  System.out.println("price :"  + price_preference + "travel : " + travel_prefernce);
 		}else{
 			System.out.println("no settings found - making default settings");
 			
 			 SharedPreferences.Editor editor = prefs.edit();
-			 editor.putString("mode", "bike");
-			 editor.putString("cusine", "american");
+			 editor.putFloat("price_preference", (float)2.5);
+			 editor.putFloat("travel_preference", (float)5.0);
 			 editor.commit();
 		}
 		

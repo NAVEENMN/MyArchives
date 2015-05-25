@@ -28,7 +28,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -60,14 +59,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
@@ -160,7 +158,6 @@ public class Login extends Activity {
 	int infocounter;
 	ImageView imageView;
 	
-	public static final String USER_SETTINGS_PREFERENCE = "user_settings_prefrence";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -946,16 +943,14 @@ public class Login extends Activity {
 		 */
 		commondata.event_information.eventID = null;
 		
-
-		TimePicker timePicker = (TimePicker) layout
-				.findViewById(R.id.timePickerstart);
-		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
-
+		EditText event_type = (EditText) layout.findViewById(R.id.event_type);
+		event_type.setOnClickListener(new OnClickListener() {
+			
 			@Override
-			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				commondata.prefrences.hour = hourOfDay;
-				commondata.prefrences.minute = minute;
+				System.out.println("type clicked");
+				
 			}
 		});
 		
@@ -1510,7 +1505,7 @@ public class Login extends Activity {
 		    Drawable icon;
 
 		    class ViewHolder {
-		        ImageView icon;
+		        //ImageView icon;
 		        TextView title;
 		        TextView placeaddress;
 		        TextView placeratings;
@@ -1527,8 +1522,8 @@ public class Login extends Activity {
 		                    R.layout.listdisplay, null);
 
 		            holder = new ViewHolder();
-		            holder.icon = (ImageView) convertView
-		                    .findViewById(R.id.icon);
+		           // holder.icon = (ImageView) convertView
+		            //        .findViewById(R.id.icon);
 		            holder.title = (TextView) convertView
 		                    .findViewById(R.id.title);
 		            holder.placeaddress = (TextView) convertView.findViewById(R.id.placeaddress);
@@ -1542,7 +1537,7 @@ public class Login extends Activity {
 
 		        holder.title.setText(listtitle.get(position));
 		        holder.placeaddress.setText(listaddress.get(position));
-		        holder.icon.setImageDrawable(drawable);
+		       // holder.icon.setImageDrawable(drawable);
 
 		        return convertView;
 		    }
@@ -1804,13 +1799,6 @@ public class Login extends Activity {
 			drop_event();
 			return true;
 		case R.id.settings_icon:
-			
-			// dummy section need new ui
-			
-			SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences(USER_SETTINGS_PREFERENCE, MODE_PRIVATE).edit();
-			 editor.putString("mode", "car");
-			 editor.putString("cusine", "indian");
-			 editor.commit();
 			
 			locationManager.removeUpdates(locationListener);
 			Intent settingsIntent = new Intent(Login.this, Settings.class);

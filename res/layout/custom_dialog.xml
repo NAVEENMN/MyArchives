@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android1="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android1="http://schemas.android.com/apk/res/android"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:android2="http://schemas.android.com/apk/res/android"
     android:id="@+id/new_event_root"
@@ -28,52 +29,61 @@
 
     <EditText
         android2:id="@+id/event_name"
-        android2:layout_width="wrap_content"
+        android2:layout_width="match_parent"
         android2:layout_height="wrap_content"
         android2:layout_alignParentLeft="true"
         android2:layout_below="@+id/Dividerevent"
-        android2:layout_marginLeft="25dp"
-        android2:inputType = "text"
-        android2:hint  = "@string/event_name"
-        android2:ems="10" />
-   
-    <TextView
-        android:id="@+id/Time_to_meet_start"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/event_name"
-        android:gravity="top"
-        android:paddingTop="20dp"
-        android:text="@string/Time_to_meet_start"
-        android:textColor="#424242"
-        android:textSize="16sp" />
-
-    <TimePicker
-        android:id="@+id/timePickerstart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Time_to_meet_start">
-        <requestFocus />
-    </TimePicker>
+        android2:ems="10"
+        android2:hint="@string/event_name"
+        android2:inputType="text" />
     
-   <TextView
-        android:id="@+id/Time_to_meet_end"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timePickerstart"
-        android:gravity="top"
-        android:paddingTop="20dp"
-        android:text="@string/Time_to_meet_end"
-        android:textColor="#424242"
-        android:textSize="16sp" />
-
-    <TimePicker
-        android:id="@+id/timePickerend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Time_to_meet_end">
-        <requestFocus />
-    </TimePicker>
+    <EditText
+        android2:id="@+id/event_type"
+        android2:layout_width="match_parent"
+        android2:layout_height="wrap_content"
+        android2:layout_alignParentLeft="true"
+        android2:layout_below="@+id/event_name"
+        android:focusable="false"
+        android:clickable="true" android:inputType="none"
+        android2:ems="10"
+        android2:hint="@string/event_type" />
+    
+    <EditText
+        android2:id="@+id/event_date"
+        android2:layout_width="match_parent"
+        android2:layout_height="wrap_content"
+        android2:layout_alignParentLeft="true"
+        android2:layout_below="@+id/event_type"
+        android2:ems="10"
+        android2:hint="@string/event_date"
+        android2:inputType="text" />
+   
+    
+    <LinearLayout
+        android2:id = "@+id/time_button_section"
+        android2:layout_below="@+id/event_date"
+        android2:layout_width="match_parent"
+        android2:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        
+          <EditText
+        android2:id="@+id/start_time_button"
+        android2:layout_width="wrap_content"
+        android2:layout_height="wrap_content"
+        android2:hint="@string/start_time"
+        android2:inputType="text" />
+          
+            <EditText
+        android2:id="@+id/end_time_button"
+        android2:layout_width="wrap_content"
+        android2:layout_height="wrap_content"
+        android2:hint="@string/end_time"
+        android2:inputType="text" />  
+    
+    </LinearLayout>
+    
+    
+   
 
 
 
