@@ -54,9 +54,10 @@
         android2:layout_height="wrap_content"
         android2:layout_alignParentLeft="true"
         android2:layout_below="@+id/event_type"
+        android:focusable="false"
+        android:clickable="true" android:inputType="none"
         android2:ems="10"
-        android2:hint="@string/event_date"
-        android2:inputType="text" />
+        android2:hint="@string/event_date" />
    
     
     <LinearLayout

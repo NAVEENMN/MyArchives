@@ -3,6 +3,7 @@ package com.nmysore.metster;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -23,6 +24,8 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -59,6 +62,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -943,13 +947,35 @@ public class Login extends Activity {
 		 */
 		commondata.event_information.eventID = null;
 		
-		EditText event_type = (EditText) layout.findViewById(R.id.event_type);
+		final EditText event_type = (EditText) layout.findViewById(R.id.event_type);
 		event_type.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				System.out.println("type clicked");
+				
+				String food_type = pick_food_type(event_type);
+				
+			}
+		});
+		
+		final EditText event_date = (EditText) layout.findViewById(R.id.event_date);
+		event_date.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				System.out.println("pick date");
+				
+		
+				Calendar c = Calendar.getInstance();
+
+				new DatePickerDialog(Login.this, new OnDateSetListener() {
+
+				    @Override
+				    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+				        // Do something here
+				    }
+				}, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
 				
 			}
 		});
@@ -994,7 +1020,6 @@ public class Login extends Activity {
 						.child(commondata.facebook_details.facebook + "--"
 								+ commondata.facebook_details.name)
 						.child("minute").setValue(commondata.prefrences.minute);
-				pick_food_type();
 				
 				Thread thread = new Thread() {
 				    @Override
@@ -1005,6 +1030,12 @@ public class Login extends Activity {
 
 				thread.start();
 
+				remove_location_listners();
+				Intent intent = new Intent(Login.this, Login.class);
+				startActivity(intent);
+				finish();
+				
+				
 			}
 
 		});
@@ -1182,7 +1213,7 @@ public class Login extends Activity {
 	 * @desp : This function prompts a dialog for user to pick food type and the same is set in firebase.
 	 */
 
-	public void pick_food_type() {
+	public String pick_food_type(final EditText event_type) {
 
 		// Strings to Show In Dialog with Radio Buttons
 		final CharSequence[] items = { " Chinese ", " Coffee ", " American ",
@@ -1205,6 +1236,7 @@ public class Login extends Activity {
 											+ commondata.facebook_details.name)
 									.child("food")
 									.setValue(commondata.prefrences.food);
+							event_type.setText(commondata.prefrences.food);
 
 							break;
 						case 1:
@@ -1216,7 +1248,7 @@ public class Login extends Activity {
 											+ commondata.facebook_details.name)
 									.child("food")
 									.setValue(commondata.prefrences.food);
-
+							event_type.setText(commondata.prefrences.food);
 							break;
 						case 2:
 							// Your code when 3rd option seletced
@@ -1227,7 +1259,7 @@ public class Login extends Activity {
 											+ commondata.facebook_details.name)
 									.child("food")
 									.setValue(commondata.prefrences.food);
-
+							event_type.setText(commondata.prefrences.food);
 							break;
 						case 3:
 							// Your code when 4th option seletced
@@ -1238,7 +1270,7 @@ public class Login extends Activity {
 											+ commondata.facebook_details.name)
 									.child("food")
 									.setValue(commondata.prefrences.food);
-
+							event_type.setText(commondata.prefrences.food);
 							break;
 						case 4:
 							// Your code when first option seletced
@@ -1249,7 +1281,7 @@ public class Login extends Activity {
 											+ commondata.facebook_details.name)
 									.child("food")
 									.setValue(commondata.prefrences.food);
-
+							event_type.setText(commondata.prefrences.food);
 							break;
 						case 5:
 							commondata.prefrences.food = "asian";
@@ -1259,7 +1291,7 @@ public class Login extends Activity {
 											+ commondata.facebook_details.name)
 									.child("food")
 									.setValue(commondata.prefrences.food);
-
+							event_type.setText(commondata.prefrences.food);
 							// Your code when 2nd option seletced
 							break;
 						case 6:
@@ -1270,7 +1302,7 @@ public class Login extends Activity {
 											+ commondata.facebook_details.name)
 									.child("food")
 									.setValue(commondata.prefrences.food);
-
+							event_type.setText(commondata.prefrences.food);
 							// Your code when 3rd option seletced
 							break;
 						case 7:
@@ -1281,7 +1313,7 @@ public class Login extends Activity {
 											+ commondata.facebook_details.name)
 									.child("food")
 									.setValue(commondata.prefrences.food);
-
+							event_type.setText(commondata.prefrences.food);
 							// Your code when 4th option seletced
 							break;
 						case 8:
@@ -1292,7 +1324,7 @@ public class Login extends Activity {
 											+ commondata.facebook_details.name)
 									.child("food")
 									.setValue(commondata.prefrences.food);
-
+							event_type.setText(commondata.prefrences.food);
 							// Your code when first option seletced
 							break;
 						case 9:
@@ -1303,7 +1335,7 @@ public class Login extends Activity {
 											+ commondata.facebook_details.name)
 									.child("food")
 									.setValue(commondata.prefrences.food);
-
+							event_type.setText(commondata.prefrences.food);
 							// Your code when 2nd option seletced
 							break;
 						case 10:
@@ -1314,7 +1346,7 @@ public class Login extends Activity {
 											+ commondata.facebook_details.name)
 									.child("food")
 									.setValue(commondata.prefrences.food);
-
+							event_type.setText(commondata.prefrences.food);
 							// Your code when 3rd option seletced
 							break;
 						default:
@@ -1325,19 +1357,16 @@ public class Login extends Activity {
 											+ commondata.facebook_details.name)
 									.child("food")
 									.setValue(commondata.prefrences.food);
-
+							event_type.setText(commondata.prefrences.food);
 							break;
 
 						}
 						levelDialog.dismiss();
-						remove_location_listners();
-						Intent intent = new Intent(Login.this, Login.class);
-						startActivity(intent);
-						finish();
 					}
 				});
 		levelDialog = builder.create();
 		levelDialog.show();
+		return commondata.prefrences.food;
 	}
 
 	/*
