@@ -28,6 +28,8 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -70,6 +72,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
@@ -947,6 +950,15 @@ public class Login extends Activity {
 		 */
 		commondata.event_information.eventID = null;
 		
+		/*
+		 * get event name
+		 */
+		
+		final EditText event_name = (EditText) layout.findViewById(R.id.event_name);
+		
+		/*
+		 * pick food type
+		 */
 		final EditText event_type = (EditText) layout.findViewById(R.id.event_type);
 		event_type.setOnClickListener(new OnClickListener() {
 			
@@ -958,6 +970,9 @@ public class Login extends Activity {
 			}
 		});
 		
+		/*
+		 * pick date
+		 */
 		final EditText event_date = (EditText) layout.findViewById(R.id.event_date);
 		event_date.setOnClickListener(new OnClickListener() {
 			
@@ -968,20 +983,91 @@ public class Login extends Activity {
 				
 		
 				Calendar c = Calendar.getInstance();
-
+				commondata.prefrences.year = Calendar.YEAR;
+				commondata.prefrences.date = Calendar.DATE;
+				commondata.prefrences.month = Calendar.MONTH + 1;
 				new DatePickerDialog(Login.this, new OnDateSetListener() {
 
 				    @Override
 				    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-				        // Do something here
+				        // save date
+						commondata.prefrences.year = year;
+						commondata.prefrences.date = monthOfYear + 1;
+						commondata.prefrences.month = dayOfMonth;
+						
+						// handle past date
+						event_date.setText(Integer.toString(monthOfYear + 1) + "/" + Integer.toString(dayOfMonth) + "/" + Integer.toString(year));
+				    	
 				    }
 				}, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
 				
 			}
 		});
 		
+		/*
+		 * pick start time
+		 */
+		
+		final EditText event_start_time = (EditText) layout.findViewById(R.id.start_time_button);
+		event_start_time.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				System.out.println("pick start time");
+				Calendar c = Calendar.getInstance();
+				commondata.prefrences.year = Calendar.YEAR;
+				commondata.prefrences.date = Calendar.DATE;
+				commondata.prefrences.month = Calendar.MONTH + 1;
+				new TimePickerDialog(Login.this, new OnTimeSetListener() {
+					
+					@Override
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+						// TODO Auto-generated method stub
+						
+						event_start_time.setText(Integer.toString(hourOfDay)+":"+Integer.toString(minute));
+						
+					}
+				}, Calendar.HOUR_OF_DAY, Calendar.MINUTE, true).show();
+				
+			}
+		});
+		
+		/*
+		 * pick end time
+		 */
+		
+		final EditText event_end_time = (EditText) layout.findViewById(R.id.end_time_button);
+		event_end_time.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				System.out.println("pick end time");
+				Calendar c = Calendar.getInstance();
+				commondata.prefrences.year = Calendar.YEAR;
+				commondata.prefrences.date = Calendar.DATE;
+				commondata.prefrences.month = Calendar.MONTH + 1;
+				new TimePickerDialog(Login.this, new OnTimeSetListener() {
+					
+					@Override
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+						// TODO Auto-generated method stub
+						
+						event_end_time.setText(Integer.toString(hourOfDay)+":"+Integer.toString(minute));
+						
+					}
+				}, Calendar.HOUR_OF_DAY, Calendar.MINUTE, true).show();
+				
+			}
+		});
+		
+		
 		alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
+				
+				commondata.prefrences.event_name = event_name.getText().toString();
+				System.out.println("name set" + commondata.prefrences.event_name);
 				/*
 				 * add the host to firebase met-ster-event
 				 */

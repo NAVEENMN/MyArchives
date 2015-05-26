@@ -72,14 +72,18 @@
         android2:layout_width="wrap_content"
         android2:layout_height="wrap_content"
         android2:hint="@string/start_time"
-        android2:inputType="text" />
+        android:focusable="false"
+        android:clickable="true" android:inputType="none"
+         />
           
             <EditText
         android2:id="@+id/end_time_button"
         android2:layout_width="wrap_content"
         android2:layout_height="wrap_content"
         android2:hint="@string/end_time"
-        android2:inputType="text" />  
+        android:focusable="false"
+        android:clickable="true" android:inputType="none"
+         />  
     
     </LinearLayout>
     

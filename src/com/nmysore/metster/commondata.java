@@ -56,6 +56,10 @@ public class commondata {
 		static int hour;
 		static int minute;
 		static String food;
+		static int year;
+		static int month;
+		static int date;
+		static String event_name;
 	}
 		
 	public static class places_found{
