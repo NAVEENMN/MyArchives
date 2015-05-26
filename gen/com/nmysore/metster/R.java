@@ -1837,17 +1837,17 @@ containing a value of this type.
         public static final int LastName=0x7f05006e;
         public static final int Logout=0x7f05007c;
         public static final int New_Event=0x7f050059;
-        public static final int Price_Level=0x7f0500ad;
+        public static final int Price_Level=0x7f0500ae;
         public static final int ProfileImage=0x7f05006b;
         public static final int ProfileImagebackground=0x7f05006a;
         public static final int ProfileSettings=0x7f050078;
-        public static final int Profile_Settings=0x7f0500ac;
+        public static final int Profile_Settings=0x7f0500ad;
         public static final int Profiledata=0x7f050069;
         public static final int Support=0x7f05007a;
         public static final int Time_to_meet=0x7f05005c;
-        public static final int Travel_Choice_Preference=0x7f0500b0;
-        public static final int Travel_Method_Preference=0x7f0500af;
-        public static final int about_icon=0x7f0500b8;
+        public static final int Travel_Choice_Preference=0x7f0500b1;
+        public static final int Travel_Method_Preference=0x7f0500b0;
+        public static final int about_icon=0x7f0500b9;
         public static final int action_bar=0x7f050039;
         public static final int action_bar_activity_content=0x7f050032;
         public static final int action_bar_container=0x7f050038;
@@ -1856,11 +1856,11 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f050040;
         public static final int action_bar_title=0x7f05003f;
         public static final int action_context_bar=0x7f05003a;
-        public static final int action_example=0x7f0500b5;
+        public static final int action_example=0x7f0500b6;
         public static final int action_menu_divider=0x7f050033;
         public static final int action_menu_presenter=0x7f050034;
         public static final int action_mode_close_button=0x7f050041;
-        public static final int action_settings=0x7f0500b6;
+        public static final int action_settings=0x7f0500b7;
         public static final int activity_chooser_view_content=0x7f050042;
         public static final int add_friends=0x7f050076;
         public static final int address_line=0x7f05006f;
@@ -1908,7 +1908,7 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f050096;
         public static final int create_a_new_event=0x7f050075;
         public static final int default_activity_button=0x7f050045;
-        public static final int delete_icon=0x7f0500b7;
+        public static final int delete_icon=0x7f0500b8;
         public static final int dialog=0x7f05002c;
         public static final int disableHome=0x7f050026;
         public static final int dropdown=0x7f05002d;
@@ -1947,31 +1947,32 @@ containing a value of this type.
         public static final int meet_up=0x7f050077;
         public static final int middle=0x7f05002f;
         public static final int monochrome=0x7f05001e;
+        public static final int nameandratings=0x7f0500a6;
         public static final int never=0x7f050027;
         public static final int new_event_root=0x7f050098;
         public static final int new_info_root=0x7f0500a1;
         public static final int none=0x7f05000c;
         public static final int normal=0x7f050001;
         public static final int picker_subtitle=0x7f05008d;
-        public static final int placeaddress=0x7f0500a6;
+        public static final int placeaddress=0x7f0500a8;
         public static final int placedetails=0x7f0500a5;
         public static final int placeratings=0x7f0500a7;
-        public static final int placereviews=0x7f0500a8;
+        public static final int placereviews=0x7f0500a9;
         public static final int placesection=0x7f0500a4;
-        public static final int placetype=0x7f0500aa;
-        public static final int pricelevelpreference=0x7f0500ae;
+        public static final int placetype=0x7f0500ab;
+        public static final int pricelevelpreference=0x7f0500af;
         public static final int production=0x7f050012;
-        public static final int profile_settings_root=0x7f0500ab;
+        public static final int profile_settings_root=0x7f0500ac;
         public static final int profileinfo=0x7f05006c;
         public static final int progress_circular=0x7f050035;
         public static final int progress_horizontal=0x7f050036;
         public static final int radio=0x7f05004c;
-        public static final int radio_bike=0x7f0500b3;
-        public static final int radio_car=0x7f0500b1;
-        public static final int radio_public=0x7f0500b2;
-        public static final int radio_walk=0x7f0500b4;
-        public static final int refresh_icon1=0x7f0500ba;
-        public static final int reviewscore=0x7f0500a9;
+        public static final int radio_bike=0x7f0500b4;
+        public static final int radio_car=0x7f0500b2;
+        public static final int radio_public=0x7f0500b3;
+        public static final int radio_walk=0x7f0500b5;
+        public static final int refresh_icon1=0x7f0500bb;
+        public static final int reviewscore=0x7f0500aa;
         public static final int right=0x7f05000b;
         public static final int sandbox=0x7f050013;
         public static final int satellite=0x7f05000d;
@@ -1986,7 +1987,7 @@ containing a value of this type.
         public static final int search_src_text=0x7f050054;
         public static final int search_voice_btn=0x7f050058;
         public static final int selectionDetails=0x7f050016;
-        public static final int settings_icon=0x7f0500b9;
+        public static final int settings_icon=0x7f0500ba;
         public static final int shortcut=0x7f05004b;
         public static final int showCustom=0x7f050025;
         public static final int showHome=0x7f050022;
@@ -2416,10 +2417,10 @@ containing a value of this type.
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f090093;
-        public static final int ButtonBar=0x7f090095;
-        public static final int ButtonBarButton=0x7f090096;
-        public static final int FullscreenActionBarStyle=0x7f090097;
-        public static final int FullscreenTheme=0x7f090094;
+        public static final int ButtonBar=0x7f090096;
+        public static final int ButtonBarButton=0x7f090097;
+        public static final int FullscreenActionBarStyle=0x7f090098;
+        public static final int FullscreenTheme=0x7f090095;
         /**  Mimic text appearance in select_dialog_item.xml 
          */
         public static final int TextAppearance_AppCompat_Base_CompactMenu_Dialog=0x7f09006a;
@@ -2633,6 +2634,7 @@ containing a value of this type.
         public static final int Widget_AppCompat_Spinner_DropDown_ActionBar=0x7f090029;
         public static final int com_facebook_loginview_default_style=0x7f090000;
         public static final int com_facebook_loginview_silver_style=0x7f090001;
+        public static final int dialog_animation=0x7f090094;
         public static final int tooltip_bubble_text=0x7f090002;
     }
     public static final class styleable {

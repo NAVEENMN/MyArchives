@@ -71,6 +71,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -176,7 +177,6 @@ public class Login extends Activity {
 						android.R.color.transparent)));
 		setTitle("New Event");
 		Firebase.setAndroidContext(this);
-
 		
 		// UNIVERSAL IMAGE LOADER SETUP
 				DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
@@ -937,14 +937,22 @@ public class Login extends Activity {
 	 * @desp : this function creates the alert box for new event.
 	 * 		   It takes event details like transport, time and rate preferences.
 	 */
+	@SuppressWarnings("deprecation")
 	public void create_event_notification() {
 
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View layout = inflater.inflate(R.layout.custom_dialog,
+		final View layout = inflater.inflate(R.layout.custom_dialog,
 				(ViewGroup) findViewById(R.id.new_event_root));
 		AlertDialog.Builder alert = new AlertDialog.Builder(this)
 				.setView(layout);
-		alert.create();
+		
+		
+		final AlertDialog dialog = alert.create();
+		dialog.getWindow().getAttributes().windowAnimations = 
+
+
+				R.style.dialog_animation;
+		
 		/*
 		 * fetch all data from the the dialog
 		 */
@@ -1033,6 +1041,7 @@ public class Login extends Activity {
 			}
 		});
 		
+		
 		/*
 		 * pick end time
 		 */
@@ -1063,11 +1072,12 @@ public class Login extends Activity {
 		});
 		
 		
-		alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+		dialog.setButton("Done", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				
 				commondata.prefrences.event_name = event_name.getText().toString();
 				System.out.println("name set" + commondata.prefrences.event_name);
+				setTitle(commondata.prefrences.event_name);
 				/*
 				 * add the host to firebase met-ster-event
 				 */
@@ -1075,6 +1085,7 @@ public class Login extends Activity {
 				commondata.event_information.eventID = "event-"
 						+ commondata.facebook_details.facebook;
 				create_firebase_refrence();
+				
 				fb_event_ref.firebaseobj.child(
 						commondata.facebook_details.facebook + "--"
 								+ commondata.facebook_details.name).setValue(
@@ -1084,6 +1095,11 @@ public class Login extends Activity {
 								+ commondata.facebook_details.name)
 						.child("Latitude")
 						.setValue(commondata.user_information.latitude);
+				fb_event_ref.firebaseobj
+				.child(commondata.facebook_details.facebook + "--"
+						+ commondata.facebook_details.name)
+				.child("EventName")
+				.setValue(commondata.prefrences.event_name);
 				fb_event_ref.firebaseobj
 						.child(commondata.facebook_details.facebook + "--"
 								+ commondata.facebook_details.name)
@@ -1125,8 +1141,8 @@ public class Login extends Activity {
 			}
 
 		});
-
-		alert.show();
+		
+		dialog.show();
 
 	}
 
@@ -1227,6 +1243,7 @@ public class Login extends Activity {
 									String address = null;
 									String contact = null;
 									String location = null;
+									String total_ratings = null;
 									
 									JSONObject dats = new JSONObject(values);
 									
@@ -1237,6 +1254,7 @@ public class Login extends Activity {
 									if (dats.has("formatted_address")) address = dats.getString("formatted_address");
 									if (dats.has("international_phone_number")) contact = dats.getString("international_phone_number");
 									if (dats.has("location")) location = dats.getString("location");
+									if (dats.has("user_ratings_total")) total_ratings= dats.getString("user_ratings_total");
 									rank = Double.parseDouble(dats.getString("rank"));
 									
 									place_details node = new commondata.place_details();
@@ -1246,6 +1264,7 @@ public class Login extends Activity {
 									node.price_level = price_level;
 									node.address = address;
 									node.contact = contact;
+									node.total_ratings = total_ratings;
 									
 									// location is in this format [lat, lon] in string, bring it to double so we can use it
 									String[] tempclean = location.split(",");
@@ -1584,14 +1603,16 @@ public class Login extends Activity {
 		builder.setTitle("Pick your choices");
 
 		ListView modeList = new ListView(this);
-		final ArrayList<String> listtitle = new ArrayList<String>();
-		final ArrayList<String> listaddress = new ArrayList<String>();
-		final ArrayList<String> listrating = new ArrayList<String>();
+		final ArrayList<String> listtitle = new ArrayList<String>();//
+		final ArrayList<String> listaddress = new ArrayList<String>();//
+		final ArrayList<Double> listrating = new ArrayList<Double>();//
 		final ArrayList<String> listreview = new ArrayList<String>();
 		final ArrayList<String> listtype = new ArrayList<String>();
 		final ArrayList<String> listreviewscore = new ArrayList<String>();
 		final ArrayList<String> listdistance = new ArrayList<String>();
-		final ArrayList<String> listprice = new ArrayList<String>();
+		final ArrayList<Double> listprice = new ArrayList<Double>();
+		final ArrayList<String> listtotalratings = new ArrayList<String>();
+		final ArrayList<String> dollar = new ArrayList<String>();
 		
 		listtitle.clear();
 		listaddress.clear();
@@ -1601,7 +1622,7 @@ public class Login extends Activity {
 		listreviewscore.clear();
 		listdistance.clear();
 		listprice.clear();
-		
+		listtotalratings.clear();
 		/*
 		 * this section sets up the common data from the server in sorted order
 		 */
@@ -1610,8 +1631,14 @@ public class Login extends Activity {
 			place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
 			listtitle.add(node.place_name);
 			listaddress.add(node.address);
-			listrating.add(node.rating.toString());
+			listrating.add(node.rating);
+			listtotalratings.add(node.total_ratings);
+			listprice.add(node.price_level);
 		}
+		
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.listdisplay,
+				(ViewGroup) findViewById(R.id.placesection));
 		
 		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
 				R.layout.listdisplay,
@@ -1623,7 +1650,9 @@ public class Login extends Activity {
 		        //ImageView icon;
 		        TextView title;
 		        TextView placeaddress;
-		        TextView placeratings;
+		        TextView placereviews;
+		        RatingBar placeratings;
+		        
 		    }
 
 		    public View getView(int position, View convertView,
@@ -1642,6 +1671,8 @@ public class Login extends Activity {
 		            holder.title = (TextView) convertView
 		                    .findViewById(R.id.title);
 		            holder.placeaddress = (TextView) convertView.findViewById(R.id.placeaddress);
+		            holder.placereviews = (TextView) convertView.findViewById(R.id.placereviews);
+		            holder.placeratings = (RatingBar) convertView.findViewById(R.id.placeratings);
 		            convertView.setTag(holder);
 		        } else {
 		            // view already defined, retrieve view holder
@@ -1652,8 +1683,16 @@ public class Login extends Activity {
 
 		        holder.title.setText(listtitle.get(position));
 		        holder.placeaddress.setText(listaddress.get(position));
+		        holder.placeratings.setRating(listrating.get(position).floatValue());
+		        
+		        // set up $
+		        for(Double i = 0.0; i<listprice.get(position);i=i+1.0){
+		        	dollar.add("$");
+		        }
+		        String dollarsign = dollar.toString().replace("[", "").replace("]", "").replace(",", "");
+		        holder.placereviews.setText(listtotalratings.get(position) +" google reviews   "+ " " + dollarsign);
 		       // holder.icon.setImageDrawable(drawable);
-
+		        dollar.clear();
 		        return convertView;
 		    }
 		};
@@ -1675,8 +1714,8 @@ public class Login extends Activity {
 				
 				
 				AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
-    			alert.setTitle("Connection Error");
-    			alert.setMessage("Please check your network settings");
+    			alert.setTitle(node.place_name);
+    			alert.setMessage("Do you wish to add this place?");
     			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
     			public void onClick(DialogInterface dialog, int whichButton) {
     				

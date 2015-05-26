@@ -5,7 +5,7 @@
     android:id="@+id/new_event_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E6E6E6"
+    android:background= "#EFF2FB"
     android:orientation="vertical" >
 
     <TextView
@@ -13,9 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:background="#FE642E"
         android:text="@string/setup_preferences"
         android:paddingBottom="10dp"
-        android:textColor="#2E2E2E"
+        android:textColor="#E0ECF8"
         android:textSize="28sp" />
 
     <View
@@ -24,7 +25,7 @@
         android:layout_height="3dp"
         android:paddingTop="20dp"
         android:layout_below="@+id/New_Event"
-        android:background="#819FF7"
+        android:background="#2E9AFE"
         android:gravity="bottom" />
 
     <EditText
@@ -86,10 +87,7 @@
          />  
     
     </LinearLayout>
-    
-    
+
    
-
-
 
 </RelativeLayout>
