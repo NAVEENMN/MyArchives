@@ -46,10 +46,10 @@ def get_distance(a, b):
             of double and fetches all the restraunts and returns its names
             and latitdues and longitudes
 '''
-def req_place_details(lat, long):
+def req_place_details(lat, long, food_type):
     
     ratings = list()
-    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + long + "&radius=2000&types=food&keyword="+"&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE"
+    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + long + "&radius=4000&types=food&keyword="+food_type+"&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE"
     response = urllib2.urlopen(url).read()
     jason_data = json.loads(response)
     for place in jason_data['results']:
@@ -120,6 +120,7 @@ def get_features(eventid,fb_res, ranking, rating_ranking):
     ranked = dict()
     ranked_ratings = dict()
     centroid = None
+    food_type = None
     # get people`s location
     for key in fb_res.keys():
         if "*" in str(key): # "*" in key implies its a place location
@@ -137,10 +138,11 @@ def get_features(eventid,fb_res, ranking, rating_ranking):
     lat = lat / len(people)
     lon = lon / len(people)
     centroid = [lat, lon]
+    food_type = fb.get(eventid + key +'/food',None)
     # Let have the centroid on maps for verification
     fb.put(eventid,"709091411991*799--center", {'Latitude': lat, 'Longitude': lon})
     # For this version we are considering centroid but we need better approach
-    locations, names, ratings, id = req_place_details(str(centroid[0]), str(centroid[1]))
+    locations, names, ratings, id = req_place_details(str(centroid[0]), str(centroid[1]),food_type)
     # all places are equally preferred
     for x in range(0, len(names)):
         ranking[names[x]] = 0.0
