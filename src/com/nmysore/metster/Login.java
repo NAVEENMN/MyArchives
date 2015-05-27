@@ -741,7 +741,6 @@ public class Login extends Activity {
 											.fromResource(R.drawable.flag))
 									.title(commondata.places_found.names.get(i)));
 							
-							System.out.println("possible bug here");
 							
 							if (event_info.is_host) {
 								mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
@@ -1122,6 +1121,10 @@ public class Login extends Activity {
 						.child(commondata.facebook_details.facebook + "--"
 								+ commondata.facebook_details.name)
 						.child("minute").setValue(commondata.prefrences.minute);
+				fb_event_ref.firebaseobj
+				.child(commondata.facebook_details.facebook + "--"
+						+ commondata.facebook_details.name)
+				.child("food").setValue(commondata.prefrences.food);
 				
 				Thread thread = new Thread() {
 				    @Override
@@ -1213,7 +1216,7 @@ public class Login extends Activity {
 				Thread thread = new Thread() {
 				    @Override
 				    public void run() {
-				    	System.out.println("before");
+				    	System.out.println("finding the meet up point");
 				    		String ranked_list = postData("http://54.183.113.236/metster/exe_get_loc.php", commondata.event_information.eventID,
 				    			"event-"+ commondata.facebook_details.facebook);
 				    		try {
@@ -1244,6 +1247,7 @@ public class Login extends Activity {
 									String contact = null;
 									String location = null;
 									String total_ratings = null;
+									String types = null;
 									
 									JSONObject dats = new JSONObject(values);
 									
@@ -1255,6 +1259,7 @@ public class Login extends Activity {
 									if (dats.has("international_phone_number")) contact = dats.getString("international_phone_number");
 									if (dats.has("location")) location = dats.getString("location");
 									if (dats.has("user_ratings_total")) total_ratings= dats.getString("user_ratings_total");
+									if (dats.has("types")) types = dats.getString("types");
 									rank = Double.parseDouble(dats.getString("rank"));
 									
 									place_details node = new commondata.place_details();
@@ -1265,6 +1270,7 @@ public class Login extends Activity {
 									node.address = address;
 									node.contact = contact;
 									node.total_ratings = total_ratings;
+									node.types = types;
 									
 									// location is in this format [lat, lon] in string, bring it to double so we can use it
 									String[] tempclean = location.split(",");
@@ -1300,12 +1306,14 @@ public class Login extends Activity {
 				};
 
 				thread.start();
+				/*
 				try {
 					thread.join();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				*/
 			}
 		}
 	}
@@ -1335,133 +1343,73 @@ public class Login extends Activity {
 						switch (item) {
 						case 0:
 							commondata.prefrences.food = "chinese";
-							fb_event_ref.firebaseobj
-									.child(commondata.facebook_details.facebook
-											+ "--"
-											+ commondata.facebook_details.name)
-									.child("food")
-									.setValue(commondata.prefrences.food);
+							
 							event_type.setText(commondata.prefrences.food);
 
 							break;
 						case 1:
 							// Your code when 2nd option seletced
 							commondata.prefrences.food = "coffee";
-							fb_event_ref.firebaseobj
-									.child(commondata.facebook_details.facebook
-											+ "--"
-											+ commondata.facebook_details.name)
-									.child("food")
-									.setValue(commondata.prefrences.food);
+							
 							event_type.setText(commondata.prefrences.food);
 							break;
 						case 2:
 							// Your code when 3rd option seletced
 							commondata.prefrences.food = "american";
-							fb_event_ref.firebaseobj
-									.child(commondata.facebook_details.facebook
-											+ "--"
-											+ commondata.facebook_details.name)
-									.child("food")
-									.setValue(commondata.prefrences.food);
+							
 							event_type.setText(commondata.prefrences.food);
 							break;
 						case 3:
 							// Your code when 4th option seletced
 							commondata.prefrences.food = "seafood";
-							fb_event_ref.firebaseobj
-									.child(commondata.facebook_details.facebook
-											+ "--"
-											+ commondata.facebook_details.name)
-									.child("food")
-									.setValue(commondata.prefrences.food);
+							
 							event_type.setText(commondata.prefrences.food);
 							break;
 						case 4:
 							// Your code when first option seletced
 							commondata.prefrences.food = "pizza";
-							fb_event_ref.firebaseobj
-									.child(commondata.facebook_details.facebook
-											+ "--"
-											+ commondata.facebook_details.name)
-									.child("food")
-									.setValue(commondata.prefrences.food);
+							
 							event_type.setText(commondata.prefrences.food);
 							break;
 						case 5:
 							commondata.prefrences.food = "asian";
-							fb_event_ref.firebaseobj
-									.child(commondata.facebook_details.facebook
-											+ "--"
-											+ commondata.facebook_details.name)
-									.child("food")
-									.setValue(commondata.prefrences.food);
+							
 							event_type.setText(commondata.prefrences.food);
 							// Your code when 2nd option seletced
 							break;
 						case 6:
 							commondata.prefrences.food = "japanese";
-							fb_event_ref.firebaseobj
-									.child(commondata.facebook_details.facebook
-											+ "--"
-											+ commondata.facebook_details.name)
-									.child("food")
-									.setValue(commondata.prefrences.food);
+							
 							event_type.setText(commondata.prefrences.food);
 							// Your code when 3rd option seletced
 							break;
 						case 7:
 							commondata.prefrences.food = "mexican";
-							fb_event_ref.firebaseobj
-									.child(commondata.facebook_details.facebook
-											+ "--"
-											+ commondata.facebook_details.name)
-									.child("food")
-									.setValue(commondata.prefrences.food);
+							
 							event_type.setText(commondata.prefrences.food);
 							// Your code when 4th option seletced
 							break;
 						case 8:
 							commondata.prefrences.food = "italian";
-							fb_event_ref.firebaseobj
-									.child(commondata.facebook_details.facebook
-											+ "--"
-											+ commondata.facebook_details.name)
-									.child("food")
-									.setValue(commondata.prefrences.food);
+							
 							event_type.setText(commondata.prefrences.food);
 							// Your code when first option seletced
 							break;
 						case 9:
 							commondata.prefrences.food = "indian";
-							fb_event_ref.firebaseobj
-									.child(commondata.facebook_details.facebook
-											+ "--"
-											+ commondata.facebook_details.name)
-									.child("food")
-									.setValue(commondata.prefrences.food);
+							
 							event_type.setText(commondata.prefrences.food);
 							// Your code when 2nd option seletced
 							break;
 						case 10:
 							commondata.prefrences.food = "icecream";
-							fb_event_ref.firebaseobj
-									.child(commondata.facebook_details.facebook
-											+ "--"
-											+ commondata.facebook_details.name)
-									.child("food")
-									.setValue(commondata.prefrences.food);
+							
 							event_type.setText(commondata.prefrences.food);
 							// Your code when 3rd option seletced
 							break;
 						default:
 							commondata.prefrences.food = "american";
-							fb_event_ref.firebaseobj
-									.child(commondata.facebook_details.facebook
-											+ "--"
-											+ commondata.facebook_details.name)
-									.child("food")
-									.setValue(commondata.prefrences.food);
+						
 							event_type.setText(commondata.prefrences.food);
 							break;
 
@@ -1607,7 +1555,7 @@ public class Login extends Activity {
 		final ArrayList<String> listaddress = new ArrayList<String>();//
 		final ArrayList<Double> listrating = new ArrayList<Double>();//
 		final ArrayList<String> listreview = new ArrayList<String>();
-		final ArrayList<String> listtype = new ArrayList<String>();
+		final ArrayList<String> listtypes = new ArrayList<String>();
 		final ArrayList<String> listreviewscore = new ArrayList<String>();
 		final ArrayList<String> listdistance = new ArrayList<String>();
 		final ArrayList<Double> listprice = new ArrayList<Double>();
@@ -1618,7 +1566,7 @@ public class Login extends Activity {
 		listaddress.clear();
 		listrating.clear();
 		listreview.clear();
-		listtype.clear();
+		listtypes.clear();
 		listreviewscore.clear();
 		listdistance.clear();
 		listprice.clear();
@@ -1634,6 +1582,7 @@ public class Login extends Activity {
 			listrating.add(node.rating);
 			listtotalratings.add(node.total_ratings);
 			listprice.add(node.price_level);
+			listtypes.add(node.types);
 		}
 		
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1652,6 +1601,7 @@ public class Login extends Activity {
 		        TextView placeaddress;
 		        TextView placereviews;
 		        RatingBar placeratings;
+		        TextView placetype;
 		        
 		    }
 
@@ -1673,6 +1623,7 @@ public class Login extends Activity {
 		            holder.placeaddress = (TextView) convertView.findViewById(R.id.placeaddress);
 		            holder.placereviews = (TextView) convertView.findViewById(R.id.placereviews);
 		            holder.placeratings = (RatingBar) convertView.findViewById(R.id.placeratings);
+		            holder.placetype = (TextView) convertView.findViewById(R.id.placetype);
 		            convertView.setTag(holder);
 		        } else {
 		            // view already defined, retrieve view holder
@@ -1684,6 +1635,7 @@ public class Login extends Activity {
 		        holder.title.setText(listtitle.get(position));
 		        holder.placeaddress.setText(listaddress.get(position));
 		        holder.placeratings.setRating(listrating.get(position).floatValue());
+		        holder.placetype.setText(listtypes.get(position));
 		        
 		        // set up $
 		        for(Double i = 0.0; i<listprice.get(position);i=i+1.0){
@@ -1746,8 +1698,14 @@ public class Login extends Activity {
 
 		});
 		builder.setView(modeList);
+		builder.setPositiveButton("Done",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,
+							int whichButton) {
+						dialog.dismiss();
+					}
+				});
 		final Dialog dialog = builder.create();
-		
 		dialog.show();
 
 	}

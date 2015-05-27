@@ -114,6 +114,8 @@ public class LoadHome extends Activity {
 		if (prefs.toString()!= null) {
 		  float price_preference = prefs.getFloat("price_preference", (float) 2.5);//"No name defined" is the default value.
 		  float travel_prefernce = prefs.getFloat("travel_preference", (float) 5.0); //0 is the default value.
+		  commondata.prefrences.price = price_preference;
+		  commondata.prefrences.travel = (double) travel_prefernce;
 		  System.out.println("price :"  + price_preference + "travel : " + travel_prefernce);
 		}else{
 			System.out.println("no settings found - making default settings");

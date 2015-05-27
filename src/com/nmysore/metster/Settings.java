@@ -51,7 +51,7 @@ public class Settings extends Activity {
 		
 		// We have stars and bullet button
 		RatingBar ratingBar = (RatingBar) layout.findViewById(R.id.pricelevelpreference);
-		ratingBar.setRating((float) 2.5);
+		ratingBar.setRating(commondata.prefrences.price);
 		ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
 
 			@Override
@@ -63,6 +63,8 @@ public class Settings extends Activity {
 			}
 		});
 		final RadioGroup travelchoice = (RadioGroup) layout.findViewById(R.id.Travel_Choice_Preference);
+		
+		travelchoice.check(commondata.prefrences.travel.intValue());
 		travelchoice.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override

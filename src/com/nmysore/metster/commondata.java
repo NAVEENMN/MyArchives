@@ -98,6 +98,7 @@ public class commondata {
 		Double latitude;
 		Double longitude;
 		String total_ratings;
+		String types;
 		
 	}
 	
