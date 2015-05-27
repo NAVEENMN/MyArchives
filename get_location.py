@@ -76,12 +76,12 @@ def get_place_details(id, rank, location):
     url = "https://maps.googleapis.com/maps/api/place/details/json?reference=" + id + "&sensor=true&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE&sensor=true&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE"
     response = urllib2.urlopen(url).read()
     jason_data = json.loads(response)
-    attributes = ['rating','price_level','formatted_address','opening_hours','website','name','international_phone_number']
+    attributes = ['rating','user_ratings_total','types','price_level','formatted_address','opening_hours','website','name','international_phone_number']
     
     #building json data
     data = dict()
     for param in jason_data['result']:
-        if param in attributes:
+        if param in attributes: 
             data[param] = jason_data['result'][param]
     data['rank'] = str(rank)
     data['location'] = location
@@ -137,6 +137,8 @@ def get_features(eventid,fb_res, ranking, rating_ranking):
     lat = lat / len(people)
     lon = lon / len(people)
     centroid = [lat, lon]
+    # Let have the centroid on maps for verification
+    fb.put(eventid,"709091411991*799--center", {'Latitude': lat, 'Longitude': lon})
     # For this version we are considering centroid but we need better approach
     locations, names, ratings, id = req_place_details(str(centroid[0]), str(centroid[1]))
     # all places are equally preferred
