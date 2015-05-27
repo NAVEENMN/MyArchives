@@ -46,6 +46,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -243,9 +244,7 @@ public class Login extends Activity {
 							// TODO Auto-generated method stub
 							System.out.println("childadded"
 									+ arg0.getName().toString());
-							if (arg0.getName().contains("center")) {
-								toast_info(" hold the meet button to explore...");
-							}
+							
 						}
 
 						@Override
@@ -607,7 +606,6 @@ public class Login extends Activity {
 				}
 				return true;
 			}
-
 		});
 		// ----------------------- long pressed ends here
 	
@@ -1213,110 +1211,14 @@ public class Login extends Activity {
 				 */
 				
 				
-				Thread thread = new Thread() {
-				    @Override
-				    public void run() {
-				    	System.out.println("finding the meet up point");
-				    		String ranked_list = postData("http://54.183.113.236/metster/exe_get_loc.php", commondata.event_information.eventID,
-				    			"event-"+ commondata.facebook_details.facebook);
-				    		try {
-								JSONObject rest_list = new JSONObject(ranked_list);
-								Iterator<String> places  = rest_list.keys();
-								
-								/*
-								 * This section reads the json data responded from the server
-								 * the data is in the form of place name as key and location and rank as values
-								 * example : place_ref : [[15.7637, -80.896987],[2.0]]
-								 */
-								
-								while(places.hasNext()){
-									String place_refrence;
-									Double latitude = null;
-									Double longitude = null;
-									Double rank = null;
-									String id = null;
-									String place = places.next();
-									place_refrence = place;
-									String values = rest_list.getString(place_refrence);
-									
-									Double rating = 0.0;
-									String website = null;
-									String place_name = null;
-									Double price_level = 0.0;
-									String address = null;
-									String contact = null;
-									String location = null;
-									String total_ratings = null;
-									String types = null;
-									
-									JSONObject dats = new JSONObject(values);
-									
-									if (dats.has("rating")) rating = Double.parseDouble(dats.getString("rating"));
-									if (dats.has("website")) website = dats.getString("website");
-									if (dats.has("name")) place_name = dats.getString("name");
-									if (dats.has("price_level")) price_level = Double.parseDouble(dats.getString("price_level"));
-									if (dats.has("formatted_address")) address = dats.getString("formatted_address");
-									if (dats.has("international_phone_number")) contact = dats.getString("international_phone_number");
-									if (dats.has("location")) location = dats.getString("location");
-									if (dats.has("user_ratings_total")) total_ratings= dats.getString("user_ratings_total");
-									if (dats.has("types")) types = dats.getString("types");
-									rank = Double.parseDouble(dats.getString("rank"));
-									
-									place_details node = new commondata.place_details();
-									node.rating = rating;
-									node.website = website;
-									node.place_name = place_name;
-									node.price_level = price_level;
-									node.address = address;
-									node.contact = contact;
-									node.total_ratings = total_ratings;
-									node.types = types;
-									
-									// location is in this format [lat, lon] in string, bring it to double so we can use it
-									String[] tempclean = location.split(",");
-									System.out.println("lat " + tempclean[0]);
-									System.out.println("lon"+ tempclean[1]);
-									node.latitude = Double.parseDouble(tempclean[0].replace("[", ""));
-									node.longitude = Double.parseDouble(tempclean[1].replace("]", ""));
-									commondata.places_found.ranking_places.put(rank, place_refrence);
-									commondata.places_found.ranking_nodes.put(place_refrence, node);
-									
-									/*
-									 * The node structure is stored in this format
-									 * KEY : rank ; Value : place_refrence
-									 * KEY : Place_refrence ; Value : Node
-									 */
-									
-								}
-								
-								/*
-								 * this section sets up the common data from the server in sorted order
-								 */
-								for(Double rnk = 0.0; rnk < commondata.places_found.ranking_places.size(); rnk = rnk + 1.0){
-									String current_place_refrence = commondata.places_found.ranking_places.get(rnk);
-									place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
-									System.out.println(node.place_name + " "+ node.website);
-								}
-								
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-				};
-
-				thread.start();
-				/*
-				try {
-					thread.join();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				*/
+				new get_list().execute("");
+				
 			}
 		}
 	}
+	
+	
+	
 	
 	
 	/*
@@ -1840,6 +1742,120 @@ public class Login extends Activity {
 			}
 		});
 	}
+	
+	private class get_list extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            
+        	
+        	System.out.println("finding the meet up point");
+    		String ranked_list = postData("http://54.183.113.236/metster/exe_get_loc.php", commondata.event_information.eventID,
+    			"event-"+ commondata.facebook_details.facebook);
+    		try {
+				JSONObject rest_list = new JSONObject(ranked_list);
+				Iterator<String> places  = rest_list.keys();
+				
+				/*
+				 * This section reads the json data responded from the server
+				 * the data is in the form of place name as key and location and rank as values
+				 * example : place_ref : [[15.7637, -80.896987],[2.0]]
+				 */
+				
+				while(places.hasNext()){
+					String place_refrence;
+					Double latitude = null;
+					Double longitude = null;
+					Double rank = null;
+					String id = null;
+					String place = places.next();
+					place_refrence = place;
+					String values = rest_list.getString(place_refrence);
+					
+					Double rating = 0.0;
+					String website = null;
+					String place_name = null;
+					Double price_level = 0.0;
+					String address = null;
+					String contact = null;
+					String location = null;
+					String total_ratings = null;
+					String types = null;
+					
+					JSONObject dats = new JSONObject(values);
+					
+					if (dats.has("rating")) rating = Double.parseDouble(dats.getString("rating"));
+					if (dats.has("website")) website = dats.getString("website");
+					if (dats.has("name")) place_name = dats.getString("name");
+					if (dats.has("price_level")) price_level = Double.parseDouble(dats.getString("price_level"));
+					if (dats.has("formatted_address")) address = dats.getString("formatted_address");
+					if (dats.has("international_phone_number")) contact = dats.getString("international_phone_number");
+					if (dats.has("location")) location = dats.getString("location");
+					if (dats.has("user_ratings_total")) total_ratings= dats.getString("user_ratings_total");
+					if (dats.has("types")) types = dats.getString("types");
+					rank = Double.parseDouble(dats.getString("rank"));
+					
+					place_details node = new commondata.place_details();
+					node.rating = rating;
+					node.website = website;
+					node.place_name = place_name;
+					node.price_level = price_level;
+					node.address = address;
+					node.contact = contact;
+					node.total_ratings = total_ratings;
+					node.types = types;
+					
+					// location is in this format [lat, lon] in string, bring it to double so we can use it
+					String[] tempclean = location.split(",");
+					System.out.println("lat " + tempclean[0]);
+					System.out.println("lon"+ tempclean[1]);
+					node.latitude = Double.parseDouble(tempclean[0].replace("[", ""));
+					node.longitude = Double.parseDouble(tempclean[1].replace("]", ""));
+					commondata.places_found.ranking_places.put(rank, place_refrence);
+					commondata.places_found.ranking_nodes.put(place_refrence, node);
+					
+					/*
+					 * The node structure is stored in this format
+					 * KEY : rank ; Value : place_refrence
+					 * KEY : Place_refrence ; Value : Node
+					 */
+					
+				}
+				
+				/*
+				 * this section sets up the common data from the server in sorted order
+				 */
+				for(Double rnk = 0.0; rnk < commondata.places_found.ranking_places.size(); rnk = rnk + 1.0){
+					String current_place_refrence = commondata.places_found.ranking_places.get(rnk);
+					place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
+				}
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+        	toast_info(" ");
+        	list_rest();
+        	
+        	
+        }
+
+        @Override
+        protected void onPreExecute() {
+        	
+        	toast_info("Exploring...");
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        	toast_info("Exploring...");
+        }
+    }
 	
 	/*
 	 * name : postData
