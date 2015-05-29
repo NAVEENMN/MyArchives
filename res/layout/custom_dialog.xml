@@ -4,90 +4,89 @@
     xmlns:android2="http://schemas.android.com/apk/res/android"
     android:id="@+id/new_event_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background= "#EFF2FB"
+    android:layout_height="wrap_content"
+    android:background= "#A4A4A4"
     android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/New_Event"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:background="#FE642E"
-        android:text="@string/setup_preferences"
-        android:paddingBottom="10dp"
-        android:textColor="#E0ECF8"
-        android:textSize="28sp" />
-
-    <View
-        android:id="@+id/Dividerevent"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:paddingTop="20dp"
-        android:layout_below="@+id/New_Event"
-        android:background="#2E9AFE"
-        android:gravity="bottom" />
-
-    <EditText
-        android2:id="@+id/event_name"
-        android2:layout_width="match_parent"
-        android2:layout_height="wrap_content"
-        android2:layout_alignParentLeft="true"
-        android2:layout_below="@+id/Dividerevent"
-        android2:ems="10"
-        android2:hint="@string/event_name"
-        android2:inputType="text" />
-    
-    <EditText
-        android2:id="@+id/event_type"
-        android2:layout_width="match_parent"
-        android2:layout_height="wrap_content"
-        android2:layout_alignParentLeft="true"
-        android2:layout_below="@+id/event_name"
-        android:focusable="false"
-        android:clickable="true" android:inputType="none"
-        android2:ems="10"
-        android2:hint="@string/event_type" />
-    
-    <EditText
-        android2:id="@+id/event_date"
-        android2:layout_width="match_parent"
-        android2:layout_height="wrap_content"
-        android2:layout_alignParentLeft="true"
-        android2:layout_below="@+id/event_type"
-        android:focusable="false"
-        android:clickable="true" android:inputType="none"
-        android2:ems="10"
-        android2:hint="@string/event_date" />
-   
     
     <LinearLayout
-        android2:id = "@+id/time_button_section"
-        android2:layout_below="@+id/event_date"
-        android2:layout_width="match_parent"
-        android2:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        
-          <EditText
-        android2:id="@+id/start_time_button"
-        android2:layout_width="wrap_content"
-        android2:layout_height="wrap_content"
-        android2:hint="@string/start_time"
-        android:focusable="false"
-        android:clickable="true" android:inputType="none"
-         />
-          
-            <EditText
-        android2:id="@+id/end_time_button"
-        android2:layout_width="wrap_content"
-        android2:layout_height="wrap_content"
-        android2:hint="@string/end_time"
-        android:focusable="false"
-        android:clickable="true" android:inputType="none"
-         />  
+    android:id="@+id/title_day"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
     
+    <TextView
+                android:id="@+id/New_Event"
+                android:textColor="#CEE3F6"
+                android:textSize="28sp"      
+                android:layout_marginBottom="2dp"
+                android:text="@string/plan"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
     </LinearLayout>
+    
+    <LinearLayout
+    android:id="@+id/sectiona"
+    android:layout_below="@+id/title_day"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-   
+        <ImageButton
+            android2:id="@+id/breakfast"
+             style="?android:attr/buttonBarButtonStyle"
+            android2:layout_width="200dp"
+            android2:layout_height="200dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/breakfast"
+            android2:text="@string/breakfast" />
+        <ImageButton
+            android2:id="@+id/lunch"
+             style="?android:attr/buttonBarButtonStyle"
+            android2:layout_width="200dp"
+            android2:layout_height="200dp"
+            android:layout_marginRight="2dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/lunch"
+            android2:text="@string/lunch" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+    android:id="@+id/sectionb"
+    android:layout_below="@+id/sectiona"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
+    android:orientation="horizontal">
+
+        <ImageButton
+            android2:id="@+id/linner"
+            style="?android:attr/buttonBarButtonStyle"
+            android2:layout_width="200dp"
+            android2:layout_height="200dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginLeft="2dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/linner"
+            android2:text="@string/linner" />
+        <ImageButton
+            android2:id="@+id/dinner"
+            style="?android:attr/buttonBarButtonStyle"
+            android2:layout_width="200dp"
+            android2:layout_height="200dp"
+            android:layout_marginRight="2dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/dinner"
+            android2:text="@string/dinner" />
+        
+    </LinearLayout>
 
 </RelativeLayout>

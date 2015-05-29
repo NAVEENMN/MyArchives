@@ -33,6 +33,7 @@ import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -212,6 +213,50 @@ public class Login extends Activity {
 		event_info.is_host = false;// by default no host access
 		create_firebase_refrence();// this is event refernce setup
 
+		
+		/*
+		 * check if invite exists
+		 */
+		
+		
+		SharedPreferences invite_notification = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE);
+		String invite_status = invite_notification.getString("invite_status", "no");
+		if(invite_notification.toString() != null){
+			String invite_from = invite_notification.getString("invite_from", "no");
+			final String invite_id = invite_notification.getString("inviteid", "no");
+			String invite_message = invite_notification.getString("message", "no");
+			System.out.println("you have a invite from " + invite_from + " " + invite_message);
+			
+			
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setTitle("Invite from " + invite_from);
+			alert.setMessage(invite_message);
+			alert.setPositiveButton("Accept",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							// gcm notify accept
+						}
+					});
+
+			alert.setNegativeButton("Reject",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							// gcm notify and join		
+							
+							gcm_send_data(commondata.facebook_details.facebook, invite_id, commondata.facebook_details.name + "rejected your invite");
+							
+						}
+					});
+			alert.setCancelable(false);
+			
+			alert.show();
+			
+		}else{
+			System.out.println("no invite exists");
+		}
+		
 		
 		/*
 		 * check if you are on any event
@@ -396,7 +441,7 @@ public class Login extends Activity {
 								Thread thread = new Thread() {
 								    @Override
 								    public void run() {
-								    	postData("http://54.183.113.236/metster/resetevent.php", commondata.facebook_details.facebook,"event-" + commondata.facebook_details.facebook );
+								    	postData("http://54.183.113.236/metster/resetevent.php", commondata.facebook_details.facebook,"event-" + commondata.facebook_details.facebook, "none" );
 								    }
 								};
 
@@ -593,20 +638,6 @@ public class Login extends Activity {
 		// Button Actions
 		SetupUIdata();
 		
-		/*
-		 * This method is triggered after long pressed of home button
-		 */
-		Button b1 = (Button) findViewById(R.id.meet_up);
-		b1.setOnLongClickListener(new OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View v) {
-				// TODO Auto-generated method stub
-				if (commondata.event_information.eventID != null) {
-					list_rest();
-				}
-				return true;
-			}
-		});
 		// ----------------------- long pressed ends here
 	
 	}// on create
@@ -937,217 +968,74 @@ public class Login extends Activity {
 	@SuppressWarnings("deprecation")
 	public void create_event_notification() {
 
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		final View layout = inflater.inflate(R.layout.custom_dialog,
-				(ViewGroup) findViewById(R.id.new_event_root));
-		AlertDialog.Builder alert = new AlertDialog.Builder(this)
-				.setView(layout);
+		String food_type = pick_food_type();
+ 
+	}
 		
-		
-		final AlertDialog dialog = alert.create();
-		dialog.getWindow().getAttributes().windowAnimations = 
+	
+	/*
+	 * name : on_event_selected
+	 */
 
-
-				R.style.dialog_animation;
+	public void on_event_selected(){
+	
+		commondata.event_information.eventID = "event-"
+				+ commondata.facebook_details.facebook;
+		create_firebase_refrence();
 		
-		/*
-		 * fetch all data from the the dialog
-		 */
-		commondata.event_information.eventID = null;
-		
-		/*
-		 * get event name
-		 */
-		
-		final EditText event_name = (EditText) layout.findViewById(R.id.event_name);
-		
-		/*
-		 * pick food type
-		 */
-		final EditText event_type = (EditText) layout.findViewById(R.id.event_type);
-		event_type.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				String food_type = pick_food_type(event_type);
-				
-			}
-		});
-		
-		/*
-		 * pick date
-		 */
-		final EditText event_date = (EditText) layout.findViewById(R.id.event_date);
-		event_date.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				System.out.println("pick date");
-				
-		
-				Calendar c = Calendar.getInstance();
-				commondata.prefrences.year = Calendar.YEAR;
-				commondata.prefrences.date = Calendar.DATE;
-				commondata.prefrences.month = Calendar.MONTH + 1;
-				new DatePickerDialog(Login.this, new OnDateSetListener() {
-
-				    @Override
-				    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-				        // save date
-						commondata.prefrences.year = year;
-						commondata.prefrences.date = monthOfYear + 1;
-						commondata.prefrences.month = dayOfMonth;
-						
-						// handle past date
-						event_date.setText(Integer.toString(monthOfYear + 1) + "/" + Integer.toString(dayOfMonth) + "/" + Integer.toString(year));
-				    	
-				    }
-				}, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
-				
-			}
-		});
-		
-		/*
-		 * pick start time
-		 */
-		
-		final EditText event_start_time = (EditText) layout.findViewById(R.id.start_time_button);
-		event_start_time.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				System.out.println("pick start time");
-				Calendar c = Calendar.getInstance();
-				commondata.prefrences.year = Calendar.YEAR;
-				commondata.prefrences.date = Calendar.DATE;
-				commondata.prefrences.month = Calendar.MONTH + 1;
-				new TimePickerDialog(Login.this, new OnTimeSetListener() {
-					
-					@Override
-					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-						// TODO Auto-generated method stub
-						
-						event_start_time.setText(Integer.toString(hourOfDay)+":"+Integer.toString(minute));
-						
-					}
-				}, Calendar.HOUR_OF_DAY, Calendar.MINUTE, true).show();
-				
-			}
-		});
-		
-		
-		/*
-		 * pick end time
-		 */
-		
-		final EditText event_end_time = (EditText) layout.findViewById(R.id.end_time_button);
-		event_end_time.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				System.out.println("pick end time");
-				Calendar c = Calendar.getInstance();
-				commondata.prefrences.year = Calendar.YEAR;
-				commondata.prefrences.date = Calendar.DATE;
-				commondata.prefrences.month = Calendar.MONTH + 1;
-				new TimePickerDialog(Login.this, new OnTimeSetListener() {
-					
-					@Override
-					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-						// TODO Auto-generated method stub
-						
-						event_end_time.setText(Integer.toString(hourOfDay)+":"+Integer.toString(minute));
-						
-					}
-				}, Calendar.HOUR_OF_DAY, Calendar.MINUTE, true).show();
-				
-			}
-		});
-		
-		
-		dialog.setButton("Done", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				
-				commondata.prefrences.event_name = event_name.getText().toString();
-				System.out.println("name set" + commondata.prefrences.event_name);
-				setTitle(commondata.prefrences.event_name);
-				/*
-				 * add the host to firebase met-ster-event
-				 */
-
-				commondata.event_information.eventID = "event-"
-						+ commondata.facebook_details.facebook;
-				create_firebase_refrence();
-				
-				fb_event_ref.firebaseobj.child(
-						commondata.facebook_details.facebook + "--"
-								+ commondata.facebook_details.name).setValue(
-						commondata.facebook_details.name);
-				fb_event_ref.firebaseobj
-						.child(commondata.facebook_details.facebook + "--"
-								+ commondata.facebook_details.name)
-						.child("Latitude")
-						.setValue(commondata.user_information.latitude);
-				fb_event_ref.firebaseobj
+		fb_event_ref.firebaseobj.child(
+				commondata.facebook_details.facebook + "--"
+						+ commondata.facebook_details.name).setValue(
+				commondata.facebook_details.name);
+		fb_event_ref.firebaseobj
 				.child(commondata.facebook_details.facebook + "--"
 						+ commondata.facebook_details.name)
-				.child("EventName")
-				.setValue(commondata.prefrences.event_name);
-				fb_event_ref.firebaseobj
-						.child(commondata.facebook_details.facebook + "--"
-								+ commondata.facebook_details.name)
-						.child("Longitude")
-						.setValue(commondata.user_information.longitude);
-
-				fb_event_ref.firebaseobj
-						.child(commondata.facebook_details.facebook + "--"
-								+ commondata.facebook_details.name)
-						.child("price").setValue(commondata.prefrences.price);
-				fb_event_ref.firebaseobj
-						.child(commondata.facebook_details.facebook + "--"
-								+ commondata.facebook_details.name)
-						.child("travel").setValue(commondata.prefrences.travel);
-				fb_event_ref.firebaseobj
-						.child(commondata.facebook_details.facebook + "--"
-								+ commondata.facebook_details.name)
-						.child("hour").setValue(commondata.prefrences.hour);
-				fb_event_ref.firebaseobj
-						.child(commondata.facebook_details.facebook + "--"
-								+ commondata.facebook_details.name)
-						.child("minute").setValue(commondata.prefrences.minute);
-				fb_event_ref.firebaseobj
+				.child("Latitude")
+				.setValue(commondata.user_information.latitude);
+	
+		fb_event_ref.firebaseobj
 				.child(commondata.facebook_details.facebook + "--"
 						+ commondata.facebook_details.name)
-				.child("food").setValue(commondata.prefrences.food);
-				
-				Thread thread = new Thread() {
-				    @Override
-				    public void run() {
-				    	postData("http://54.183.113.236/metster/updateevent.php", commondata.facebook_details.facebook,"event-" + commondata.facebook_details.facebook );
-				    }
-				};
+				.child("Longitude")
+				.setValue(commondata.user_information.longitude);
 
-				thread.start();
-
-				remove_location_listners();
-				Intent intent = new Intent(Login.this, Login.class);
-				startActivity(intent);
-				finish();
-				
-				
-			}
-
-		});
+		fb_event_ref.firebaseobj
+				.child(commondata.facebook_details.facebook + "--"
+						+ commondata.facebook_details.name)
+				.child("price").setValue(commondata.prefrences.price);
+		fb_event_ref.firebaseobj
+				.child(commondata.facebook_details.facebook + "--"
+						+ commondata.facebook_details.name)
+				.child("travel").setValue(commondata.prefrences.travel);
+		fb_event_ref.firebaseobj
+				.child(commondata.facebook_details.facebook + "--"
+						+ commondata.facebook_details.name)
+				.child("hour").setValue(commondata.prefrences.hour);
+		fb_event_ref.firebaseobj
+				.child(commondata.facebook_details.facebook + "--"
+						+ commondata.facebook_details.name)
+				.child("minute").setValue(commondata.prefrences.minute);
+		fb_event_ref.firebaseobj
+		.child(commondata.facebook_details.facebook + "--"
+				+ commondata.facebook_details.name)
+		.child("food").setValue(commondata.prefrences.food);
 		
-		dialog.show();
+		Thread thread = new Thread() {
+		    @Override
+		    public void run() {
+		    	postData("http://54.183.113.236/metster/updateevent.php", commondata.facebook_details.facebook,"event-" + commondata.facebook_details.facebook, "none" );
+		    }
+		};
 
+		thread.start();
+
+		remove_location_listners();
+		Intent intent = new Intent(Login.this, Login.class);
+		startActivity(intent);
+		finish();
+	
 	}
 
-	
 	/*
 	 * name : Create_A_New_Event
 	 * @params : View view
@@ -1228,7 +1116,7 @@ public class Login extends Activity {
 	 * @desp : This function prompts a dialog for user to pick food type and the same is set in firebase.
 	 */
 
-	public String pick_food_type(final EditText event_type) {
+	public String pick_food_type() {
 
 		// Strings to Show In Dialog with Radio Buttons
 		final CharSequence[] items = { " Chinese ", " Coffee ", " American ",
@@ -1246,73 +1134,73 @@ public class Login extends Activity {
 						case 0:
 							commondata.prefrences.food = "chinese";
 							
-							event_type.setText(commondata.prefrences.food);
+							on_event_selected();
 
 							break;
 						case 1:
 							// Your code when 2nd option seletced
 							commondata.prefrences.food = "coffee";
+							on_event_selected();
 							
-							event_type.setText(commondata.prefrences.food);
 							break;
 						case 2:
 							// Your code when 3rd option seletced
 							commondata.prefrences.food = "american";
+							on_event_selected();
 							
-							event_type.setText(commondata.prefrences.food);
 							break;
 						case 3:
 							// Your code when 4th option seletced
 							commondata.prefrences.food = "seafood";
+							on_event_selected();
 							
-							event_type.setText(commondata.prefrences.food);
 							break;
 						case 4:
 							// Your code when first option seletced
 							commondata.prefrences.food = "pizza";
-							
-							event_type.setText(commondata.prefrences.food);
+							on_event_selected();
+						
 							break;
 						case 5:
 							commondata.prefrences.food = "asian";
 							
-							event_type.setText(commondata.prefrences.food);
+							on_event_selected();
 							// Your code when 2nd option seletced
 							break;
 						case 6:
 							commondata.prefrences.food = "japanese";
-							
-							event_type.setText(commondata.prefrences.food);
+							on_event_selected();
+					
 							// Your code when 3rd option seletced
 							break;
 						case 7:
 							commondata.prefrences.food = "mexican";
+							on_event_selected();
 							
-							event_type.setText(commondata.prefrences.food);
 							// Your code when 4th option seletced
 							break;
 						case 8:
 							commondata.prefrences.food = "italian";
+							on_event_selected();
 							
-							event_type.setText(commondata.prefrences.food);
 							// Your code when first option seletced
 							break;
 						case 9:
 							commondata.prefrences.food = "indian";
-							
-							event_type.setText(commondata.prefrences.food);
+							on_event_selected();
+						
 							// Your code when 2nd option seletced
 							break;
 						case 10:
 							commondata.prefrences.food = "icecream";
-							
-							event_type.setText(commondata.prefrences.food);
+							on_event_selected();
+						
 							// Your code when 3rd option seletced
 							break;
 						default:
 							commondata.prefrences.food = "american";
-						
-							event_type.setText(commondata.prefrences.food);
+							on_event_selected();
+							
 							break;
 
 						}
@@ -1324,6 +1212,84 @@ public class Login extends Activity {
 		return commondata.prefrences.food;
 	}
 
+	
+	
+	
+	/*
+	 * name : gcm_send_data
+	 * @params : facebook_id, to_facebook_id, message
+	 * @return : server response
+	 * @desp : This function takes care of sending gcm messages
+	 *         Still need to handle server response
+	 */
+	
+	private String gcm_send_data(String facebook_id, final String to_facebook_id, final String message){
+	
+	   
+		Thread thread = new Thread() {
+			String server_resp;
+			String response = "error";
+			@Override
+			public void run() {
+				Looper.prepare();
+				try {
+					Thread thread = new Thread() {
+					    @Override
+					    public void run() {
+					    	response = postData("http://54.183.113.236/metster/exe_gcm_send.php", commondata.facebook_details.facebook, to_facebook_id, message);
+					    	System.out.println(server_resp);
+					    }
+					};
+					thread.start();
+					thread.join();
+					if (server_resp.contains("doesnot-exist")) {
+						runOnUiThread(new Runnable() {
+
+							@Override
+							public void run() {
+								toast_info(contact_info.contact_name
+										+ " seems to not have a Metster account!!");
+							}
+						});
+
+					} else {
+						int offst = server_resp.indexOf("success");
+
+						char response_of_gcm = server_resp
+								.charAt(offst + 9);
+						if (response_of_gcm == '1') {
+							runOnUiThread(new Runnable() {
+
+								@Override
+								public void run() {
+									toast_info("invite sent");
+								}
+							});
+
+						} else {
+							runOnUiThread(new Runnable() {
+
+								@Override
+								public void run() {
+									toast_info("We encountered some error while adding this person!!");
+								}
+							});
+
+						}
+					}
+					System.out.println(server_resp);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}
+		};
+		
+		thread.start();
+		return "done";
+	}
+	
+	
 	/*
 	 * name : list_friends
 	 * @params : None
@@ -1363,66 +1329,7 @@ public class Login extends Activity {
 				final int it = arg2;
 				final String name = arg0.getItemAtPosition(arg2).toString();
 				// TODO Auto-generated method stub	
-				
-				Thread thread = new Thread() {
-					String server_resp;
-					@Override
-					public void run() {
-						Looper.prepare();
-						try {
-							Thread thread = new Thread() {
-							    @Override
-							    public void run() {
-							    	server_resp = postData("http://54.183.113.236/metster/exe_gcm_send.php", commondata.facebook_details.facebook,friendid.get(it).toString());
-							    	System.out.println(server_resp);
-							    }
-							};
-
-							thread.start();
-							thread.join();
-							if (server_resp.contains("doesnot-exist")) {
-								runOnUiThread(new Runnable() {
-
-									@Override
-									public void run() {
-										toast_info(contact_info.contact_name
-												+ " seems to not have a Metster account!!");
-									}
-								});
-
-							} else {
-								int offst = server_resp.indexOf("success");
-
-								char response_of_gcm = server_resp
-										.charAt(offst + 9);
-								if (response_of_gcm == '1') {
-									runOnUiThread(new Runnable() {
-
-										@Override
-										public void run() {
-											toast_info("invite sent");
-										}
-									});
-
-								} else {
-									runOnUiThread(new Runnable() {
-
-										@Override
-										public void run() {
-											toast_info("We encountered some error while adding this person!!");
-										}
-									});
-
-								}
-							}
-							System.out.println(server_resp);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} 
-					}
-				};
-				thread.start();
+				String server_response = gcm_send_data(commondata.facebook_details.facebook, friendid.get(it).toString(), "dinner tonight?");
 
 			}
 
@@ -1681,7 +1588,7 @@ public class Login extends Activity {
 			Thread thread = new Thread() {
 			    @Override
 			    public void run() {
-			    	postData("http://54.183.113.236/metster/resetevent.php", commondata.facebook_details.facebook,"event-" + commondata.facebook_details.facebook );
+			    	postData("http://54.183.113.236/metster/resetevent.php", commondata.facebook_details.facebook,"event-" + commondata.facebook_details.facebook, "none" );
 			    }
 			};
 
@@ -1750,7 +1657,7 @@ public class Login extends Activity {
         	
         	System.out.println("finding the meet up point");
     		String ranked_list = postData("http://54.183.113.236/metster/exe_get_loc.php", commondata.event_information.eventID,
-    			"event-"+ commondata.facebook_details.facebook);
+    			"event-"+ commondata.facebook_details.facebook, "none");
     		try {
 				JSONObject rest_list = new JSONObject(ranked_list);
 				Iterator<String> places  = rest_list.keys();
@@ -1863,7 +1770,7 @@ public class Login extends Activity {
 	 * @return : String
 	 * @desp : This function makes http post request and returns the server response
 	 */
-	private String postData(String url, String param1, String param2) {
+	private String postData(String url, String param1, String param2, String param3) {
 	    // Create a new HttpClient and Post Header
 	    HttpClient httpclient = new DefaultHttpClient();
 	    HttpPost httppost = new HttpPost(url);
@@ -1874,6 +1781,7 @@ public class Login extends Activity {
 	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 	        nameValuePairs.add(new BasicNameValuePair("appkey", param1));
 	        nameValuePairs.add(new BasicNameValuePair("param2", param2));
+	        nameValuePairs.add(new BasicNameValuePair("param3", param3));
 	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 	        // Execute HTTP Post Request

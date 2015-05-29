@@ -1,21 +1,24 @@
 package com.nmysore.metster;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 
-import com.nmysore.metster.Login.fb_event_ref;
 import com.firebase.client.Firebase;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.nmysore.metster.R;
+import com.nmysore.metster.Login.fb_event_ref;
 
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
@@ -63,37 +66,41 @@ public class GcmIntentService extends IntentService {
                 Log.i("tag", "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
                 System.out.println("gcm says: " + extras.toString());
-                /*
-                String message[] = extras.toString().split(" ");
-                Log.w("from",message[1]);//message=firstname
-                Log.w("message",message[2]);
-                Log.w("id",message[3]);
-                */
-                //String message_data[] = message[1].split("="); 
-                //String info_gcm[] = message_data[1].split("-#>");
-                //sendNotification(info_gcm[0]);
-                //Log.w("memberid",info_gcm[1]);
-                //Log.w("from",info_gcm[2].replace(",", ""));
-                //Log.i("tag", "Received: " + extras.toString());
-                //update_loc_of(info_gcm[1],info_gcm[2].replace(",", ""));
                 
-                String message[] = extras.toString().split(" ");// xxx message=fname lname-#>messagedata  xxx
-                String name[] = message[1].split("="); //message=fname --> message fname 
-                String message_data[] = message[2].split("-#>"); // lname  messagedata 
-                String messagedata = message_data[1];
-                String action  = intent.getStringExtra("action");
-                Log.w("from",name[1]);//message=firstname
+                
+                /*
+                 * When a gcm message comes we need to check what type of message it is
+                 * 1) invite from a friend -- store in chache and join
+                 * 2) reject for an invite sent from you -- just notify dont store
+                 * 3) accept for an invite sent from you -- just notify dont store, already data on firebase
+                 */
+                
+                String message_info = extras.getString("message", null);
+                if(message_info  != null ){
+                	System.out.println("message is : " + message_info);
+                }else{
+                	System.out.println("GCM Error");
+                }
+                
+                
+                String message_data[] = message_info.split("-#>"); // name -- message -- id
+               
+                
+                Log.w("from",message_data[0]);//name
                 Log.w("message",message_data[1]);//actual message
                 Log.w("id",message_data[2]);//id
                 
-                sendNotification(name[1], message_data[1], "event-"+message_data[2]);
-                int extra = 0;
-                try {
-                        extra = Integer.parseInt(intent.getStringExtra("action_id"));
-                } catch (Exception e){
-                        /* ignore */
-                }
+                final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
+                editor.putString("invite_status", "yes");
+                editor.putString("invite_from", message_data[0]);
+                editor.putString("inviteid", message_data[2]);
+                editor.putString("message", message_data[1]);
+                editor.commit();
                 
+                System.out.println("invite stored");
+                
+                sendNotification(message_data[0], message_data[1], "event-"+message_data[2]);
+             
                 
             }
         }

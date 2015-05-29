@@ -41,6 +41,11 @@
     <string name="CurrentCountry">Country</string>
     <string name="updateprofile">update profile</string>
     
+    <string name="breakfast">Breakfast</string>
+    <string name="lunch">Lunch</string>
+    <string name="linner">Linner</string>
+    <string name="dinner">Dinner</string>
+    
     <!-- ******************************************************** -->
 
 
@@ -125,7 +130,7 @@
     <string name="title_activity_gcm_handle">GCM_handle</string>
     <string name="title_activity_accept_invite">Accept_invite</string>
     
-    <string name="new_contact">Do you want add more people?</string>
+    <string name="plan">What`s the plan?</string>
     <string name="facebookpost">*We do not post anything on facebook.</string>
     <string name="infonext">Next</string>
     

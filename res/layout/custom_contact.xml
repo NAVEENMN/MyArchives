@@ -5,13 +5,12 @@
     android:background="#FE642E"
     android:orientation="vertical" >
     
-<TextView
+	<TextView
                 android:id="@+id/New_Event"
                 android:textColor="#CEE3F6"
                 android:textSize="28sp"
-                
                 android:layout_marginBottom="20dp"
-                android:text="@string/new_contact"
+                android:text="@string/plan"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
