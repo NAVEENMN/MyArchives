@@ -3,10 +3,11 @@ package com.nmysore.metster;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -24,12 +25,8 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
-import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,6 +49,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -60,14 +58,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -75,7 +70,6 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
@@ -92,12 +86,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nmysore.metster.commondata.place_details;
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 public class Login extends Activity {
 
@@ -174,27 +162,11 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		setupActionBar();// Show the Up button in the action bar.
-		getActionBar().setIcon(
-				new ColorDrawable(getResources().getColor(
-						android.R.color.transparent)));
+		getActionBar().setIcon( new ColorDrawable(getResources().getColor(android.R.color.transparent)));
 		setTitle("New Event");
 		Firebase.setAndroidContext(this);
-		
-		// UNIVERSAL IMAGE LOADER SETUP
-				DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-						.cacheOnDisc(true).cacheInMemory(true)
-						.imageScaleType(ImageScaleType.EXACTLY)
-						.displayer(new FadeInBitmapDisplayer(300)).build();
-
-				ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-						getApplicationContext())
-						.defaultDisplayImageOptions(defaultOptions)
-						.memoryCache(new WeakMemoryCache())
-						.discCacheSize(100 * 1024 * 1024).build();
-
-				ImageLoader.getInstance().init(config);
-				// END - UNIVERSAL IMAGE LOADER SETUP
-		
+				
+		// This is just a verification		
 		if (commondata.facebook_details.facebook == null) {
 			Intent intent = new Intent(Login.this, HomescreenActivity.class);
 			startActivity(intent);
@@ -202,7 +174,7 @@ public class Login extends Activity {
 		}
 
 		infocounter = 1;
-		listnerflag = true;
+		listnerflag = true; // controls if image is clicked
 		event_info.food_type = "american";
 		commondata.prefrences.price = (float) 2.5;
 		commondata.prefrences.travel = 5.0;
@@ -211,22 +183,21 @@ public class Login extends Activity {
 		commondata.prefrences.food = "american";
 
 		event_info.is_host = false;// by default no host access
-		create_firebase_refrence();// this is event refernce setup
+		
+		create_firebase_refrence();// use fbref object as the refrence.
 
 		
 		/*
 		 * check if invite exists
 		 */
 		
-		
 		SharedPreferences invite_notification = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE);
-		String invite_status = invite_notification.getString("invite_status", "no");
-		if(invite_notification.toString() != null){
-			String invite_from = invite_notification.getString("invite_from", "no");
-			final String invite_id = invite_notification.getString("inviteid", "no");
-			String invite_message = invite_notification.getString("message", "no");
+		String invite_status = invite_notification.getString("invite_status", "none");
+		if(invite_notification.toString() != "none"){
+			String invite_from = invite_notification.getString("invite_from", "none");
+			final String invite_id = invite_notification.getString("inviteid", "none");
+			String invite_message = invite_notification.getString("message", "none");
 			System.out.println("you have a invite from " + invite_from + " " + invite_message);
-			
 			
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 			alert.setTitle("Invite from " + invite_from);
@@ -236,6 +207,17 @@ public class Login extends Activity {
 						public void onClick(DialogInterface dialog,
 								int whichButton) {
 							// gcm notify accept
+							JSONObject json = new JSONObject(); 
+							try {
+								json.put("host", commondata.facebook_details.facebook);
+								json.put("to_id", invite_id); 
+								json.put("payload_type", "invite_accept"); 
+								json.put("payload_message", "sounds great");
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} 
+							gcm_send_data(commondata.facebook_details.facebook, invite_id, json.toString());
 						}
 					});
 
@@ -261,6 +243,84 @@ public class Login extends Activity {
 		/*
 		 * check if you are on any event
 		 */
+		
+		/*
+		 * case a - 0 : user has hosted few events
+		 * case b - 1: user is part of few events
+		 * case c - 2: user has hosted and also part of few events
+		 * case d - 3: user is not part of any event
+		 * 
+		 * case d --> this is a new event case
+		 * case a --> we will display most recent hosted event but can view any
+		 * case c --> if user has hosted then will display most recent hosted so it reduced to case a
+		 * case b --> we will display most recent event the user is part of.
+		 */
+		
+		
+		// to be safe lets pull shared pref on event here.
+		int event_case = 3;
+		
+		SharedPreferences eventshosted = getApplicationContext().getSharedPreferences("eventhosted", MODE_PRIVATE);
+		SharedPreferences eventsjoined = getApplicationContext().getSharedPreferences("eventjoined", MODE_PRIVATE);
+		
+		if(eventsjoined != null){
+			Map<String,?> joinedkeys = eventsjoined.getAll();
+			for(Map.Entry<String,?> entry : joinedkeys.entrySet()){
+				String event_id = entry.getKey();
+	            String event_name = entry.getValue().toString();
+	            commondata.event_information.event_joined_table.put(event_id, event_name);
+			}
+		}else{
+			
+		}
+		
+		
+		Map<String,?> hostedkeys = eventshosted.getAll();
+		if(eventshosted != null){// means the user has hosted event/events
+			for(Map.Entry<String,?> entry : hostedkeys.entrySet()){
+				 String event_id = entry.getKey();
+				 String event_name = entry.getValue().toString();
+				 commondata.event_information.event_hosted_table.put(event_id, event_name);
+			}
+		}
+		
+		if(commondata.event_information.event_joined_table.isEmpty() & commondata.event_information.event_hosted_table.isEmpty()){ // the user is not in any event
+			event_case = 3; // new event case
+		}else{
+			event_case = 2;
+		}
+		if(!commondata.event_information.event_joined_table.isEmpty()){
+			event_case = 1;
+		}
+		if(!commondata.event_information.event_hosted_table.isEmpty()){ // user has hosted something
+			event_case = 0;
+		}
+		
+		
+		switch (event_case){
+		case 0 :// the user has hosted few events
+			//commondata.event_information.eventID = set to latest hosted event
+			System.out.println("case 0");
+			break;
+		case 1:// the user is part of few events
+			//commondata.event_information.eventID = set to latest joined event
+			System.out.println("case 1");
+			break;
+		case 2:// user has hosted and also part of few events
+			//commondata.event_information.eventID = set to latest hosted event
+			System.out.println("case 2");
+			break;
+		case 3: // user is not part of any event
+			commondata.event_information.eventID = null;
+			System.out.println("case 3");
+			break;
+		default:// user is not part of any event
+			System.out.println("case 0");
+			commondata.event_information.eventID = null;
+			break;
+		}
+		
+		
 		if (commondata.event_information.eventID != null) {// this will be set
 															// from res of mysql
 			/*
@@ -979,46 +1039,16 @@ public class Login extends Activity {
 
 	public void on_event_selected(){
 	
-		commondata.event_information.eventID = "event-"
-				+ commondata.facebook_details.facebook;
+		HashMap<String, String> fb_data = new HashMap<String, String>();
+		int number_of_hosted_events = commondata.event_information.event_hosted_table.size()+1;
+		fb_data.put("username",commondata.facebook_details.name );
+		fb_data.put("Latitude", commondata.user_information.latitude.toString());
+		fb_data.put("Longitude", commondata.user_information.longitude.toString());
+		fb_data.put("price", Float.toString(commondata.prefrences.price));
+		fb_data.put("travel", Double.toString(commondata.prefrences.travel));
+		fb_data.put("food", commondata.prefrences.food);
 		create_firebase_refrence();
-		
-		fb_event_ref.firebaseobj.child(
-				commondata.facebook_details.facebook + "--"
-						+ commondata.facebook_details.name).setValue(
-				commondata.facebook_details.name);
-		fb_event_ref.firebaseobj
-				.child(commondata.facebook_details.facebook + "--"
-						+ commondata.facebook_details.name)
-				.child("Latitude")
-				.setValue(commondata.user_information.latitude);
-	
-		fb_event_ref.firebaseobj
-				.child(commondata.facebook_details.facebook + "--"
-						+ commondata.facebook_details.name)
-				.child("Longitude")
-				.setValue(commondata.user_information.longitude);
-
-		fb_event_ref.firebaseobj
-				.child(commondata.facebook_details.facebook + "--"
-						+ commondata.facebook_details.name)
-				.child("price").setValue(commondata.prefrences.price);
-		fb_event_ref.firebaseobj
-				.child(commondata.facebook_details.facebook + "--"
-						+ commondata.facebook_details.name)
-				.child("travel").setValue(commondata.prefrences.travel);
-		fb_event_ref.firebaseobj
-				.child(commondata.facebook_details.facebook + "--"
-						+ commondata.facebook_details.name)
-				.child("hour").setValue(commondata.prefrences.hour);
-		fb_event_ref.firebaseobj
-				.child(commondata.facebook_details.facebook + "--"
-						+ commondata.facebook_details.name)
-				.child("minute").setValue(commondata.prefrences.minute);
-		fb_event_ref.firebaseobj
-		.child(commondata.facebook_details.facebook + "--"
-				+ commondata.facebook_details.name)
-		.child("food").setValue(commondata.prefrences.food);
+		fb_event_ref.firebaseobj.child("event-" + Integer.toString(number_of_hosted_events)).child(commondata.facebook_details.facebook).setValue(fb_data);
 		
 		Thread thread = new Thread() {
 		    @Override
@@ -1223,7 +1253,7 @@ public class Login extends Activity {
 	 *         Still need to handle server response
 	 */
 	
-	private String gcm_send_data(String facebook_id, final String to_facebook_id, final String message){
+	public String gcm_send_data(String facebook_id, final String to_facebook_id, final String message){
 	
 	   
 		Thread thread = new Thread() {
@@ -1236,8 +1266,8 @@ public class Login extends Activity {
 					Thread thread = new Thread() {
 					    @Override
 					    public void run() {
-					    	response = postData("http://54.183.113.236/metster/exe_gcm_send.php", commondata.facebook_details.facebook, to_facebook_id, message);
-					    	System.out.println(server_resp);
+					    	response = postData("http://54.183.113.236/metster/exe_gcm_send_test.php", commondata.facebook_details.facebook, to_facebook_id, message);
+					    	System.out.println("gcm_server : " + server_resp);
 					    }
 					};
 					thread.start();
@@ -1545,7 +1575,7 @@ public class Login extends Activity {
 	public void create_firebase_refrence() {
 		StringBuilder strBuilder = new StringBuilder(
 				"https://met-ster-event.firebaseio.com/");
-		strBuilder.append(commondata.event_information.eventID);
+		strBuilder.append(commondata.facebook_details.facebook);
 		fb_event_ref.fbref = strBuilder.toString();
 		fb_event_ref.firebaseobj = new Firebase(fb_event_ref.fbref);
 	}
@@ -1799,7 +1829,7 @@ public class Login extends Activity {
                 throw new IOException(statusLine.getReasonPhrase());
             }
 	        
-	        System.out.println(responseString);
+	        System.out.println("postData: " + responseString);
 	        
 	    } catch (ClientProtocolException e) {
 	        // TODO Auto-generated catch block

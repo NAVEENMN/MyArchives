@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -112,8 +113,7 @@ public class HomescreenActivity extends Activity {
 				commondata.facebook_details.fb.setAccessExpires(expires);
 				commondata.facebook_details.fb
 						.setSession(commondata.facebook_details.fb.getSession());
-				//
-				System.out.println("retrieve");
+				System.out.println("retriving data from facebook");
 				new RetrieveFeedTask().execute();
 			}
 			
@@ -160,22 +160,14 @@ public class HomescreenActivity extends Activity {
 			if (initialX > finalX) {
 				if (Homeimage.getDisplayedChild() == 1)
 					break;
-
-				
 				Homeimage.setInAnimation(HomescreenActivity.this, R.anim.in_right);
 				Homeimage.setOutAnimation(this, R.anim.out_left);
-				 
-
 				Homeimage.showNext();
 			} else {
 				if (Homeimage.getDisplayedChild() == 0)
 					break;
-
-				
 				Homeimage.setInAnimation(this, R.anim.in_left);
 				Homeimage.setOutAnimation(this, R.anim.out_right);
-				 
-
 				Homeimage.showPrevious();
 			}
 			break;
@@ -197,13 +189,12 @@ public class HomescreenActivity extends Activity {
 			progress.show();	
 			progress.setCancelable(false);
 			progress.setCanceledOnTouchOutside(false);
-			System.out.println("leaves pre exe");
 		}
 		@Override
 		protected void onPostExecute(Void result) {
 			// create account
 			super.onPostExecute(result);
-			System.out.println("on post");
+			System.out.println("leaving homescreen.");
 		
 			progress.dismiss();
 			Intent serviceIntent = new Intent(HomescreenActivity.this,
@@ -227,22 +218,49 @@ public class HomescreenActivity extends Activity {
 					Thread thread = new Thread() {
 					    @Override
 					    public void run() {
-					    	System.out.println("before");
-					    	response = 	postData("http://54.183.113.236/metster/setup_account.php", commondata.facebook_details.facebook,
-									commondata.facebook_details.name,commondata.facebook_details.email );
-					    	System.out.println("after");
+					    	System.out.println("before post");
+					    	
+					    	JSONObject json_to_server = new JSONObject(); 
+					    	try {
+					    		json_to_server.put("id", commondata.facebook_details.facebook);
+					    		json_to_server.put("username", commondata.facebook_details.name); 
+					    		json_to_server.put("email", commondata.facebook_details.email);
+					    		json_to_server.put("gcm",null);
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} 
+					    	
+					    	
+					    	response = 	postData("http://52.8.173.36/metster/setup_account.php", "setup" ,
+									json_to_server.toString() ,commondata.facebook_details.email );
+					    	System.out.println("after resonse");
 							System.out.println(response.toString());
-							String[] dat = response.toString().split("-->");
-							commondata.facebook_details.contact = dat[1];// contact
-							if (dat[2].isEmpty() || dat[2] == null) {
+						
+							commondata.event_information.eventID = null;
+							SharedPreferences eventshosted = getApplicationContext().getSharedPreferences("eventhosted", MODE_PRIVATE);
+							Map<String,?> hostedkeys = eventshosted.getAll();
+							if(eventshosted != null){
+								for(Map.Entry<String,?> entry : hostedkeys.entrySet()){
+									Log.d("map values",entry.getKey() + ": " + 
+											entry.getValue().toString());            
+								}
+							}else{
 								commondata.event_information.eventID = null;
-							} else {
-								commondata.event_information.eventID = dat[2];// eventid
 							}
-							System.out.println("contact"
-									+ commondata.facebook_details.contact);
-							System.out.println("eventid"
-									+ commondata.event_information.eventID);
+							SharedPreferences eventsjoined = getApplicationContext().getSharedPreferences("eventjoined", MODE_PRIVATE);
+							
+							if(eventsjoined != null){
+								Map<String,?> joinedkeys = eventshosted.getAll();
+								
+								for(Map.Entry<String,?> entry : joinedkeys.entrySet()){
+									Log.d("map values",entry.getKey() + ": " + 
+											entry.getValue().toString());            
+								}
+							}else{
+								
+							}
+							
 							}
 					};
 
@@ -409,7 +427,7 @@ public class HomescreenActivity extends Activity {
 	    try {
 	        // Add your data
 	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-	        nameValuePairs.add(new BasicNameValuePair("appkey", param1));
+	        nameValuePairs.add(new BasicNameValuePair("param1", param1));
 	        nameValuePairs.add(new BasicNameValuePair("param2", param2));
 	        nameValuePairs.add(new BasicNameValuePair("param3", param3));
 	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));

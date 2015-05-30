@@ -25,7 +25,6 @@ public class commondata {
 		static String name;
 		static String email;
 		static Bitmap profile_image;
-		static String contact;
 		static Facebook fb;
 		static JSONArray friends;
 	}
@@ -51,6 +50,8 @@ public class commondata {
 	public static class event_information{
 		static String eventID;
 		static String host;
+		static HashMap<String, String> event_hosted_table = new HashMap<String, String>();
+		static HashMap<String, String> event_joined_table = new HashMap<String, String>();
 	}
 	
 	public static class prefrence{

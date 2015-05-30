@@ -15,6 +15,8 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -175,9 +177,19 @@ public class LoadHome extends Activity {
 	        			Thread thread = new Thread() {
 	        			    @Override
 	        			    public void run() {
-	        			  
-	        			    	String response = 	postData("http://54.183.113.236/metster/register_gcm.php", commondata.facebook_details.facebook,
-	        			    			regid,"1" );
+	        			    	
+	        			    	JSONObject json_to_server = new JSONObject(); 
+	        			    	try {
+	        			    		json_to_server.put("id", commondata.facebook_details.facebook);
+	        			    		json_to_server.put("username", commondata.facebook_details.name); 
+	        			    		json_to_server.put("email", commondata.facebook_details.email);
+	        			    		json_to_server.put("gcm",regid);
+	        					} catch (JSONException e) {
+	        						// TODO Auto-generated catch block
+	        						e.printStackTrace();
+	        					} 
+	        			    	
+	        			    	String response = 	postData("http://52.8.173.36/metster/setup_account.php", "update", json_to_server.toString() );
 	        			    
 	        					}
 	        			};
@@ -551,7 +563,7 @@ public class LoadHome extends Activity {
 	}
 	
 	
-	private String postData(String url, String param1, String param2, String param3) {
+	private String postData(String url, String param1, String param2) {
 	    // Create a new HttpClient and Post Header
 	    HttpClient httpclient = new DefaultHttpClient();
 	    HttpPost httppost = new HttpPost(url);
@@ -560,9 +572,8 @@ public class LoadHome extends Activity {
 	    try {
 	        // Add your data
 	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-	        nameValuePairs.add(new BasicNameValuePair("appkey", param1));
+	        nameValuePairs.add(new BasicNameValuePair("param1", param1));
 	        nameValuePairs.add(new BasicNameValuePair("param2", param2));
-	        nameValuePairs.add(new BasicNameValuePair("param3", param3));
 	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 	        // Execute HTTP Post Request
@@ -607,9 +618,20 @@ public class LoadHome extends Activity {
 			Thread thread = new Thread() {
 			    @Override
 			    public void run() {
-			    	System.out.println("before");
-			    	String response = 	postData("http://54.183.113.236/metster/register_gcm.php", commondata.facebook_details.facebook,
-			    			regd,"1" );
+			    	System.out.println("updating gcm");
+			    	
+			    	JSONObject json_to_server = new JSONObject(); 
+			    	try {
+			    		json_to_server.put("id", commondata.facebook_details.facebook);
+			    		json_to_server.put("username", commondata.facebook_details.name); 
+			    		json_to_server.put("email", commondata.facebook_details.email);
+			    		json_to_server.put("gcm",regd);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} 
+			    	
+			    	String response = 	postData("http://52.8.173.36/metster/setup_account.php", "update", json_to_server.toString() );
 					}
 			};
 
