@@ -31,6 +31,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -190,7 +191,7 @@ public class Login extends Activity {
 		/*
 		 * check if invite exists
 		 */
-		
+		/*
 		SharedPreferences invite_notification = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE);
 		String invite_status = invite_notification.getString("invite_status", "none");
 		if(invite_notification.toString() != "none"){
@@ -238,7 +239,7 @@ public class Login extends Activity {
 		}else{
 			System.out.println("no invite exists");
 		}
-		
+		*/
 		
 		/*
 		 * check if you are on any event
@@ -260,9 +261,11 @@ public class Login extends Activity {
 		// to be safe lets pull shared pref on event here.
 		int event_case = 3;
 		
+		//********** retieve events information from localdb
 		SharedPreferences eventshosted = getApplicationContext().getSharedPreferences("eventhosted", MODE_PRIVATE);
 		SharedPreferences eventsjoined = getApplicationContext().getSharedPreferences("eventjoined", MODE_PRIVATE);
 		
+		//******** and store them in commondata
 		if(eventsjoined != null){
 			Map<String,?> joinedkeys = eventsjoined.getAll();
 			for(Map.Entry<String,?> entry : joinedkeys.entrySet()){
@@ -270,11 +273,7 @@ public class Login extends Activity {
 	            String event_name = entry.getValue().toString();
 	            commondata.event_information.event_joined_table.put(event_id, event_name);
 			}
-		}else{
-			
 		}
-		
-		
 		Map<String,?> hostedkeys = eventshosted.getAll();
 		if(eventshosted != null){// means the user has hosted event/events
 			for(Map.Entry<String,?> entry : hostedkeys.entrySet()){
@@ -284,6 +283,7 @@ public class Login extends Activity {
 			}
 		}
 		
+		//********* check which case it belongs to 
 		if(commondata.event_information.event_joined_table.isEmpty() & commondata.event_information.event_hosted_table.isEmpty()){ // the user is not in any event
 			event_case = 3; // new event case
 		}else{
@@ -300,7 +300,9 @@ public class Login extends Activity {
 		switch (event_case){
 		case 0 :// the user has hosted few events
 			//commondata.event_information.eventID = set to latest hosted event
-			System.out.println("case 0");
+			String current_event = commondata.event_information.event_hosted_table.get(commondata.event_information.event_hosted_table.size());
+			System.out.println("all events " + commondata.event_information.event_hosted_table);
+			System.out.println("current event" + commondata.event_information.event_hosted_table.size());
 			break;
 		case 1:// the user is part of few events
 			//commondata.event_information.eventID = set to latest joined event
@@ -1039,9 +1041,11 @@ public class Login extends Activity {
 
 	public void on_event_selected(){
 	
+		//************* push data to firebase
 		HashMap<String, String> fb_data = new HashMap<String, String>();
 		int number_of_hosted_events = commondata.event_information.event_hosted_table.size()+1;
 		fb_data.put("username",commondata.facebook_details.name );
+		fb_data.put("eventname","newevent" );
 		fb_data.put("Latitude", commondata.user_information.latitude.toString());
 		fb_data.put("Longitude", commondata.user_information.longitude.toString());
 		fb_data.put("price", Float.toString(commondata.prefrences.price));
@@ -1050,15 +1054,15 @@ public class Login extends Activity {
 		create_firebase_refrence();
 		fb_event_ref.firebaseobj.child("event-" + Integer.toString(number_of_hosted_events)).child(commondata.facebook_details.facebook).setValue(fb_data);
 		
-		Thread thread = new Thread() {
-		    @Override
-		    public void run() {
-		    	postData("http://54.183.113.236/metster/updateevent.php", commondata.facebook_details.facebook,"event-" + commondata.facebook_details.facebook, "none" );
-		    }
-		};
-
-		thread.start();
-
+		//************** keep this record locally
+		commondata.event_information.event_hosted_table.put("event-" + Integer.toString(number_of_hosted_events), "newevent");
+		//************** store the table in shared pref
+		Editor eventshostededitor = getApplicationContext().getSharedPreferences("eventhosted", MODE_PRIVATE).edit();
+		for (String eventid : commondata.event_information.event_hosted_table.keySet()) {
+			eventshostededitor.putString(eventid, "newevent");
+		}
+		eventshostededitor.commit();
+		//************** prepare for launch
 		remove_location_listners();
 		Intent intent = new Intent(Login.this, Login.class);
 		startActivity(intent);
@@ -1629,6 +1633,41 @@ public class Login extends Activity {
 			finish();
 		}
 	}
+	
+	
+	/*
+	 * name : drop_all_event
+	 * @desp : this funtion clears all event
+	 */
+	
+	private void drop_all_event() {
+		//******* flush hashmaps
+		commondata.event_information.event_hosted_table.clear();
+		commondata.event_information.event_joined_table.clear();
+		//******* flush local db
+		Editor eventshostededitor = getApplicationContext().getSharedPreferences("eventhosted", MODE_PRIVATE).edit();
+		Editor eventsjoinededitor = getApplicationContext().getSharedPreferences("eventjoined", MODE_PRIVATE).edit();
+		eventshostededitor.clear();
+		eventsjoinededitor.clear();
+		eventshostededitor.commit();
+		eventsjoinededitor.commit();
+		//******* clears firebase data
+		create_firebase_refrence();
+		fb_event_ref.firebaseobj.removeValue();
+		try {
+			locationManager.removeUpdates(locationListener);
+		} catch (Exception e) {
+			System.out.println("location manager error while dropping");
+		}
+		//remove_firebase_listners();// this need to taken care of remove listers before dropping
+		
+		//***** Launch
+		Intent intent = new Intent(Login.this, Login.class);
+		startActivity(intent);
+		finish();
+	}
+	
+	
 
 	/**
 	 * Set up the {@link android.app.ActionBar}.
@@ -1862,7 +1901,8 @@ public class Login extends Activity {
 			return true;
 
 		case R.id.delete_icon:
-			drop_event();
+			drop_all_event();
+			//drop_event();
 			return true;
 		case R.id.settings_icon:
 			
