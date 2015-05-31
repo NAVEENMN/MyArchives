@@ -50,6 +50,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.util.Base64;
 import android.view.Display;
@@ -267,7 +268,6 @@ public class Login extends Activity {
 		//********** retieve events information from localdb
 		
 		SharedPreferences eventsjoined = getApplicationContext().getSharedPreferences("eventjoined", MODE_PRIVATE);
-		pull_data_from_firebase();// at the start reference if you
 		
 		//******** and store them in commondata
 		if(eventsjoined != null){
@@ -536,13 +536,23 @@ public class Login extends Activity {
 	 * name : pull_data_from_firevbase
 	 * @params : user_root (facebookid)
 	 * @return :
-	 * @desp : This function pulls data from firebase and sets up event nodes
+	 * @desp : This function pulls data from firebase and sets up event nodes.
+	 * 			you just eventid, it fetches the host and it pulls all data for the event
+	 * 			ot also sets up nodes for that which we can use
+	 * 			input is of this form 80897978789-->event-->1 
 	 */
-	private void pull_data_from_firebase(){
-		create_firebase_refrence();
-		System.out.println("pulling data");
+	private void pull_data_from_firebase(final String eventid){
+		String[] data = eventid.split("-->");
+		final String host = data[0];// this give refrence to facebook id
+		final String eventref = data[1]+"-->"+data[2];//event-->1
+		StringBuilder strBuilder = new StringBuilder(
+				"https://met-ster-event.firebaseio.com/");
+		strBuilder.append(host+"/"+host+"-->"+eventref);
+		final String baseref = strBuilder.toString();//https://met-ster-event.firebaseio.com/80897978789/80897978789-->event-->1 
+		Firebase event_fb_ref = new Firebase(baseref);
+		System.out.println("pulling data for " + eventref + "from " + baseref);
 		// This is called only once
-		fb_event_ref.firebaseobj
+		event_fb_ref
 		.addListenerForSingleValueEvent(new ValueEventListener() {
 		    @Override
 		    public void onDataChange(DataSnapshot snapshot) {
@@ -551,9 +561,9 @@ public class Login extends Activity {
 		    	while(members.hasNext()){//this segment pulls hosted events
 		    		DataSnapshot eventkey = members.next();
 		    		host_event_node hostnode = new commondata.host_event_node();
-		    		hostnode.eventid = eventkey.getName().toString();
+		    		hostnode.eventid = host+"-->"+eventref;
 		    		hostnode.number_of_people = eventkey.getChildrenCount();
-		    		System.out.println("event"+ eventkey.getName().toString());
+		    		System.out.println("event "+ hostnode.eventid );// bug
 		    		Iterable<DataSnapshot> data = eventkey.getChildren();
 		    		Iterator<DataSnapshot> dat = data.iterator();
 		    		while(dat.hasNext()){// this segment pulls users
@@ -566,12 +576,12 @@ public class Login extends Activity {
 		    				if(snap.getName().toString() == "food") hostnode.food_type = snap.getValue().toString();
 		    				if(snap.getName().toString() == "price") hostnode.price = snap.getValue().toString();
 		    				if(snap.getName().toString() == "travel") hostnode.travel = snap.getValue().toString();
+		    				if(snap.getName().toString() == "Latitude") hostnode.Latitude = Double.parseDouble(snap.getValue().toString());
+		    				if(snap.getName().toString() == "Longitude") hostnode.Longitude = Double.parseDouble(snap.getValue().toString());
 		    			}
 		    			
 		    		}
-		    		
-		    		commondata.event_information.event_hosted_lookup.put(hostnode.eventid, hostnode);
-		    		
+		    		commondata.event_information.event_hosted_lookup.put(hostnode.eventid, hostnode);	
 		    	}
 		         
 		    }
@@ -582,207 +592,26 @@ public class Login extends Activity {
 	}
 	
 	/*
-	 * name : handle_events
+	 * name : launch_event
 	 * @params : event_id root (facebook id of (any)host and event id under that host)
 	 * @return :
 	 * @desp : This function takes the event id and sets view on that
 	 * 			from event id we can get hostid and we can set listners on that
+	 * 			This function first pulls data from the firebase and updates local nodes
+	 *  		and launches based on that.
 	 */
-	private void handle_events(String eventid){
-		
-		StringBuilder strBuilder = new StringBuilder(
-				"https://met-ster-event.firebaseio.com/");
-		String[] raw = eventid.split("<*=*>");
-		strBuilder.append(raw[0]);
-		strBuilder.append("/"+eventid);
-		String current = strBuilder.toString();
-		Firebase current_fb_ref = new Firebase(current);
-		
-		
-		/*
-		 * setup the listeners this listens to child modification events
-		 */
-		current_fb_ref
-				.addChildEventListener(child_listner = new ChildEventListener() {
-
-					@Override
-					public void onCancelled(FirebaseError arg0) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void onChildAdded(DataSnapshot arg0, String arg1) {
-						// TODO Auto-generated method stub
-						System.out.println("childadded"
-								+ arg0.getName().toString());
-						
-					}
-
-					@Override
-					public void onChildChanged(DataSnapshot arg0,
-							String arg1) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void onChildMoved(DataSnapshot arg0, String arg1) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void onChildRemoved(DataSnapshot child) {
-						// TODO Auto-generated method stub
-
-						System.out.println("changed" + child.getName());
-						String rawname = child.getName();
-						String[] name = rawname.split("--");// name[0] will
-															// have id and
-															// name[1] will
-						boolean stat = false; // have name
-						try {
-							stat = commondata.event_information.eventID
-									.contains(name[0]);
-						} catch (Exception e) {
-							drop_event();
-						}
-						if (stat) {// host has left
-							/*
-							 * host has left safely drop the event
-							 */
-							drop_event();
-						}
-
-					}
-
-				});
-
-		/*
-		 * value listeners this listens to child value modifications
-		 */
-
-		current_fb_ref
-				.addValueEventListener(listn = new ValueEventListener() {
-					@Override
-					public void onCancelled(FirebaseError arg0) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void onDataChange(DataSnapshot data) {
-
-						if (data.hasChildren()) {// members are present
-							// TODO Auto-generated method stub
-							System.out
-									.println("something child value changed");
-							/*
-							 * clear all values and recapture the values
-							 */
-							commondata.places_found.latitudes.clear();
-							commondata.places_found.longitudes.clear();
-							commondata.places_found.names.clear();
-							commondata.places_found.tokens.clear();
-							Iterator<DataSnapshot> children = data
-									.getChildren().iterator();
-							commondata.event_information.host = null;
-							while (children.hasNext()) {// handle cases here
-														// like if no
-														// latitude etc
-								DataSnapshot child = children.next();
-								String rawname = child.getName();
-								String[] rawdata = rawname.split("--"); // rawdata[0]
-																		// has
-																		// id
-																		// and
-																		// rawdata[1]
-																		// has
-																		// name
-								if (commondata.event_information.eventID
-										.contains(rawdata[0])) {// then he
-																// is the
-																// host
-									commondata.event_information.host = rawdata[1];
-									setTitle("(host)"
-											+ commondata.event_information.host);
-								}
-								try {
-									Iterable<DataSnapshot> kid = child
-											.getChildren();
-									Iterator<DataSnapshot> ki = kid
-											.iterator();
-									while (ki.hasNext()) {
-										DataSnapshot par = ki.next();
-										if (par.getName().contains(
-												"Latitude"))
-											commondata.places_found.latitudes.add(Double
-													.parseDouble(par
-															.getValue()
-															.toString()));
-										if (par.getName().contains(
-												"Longitude"))
-											commondata.places_found.longitudes.add(Double
-													.parseDouble(par
-															.getValue()
-															.toString()));
-									}
-
-									String restrauntname = rawdata[1]
-											.replace(".", "")
-											.replace("#", "")
-											.replace("$", "")
-											.replace("[", "")
-											.replace("]", "");
-									commondata.places_found.names
-											.add(restrauntname);
-									commondata.places_found.tokens
-											.add(rawdata[0]);
-								} catch (Exception e) {
-									System.out.println("pair error");
-								}
-							}
-							// after the loop if host is still null then
-							// host has left
-							/*
-							 * update map only if we have correct pair of
-							 * latitude and longitude
-							 */
-							if (commondata.places_found.latitudes.size() != 0
-									&& commondata.places_found.longitudes
-											.size() != 0) {
-								if (commondata.places_found.latitudes
-										.size() == commondata.places_found.longitudes
-										.size()) {
-									set_up_map_view();
-								}
-							}
-						} else {// no members -- clear mysql reset eventid
-								// and refresh
-
-							commondata.event_information.eventID = null;
-							/*
-							 * reset the event
-							 */
-							Thread thread = new Thread() {
-							    @Override
-							    public void run() {
-							    	postData("http://54.183.113.236/metster/resetevent.php", commondata.facebook_details.facebook,"event-" + commondata.facebook_details.facebook, "none" );
-							    }
-							};
-
-							thread.start();
-							Intent intent = new Intent(Login.this,
-									Login.class);
-							startActivity(intent);
-							finish();
-						}
-					}
-
-				});
-		
-		
+	private void launch_event(String eventid){
+		System.out.println("handling event " + eventid);
+		pull_data_from_firebase(eventid);
+		Set<String> keys = commondata.event_information.event_hosted_lookup.keySet();
+		Iterator<String> eventnodes = keys.iterator();
+		while(eventnodes.hasNext()){
+			String ky = eventnodes.next();
+			host_event_node node = commondata.event_information.event_hosted_lookup.get(ky);
+			System.out.println("lat" + node.Latitude );
+			System.out.println("lon" + node.Longitude);
+		}
+				
 	}
 	
 	/*
@@ -1120,17 +949,22 @@ public class Login extends Activity {
 	
 	/*
 	 * name : on_event_selected
+	 * @params : None
+	 * @return : void
+	 * @desp : This function is called when a new event is created.
 	 */
 
 	public void on_event_selected(){
-	
+		
 		//************* push data to firebase
 		final HashMap<String, String> fb_data = new HashMap<String, String>();
-		final int number_of_hosted_events = commondata.event_information.event_hosted_table.size()+1;
+		//************* get hosted event count
 		//************** get event name from user
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setTitle("Event Name");
 		alert.setMessage("Event name helps your friends to identify");
+		//************** check how many events you have hosted.
+		
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
 		alert.setView(input);
@@ -1146,8 +980,24 @@ public class Login extends Activity {
 			fb_data.put("travel", Double.toString(commondata.prefrences.travel));
 			fb_data.put("food", commondata.prefrences.food);
 			create_firebase_refrence();
-			final String eventrefrence = commondata.facebook_details.facebook+"<*=*>"+"event"+"<*=*>"+ Integer.toString(number_of_hosted_events);
-			fb_event_ref.firebaseobj.child(eventrefrence).child(commondata.facebook_details.facebook).setValue(fb_data);
+			//************ pull data from local db
+			SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
+			String hostedevents = prefs.getString("hostedevents", null);
+			int number_of_hosted_events = 0;
+			String []events = null;
+			if (hostedevents != null) {
+			  String hostedeventlist = prefs.getString("hostedevents", "None");//"No name defined" is the default value.
+			  events = hostedeventlist.split("<<");
+			  number_of_hosted_events = events.length+1;
+			}
+			final String eventrefrence = commondata.facebook_details.facebook+"-->"+"event"+"-->"+ number_of_hosted_events;
+			fb_event_ref.firebaseobj.child(eventrefrence).child(commondata.facebook_details.facebook+"-->"+"host").setValue(fb_data);
+			//************** get data from firebase and update local
+			pull_data_from_firebase(eventrefrence);
+			//************** store this new event copy to local data base
+			SharedPreferences.Editor editor = getSharedPreferences("myevents", MODE_PRIVATE).edit();
+			 editor.putString("hostedevents", hostedevents +"<<"+eventrefrence);
+			 editor.commit();
 			//************** prepare for launch
 			remove_location_listners();
 			Intent intent = new Intent(Login.this, Login.class);
@@ -1497,13 +1347,32 @@ public class Login extends Activity {
 		//******* get all the events and put a array list
 		final ArrayList<String> eventtitle = new ArrayList<String>();
 		eventtitle.clear();
-		
-		Set<String> eventsids = commondata.event_information.event_hosted_lookup.keySet();
-		Iterator<String> key = eventsids.iterator();
-		while(key.hasNext()){
-			host_event_node hostnode = commondata.event_information.event_hosted_lookup.get(key.next());
-			eventtitle.add(hostnode.eventid);
+		//************ pull data from local db
+		//**** hosted
+		SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
+		String hostedevents = prefs.getString("hostedevents", null);
+		String []events = null;
+		if (hostedevents != null) {
+		  String hostedeventlist = prefs.getString("hostedevents", "None");//"No name defined" is the default value.
+		  if(hostedeventlist == "none"){
+			  events = null;
+		  }else{
+			  events = hostedeventlist.split("<<");
+		  }
 		}
+		//**** implement joined
+		boolean flag = true;
+		if(events != null){
+		//--------------------
+			for(int i=1; i<events.length; i++){
+				eventtitle.add(events[i]);
+			}
+		}else{
+			//show no events
+			flag = false;
+			toast_info("no events");
+		}
+		if(flag){
 		//******* display on the list
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View layout = inflater.inflate(R.layout.listevents,
@@ -1560,7 +1429,7 @@ public class Login extends Activity {
 				// view that event
 			
 				String eventid = eventtitle.get(order);
-				handle_events(eventid);
+				launch_event(eventid);
 				
 			
 			}
@@ -1576,6 +1445,7 @@ public class Login extends Activity {
 				});
 		final Dialog dialog = builder.create();
 		dialog.show();	
+		}
 		
 	}
 	
@@ -1839,11 +1709,8 @@ public class Login extends Activity {
 		commondata.event_information.event_hosted_table.clear();
 		commondata.event_information.event_joined_table.clear();
 		//******* flush local db
-		
-		Editor eventsjoinededitor = getApplicationContext().getSharedPreferences("eventjoined", MODE_PRIVATE).edit();
-		
+		Editor eventsjoinededitor = getApplicationContext().getSharedPreferences("myevents", MODE_PRIVATE).edit();
 		eventsjoinededitor.clear();
-		
 		eventsjoinededitor.commit();
 		//******* clears firebase data
 		create_firebase_refrence();

@@ -112,6 +112,8 @@ public class commondata {
 		String food_type;
 		String price;
 		String travel;
+		Double Latitude;
+		Double Longitude;
 	}
 	
 	
