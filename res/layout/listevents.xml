@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listeventroot"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:gravity="top"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">  
+        
+       
+     	<LinearLayout
+            android:id="@+id/eventlistdetails"
+            android:layout_width="0dip"
+			android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingLeft="2dp"
+			android:paddingTop="10dp"
+            android:orientation="vertical" >
+       
+       		<TextView
+        		android:id="@+id/title"
+        		android:textColor="#424242"
+        		android:textSize="18sp"
+        		android:text=""
+        		android:layout_gravity="left"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content" />
+            
+        </LinearLayout>
+    
+</LinearLayout>

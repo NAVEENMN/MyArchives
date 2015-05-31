@@ -238,20 +238,11 @@ public class HomescreenActivity extends Activity {
 							System.out.println(response.toString());
 						
 							commondata.event_information.eventID = null;
-							SharedPreferences eventshosted = getApplicationContext().getSharedPreferences("eventhosted", MODE_PRIVATE);
-							Map<String,?> hostedkeys = eventshosted.getAll();
-							if(eventshosted != null){
-								for(Map.Entry<String,?> entry : hostedkeys.entrySet()){
-									Log.d("map values",entry.getKey() + ": " + 
-											entry.getValue().toString());            
-								}
-							}else{
-								commondata.event_information.eventID = null;
-							}
+							
 							SharedPreferences eventsjoined = getApplicationContext().getSharedPreferences("eventjoined", MODE_PRIVATE);
 							
 							if(eventsjoined != null){
-								Map<String,?> joinedkeys = eventshosted.getAll();
+								Map<String,?> joinedkeys = eventsjoined.getAll();
 								
 								for(Map.Entry<String,?> entry : joinedkeys.entrySet()){
 									Log.d("map values",entry.getKey() + ": " + 

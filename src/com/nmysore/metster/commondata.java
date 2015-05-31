@@ -52,6 +52,7 @@ public class commondata {
 		static String host;
 		static HashMap<String, String> event_hosted_table = new HashMap<String, String>();
 		static HashMap<String, String> event_joined_table = new HashMap<String, String>();
+		static HashMap<String, host_event_node> event_hosted_lookup = new HashMap<String, host_event_node>();
 	}
 	
 	public static class prefrence{
@@ -102,6 +103,17 @@ public class commondata {
 		String types;
 		
 	}
+	
+	// key --> eventid (host-event-#)
+	public static class host_event_node{
+		String event_name;
+		String eventid;
+		Long number_of_people;
+		String food_type;
+		String price;
+		String travel;
+	}
+	
 	
 	public static class BlurBuilder {
 	    private static final float BITMAP_SCALE = 0.4f;
