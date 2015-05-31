@@ -542,6 +542,7 @@ public class Login extends Activity {
 	 * 			input is of this form 80897978789-->event-->1 
 	 */
 	private void pull_data_from_firebase(final String eventid){
+		commondata.event_information.given_events_lookup.clear();
 		String[] data = eventid.split("-->");
 		final String host = data[0];// this give refrence to facebook id
 		final String eventref = data[1]+"-->"+data[2];//event-->1
@@ -552,12 +553,13 @@ public class Login extends Activity {
 		Firebase event_fb_ref = new Firebase(baseref);
 		System.out.println("pulling data for " + eventref + "from " + baseref);
 		// This is called only once
-		event_fb_ref
-		.addListenerForSingleValueEvent(new ValueEventListener() {
-		    @Override
-		    public void onDataChange(DataSnapshot snapshot) {
-		    	Iterable<DataSnapshot> events = snapshot.getChildren();
+		event_fb_ref.addValueEventListener(new ValueEventListener() {
+			
+			@Override
+			public void onDataChange(DataSnapshot snapshot) {
+				Iterable<DataSnapshot> events = snapshot.getChildren();
 		    	Iterator<DataSnapshot> members = events.iterator();
+		    	ArrayList<host_event_node> nodelist = new ArrayList<host_event_node>();
 		    	while(members.hasNext()){//this segment pulls hosted events
 		    		DataSnapshot eventkey = members.next();
 		    		host_event_node hostnode = new commondata.host_event_node();
@@ -567,32 +569,64 @@ public class Login extends Activity {
 		    		Iterable<DataSnapshot> data = eventkey.getChildren();
 		    		Iterator<DataSnapshot> dat = data.iterator();
 		    		while(dat.hasNext()){// this segment pulls users
-		    			DataSnapshot userid = dat.next();
-		    			Iterator<DataSnapshot> value = userid.getChildren().iterator();
-		    			System.out.println("users " + userid.getName().toString());
-		    			while(value.hasNext()){// this segment pull value
-		    				DataSnapshot snap = value.next();
-		    				if(snap.getName().toString() == "eventname") hostnode.event_name = snap.getValue().toString();
-		    				if(snap.getName().toString() == "food") hostnode.food_type = snap.getValue().toString();
-		    				if(snap.getName().toString() == "price") hostnode.price = snap.getValue().toString();
-		    				if(snap.getName().toString() == "travel") hostnode.travel = snap.getValue().toString();
-		    				if(snap.getName().toString() == "Latitude") hostnode.Latitude = Double.parseDouble(snap.getValue().toString());
-		    				if(snap.getName().toString() == "Longitude") hostnode.Longitude = Double.parseDouble(snap.getValue().toString());
-		    			}
-		    			
+		    			DataSnapshot params = dat.next();	
+		    			if(params.getName().toString() == "eventname") hostnode.event_name = params.getValue().toString();
+	    				if(params.getName().toString() == "food") hostnode.food_type = params.getValue().toString();
+	    				if(params.getName().toString() == "price") hostnode.price = params.getValue().toString();
+	    				if(params.getName().toString() == "travel") hostnode.travel = params.getValue().toString();
+	    				if(params.getName().toString() == "Latitude") hostnode.Latitude = Double.parseDouble(params.getValue().toString());
+	    				if(params.getName().toString() == "Longitude") hostnode.Longitude = Double.parseDouble(params.getValue().toString());
 		    		}
-		    		commondata.event_information.event_hosted_lookup.put(hostnode.eventid, hostnode);	
+		    		nodelist.add(hostnode);	
 		    	}
-		         
-		    }
-		    @Override
-		    public void onCancelled(FirebaseError firebaseError) {
-		    }
+		    	System.out.println("nodelist has this data : " +  nodelist.size());
+		    	commondata.event_information.given_events_lookup.put(host+"-->"+eventref, nodelist);
+		    	System.out.println("and ppp " + commondata.event_information.given_events_lookup.keySet().toString());
+				//display_node_data();
+		    	launch_event(host+"-->"+eventref);
+			}
+			
+			@Override
+			public void onCancelled(FirebaseError arg0) {
+				// TODO Auto-generated method stub
+				
+			}
 		});
+		//launch_event(host+"-->"+eventref);
+		
 	}
 	
 	/*
-	 * name : launch_event
+	 * name : display_node_data
+	 * @params : None
+	 * @return : null
+	 * @desp : This is a test funtion to check data stores in nodes
+	 */
+	
+	private void display_node_data(){
+		System.out.println("displaying all node");
+		Set<String> eventkeys = commondata.event_information.given_events_lookup.keySet();
+		System.out.println("its keys are" + eventkeys);
+		Iterator<String> keys = eventkeys.iterator();
+		while(keys.hasNext()){
+			String event = keys.next();
+			System.out.println("event key - " + event);
+			ArrayList<host_event_node> nodearry = commondata.event_information.given_events_lookup.get(event);
+			
+			System.out.println("number of people in this event" + nodearry.size());
+			Iterator<host_event_node> arriter = nodearry.iterator();
+			while(arriter.hasNext()){
+				host_event_node node = arriter.next();
+				System.out.println("eventid" + node.eventid);
+				System.out.println("location" + node.Latitude + " " + node.Longitude);
+			}
+			
+		}
+		
+	}
+	
+	/*
+	 * name : launch_event (called from pull data from firebase)
 	 * @params : event_id root (facebook id of (any)host and event id under that host)
 	 * @return :
 	 * @desp : This function takes the event id and sets view on that
@@ -602,14 +636,19 @@ public class Login extends Activity {
 	 */
 	private void launch_event(String eventid){
 		System.out.println("handling event " + eventid);
-		pull_data_from_firebase(eventid);
-		Set<String> keys = commondata.event_information.event_hosted_lookup.keySet();
+		//host_event_node node = commondata.event_information.given_events_lookup.get(eventid);
+		
+		Set<String> keys = commondata.event_information.given_events_lookup.keySet();
 		Iterator<String> eventnodes = keys.iterator();
 		while(eventnodes.hasNext()){
 			String ky = eventnodes.next();
-			host_event_node node = commondata.event_information.event_hosted_lookup.get(ky);
-			System.out.println("lat" + node.Latitude );
-			System.out.println("lon" + node.Longitude);
+			ArrayList<host_event_node> nodes = commondata.event_information.given_events_lookup.get(ky);
+			Iterator<host_event_node> node = nodes.iterator();
+			while(node.hasNext()){
+				host_event_node data = node.next();
+				System.out.println("location" + data.Latitude +", " + data.Longitude );
+			}
+			
 		}
 				
 	}
@@ -1429,8 +1468,7 @@ public class Login extends Activity {
 				// view that event
 			
 				String eventid = eventtitle.get(order);
-				launch_event(eventid);
-				
+				pull_data_from_firebase(eventid);
 			
 			}
 

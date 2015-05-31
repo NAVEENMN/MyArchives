@@ -52,7 +52,7 @@ public class commondata {
 		static String host;
 		static HashMap<String, String> event_hosted_table = new HashMap<String, String>();
 		static HashMap<String, String> event_joined_table = new HashMap<String, String>();
-		static HashMap<String, host_event_node> event_hosted_lookup = new HashMap<String, host_event_node>();
+		static HashMap<String, ArrayList<host_event_node>> given_events_lookup = new HashMap<String, ArrayList<host_event_node>>();
 	}
 	
 	public static class prefrence{
