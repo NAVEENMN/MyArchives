@@ -583,6 +583,8 @@ public class Login extends Activity {
 		    	commondata.event_information.given_events_lookup.put(host+"-->"+eventref, nodelist);
 		    	System.out.println("and ppp " + commondata.event_information.given_events_lookup.keySet().toString());
 				//display_node_data();
+		    	//*********** prepare for launch
+		    	//*********** launch the event
 		    	launch_event(host+"-->"+eventref);
 			}
 			
@@ -635,9 +637,7 @@ public class Login extends Activity {
 	 *  		and launches based on that.
 	 */
 	private void launch_event(String eventid){
-		System.out.println("handling event " + eventid);
-		//host_event_node node = commondata.event_information.given_events_lookup.get(eventid);
-		
+		System.out.println("handling event " + eventid);		
 		Set<String> keys = commondata.event_information.given_events_lookup.keySet();
 		Iterator<String> eventnodes = keys.iterator();
 		while(eventnodes.hasNext()){
@@ -647,9 +647,13 @@ public class Login extends Activity {
 			while(node.hasNext()){
 				host_event_node data = node.next();
 				System.out.println("location" + data.Latitude +", " + data.Longitude );
+				commondata.places_found.latitudes.add(data.Latitude);
+				commondata.places_found.longitudes.add(data.Longitude);
 			}
-			
 		}
+		
+		//** all members are added
+		set_up_map_view();
 				
 	}
 	
@@ -753,103 +757,8 @@ public class Login extends Activity {
 			try {
 				for (int i = 0; i < commondata.places_found.latitudes.size(); i++) {
 					System.out.println("setting up : " + commondata.places_found.latitudes.get(i) + ", " + commondata.places_found.longitudes.get(i) );
-					if (commondata.places_found.tokens.get(i).contains("final")) {
-						mMap.addMarker(new MarkerOptions()
-								.position(
-										new LatLng(
-												commondata.places_found.latitudes
-														.get(i),
-												commondata.places_found.longitudes
-														.get(i)))
-
-								.icon(BitmapDescriptorFactory
-										.fromResource(R.drawable.finalpoint))
-								.title(commondata.places_found.names.get(i)));
-					} else {
-
-						if (commondata.places_found.tokens.get(i).contains(
-								"rest")) {// they
-											// are
-											// restraunt
-							mMap.addMarker(new MarkerOptions()
-									.position(
-											new LatLng(
-													commondata.places_found.latitudes
-															.get(i),
-													commondata.places_found.longitudes
-															.get(i)))
-
-									.icon(BitmapDescriptorFactory
-											.fromResource(R.drawable.flag))
-									.title(commondata.places_found.names.get(i)));
-							
-							
-							if (event_info.is_host) {
-								mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
-
-									@Override
-									public void onInfoWindowClick(Marker arg0) {
-										// TODO Auto-generated method stub
-										AlertDialog.Builder alert = new AlertDialog.Builder(
-												Login.this);
-										final Marker picked = arg0;
-										System.out.println(arg0.getTitle());
-										alert.setTitle("Finalize Meet Up");
-										alert.setMessage("Do you want to finalize "
-												+ arg0.getTitle()
-												+ " as meetup area ?");
-										// Set an EditText view to get user
-										// input
-
-										alert.setPositiveButton(
-												"Ok",
-												new DialogInterface.OnClickListener() {
-													public void onClick(
-															DialogInterface dialog,
-															int whichButton) {
-
-														finalize_place(picked
-																.getTitle()
-																.toString());
-													}
-												});
-
-										alert.setNegativeButton(
-												"Cancel",
-												new DialogInterface.OnClickListener() {
-													public void onClick(
-															DialogInterface dialog,
-															int whichButton) {
-														// just cancel it
-													}
-												});
-
-										alert.show();
-
-									}
-								});
-							}
-						} else {
-
-							if (commondata.places_found.names.get(i).equals(
-									"center")) {// for
-												// center
-												// button
-								final int j = i;
-								mMap.addMarker(new MarkerOptions()
-										.position(
-												new LatLng(
-														commondata.places_found.latitudes
-																.get(i),
-														commondata.places_found.longitudes
-																.get(i)))
-										// visitor
-										.icon(BitmapDescriptorFactory
-												.fromResource(R.drawable.mp))
-										.title("explore neighbourhood"));
-
-
-							} else {
+					 			
+						 
 								mMap.addMarker(new MarkerOptions()
 										.position(
 												new LatLng(
@@ -860,11 +769,7 @@ public class Login extends Activity {
 										// visitor
 										.icon(BitmapDescriptorFactory
 												.fromResource(R.drawable.pin))
-										.title(commondata.places_found.names
-												.get(i)));
-							}
-						}
-					}
+										);	
 				}
 
 				mMap.setMyLocationEnabled(true);
