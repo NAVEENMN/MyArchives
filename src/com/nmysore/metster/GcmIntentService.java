@@ -36,7 +36,7 @@ public class GcmIntentService extends IntentService {
         // The getMessageType() intent parameter must be the intent you received
         // in your BroadcastReceiver.
         String messageType = gcm.getMessageType(intent);
-        
+        System.out.println("gcm data incoming...");
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
             /*
              * Filter messages based on message type. Since it is likely that GCM
@@ -66,8 +66,7 @@ public class GcmIntentService extends IntentService {
                 Log.i("tag", "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
                 System.out.println("gcm says: " + extras.toString());
-                
-                
+               
                 /*
                  * When a gcm message comes we need to check what type of message it is
                  * 1) invite from a friend -- store in chache and join

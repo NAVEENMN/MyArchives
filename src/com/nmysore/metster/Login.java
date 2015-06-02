@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.http.HttpResponse;
@@ -526,10 +527,78 @@ public class Login extends Activity {
 	 * @return:
 	 * @desp : this function stops old listner and sets new listner to new event
 	 */
-	private void set_firebase_listner(){
+	private ChildEventListener set_firebase_listner(String eventid){
+	
+		String[] data = eventid.split("-->");
+		final String host = data[0];// this give refrence to facebook id
+		final String eventref = data[1]+"-->"+data[2];//event-->1
+		StringBuilder strBuilder = new StringBuilder(
+				"https://met-ster-event.firebaseio.com/");
+		strBuilder.append(host+"/"+host+"-->"+eventref);
+		final String baseref = strBuilder.toString();//https://met-ster-event.firebaseio.com/80897978789/80897978789-->event-->1 
+		Firebase event_fb_ref = new Firebase(baseref);
+		
+		
+		ChildEventListener listner = event_fb_ref.addChildEventListener(new ChildEventListener() {
+			
+			@Override
+			public void onChildRemoved(DataSnapshot arg0) {
+				// TODO Auto-generated method stub
+				System.out.println("child removed");
+			}
+			
+			@Override
+			public void onChildMoved(DataSnapshot arg0, String arg1) {
+				// TODO Auto-generated method stub
+				System.out.println("child moved");
+			}
+			
+			@Override
+			public void onChildChanged(DataSnapshot arg0, String arg1) {
+				// TODO Auto-generated method stub
+				System.out.println("child changed");
+			}
+			
+			@Override
+			public void onChildAdded(DataSnapshot arg0, String arg1) {
+				// TODO Auto-generated method stub
+				System.out.println("nee child added");
+			}
+			
+			@Override
+			public void onCancelled(FirebaseError arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		return listner;
 		
 	}
 	
+	
+	
+	
+	/*
+	 * name : remove_fb_listner
+	 * @params : eventid
+	 * @return : void
+	 * @desp : for a given event the firebase listner will be removed. 
+	 */
+	
+	/*
+	private void remove_fb_listner(String eventid, listner){
+		String[] data = eventid.split("-->");
+		final String host = data[0];// this give refrence to facebook id
+		final String eventref = data[1]+"-->"+data[2];//event-->1
+		StringBuilder strBuilder = new StringBuilder(
+				"https://met-ster-event.firebaseio.com/");
+		strBuilder.append(host+"/"+host+"-->"+eventref);
+		final String baseref = strBuilder.toString();//https://met-ster-event.firebaseio.com/80897978789/80897978789-->event-->1 
+		Firebase event_fb_ref = new Firebase(baseref);
+		event_fb_ref.removeEventListener();
+	}
+	*/
 	
 	
 	/*
@@ -557,6 +626,7 @@ public class Login extends Activity {
 			
 			@Override
 			public void onDataChange(DataSnapshot snapshot) {
+				commondata.event_information.given_events_lookup.clear();
 				Iterable<DataSnapshot> events = snapshot.getChildren();
 		    	Iterator<DataSnapshot> members = events.iterator();
 		    	ArrayList<host_event_node> nodelist = new ArrayList<host_event_node>();
@@ -571,6 +641,8 @@ public class Login extends Activity {
 		    		while(dat.hasNext()){// this segment pulls users
 		    			DataSnapshot params = dat.next();	
 		    			if(params.getName().toString() == "eventname") hostnode.event_name = params.getValue().toString();
+		    			if(params.getName().toString() == "nodename") hostnode.nodename = params.getValue().toString();
+		    			if(params.getName().toString() == "nodetype") hostnode.nodetype = params.getValue().toString();
 	    				if(params.getName().toString() == "food") hostnode.food_type = params.getValue().toString();
 	    				if(params.getName().toString() == "price") hostnode.price = params.getValue().toString();
 	    				if(params.getName().toString() == "travel") hostnode.travel = params.getValue().toString();
@@ -585,6 +657,7 @@ public class Login extends Activity {
 				//display_node_data();
 		    	//*********** prepare for launch
 		    	//*********** launch the event
+		    	System.out.println("checking " + commondata.event_information.given_events_lookup.size());
 		    	launch_event(host+"-->"+eventref);
 			}
 			
@@ -594,8 +667,8 @@ public class Login extends Activity {
 				
 			}
 		});
-		//launch_event(host+"-->"+eventref);
 		
+		ChildEventListener lister = set_firebase_listner(eventid);
 	}
 	
 	/*
@@ -644,11 +717,15 @@ public class Login extends Activity {
 			String ky = eventnodes.next();
 			ArrayList<host_event_node> nodes = commondata.event_information.given_events_lookup.get(ky);
 			Iterator<host_event_node> node = nodes.iterator();
+			commondata.places_found.latitudes.clear();
+			commondata.places_found.longitudes.clear();
 			while(node.hasNext()){
 				host_event_node data = node.next();
 				System.out.println("location" + data.Latitude +", " + data.Longitude );
 				commondata.places_found.latitudes.add(data.Latitude);
 				commondata.places_found.longitudes.add(data.Longitude);
+				commondata.places_found.names.add(data.nodename);
+				commondata.places_found.tokens.add(data.nodetype);
 			}
 		}
 		
@@ -748,6 +825,7 @@ public class Login extends Activity {
 	 * @desp : This function sets up the initial map view 
 	 */
 	public void set_up_map_view() {
+				
 		
 		try {
 			mMap = ((MapFragment) getFragmentManager().findFragmentById(
@@ -756,9 +834,8 @@ public class Login extends Activity {
 			mMap.setTrafficEnabled(true);
 			try {
 				for (int i = 0; i < commondata.places_found.latitudes.size(); i++) {
+					
 					System.out.println("setting up : " + commondata.places_found.latitudes.get(i) + ", " + commondata.places_found.longitudes.get(i) );
-					 			
-						 
 								mMap.addMarker(new MarkerOptions()
 										.position(
 												new LatLng(
@@ -766,9 +843,9 @@ public class Login extends Activity {
 																.get(i),
 														commondata.places_found.longitudes
 																.get(i)))
-										// visitor
 										.icon(BitmapDescriptorFactory
 												.fromResource(R.drawable.pin))
+										.title(commondata.places_found.names.get(i))
 										);	
 				}
 
@@ -777,6 +854,7 @@ public class Login extends Activity {
 						commondata.user_information.latitude,
 						commondata.user_information.longitude);// yours
 				mMap.getUiSettings().setZoomControlsEnabled(false);
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
 			} catch (Exception e) {
 				System.out.println("something fishy in setting up map");
 				// ret_data();
@@ -890,14 +968,15 @@ public class Login extends Activity {
  
 	}
 		
-	
+		
 	/*
 	 * name : on_event_selected
 	 * @params : None
 	 * @return : void
-	 * @desp : This function is called when a new event is created.
+	 * @desp : This function is called after you select from view events
+	 * 			This function pulls data from firebase and stored contents in local
+	 * 			member pulling data from firebase also launches view.
 	 */
-
 	public void on_event_selected(){
 		
 		//************* push data to firebase
@@ -916,13 +995,14 @@ public class Login extends Activity {
 		public void onClick(DialogInterface dialog, int whichButton) {
 		  Editable value = input.getText();
 		  String event_name = value.toString();
-		  fb_data.put("username",commondata.facebook_details.name );
+		  fb_data.put("nodename",commondata.facebook_details.name );
 			fb_data.put("eventname",event_name);
 			fb_data.put("Latitude", commondata.user_information.latitude.toString());
 			fb_data.put("Longitude", commondata.user_information.longitude.toString());
 			fb_data.put("price", Float.toString(commondata.prefrences.price));
 			fb_data.put("travel", Double.toString(commondata.prefrences.travel));
 			fb_data.put("food", commondata.prefrences.food);
+			fb_data.put("nodetype", "host");
 			create_firebase_refrence();
 			//************ pull data from local db
 			SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 

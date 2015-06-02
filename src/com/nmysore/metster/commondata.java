@@ -106,14 +106,16 @@ public class commondata {
 	
 	// key --> eventid (host-event-#)
 	public static class host_event_node{
-		String event_name;
-		String eventid;
-		Long number_of_people;
+		String event_name;// what user enters
+		String eventid;//fbid-->event-->#
+		Long number_of_people;//
 		String food_type;
 		String price;
 		String travel;
 		Double Latitude;
 		Double Longitude;
+		String nodename;// Philz, stanford theater, naveen, allie --> can be used for title on map
+		String nodetype;//restaurant, movie place, host, member# --> can be used for icons on map
 	}
 	
 	
