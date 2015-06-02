@@ -630,6 +630,7 @@ public class Login extends Activity {
 				Iterable<DataSnapshot> events = snapshot.getChildren();
 		    	Iterator<DataSnapshot> members = events.iterator();
 		    	ArrayList<host_event_node> nodelist = new ArrayList<host_event_node>();
+		    	boolean flag = false;
 		    	while(members.hasNext()){//this segment pulls hosted events
 		    		DataSnapshot eventkey = members.next();
 		    		host_event_node hostnode = new commondata.host_event_node();
@@ -646,19 +647,34 @@ public class Login extends Activity {
 	    				if(params.getName().toString() == "food") hostnode.food_type = params.getValue().toString();
 	    				if(params.getName().toString() == "price") hostnode.price = params.getValue().toString();
 	    				if(params.getName().toString() == "travel") hostnode.travel = params.getValue().toString();
-	    				if(params.getName().toString() == "Latitude") hostnode.Latitude = Double.parseDouble(params.getValue().toString());
-	    				if(params.getName().toString() == "Longitude") hostnode.Longitude = Double.parseDouble(params.getValue().toString());
+	    				if(params.getName().toString() == "Latitude") {
+	    					hostnode.Latitude = Double.parseDouble(params.getValue().toString());
+	    					System.out.println("values added location "+ hostnode.Latitude + hostnode.Longitude);
+	    				}
+	    				if(params.getName().toString() == "Longitude"){
+	    					hostnode.Longitude = Double.parseDouble(params.getValue().toString());
+	    					System.out.println("values added location "+ hostnode.Latitude + hostnode.Longitude);
+	    				}
+	    				if(hostnode.Longitude != null || hostnode.Longitude != null){
+	    					flag = true;
+	    				}
+	    				
 		    		}
 		    		nodelist.add(hostnode);	
 		    	}
 		    	System.out.println("nodelist has this data : " +  nodelist.size());
+		    	if(flag){
 		    	commondata.event_information.given_events_lookup.put(host+"-->"+eventref, nodelist);
 		    	System.out.println("and ppp " + commondata.event_information.given_events_lookup.keySet().toString());
+		    	System.out.println("checking " + commondata.event_information.given_events_lookup.size());
+		    	launch_event(host+"-->"+eventref);
+		    	flag = false;
+		    	}else{
+		    		System.out.println("lat of lon is null");
+		    	}
 				//display_node_data();
 		    	//*********** prepare for launch
 		    	//*********** launch the event
-		    	System.out.println("checking " + commondata.event_information.given_events_lookup.size());
-		    	launch_event(host+"-->"+eventref);
 			}
 			
 			@Override
