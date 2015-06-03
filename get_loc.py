@@ -121,28 +121,45 @@ def get_features(eventid,fb_res, ranking, rating_ranking):
     ranked_ratings = dict()
     centroid = None
     food_type = None
-    # get people`s location
-    for key in fb_res.keys():
-        if "*" in str(key): # "*" in key implies its a place location
-            s = 0
-        else: # This implies person location
-            fb_lat = fb.get(eventid + key +'/Latitude', None)
-            fb_lon = fb.get(eventid + key +'/Longitude', None)
-            people.append([fb_lat, fb_lon])
+	
+    # first get the data from the firebase 
+    data = fb_res.get()
+    food = dict()
+    for key in data.keys():
+    	if(data[key]['nodetype'] == "member"  or data[key]["nodetype"] == "host"): # this is a person
+		location = list()
+		location.append(data[key]['Latitude'])
+		location.append(data[key]['Longitude'])
+		people.append(location)
+		pref = data[key]['food']
+		if(food.has_key(pref)):
+			count = food[pref]
+			food[pref] = count + 1
+		else:
+			food[pref] = 1 	
     # get location centroid
     lat = 0
     lon = 0
     for person in people:
-        lat = lat + person[0]
-        lon = lon + person[1]
+        lat = lat + float( person[0] )
+        lon = lon + float( person[1] )
     lat = lat / len(people)
     lon = lon / len(people)
     centroid = [lat, lon]
-    food_type = fb.get(eventid + key +'/food',None)
     # Let have the centroid on maps for verification
-    fb.put(eventid,"709091411991*799--center", {'Latitude': lat, 'Longitude': lon})
+    Dfb_base = "https://met-ster-event.firebaseio.com/"
+    Devent_id = "859842507380812-->event-->0" #str(sys.argv[1])+"/" # this you will get from app
+    Duser = Devent_id.rpartition('--')[0]
+    Dfb_ref = Dfb_base + Duser + "/" + "8987987CENTER098"
+    Dfb = Firebase(Dfb_ref) 
+    lat = 0.0
+    lon = 0.0
+    cen = dict()
+    cen['Latitude'] = centroid[0]
+    cen['Longitude'] = centroid[1]
+    Dfb.put(cen)
     # For this version we are considering centroid but we need better approach
-    locations, names, ratings, id = req_place_details(str(centroid[0]), str(centroid[1]),food_type)
+    locations, names, ratings, id = req_place_details(str(cen[0]), str(cen[1]),food_type)
     # all places are equally preferred
     for x in range(0, len(names)):
         ranking[names[x]] = 0.0
@@ -241,6 +258,7 @@ def main():
     fb_base = "https://met-ster-event.firebaseio.com/"
     event_id = "859842507380812-->event-->0" #str(sys.argv[1])+"/" # this you will get from app
     user = event_id.rpartition('--')[0]
+    user = user.rpartition('--')[0]
     fb_ref = fb_base + user + "/" + event_id
     fb = Firebase(fb_ref) 
     #event_id ww= str(sys.argv[1])+"/" # this you will get from app
