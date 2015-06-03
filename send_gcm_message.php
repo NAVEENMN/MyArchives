@@ -29,11 +29,11 @@ if($row){
 $json_data = $row['PAYLOAD'];
 $data = json_decode($json_data);
 $to_gcm = $data -> gcm;
-
-$from_jason_data = $dat['PAYLOAD'];
+/*
+$from_json_data = $dat['PAYLOAD'];
 $from_data = json_decode($from_json_data);
 $from_name = $from_data -> username;
-
+*/
 switch($type){	
 
 	case "invite_check" :
@@ -44,9 +44,9 @@ switch($type){
 				$message = "invite" . "--" . "accepted";
 				invite_accept($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_accept", $message);
 				break;
-	case "invite_no" :
+	case "invite_reject" :
 				$message = "invite" . "--" . "rejected";
-				invite_reject($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_reject", $message);
+				//invite_reject($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_reject", $message);
 				break;
 	case "host_cancel":
 				host_cancel();
@@ -102,6 +102,7 @@ send_gcm_notify($togcm, $new_payload);
 	return :
 	desp : This function checks which type of message and build a payload for that 
 */
+/*
 function invite_reject($from, $to, $togcm, $type, $message){
 $arr = array("host" => $from,
 	     "to_id" => $to,
@@ -110,7 +111,7 @@ $arr = array("host" => $from,
 $new_payload = json_encode($arr);
 send_gcm_notify($togcm, $new_payload);
 }
-
+*/
 
 //-------> getting who sent it
 function send_gcm_notify($reg_id, $message) {
