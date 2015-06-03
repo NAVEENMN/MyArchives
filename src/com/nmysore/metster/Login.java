@@ -726,6 +726,7 @@ public class Login extends Activity {
 	 *  		and launches based on that.
 	 */
 	private void launch_event(String eventid){
+		commondata.event_information.eventID = eventid;
 		System.out.println("handling event " + eventid);		
 		Set<String> keys = commondata.event_information.given_events_lookup.keySet();
 		Iterator<String> eventnodes = keys.iterator();
@@ -1234,7 +1235,7 @@ public class Login extends Activity {
 	 *         Still need to handle server response
 	 */
 	
-	public String gcm_send_data(String facebook_id, final String to_facebook_id, final String message){
+	public String gcm_send_data(String facebook_id, final String to_facebook_id, final String payload){
 	
 	   
 		Thread thread = new Thread() {
@@ -1247,7 +1248,7 @@ public class Login extends Activity {
 					Thread thread = new Thread() {
 					    @Override
 					    public void run() {
-					    	response = postData("http://54.183.113.236/metster/exe_gcm_send_test.php", commondata.facebook_details.facebook, to_facebook_id, message);
+					    	response = postData("http://52.8.173.36//metster/send_gcm_message.php", commondata.facebook_details.facebook, to_facebook_id, payload);
 					    	System.out.println("gcm_server : " + server_resp);
 					    }
 					};
@@ -1340,7 +1341,21 @@ public class Login extends Activity {
 				final int it = arg2;
 				final String name = arg0.getItemAtPosition(arg2).toString();
 				// TODO Auto-generated method stub	
-				String server_response = gcm_send_data(commondata.facebook_details.facebook, friendid.get(it).toString(), "dinner tonight?");
+				
+				JSONObject payload = new JSONObject(); 
+				
+				try {
+					payload.put("host", commondata.facebook_details.facebook); 
+					payload.put("to_id", commondata.facebook_details.facebook);
+					payload.put("payload_type", "invite_check");
+					payload.put("payload_message", "dinner tonight");
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+				
+				//String server_response = gcm_send_data(commondata.facebook_details.facebook, friendid.get(it).toString(), "dinner tonight?");
+				String server_response = gcm_send_data(commondata.facebook_details.facebook, commondata.facebook_details.facebook, payload.toString());
 
 			}
 

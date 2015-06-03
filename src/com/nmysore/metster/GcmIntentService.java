@@ -77,30 +77,57 @@ public class GcmIntentService extends IntentService {
                 String message_info = extras.getString("message", null);
                 if(message_info  != null ){
                 	System.out.println("message is : " + message_info);
+                	
+                	
+                	
+                	try {
+                		JSONObject gcmdata = new JSONObject(message_info);
+						String host = gcmdata.getString("host");
+						String  to_id = gcmdata.getString("to_id");
+	                	String  payload_type = gcmdata.getString("payload_type");
+	                	String  payload_message = gcmdata.getString("payload_message");
+	                	
+	                	/*
+	                	 * payload_type : invite_check, invite_accept, invite_no
+                                host_cancel, invite_drop
+	                	 * case a : invite_check 
+	                	 * 			in login if in server response ok then sent else fail
+	                	 * case b : invite_accept
+	                	 * 			a member accepted invite send gcm to host(organizer) from this user
+	                	 * case c : invite_no
+	                	 * 			a member rejected invite send gcm to host (organizer) from this user
+	                	 * case d : host cancel
+	                	 * 			this is incoming saying host cancled.. let this user know that host
+	                	 * 			cancled the evrnt and flush all data in local data for that event
+	                	 * case e : invite_drop
+	                	 * 			this is when user bails out... let the host know by sending a gcm
+	                	 */
+	                	
+	                	 Log.w("from", host);
+	                    Log.w("message", to_id);
+	                    Log.w("type", payload_type);//id
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+                	
+                   
+                    
+                    //final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
+                    //editor.putString("invite_status", "yes");
+                    //editor.putString("invite_from", message_data[0]);
+                    //editor.putString("inviteid", message_data[2]);
+                    //editor.putString("message", message_data[1]);
+                    //editor.commit();
+                    
+                    //System.out.println("invite stored");
+                    
+                    //sendNotification(message_data[0], message_data[1], "event-"+message_data[2]);
+                    
                 }else{
                 	System.out.println("GCM Error");
-                }
-                
-                
-                String message_data[] = message_info.split("-#>"); // name -- message -- id
-               
-                
-                Log.w("from",message_data[0]);//name
-                Log.w("message",message_data[1]);//actual message
-                Log.w("id",message_data[2]);//id
-                
-                final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
-                editor.putString("invite_status", "yes");
-                editor.putString("invite_from", message_data[0]);
-                editor.putString("inviteid", message_data[2]);
-                editor.putString("message", message_data[1]);
-                editor.commit();
-                
-                System.out.println("invite stored");
-                
-                sendNotification(message_data[0], message_data[1], "event-"+message_data[2]);
-             
-                
+                } 
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
