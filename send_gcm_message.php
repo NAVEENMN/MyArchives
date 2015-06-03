@@ -15,6 +15,8 @@ $to_facebookid = $_POST['param2'];//check to whom to send with email
 $payload = $_POST['param3'];
 $incoming_data = json_decode($payload);
 $type = $incoming_data -> payload_type;
+$event_refrence =  $incoming_data -> event_refrence;
+$sender_name = $incoming_data -> sender_name; 
 $result = mysql_query("SELECT * FROM accounts
  WHERE USERID ='$to_facebookid'") or die(mysql_error());
 $row = mysql_fetch_array( $result );
@@ -35,16 +37,16 @@ $from_name = $from_data -> username;
 switch($type){	
 
 	case "invite_check" :
-				$message = "invite from ";
-				echo $from_name;
-				$message = $message . $from_name;
+				$message = $sender_name . "--" . $event_refrence;
 				invite_check($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_check", $message);
 				break;
 	case "invite_accept" :
-				invite_accept();
+				$message = "invite" . "--" . "accepted";
+				invite_accept($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_accept", $message);
 				break;
 	case "invite_no" :
-				invite_no();
+				$message = "invite" . "--" . "rejected";
+				invite_reject($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_reject", $message);
 				break;
 	case "host_cancel":
 				host_cancel();
@@ -78,6 +80,37 @@ $new_payload = json_encode($arr);
 send_gcm_notify($togcm, $new_payload);
 	
 }
+
+/*
+	name : invite_accept
+	param: 
+	return :
+	desp : This function checks which type of message and build a payload for that 
+*/
+function invite_accept($from, $to, $togcm, $type, $message){
+$arr = array("host" => $from,
+	     "to_id" => $to,
+	     "payload_type" =>  $type,
+             "payload_message" => $message);
+$new_payload = json_encode($arr);
+send_gcm_notify($togcm, $new_payload);
+}
+
+/*
+	name : invite_reject
+	param: 
+	return :
+	desp : This function checks which type of message and build a payload for that 
+*/
+function invite_reject($from, $to, $togcm, $type, $message){
+$arr = array("host" => $from,
+	     "to_id" => $to,
+	     "payload_type" =>  $type,
+             "payload_message" => $message);
+$new_payload = json_encode($arr);
+send_gcm_notify($togcm, $new_payload);
+}
+
 
 //-------> getting who sent it
 function send_gcm_notify($reg_id, $message) {
