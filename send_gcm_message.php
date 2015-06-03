@@ -10,16 +10,22 @@ payload format
         }
 */
 include 'databaseauth.php';
-$from_accountnumber = $argv[1];//$_POST['appkey'];//who sent it
-$to_facebookid = $argv[2];//$_POST['param2'];//check to whom to send with email
-$message = $argv[3];
-/*
-	$data = json_decode($payload)
-	type = $data -> payload_type
-	switch(type){	
+$from_accountnumber = $_POST['param1'];//who sent it
+$to_facebookid = $_POST['param2'];//check to whom to send with email
+$payload = $_POST['param3'];
+$incoming_data = json_decode($payload);
+$type = $incoming_data -> payload_type;
+$result = mysql_query("SELECT * FROM accounts
+ WHERE USERID ='$to_facebookid'") or die(mysql_error());
+$row = mysql_fetch_array( $result );
+if($row){
+$json_data = $row['PAYLOAD'];
+$data = json_decode($json_data);
+$to_gcm = $data -> gcm;
+switch($type){	
 
 	case "invite_check" :
-				invite_check();
+				invite_check($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_check");
 				break;
 	case "invite_accept" :
 				invite_accept();
@@ -34,33 +40,37 @@ $message = $argv[3];
 				invite_drop();
 				break;
 	default :
-				something_wrong();
+				echo "invalid request";
 				break;
 	
-	}	
+	}
+}
+else{
+	// no user
+	$v = 0;
+}	
+
+/*
+	name : invite_check
+	param: 
+	return :
+	desp : This function checks which type of message and build a payload for that 
 */
+function invite_check($from, $to, $togcm, $type){
+$arr = array("host" => $from,
+	     "to_id" => $to,
+	     "payload_type" =>  $type,
+             "payload_message" => "invite for event");
+$new_payload = json_encode($arr);
+send_gcm_notify($togcm, $new_payload);
+	
+}
 
-//$message = $_POST['param3'];
-//-------> getting to gcm refrence
-$result = mysql_query("SELECT * FROM accounts
- WHERE USERID ='$to_facebookid'") or die(mysql_error());
-$row = mysql_fetch_array( $result );
-$json_data = $row['PAYLOAD'];
-$data = json_decode($json_data);
-if($row){
-$to_gcm = $data -> gcm;
 //-------> getting who sent it
-$res = mysql_query("SELECT * FROM accounts
- WHERE USERID ='$from_accountnumber'") or die(mysql_error());
-$raw = mysql_fetch_array( $res );
-$json_data = $raw['PAYLOAD'];
-$dat = json_decode($json_data);
-$sender_name  = $dat -> username;
-
-    define("GOOGLE_API_KEY", "AIzaSyAej8YahV9nPJXz-8VtzM-iI80bo2394f0");
-    define("GOOGLE_GCM_URL", "https://android.googleapis.com/gcm/send");
-    function send_gcm_notify($reg_id, $message) {
-        $fields = array(
+function send_gcm_notify($reg_id, $message) {
+define("GOOGLE_API_KEY", "AIzaSyAej8YahV9nPJXz-8VtzM-iI80bo2394f0");
+define("GOOGLE_GCM_URL", "https://android.googleapis.com/gcm/send");
+	$fields = array(
             'registration_ids'  => array( $reg_id ),
             'data'              => array( "message" => $message ),
         );
@@ -81,11 +91,5 @@ $sender_name  = $dat -> username;
         }
         curl_close($ch);
         echo $result;
-    }
-    $reg_id = $to_gcm;
-    $msg = $sender_name."-#>".$message."-#>".$from_accountnumber;
-    send_gcm_notify($reg_id, $msg);
-}else{
-	echo "doesnot-exist";
 }
 ?>
