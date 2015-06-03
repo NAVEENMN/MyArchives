@@ -18,14 +18,27 @@ $type = $incoming_data -> payload_type;
 $result = mysql_query("SELECT * FROM accounts
  WHERE USERID ='$to_facebookid'") or die(mysql_error());
 $row = mysql_fetch_array( $result );
+
+$res = mysql_query("SELECT * FROM accounts
+ WHERE USERID ='$from_accountnumber'") or die(mysql_error());
+$dat = mysql_fetch_array( $res );
+
 if($row){
 $json_data = $row['PAYLOAD'];
 $data = json_decode($json_data);
 $to_gcm = $data -> gcm;
+
+$from_jason_data = $dat['PAYLOAD'];
+$from_data = json_decode($from_json_data);
+$from_name = $from_data -> username;
+
 switch($type){	
 
 	case "invite_check" :
-				invite_check($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_check");
+				$message = "invite from ";
+				echo $from_name;
+				$message = $message . $from_name;
+				invite_check($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_check", $message);
 				break;
 	case "invite_accept" :
 				invite_accept();
@@ -56,11 +69,11 @@ else{
 	return :
 	desp : This function checks which type of message and build a payload for that 
 */
-function invite_check($from, $to, $togcm, $type){
+function invite_check($from, $to, $togcm, $type, $message){
 $arr = array("host" => $from,
 	     "to_id" => $to,
 	     "payload_type" =>  $type,
-             "payload_message" => "invite for event");
+             "payload_message" => $message);
 $new_payload = json_encode($arr);
 send_gcm_notify($togcm, $new_payload);
 	
