@@ -196,7 +196,6 @@ public class Login extends Activity {
 		/*
 		 * check if invite exists
 		 */
-		/*
 		SharedPreferences invite_notification = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE);
 		String invite_status = invite_notification.getString("invite_status", "none");
 		if(invite_notification.toString() != "none"){
@@ -213,6 +212,8 @@ public class Login extends Activity {
 						public void onClick(DialogInterface dialog,
 								int whichButton) {
 							// gcm notify accept
+							
+							// store in local and notify host
 							JSONObject json = new JSONObject(); 
 							try {
 								json.put("host", commondata.facebook_details.facebook);
@@ -233,7 +234,18 @@ public class Login extends Activity {
 								int whichButton) {
 							// gcm notify and join		
 							
-							gcm_send_data(commondata.facebook_details.facebook, invite_id, commondata.facebook_details.name + "rejected your invite");
+							// store in local and notify host
+							JSONObject json = new JSONObject(); 
+							try {
+								json.put("host", commondata.facebook_details.facebook);
+								json.put("to_id", invite_id); 
+								json.put("payload_type", "invite_reject"); 
+								json.put("payload_message", "I am sorry");
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} 
+							gcm_send_data(commondata.facebook_details.facebook, invite_id, json.toString());
 							
 						}
 					});
@@ -244,7 +256,7 @@ public class Login extends Activity {
 		}else{
 			System.out.println("no invite exists");
 		}
-		*/
+
 		
 		/*
 		 * check if you are on any event
@@ -1106,8 +1118,8 @@ public class Login extends Activity {
 				 * remove if mp data on firebase exist
 				 */
 
-				fb_event_ref.firebaseobj.child("70909141991*799--center")
-						.removeValue();
+				//fb_event_ref.firebaseobj.child("70909141991*799--center")
+					//	.removeValue();
 				/*
 				 * execute the get convience point algorithm on sever
 				 */
@@ -1248,7 +1260,7 @@ public class Login extends Activity {
 					Thread thread = new Thread() {
 					    @Override
 					    public void run() {
-					    	response = postData("http://52.8.173.36//metster/send_gcm_message.php", commondata.facebook_details.facebook, to_facebook_id, payload);
+					    	response = postData("http://52.8.173.36/metster/send_gcm_message.php", commondata.facebook_details.facebook, to_facebook_id, payload);
 					    	System.out.println("gcm_server : " + server_resp);
 					    }
 					};
@@ -1349,6 +1361,8 @@ public class Login extends Activity {
 					payload.put("to_id", commondata.facebook_details.facebook);
 					payload.put("payload_type", "invite_check");
 					payload.put("payload_message", "dinner tonight");
+					payload.put("event_refrence", commondata.event_information.eventID);
+					payload.put("sender_name", commondata.facebook_details.name);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1836,11 +1850,13 @@ public class Login extends Activity {
 	private class get_list extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            
-        	
         	System.out.println("finding the meet up point");
-    		String ranked_list = postData("http://54.183.113.236/metster/exe_get_loc.php", commondata.event_information.eventID,
-    			"event-"+ commondata.facebook_details.facebook, "none");
+        	 String ranked_list = null;
+        	
+        	
+        	 ranked_list = postData("http://52.8.173.36/metster/exe_get_location.php", commondata.event_information.eventID,
+          			"event-"+ commondata.facebook_details.facebook, "none");
+        	 System.out.println("list is : " + ranked_list);
     		try {
 				JSONObject rest_list = new JSONObject(ranked_list);
 				Iterator<String> places  = rest_list.keys();
@@ -1932,7 +1948,6 @@ public class Login extends Activity {
         	toast_info(" ");
         	list_rest();
         	
-        	
         }
 
         @Override
@@ -1962,7 +1977,7 @@ public class Login extends Activity {
 	    try {
 	        // Add your data
 	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-	        nameValuePairs.add(new BasicNameValuePair("appkey", param1));
+	        nameValuePairs.add(new BasicNameValuePair("param1", param1));
 	        nameValuePairs.add(new BasicNameValuePair("param2", param2));
 	        nameValuePairs.add(new BasicNameValuePair("param3", param3));
 	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -1976,13 +1991,14 @@ public class Login extends Activity {
                 response.getEntity().writeTo(out);
                 out.close();
                 responseString = out.toString();
+                System.out.println("postData: " + responseString);
             } else{
                 //Closes the connection.
                 response.getEntity().getContent().close();
                 throw new IOException(statusLine.getReasonPhrase());
             }
 	        
-	        System.out.println("postData: " + responseString);
+	        
 	        
 	    } catch (ClientProtocolException e) {
 	        // TODO Auto-generated catch block

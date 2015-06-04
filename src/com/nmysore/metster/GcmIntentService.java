@@ -86,44 +86,68 @@ public class GcmIntentService extends IntentService {
 						String  to_id = gcmdata.getString("to_id");
 	                	String  payload_type = gcmdata.getString("payload_type");
 	                	String  payload_message = gcmdata.getString("payload_message");
+	                	String[] data = payload_message.split("--");
 	                	
 	                	/*
 	                	 * payload_type : invite_check, invite_accept, invite_no
                                 host_cancel, invite_drop
-	                	 * case a : invite_check 
+	                	 * case a 0 : invite_check 
 	                	 * 			in login if in server response ok then sent else fail
-	                	 * case b : invite_accept
+	                	 * case b 1: invite_accept
 	                	 * 			a member accepted invite send gcm to host(organizer) from this user
-	                	 * case c : invite_no
+	                	 * case c 2: invite_no
 	                	 * 			a member rejected invite send gcm to host (organizer) from this user
-	                	 * case d : host cancel
+	                	 * case d 3: host cancel
 	                	 * 			this is incoming saying host cancled.. let this user know that host
 	                	 * 			cancled the evrnt and flush all data in local data for that event
-	                	 * case e : invite_drop
+	                	 * case e 4: invite_drop
 	                	 * 			this is when user bails out... let the host know by sending a gcm
 	                	 */
+	                	int type = 0;
+	                	if(payload_type == "invite_check") type = 0;
+	                	if(payload_type == "invite_accept") type = 1;
+	                	if(payload_type == "invite_reject") type = 2;
+	                	if(payload_type == "host_cancel") type = 3;
+	                	if(payload_type == "invite_drop") type = 4;
 	                	
-	                	 Log.w("from", host);
+	                	
+	                	Log.w("from", host);
 	                    Log.w("message", to_id);
 	                    Log.w("type", payload_type);//id
+	                    
+	                    switch(type){
+	                    	case 0:// invite_check store in shared and ask user join / reject
+	                    		
+	                    		final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
+	                            editor.putString("invite_status", "yes");
+	                            editor.putString("invite_from", host);
+	                            editor.putString("inviteid", data[1]);
+	                            editor.putString("message", "invite from" + data[0]);
+	                            editor.commit();
+	                            sendNotification("New Invite", data[1], "invite from" + data[0]);
+	                    		break;
+	                    	case 1:// invite_accept comes back on gcm
+	                    		
+	                    		sendNotification("Notification", data[1], "Accepted your invite");
+	                    		
+	                    		break;
+	                    	case 2:// invite_reject comes back on gcm
+	                    		sendNotification("Notification", data[1], "Rejected your invite");
+	                    		break;
+	                    	case 3:// host_cancelcomes on gcm
+	                    		break;
+	                    	case 4:// invite_drop comes on gcm
+	                    		break;
+	                    	default:
+	                    		break;
+	                    }
+	                    
+	                    
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
+					}                    
 
-                	
-                   
-                    
-                    //final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
-                    //editor.putString("invite_status", "yes");
-                    //editor.putString("invite_from", message_data[0]);
-                    //editor.putString("inviteid", message_data[2]);
-                    //editor.putString("message", message_data[1]);
-                    //editor.commit();
-                    
-                    //System.out.println("invite stored");
-                    
-                    //sendNotification(message_data[0], message_data[1], "event-"+message_data[2]);
                     
                 }else{
                 	System.out.println("GCM Error");
