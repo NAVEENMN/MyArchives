@@ -1,4 +1,3 @@
-
 from numpy import *
 import random
 import scipy
@@ -38,6 +37,7 @@ def req_place_details(lat, long, food_type):
     ratings = list()
     url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + long + "&radius=4000&types=food&keyword="+food_type+"&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE"
     response = urllib2.urlopen(url).read()
+    print response
     jason_data = json.loads(response)
     for place in jason_data['results']:
         lati = place['geometry']['location']['lat']
@@ -63,6 +63,7 @@ def get_place_details(id, rank, location):
     url = "https://maps.googleapis.com/maps/api/place/details/json?reference=" + id + "&sensor=true&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE&sensor=true&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE"
     response = urllib2.urlopen(url).read()
     jason_data = json.loads(response)
+    print "dadd" , jason_data
     attributes = ['rating','user_ratings_total','types','price_level','formatted_address','opening_hours','website','name','international_phone_number']
     
     #building json data
@@ -94,7 +95,7 @@ def print_matrix(Matrix):
     we sort each row and that gives ranking order for each person. We create
     new ranks for each place and combine them and normalize them.
     '''
-def get_features(eventid,fb_ref, ranking, rating_ranking):
+def get_features(eventid,fb_ref, ranking, rating_ranking, food_chosen):
     people = list()
     ranked = dict()
     ranked_ratings = dict()
@@ -103,19 +104,12 @@ def get_features(eventid,fb_ref, ranking, rating_ranking):
     fb = Firebase(fb_ref)
     # first get the data from the firebase
     data = fb.get()
-    food = dict()
     location = list()
     for key in data.keys():
         if(data[key]['nodetype'] == "member"  or data[key]['nodetype'] == "host"): # this is a person
             fb_lat = float(data[key]['Latitude'])
             fb_lon = float(data[key]['Longitude'])
             people.append([fb_lat, fb_lon])
-            pref = data[key]['food']
-            if(food.has_key(pref)):
-                count = food[pref]
-                food[pref] = count + 1
-            else:
-                food[pref] = 1
     # get location centroid
     lat = 0.0
     lon = 0.0
@@ -132,12 +126,13 @@ def get_features(eventid,fb_ref, ranking, rating_ranking):
     fb_cen = Firebase(fb_ref+"/centroid")
     fb_cen.put(cen)
     # For this version we are considering centroid but we need better approach
-    locations, names, ratings, id = req_place_details(str(cen['Latitude']), str(cen['Longitude']),"asian")
+    locations, names, ratings, id = req_place_details(str(cen['Latitude']), str(cen['Longitude']),food_chosen)
     # all places are equally preferred
+    print locations
     for x in range(0, len(names)):
         ranking[names[x]] = 0.0
         rating_ranking[names[x]] = ratings[x]
-
+    
     #sort based on ratings
     ranked_ratings =  sorted(rating_ranking.items(), key=lambda x: x[1])
     
@@ -206,7 +201,7 @@ def reduce_features(featurea, featureb):
         temp_result.append([temp_ordera[x], temp_orderb[x]])
     for x in range(0, len(temp_ordera)):
         result[places_names[x]] = temp_result[x] # the new dictonary holds places as key and the feature pairs as values
-    
+
     temp_result.sort() # sort the pair order this will be feature space scarpping from left to right
 
     for pair in temp_result:
@@ -224,16 +219,18 @@ def reduce_features(featurea, featureb):
     result[temp_result[key]] = key
     ref = ref + 1 '''
 
-def main():
+def main(event_id, FOOD_TYPE):
+    #event_id = sys.argv[1]
+    #FOOD_TYPE = sys.argv[2]
     convience_feature = dict()
     rating_feature = dict()
     fb_base = "https://met-ster-event.firebaseio.com/"
-    event_id = "859842507380812-->event-->0" #str(sys.argv[1])+"/" # this you will get from app
     user = event_id.rpartition('--')[0]
     user = user.rpartition('--')[0]
-    fb_ref = fb_base + user + "/" + event_id
+    nevent_id = event_id.replace("--","-->")
+    fb_ref = fb_base + user + "/" + nevent_id
     #event_id ww= str(sys.argv[1])+"/" # this you will get from app
-    get_features(event_id, fb_ref, convience_feature, rating_feature)
+    get_features(event_id, fb_ref, convience_feature, rating_feature, FOOD_TYPE)
     ranked_palaces = reduce_features(convience_feature, rating_feature)
     
     # look dictonary holds names as key and location as value
@@ -250,9 +247,9 @@ def main():
         data[id_dict[place]] = get_place_details(id_dict[place], rank, look[place])
         rank = rank + 1
     json_places_data = json.dumps(OrderedDict(data))
-    
-    print " "
+   
     print json_places_data
 
 if __name__ == "__main__":
-    main()
+    main(event, food)
+

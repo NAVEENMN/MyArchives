@@ -1,5 +1,6 @@
 <?php
-$eventid = "86987987";//$_POST['param1'];
-$output = shell_exec('python get_location.py ' . $eventid);
+$eventid = $_POST['param1'];
+$eventid = str_replace('-->', '--', $eventid);
+$output = shell_exec('python location_driver.py ' . $eventid);
 echo "$output";
 ?>
