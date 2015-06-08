@@ -17,7 +17,7 @@ from collections import OrderedDict
 API_HOST = 'api.yelp.com'
 DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'San Francisco, CA'
-SEARCH_LIMIT = 15
+SEARCH_LIMIT = 10
 SEARCH_PATH = '/v2/search/'
 BUSINESS_PATH = '/v2/business/'
 FIREBASE_URL = "https://met-ster-event.firebaseio.com/"
@@ -88,22 +88,24 @@ def query_api(term, location, type):
     
         for x in range(0, len(businesses)):
             data = businesses[x]['id']
-            r = get_business(data)  
+            r = get_business(data)
 	    info = dict()
 	    try:
+		info['rank'] = str(x);
 	    	info['ratings'] = str(r['ratings'])
 		info['name'] = str(r['name'])
 		info['review_count'] = str(r['review_count'])
 		info['phone'] = str(r['display_phone'])
-		info['snippet']  = str(r['excerpt'])
+		info['snippet']  = str(r['snippet_text'])
 		info['address'] = str(r['location']['display_address'])
 		info['coordinate'] = str(r['location']['coordinate'])
 		info['snippet']  = str(r['snippet_text'])
 		info['url'] = str(r['mobile_url'])
 		info['category'] = str(r['categories'])
+		place_details[data] = json.dumps(info)
 	    except:
 	    	v = 0 
-	    place_details[data] = json.dumps(info)
+	
         return place_details
 
     if(type == "b"):
@@ -119,18 +121,22 @@ def query_api(term, location, type):
             r = get_business(data) 
 	    info = dict()
 	    try:
-	    	info['ratings'] = str(r['rating'])
-		info['name'] = str(r['name'])
-		info['review_count'] = str(r['review_count'])
-		info['phone'] = str(r['display_phone'])
-		info['address'] = str(r['location']['display_address'])
-		info['coordinate'] = str(r['location']['coordinate'])
-		info['snippet']  = str(r['snippet_text'])
-		info['url'] = str(r['mobile_url'])
-		info['category'] = str(r['categories'])
+		if(r['name']):
+			info['rank'] =str(x)
+	    		info['ratings'] = str(r['rating'])
+			info['name'] = str(r['name'])
+			info['review_count'] = str(r['review_count'])
+			info['phone'] = str(r['display_phone'])
+			info['address'] = str(r['location']['display_address'])
+			info['coordinate'] = str(r['location']['coordinate'])
+			info['snippet']  = str(r['snippet_text'])
+			info['url'] = str(r['mobile_url'])
+			info['category'] = str(r['categories'])
+			info['id'] = data.replace("-","")
+			place_details[data.replace("-","")] = json.dumps(info)
 	    except:
 	    	v = 0 
-	    place_details[data] = json.dumps(info)
+	 
         return place_details
 
 '''
