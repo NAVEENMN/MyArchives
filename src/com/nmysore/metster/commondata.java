@@ -105,6 +105,7 @@ public class commondata {
 		Double longitude;
 		String total_ratings;
 		String types;
+		String snippet;
 		
 	}
 	

@@ -1538,6 +1538,7 @@ public class Login extends Activity {
 		final ArrayList<String> listdistance = new ArrayList<String>();
 		final ArrayList<Double> listprice = new ArrayList<Double>();
 		final ArrayList<String> listtotalratings = new ArrayList<String>();
+		final ArrayList<String> listsnippets = new ArrayList<String>();
 		final ArrayList<String> dollar = new ArrayList<String>();
 		
 		listtitle.clear();
@@ -1549,6 +1550,7 @@ public class Login extends Activity {
 		listdistance.clear();
 		listprice.clear();
 		listtotalratings.clear();
+		listsnippets.clear();
 		/*
 		 * this section sets up the common data from the server in sorted order
 		 */
@@ -1563,6 +1565,8 @@ public class Login extends Activity {
 			listtotalratings.add(node.total_ratings);
 			listprice.add(node.price_level);
 			listtypes.add(node.types);
+			listsnippets.add(node.snippet);
+			
 		}
 		
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1582,6 +1586,7 @@ public class Login extends Activity {
 		        TextView placereviews;
 		        RatingBar placeratings;
 		        TextView placetype;
+		        TextView snippet;
 		        
 		    }
 
@@ -1604,6 +1609,7 @@ public class Login extends Activity {
 		            holder.placereviews = (TextView) convertView.findViewById(R.id.placereviews);
 		            holder.placeratings = (RatingBar) convertView.findViewById(R.id.placeratings);
 		            holder.placetype = (TextView) convertView.findViewById(R.id.placetype);
+		            holder.snippet = (TextView) convertView.findViewById(R.id.snippet);
 		            convertView.setTag(holder);
 		        } else {
 		            // view already defined, retrieve view holder
@@ -1616,13 +1622,14 @@ public class Login extends Activity {
 		        holder.placeaddress.setText(listaddress.get(position));
 		        holder.placeratings.setRating(listrating.get(position).floatValue());
 		        holder.placetype.setText(listtypes.get(position));
-		        
+		        holder.snippet.setText(listsnippets.get(position));
+		        System.out.println("tyoes " + listtypes.get(position));
 		        // set up $
 		        for(Double i = 0.0; i<listprice.get(position);i=i+1.0){
 		        	dollar.add("$");
 		        }
 		        String dollarsign = dollar.toString().replace("[", "").replace("]", "").replace(",", "");
-		        holder.placereviews.setText(listtotalratings.get(position) +" google reviews   "+ " " + dollarsign);
+		        holder.placereviews.setText(listtotalratings.get(position) +" yelp reviews   "+ " " + dollarsign);
 		       // holder.icon.setImageDrawable(drawable);
 		        dollar.clear();
 		        return convertView;
@@ -1974,6 +1981,7 @@ public class Login extends Activity {
  					String contact = null;
  					String total_ratings = null;
  					String types = null;
+ 					String snippet = null;
 					//*****
 					
 					
@@ -2002,11 +2010,13 @@ public class Login extends Activity {
 					 }
 				
 				}
-
+				 
+				 if(info_about_place.has("category")){types = info_about_place.getString("category");}
 				 if(info_about_place.has("url")){website = info_about_place.getString("url");}
-				 if(info_about_place.has("snippet")){info_about_place.getString("snippet");}
+				 if(info_about_place.has("snippet")){snippet = info_about_place.getString("snippet");}
 				 if(info_about_place.has("phone")){contact = info_about_place.getString("phone");}
 				 if(info_about_place.has("address")){address = info_about_place.getString("address");}
+				 if(info_about_place.has("snippet")){snippet = info_about_place.getString("snippet");}
 				 
 				 
 				// creat a new node and set its value 
@@ -2021,6 +2031,7 @@ public class Login extends Activity {
 					node.types = types;     				
 					node.latitude = latitude;
 					node.longitude = longitude;
+					node.snippet =snippet;
 					commondata.places_found.ranking_places.put(rank, place_id);
  					commondata.places_found.ranking_nodes.put(place_id, node);
  					rank +=1;

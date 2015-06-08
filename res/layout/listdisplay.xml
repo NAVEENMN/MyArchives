@@ -79,6 +79,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             
+            <TextView
+                android:id="@+id/snippet"
+                android:textColor="#D8D8D8"
+                android:textSize="9sp"
+                android:text="@string/Gender"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            
         </LinearLayout>
     
 </LinearLayout>
