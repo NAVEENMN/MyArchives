@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -161,8 +162,8 @@ public class Login extends Activity {
 	ArrayList<Restaurant> restlist;
 	int infocounter;
 	ImageView imageView;
-	
-	
+	String server_response;
+	Integer async_counter = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -1248,7 +1249,7 @@ public class Login extends Activity {
 	 */
 	
 	public String gcm_send_data(String facebook_id, final String to_facebook_id, final String payload){
-	
+	/*
 	   
 		Thread thread = new Thread() {
 			String server_resp;
@@ -1310,6 +1311,8 @@ public class Login extends Activity {
 		};
 		
 		thread.start();
+		return "done";
+		*/
 		return "done";
 	}
 	
@@ -1549,7 +1552,9 @@ public class Login extends Activity {
 		/*
 		 * this section sets up the common data from the server in sorted order
 		 */
-		for(Double rnk = 0.0; rnk < commondata.places_found.ranking_places.size(); rnk = rnk + 1.0){
+		System.out.println("conrsnsn" + commondata.places_found.ranking_places.size());
+		
+		for(Integer rnk = 0; rnk < commondata.places_found.ranking_places.size(); rnk = rnk + 1){
 			String current_place_refrence = commondata.places_found.ranking_places.get(rnk);
 			place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
 			listtitle.add(node.place_name);
@@ -1847,60 +1852,165 @@ public class Login extends Activity {
 		});
 	}
 	
-	private class get_list extends AsyncTask<String, Void, String> {
+	
+	
+	private class post_req extends AsyncTask<String, Void, String>{
+		
+		String choice;
+		String count_limit;
+		
+		@Override
+		protected String doInBackground(String... params){
+			
+			System.out.println("param0" + params[0]);
+			System.out.println("param1" + params[1]);
+			System.out.println("param2" + params[2]);
+			choice = params[2];
+			count_limit = params[3];
+			
+			//****************************
+			
+			// Create a new HttpClient and Post Header
+			
+		    HttpClient httpclient = new DefaultHttpClient();
+		    HttpPost httppost = new HttpPost(params[0]);
+		    HttpResponse response = null;
+		    String responseString = null;
+		    try {
+		        // Add your data
+		        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+		        nameValuePairs.add(new BasicNameValuePair("param1", params[1]));
+		        nameValuePairs.add(new BasicNameValuePair("param2", params[2]));
+		        nameValuePairs.add(new BasicNameValuePair("param3", null));
+		        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+		        // Execute HTTP Post Request
+		        response = httpclient.execute(httppost);
+		        StatusLine statusLine = response.getStatusLine();
+	           
+				if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+	                ByteArrayOutputStream out = new ByteArrayOutputStream();
+	                response.getEntity().writeTo(out);
+	                out.close();
+	                responseString = out.toString();
+	                //System.out.println("postData: " + responseString);
+	            } else{
+	                //Closes the connection.
+	                response.getEntity().getContent().close();
+	                throw new IOException(statusLine.getReasonPhrase());
+	            }
+		        
+		        
+		        
+		    } catch (ClientProtocolException e) {
+		        // TODO Auto-generated catch block
+		    } catch (IOException e) {
+		        // TODO Auto-generated catch block
+		    }
+		    return responseString;
+			
+			//****************************
+	
+		}
+		
+		@Override
+        protected void onPostExecute(String result) {
+			async_counter +=1;
+        	System.out.println("pushing " + choice);
+        	commondata.server_res.server_says.put(choice, result);
+        	if(async_counter.toString() == count_limit){
+        		System.out.println("good to list");
+        		async_counter = 0;
+        		String status = extract_data();
+        		list_rest();
+        	}
+        	
+        }
+
         @Override
-        protected String doInBackground(String... params) {
-        	System.out.println("finding the meet up point");
-        	 String ranked_list = null;
+        protected void onPreExecute() {
         	
-        	
-        	 ranked_list = postData("http://52.8.173.36/metster/exe_get_location.php", commondata.event_information.eventID,
-          			"event-"+ commondata.facebook_details.facebook, "none");
-        	 System.out.println("list is : " + ranked_list);
-    		try {
-				JSONObject rest_list = new JSONObject(ranked_list);
+        	//toast_info("Exploring...");
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        	//toast_info("Exploring...");
+        }
+		
+		
+	}
+	
+	
+	private String extract_data(){
+		
+		Set<String> keys = commondata.server_res.server_says.keySet();
+		Iterator<String> choice_iterator = keys.iterator();
+		System.out.println("number of sets " + commondata.server_res.server_says.size());
+		// this loop through choices.
+		Integer rank = 0;
+		while(choice_iterator.hasNext()){
+			
+			String choice = choice_iterator.next();
+			String jason_data = commondata.server_res.server_says.get(choice);
+			//System.out.println("kkk" + jason_data);
+			try{
+				JSONObject rest_list = new JSONObject(jason_data);
+				System.out.println("kys " + rest_list);
 				Iterator<String> places  = rest_list.keys();
-				
-				/*
-				 * This section reads the json data responded from the server
-				 * the data is in the form of place name as key and location and rank as values
-				 * example : place_ref : [[15.7637, -80.896987],[2.0]]
-				 */
-				
+				// this loop goes through all places for a given choice
 				while(places.hasNext()){
-					String place_refrence;
+					
+					//*****
 					Double latitude = null;
-					Double longitude = null;
-					Double rank = null;
-					String id = null;
-					String place = places.next();
-					place_refrence = place;
-					String values = rest_list.getString(place_refrence);
+ 					Double longitude = null;
+ 					String place_id = places.next();
+ 					place_details node = new commondata.place_details();
+ 					Double rating = 0.0;
+ 					String website = null;
+ 					String place_name = null;
+ 					Double price_level = 0.0;
+ 					String address = null;
+ 					String contact = null;
+ 					String total_ratings = null;
+ 					String types = null;
+					//*****
 					
-					Double rating = 0.0;
-					String website = null;
-					String place_name = null;
-					Double price_level = 0.0;
-					String address = null;
-					String contact = null;
-					String location = null;
-					String total_ratings = null;
-					String types = null;
 					
-					JSONObject dats = new JSONObject(values);
+ 					String content = rest_list.getString(place_id);
+ 					JSONObject info_about_place = new  JSONObject(content);
+					System.out.println("place_id" + place_id);
+					// fetch the co ordinates.
+   				 if(info_about_place.has("coordinate")) {
+   					 System.out.println("cor");
+   					 String s = info_about_place.getString("coordinate");
+   					 String[] ss = s.split(",");
+   					 latitude = Double.parseDouble(ss[0].replace("latitude", "").replace("{u'':", "").replace(",", ""));
+   					 longitude = Double.parseDouble(ss[1].replace("longitude", "").replace("u'':", "").replace("}", ""));
+   					 System.out.println("location" + latitude +", " + longitude);
+   				 }
 					
-					if (dats.has("rating")) rating = Double.parseDouble(dats.getString("rating"));
-					if (dats.has("website")) website = dats.getString("website");
-					if (dats.has("name")) place_name = dats.getString("name");
-					if (dats.has("price_level")) price_level = Double.parseDouble(dats.getString("price_level"));
-					if (dats.has("formatted_address")) address = dats.getString("formatted_address");
-					if (dats.has("international_phone_number")) contact = dats.getString("international_phone_number");
-					if (dats.has("location")) location = dats.getString("location");
-					if (dats.has("user_ratings_total")) total_ratings= dats.getString("user_ratings_total");
-					if (dats.has("types")) types = dats.getString("types");
-					rank = Double.parseDouble(dats.getString("rank"));
-					
-					place_details node = new commondata.place_details();
+   				 if(info_about_place.has("ratings")){ rating = Double.parseDouble(info_about_place.getString("ratings"));}
+				 if(info_about_place.has("review_count")){total_ratings = info_about_place.getString("review_count");}
+				 if(info_about_place.has("name")){
+					 if(info_about_place.getString("name") != null){
+					 place_name = info_about_place.getString("name");
+					 node.place_name = place_name;
+					 }else{
+						 place_name = "place";
+						 node.place_name = place_name;
+					 }
+				
+				}
+
+				 if(info_about_place.has("url")){website = info_about_place.getString("url");}
+				 if(info_about_place.has("snippet")){info_about_place.getString("snippet");}
+				 if(info_about_place.has("phone")){contact = info_about_place.getString("phone");}
+				 if(info_about_place.has("address")){address = info_about_place.getString("address");}
+				 
+				 
+				// creat a new node and set its value 
+ 				
 					node.rating = rating;
 					node.website = website;
 					node.place_name = place_name;
@@ -1908,45 +2018,81 @@ public class Login extends Activity {
 					node.address = address;
 					node.contact = contact;
 					node.total_ratings = total_ratings;
-					node.types = types;
-					
-					// location is in this format [lat, lon] in string, bring it to double so we can use it
-					String[] tempclean = location.split(",");
-					System.out.println("lat " + tempclean[0]);
-					System.out.println("lon"+ tempclean[1]);
-					node.latitude = Double.parseDouble(tempclean[0].replace("[", ""));
-					node.longitude = Double.parseDouble(tempclean[1].replace("]", ""));
-					commondata.places_found.ranking_places.put(rank, place_refrence);
-					commondata.places_found.ranking_nodes.put(place_refrence, node);
-					
-					/*
-					 * The node structure is stored in this format
-					 * KEY : rank ; Value : place_refrence
-					 * KEY : Place_refrence ; Value : Node
-					 */
-					
+					node.types = types;     				
+					node.latitude = latitude;
+					node.longitude = longitude;
+					commondata.places_found.ranking_places.put(rank, place_id);
+ 					commondata.places_found.ranking_nodes.put(place_id, node);
+ 					rank +=1;
 				}
-				
-				/*
-				 * this section sets up the common data from the server in sorted order
-				 */
-				for(Double rnk = 0.0; rnk < commondata.places_found.ranking_places.size(); rnk = rnk + 1.0){
-					String current_place_refrence = commondata.places_found.ranking_places.get(rnk);
-					place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
-				}
-				
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//rank_refrence += commondata.places_found.ranking_places.size()+1;
+			}catch(Exception e){
+				System.out.println("exception" + e);
 			}
+
+    		 }
+	
+		 //list_rest();
+		return "done"; 
+		 //display_node_data();
+		
+	}
+	
+	
+	private class get_list extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+        	System.out.println("finding the meet up point");
+        	 final String ranked_list = null;
+        	 ArrayList<String> results = new ArrayList<String>();
+        	 String eventres = commondata.event_information.eventID;
+        	 eventres = eventres.replaceAll("-->", "--");
+        	 
+        	//************** this segment handles food choices.
+        	 ArrayList<host_event_node> looks = commondata.event_information.given_events_lookup.get(commondata.event_information.eventID);
+        	 Iterator<host_event_node> per = looks.iterator();
+        	 HashMap<String, Integer> food_keys = new HashMap<String, Integer>();
+        	 final HashMap<String, String> map_results = new HashMap<String, String>();
+        	 while(per.hasNext()){
+        		 host_event_node node = per.next();
+        		 System.out.println(node.nodetype);
+        		 int count = 0;
+        		 if(node.nodetype.contains("member") || node.nodetype.contains("host")){
+        			 String choice  = node.food_type;
+        			 System.out.println("choice is " +  choice);
+        			 if(food_keys.containsKey(choice)){
+        				 count = food_keys.get(choice);
+        				 count = count + 1;
+        				 food_keys.put(choice, count);
+        			 }else{
+        				 food_keys.put(choice, 1);
+        			 }
+        		 }
+        	 }
+        	 //************************
+
+        	 Set<String> keys = food_keys.keySet();
+        	 Iterator<String> food_iter = keys.iterator();
+        	 while(food_iter.hasNext()){
+        		 final String choice  = food_iter.next();
+        		 final String eventid = commondata.event_information.eventID.replaceAll("-->", "--");
+        		 
+
+ 					    	String list;
+ 					    	System.out.println("posting for" + choice);
+ 					    	
+ 					    	new post_req().execute("http://52.8.173.36/metster/exe_yelp.php", eventid, choice, Integer.toString(keys.size()));	
+ 			        		 
+        	 }
+        	 
+        	 
         	
-            return null;
+            return "Thread issued";
         }
 
         @Override
         protected void onPostExecute(String result) {
-        	toast_info(" ");
-        	list_rest();
+        	System.out.println("status " + result);
         	
         }
 
@@ -1961,6 +2107,10 @@ public class Login extends Activity {
         	toast_info("Exploring...");
         }
     }
+
+
+	
+	
 	
 	/*
 	 * name : postData
@@ -1969,7 +2119,9 @@ public class Login extends Activity {
 	 * @desp : This function makes http post request and returns the server response
 	 */
 	private String postData(String url, String param1, String param2, String param3) {
+	
 	    // Create a new HttpClient and Post Header
+	
 	    HttpClient httpclient = new DefaultHttpClient();
 	    HttpPost httppost = new HttpPost(url);
 	    HttpResponse response = null;
@@ -1991,7 +2143,7 @@ public class Login extends Activity {
                 response.getEntity().writeTo(out);
                 out.close();
                 responseString = out.toString();
-                System.out.println("postData: " + responseString);
+                //System.out.println("postData: " + responseString);
             } else{
                 //Closes the connection.
                 response.getEntity().getContent().close();

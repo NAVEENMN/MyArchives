@@ -82,8 +82,12 @@ public class commondata {
 		static ArrayList<String> rankedplaces = new ArrayList<String>();
 		static ArrayList<Double> rankedlatitudes = new ArrayList<Double>();
 		static ArrayList<Double> rankedlongitudes = new ArrayList<Double>();
-		static HashMap<Double, String> ranking_places = new HashMap<Double, String>(); // This hashmap links rank as key and place as value
+		static HashMap<Integer, String> ranking_places = new HashMap<Integer, String>(); // This hashmap links rank as key and place as value
 		static HashMap<String, place_details> ranking_nodes = new HashMap<String, place_details>();
+	}
+	
+	public static class server_res{
+		static HashMap<String, String> server_says = new HashMap<String, String>();
 	}
 	
 	public static class gcm_incoming{
