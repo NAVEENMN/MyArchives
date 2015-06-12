@@ -8,9 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -48,11 +46,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.util.Base64;
 import android.view.Display;
@@ -85,11 +82,9 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nmysore.metster.commondata.host_event_node;
 import com.nmysore.metster.commondata.place_details;
@@ -1540,6 +1535,7 @@ public class Login extends Activity {
 		final ArrayList<String> listtotalratings = new ArrayList<String>();
 		final ArrayList<String> listsnippets = new ArrayList<String>();
 		final ArrayList<String> dollar = new ArrayList<String>();
+		final ArrayList<String> listplace_url = new ArrayList<String>();
 		
 		listtitle.clear();
 		listaddress.clear();
@@ -1551,6 +1547,7 @@ public class Login extends Activity {
 		listprice.clear();
 		listtotalratings.clear();
 		listsnippets.clear();
+		listplace_url.clear();
 		/*
 		 * this section sets up the common data from the server in sorted order
 		 */
@@ -1566,6 +1563,7 @@ public class Login extends Activity {
 			listprice.add(node.price_level);
 			listtypes.add(node.types);
 			listsnippets.add(node.snippet);
+			listplace_url.add(node.website);
 			
 		}
 		
@@ -1580,7 +1578,7 @@ public class Login extends Activity {
 		    Drawable icon;
 
 		    class ViewHolder {
-		        //ImageView icon;
+		        ImageView icon;
 		        TextView title;
 		        TextView placeaddress;
 		        TextView placereviews;
@@ -1601,8 +1599,8 @@ public class Login extends Activity {
 		                    R.layout.listdisplay, null);
 
 		            holder = new ViewHolder();
-		           // holder.icon = (ImageView) convertView
-		            //        .findViewById(R.id.icon);
+		            holder.icon = (ImageView) convertView
+		                    .findViewById(R.id.icon);
 		            holder.title = (TextView) convertView
 		                    .findViewById(R.id.title);
 		            holder.placeaddress = (TextView) convertView.findViewById(R.id.placeaddress);
@@ -1616,32 +1614,52 @@ public class Login extends Activity {
 		            holder = (ViewHolder) convertView.getTag();
 		        }       
 
-		        Drawable drawable = getResources().getDrawable(R.drawable.flag); //this is an image from the drawables folder
+		        // load from yelp and set async
+		        Drawable drawable = getResources().getDrawable(R.drawable.eventbutton); //this is an image from the drawables folder
 
 		        holder.title.setText(listtitle.get(position));
-		        holder.placeaddress.setText(listaddress.get(position));
+		        String address = listaddress.get(position);
+		        address = address.replaceAll("u", "").replaceAll("'", "");
+		        holder.placeaddress.setText(address);
 		        holder.placeratings.setRating(listrating.get(position).floatValue());
 		        holder.placetype.setText(listtypes.get(position));
 		        holder.snippet.setText(listsnippets.get(position));
-		        System.out.println("tyoes " + listtypes.get(position));
+		        System.out.println("types " + listtypes.get(position));
 		        // set up $
 		        for(Double i = 0.0; i<listprice.get(position);i=i+1.0){
 		        	dollar.add("$");
 		        }
 		        String dollarsign = dollar.toString().replace("[", "").replace("]", "").replace(",", "");
-		        holder.placereviews.setText(listtotalratings.get(position) +" yelp reviews   "+ " " + dollarsign);
-		       // holder.icon.setImageDrawable(drawable);
+		        if(listtotalratings.get(position) == "null"){
+		        	holder.placereviews.setText(" no reviews   "+ " " + dollarsign);
+		        }else{
+		        holder.placereviews.setText(listtotalratings.get(position) +" user reviews   "+ " " + dollarsign);
+		        }
+		        holder.icon.setImageDrawable(drawable);
 		        dollar.clear();
 		        return convertView;
 		    }
 		};
 		modeList.setAdapter(modeAdapter);
+		
+		
+		
+		
 		modeList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> items, View arg1, int order,
 					long arg3) {
 				
+				System.out.println("held" + order);
+				String link = listplace_url.get(order);
+				if(link != "null"){
+				Uri url = Uri.parse(link);
+		        Intent intent = new Intent(Intent.ACTION_VIEW, url);
+		        startActivity(intent);
+				}
+				
+				/*
 				System.out.println("selected " + items.getItemIdAtPosition(order)); // order is also traced to rank
 				
 				create_firebase_refrence();
@@ -1679,11 +1697,13 @@ public class Login extends Activity {
     			  }
     			});
     			alert.show();
-				
+				*/
 			
 			}
 
 		});
+		
+		
 		builder.setView(modeList);
 		builder.setPositiveButton("Done",
 				new DialogInterface.OnClickListener() {
@@ -1982,12 +2002,12 @@ public class Login extends Activity {
  					String total_ratings = null;
  					String types = null;
  					String snippet = null;
+ 					String image_url = null;
 					//*****
 					
 					
  					String content = rest_list.getString(place_id);
  					JSONObject info_about_place = new  JSONObject(content);
-					System.out.println("place_id" + place_id);
 					// fetch the co ordinates.
    				 if(info_about_place.has("coordinate")) {
    					 System.out.println("cor");
@@ -1998,8 +2018,9 @@ public class Login extends Activity {
    					 System.out.println("location" + latitude +", " + longitude);
    				 }
 					
-   				 if(info_about_place.has("ratings")){ rating = Double.parseDouble(info_about_place.getString("ratings"));}
+   				 if(info_about_place.has("rating")){ rating = Double.parseDouble(info_about_place.getString("rating"));}
 				 if(info_about_place.has("review_count")){total_ratings = info_about_place.getString("review_count");}
+				 if(info_about_place.has("image_url")){image_url = info_about_place.getString("image_url");}
 				 if(info_about_place.has("name")){
 					 if(info_about_place.getString("name") != null){
 					 place_name = info_about_place.getString("name");
@@ -2011,17 +2032,23 @@ public class Login extends Activity {
 				
 				}
 				 
-				 if(info_about_place.has("category")){types = info_about_place.getString("category");}
+				 if(info_about_place.has("category")){
+					 types = info_about_place.getString("category");
+					 
+					 }
 				 if(info_about_place.has("url")){website = info_about_place.getString("url");}
 				 if(info_about_place.has("snippet")){snippet = info_about_place.getString("snippet");}
 				 if(info_about_place.has("phone")){contact = info_about_place.getString("phone");}
-				 if(info_about_place.has("address")){address = info_about_place.getString("address");}
-				 if(info_about_place.has("snippet")){snippet = info_about_place.getString("snippet");}
+				 if(info_about_place.has("price_level")){price_level = Double.parseDouble(info_about_place.getString("price_level"));}
+				 if(info_about_place.has("address")){
+					 address = info_about_place.getString("address");
+				 }
 				 
 				 
 				// creat a new node and set its value 
  				
 					node.rating = rating;
+					System.out.println("ratings" + rating);
 					node.website = website;
 					node.place_name = place_name;
 					node.price_level = price_level;
@@ -2032,6 +2059,7 @@ public class Login extends Activity {
 					node.latitude = latitude;
 					node.longitude = longitude;
 					node.snippet =snippet;
+					node.image_url = image_url;
 					commondata.places_found.ranking_places.put(rank, place_id);
  					commondata.places_found.ranking_nodes.put(place_id, node);
  					rank +=1;

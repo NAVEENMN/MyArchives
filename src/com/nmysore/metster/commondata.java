@@ -106,6 +106,7 @@ public class commondata {
 		String total_ratings;
 		String types;
 		String snippet;
+		String image_url;
 		
 	}
 	
