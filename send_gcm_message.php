@@ -16,7 +16,7 @@ $payload = $_POST['param3'];
 $incoming_data = json_decode($payload);
 $type = $incoming_data -> payload_type;
 $event_refrence =  $incoming_data -> event_refrence;
-$sender_name = $incoming_data -> sender_name; 
+$sender_name = $incoming_data -> sender_name;//$incoming_data -> sender_name; 
 $result = mysql_query("SELECT * FROM accounts
  WHERE USERID ='$to_facebookid'") or die(mysql_error());
 $row = mysql_fetch_array( $result );
@@ -38,11 +38,13 @@ switch($type){
 
 	case "invite_check" :
 				$message = $sender_name . "--" . $event_refrence;
-				invite_check($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_check", $message);
+				invite_check($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_check", $message
+				, $sender_name, $event_refrence);
 				break;
 	case "invite_accept" :
 				$message = "invite" . "--" . "accepted";
-				invite_accept($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_accept", $message);
+				invite_accept($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_accept", $sender_name
+				, $event_refrence);
 				break;
 	case "invite_reject" :
 				$message = "invite" . "--" . "rejected";
@@ -71,14 +73,15 @@ else{
 	return :
 	desp : This function checks which type of message and build a payload for that 
 */
-function invite_check($from, $to, $togcm, $type, $message){
+function invite_check($from, $to, $togcm, $type, $message, $sender_name, $event_refrence){
 $arr = array("host" => $from,
 	     "to_id" => $to,
-	     "payload_type" =>  $type,
+	     "payload_type" => $type,
+	     "sender_name" => $sender_name,
+	     "event_refrence" => $event_refrence,
              "payload_message" => $message);
 $new_payload = json_encode($arr);
 send_gcm_notify($togcm, $new_payload);
-	
 }
 
 /*
@@ -87,9 +90,11 @@ send_gcm_notify($togcm, $new_payload);
 	return :
 	desp : This function checks which type of message and build a payload for that 
 */
-function invite_accept($from, $to, $togcm, $type, $message){
+function invite_accept($from, $to, $togcm, $type, $message, $sender_name, $event_refrence){
 $arr = array("host" => $from,
 	     "to_id" => $to,
+	     "sender_name" => $sender_name,
+	     "event_refrence" => $event_refrence, 
 	     "payload_type" =>  $type,
              "payload_message" => $message);
 $new_payload = json_encode($arr);
