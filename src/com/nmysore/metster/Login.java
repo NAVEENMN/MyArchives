@@ -50,6 +50,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.util.Base64;
 import android.view.Display;
@@ -61,6 +62,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -159,6 +161,7 @@ public class Login extends Activity {
 	ImageView imageView;
 	String server_response;
 	Integer async_counter = 0;
+	private WebView webView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -194,9 +197,11 @@ public class Login extends Activity {
 		 */
 		SharedPreferences invite_notification = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE);
 		String invite_status = invite_notification.getString("invite_status", "none");
+		
+		
 		if(invite_notification.toString() != "none"){
-			String invite_from = invite_notification.getString("invite_from", "none");
-			final String invite_id = invite_notification.getString("inviteid", "none");
+			final String invite_from = invite_notification.getString("invite_from", "none"); // the one who sent it
+			final String event_reference = invite_notification.getString("eventid", "none");
 			String invite_message = invite_notification.getString("message", "none");
 			System.out.println("you have a invite from " + invite_from + " " + invite_message);
 			
@@ -208,19 +213,23 @@ public class Login extends Activity {
 						public void onClick(DialogInterface dialog,
 								int whichButton) {
 							// gcm notify accept
-							
 							// store in local and notify host
 							JSONObject json = new JSONObject(); 
 							try {
 								json.put("host", commondata.facebook_details.facebook);
-								json.put("to_id", invite_id); 
-								json.put("payload_type", "invite_accept"); 
+								json.put("to_id", invite_from); 
+								json.put("payload_type", "invite_accept");
+								json.put("event_refrence", event_reference);
+								json.put("sender_name", commondata.facebook_details.name);
 								json.put("payload_message", "sounds great");
+							
+								
 							} catch (JSONException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} 
-							gcm_send_data(commondata.facebook_details.facebook, invite_id, json.toString());
+							System.out.println("in json" + json.toString());
+							gcm_send_data(commondata.facebook_details.facebook, invite_from, json.toString());
 						}
 					});
 
@@ -234,14 +243,14 @@ public class Login extends Activity {
 							JSONObject json = new JSONObject(); 
 							try {
 								json.put("host", commondata.facebook_details.facebook);
-								json.put("to_id", invite_id); 
+								json.put("to_id", invite_from); 
 								json.put("payload_type", "invite_reject"); 
 								json.put("payload_message", "I am sorry");
 							} catch (JSONException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} 
-							gcm_send_data(commondata.facebook_details.facebook, invite_id, json.toString());
+							gcm_send_data(commondata.facebook_details.facebook, invite_from, json.toString());
 							
 						}
 					});
@@ -1244,7 +1253,7 @@ public class Login extends Activity {
 	 */
 	
 	public String gcm_send_data(String facebook_id, final String to_facebook_id, final String payload){
-	/*
+	
 	   
 		Thread thread = new Thread() {
 			String server_resp;
@@ -1307,8 +1316,7 @@ public class Login extends Activity {
 		
 		thread.start();
 		return "done";
-		*/
-		return "done";
+
 	}
 	
 	
@@ -1356,7 +1364,7 @@ public class Login extends Activity {
 				
 				try {
 					payload.put("host", commondata.facebook_details.facebook); 
-					payload.put("to_id", commondata.facebook_details.facebook);
+					payload.put("to_id", commondata.facebook_details.facebook);// need to fetch and send
 					payload.put("payload_type", "invite_check");
 					payload.put("payload_message", "dinner tonight");
 					payload.put("event_refrence", commondata.event_information.eventID);
@@ -1449,7 +1457,7 @@ public class Login extends Activity {
 				R.layout.listdisplay,
 				eventtitle){
 		    ViewHolder holder;
-		    Drawable icon;
+		    //Drawable icon;
 
 		    class ViewHolder {
 		        //ImageView icon;
@@ -1478,7 +1486,7 @@ public class Login extends Activity {
 		            holder = (ViewHolder) convertView.getTag();
 		        }       
 
-		        Drawable drawable = getResources().getDrawable(R.drawable.flag); //this is an image from the drawables folder
+		        //Drawable drawable = getResources().getDrawable(R.drawable.flag); //this is an image from the drawables folder
 
 		        holder.title.setText(eventtitle.get(position));
 		        
@@ -1575,10 +1583,10 @@ public class Login extends Activity {
 				R.layout.listdisplay,
 				listtitle){
 		    ViewHolder holder;
-		    Drawable icon;
+		    //Drawable icon;
 
 		    class ViewHolder {
-		        ImageView icon;
+		        //ImageView icon;
 		        TextView title;
 		        TextView placeaddress;
 		        TextView placereviews;
@@ -1599,8 +1607,8 @@ public class Login extends Activity {
 		                    R.layout.listdisplay, null);
 
 		            holder = new ViewHolder();
-		            holder.icon = (ImageView) convertView
-		                    .findViewById(R.id.icon);
+		           // holder.icon = (ImageView) convertView
+		            //        .findViewById(R.id.icon);
 		            holder.title = (TextView) convertView
 		                    .findViewById(R.id.title);
 		            holder.placeaddress = (TextView) convertView.findViewById(R.id.placeaddress);
@@ -1635,7 +1643,7 @@ public class Login extends Activity {
 		        }else{
 		        holder.placereviews.setText(listtotalratings.get(position) +" user reviews   "+ " " + dollarsign);
 		        }
-		        holder.icon.setImageDrawable(drawable);
+		        //holder.icon.setImageDrawable(drawable);
 		        dollar.clear();
 		        return convertView;
 		    }
@@ -1654,6 +1662,11 @@ public class Login extends Activity {
 				System.out.println("held" + order);
 				String link = listplace_url.get(order);
 				if(link != "null"){
+					/*
+					webView = (WebView) findViewById(R.id.webView1);
+				    webView.getSettings().setJavaScriptEnabled(true);
+				    webView.loadUrl(link);
+					*/
 				Uri url = Uri.parse(link);
 		        Intent intent = new Intent(Intent.ACTION_VIEW, url);
 		        startActivity(intent);

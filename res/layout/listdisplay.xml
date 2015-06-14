@@ -8,12 +8,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">  
         
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:contentDescription="@string/AboutMetster"
-        android:src="@drawable/eventbutton" />
+   
        
     <LinearLayout
             android:id="@+id/placedetails"

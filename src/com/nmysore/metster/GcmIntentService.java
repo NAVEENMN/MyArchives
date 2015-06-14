@@ -78,14 +78,14 @@ public class GcmIntentService extends IntentService {
                 if(message_info  != null ){
                 	System.out.println("message is : " + message_info);
                 	
-                	
-                	
                 	try {
                 		JSONObject gcmdata = new JSONObject(message_info);
 						String host = gcmdata.getString("host");
 						String  to_id = gcmdata.getString("to_id");
 	                	String  payload_type = gcmdata.getString("payload_type");
 	                	String  payload_message = gcmdata.getString("payload_message");
+	                	String sender_name = gcmdata.getString("sender_name");
+	                	String event_refrence = gcmdata.getString("event_refrence");
 	                	String[] data = payload_message.split("--");
 	                	
 	                	/*
@@ -121,10 +121,11 @@ public class GcmIntentService extends IntentService {
 	                    		final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
 	                            editor.putString("invite_status", "yes");
 	                            editor.putString("invite_from", host);
-	                            editor.putString("inviteid", data[1]);
-	                            editor.putString("message", "invite from" + data[0]);
+	                            editor.putString("eventid", event_refrence);
+	                            editor.putString("sender_name", sender_name);
+	                            editor.putString("message", "invite from" + sender_name);
 	                            editor.commit();
-	                            sendNotification("New Invite", data[1], "invite from" + data[0]);
+	                            sendNotification("New Invite", event_refrence, "invite from " + sender_name);
 	                    		break;
 	                    	case 1:// invite_accept comes back on gcm
 	                    		

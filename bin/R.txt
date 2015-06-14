@@ -538,7 +538,7 @@ int id Support 0x7f05007a
 int id Time_to_meet 0x7f05005c
 int id Travel_Choice_Preference 0x7f0500bd
 int id Travel_Method_Preference 0x7f0500bc
-int id about_icon 0x7f0500c5
+int id about_icon 0x7f0500c6
 int id action_bar 0x7f050039
 int id action_bar_activity_content 0x7f050032
 int id action_bar_container 0x7f050038
@@ -547,11 +547,11 @@ int id action_bar_root 0x7f050037
 int id action_bar_subtitle 0x7f050040
 int id action_bar_title 0x7f05003f
 int id action_context_bar 0x7f05003a
-int id action_example 0x7f0500c2
+int id action_example 0x7f0500c3
 int id action_menu_divider 0x7f050033
 int id action_menu_presenter 0x7f050034
 int id action_mode_close_button 0x7f050041
-int id action_settings 0x7f0500c3
+int id action_settings 0x7f0500c4
 int id activity_chooser_view_content 0x7f050042
 int id add_friends 0x7f050076
 int id address_line 0x7f05006f
@@ -601,7 +601,7 @@ int id com_facebook_usersettingsfragment_logo_image 0x7f050095
 int id com_facebook_usersettingsfragment_profile_name 0x7f050096
 int id create_a_new_event 0x7f050075
 int id default_activity_button 0x7f050045
-int id delete_icon 0x7f0500c4
+int id delete_icon 0x7f0500c5
 int id dialog 0x7f05002c
 int id dinner 0x7f05009f
 int id disableHome 0x7f050026
@@ -668,7 +668,7 @@ int id radio_bike 0x7f0500c0
 int id radio_car 0x7f0500be
 int id radio_public 0x7f0500bf
 int id radio_walk 0x7f0500c1
-int id refresh_icon1 0x7f0500c7
+int id refresh_icon1 0x7f0500c8
 int id reviewsections 0x7f0500ac
 int id right 0x7f05000b
 int id sandbox 0x7f050013
@@ -686,7 +686,7 @@ int id search_voice_btn 0x7f050058
 int id sectiona 0x7f05009a
 int id sectionb 0x7f05009d
 int id selectionDetails 0x7f050016
-int id settings_icon 0x7f0500c6
+int id settings_icon 0x7f0500c7
 int id shortcut 0x7f05004b
 int id showCustom 0x7f050025
 int id showHome 0x7f050022
@@ -712,6 +712,7 @@ int id up 0x7f05003e
 int id useLogo 0x7f050021
 int id view_flipper 0x7f05005f
 int id visitormap 0x7f050073
+int id webView1 0x7f0500c2
 int id withText 0x7f05002a
 int id wrap_content 0x7f050018
 int integer abc_max_action_buttons 0x7f0a0001
@@ -771,6 +772,7 @@ int layout listdisplay 0x7f030033
 int layout listevents 0x7f030034
 int layout profilesettings 0x7f030035
 int layout support_simple_spinner_dropdown_item 0x7f030036
+int layout webview 0x7f030037
 int menu centra_dash 0x7f0c0000
 int menu global 0x7f0c0001
 int menu login 0x7f0c0002
