@@ -202,8 +202,9 @@ public class Login extends Activity {
 		if(invite_notification.toString() != "none"){
 			final String invite_from = invite_notification.getString("invite_from", "none"); // the one who sent it
 			final String event_reference = invite_notification.getString("eventid", "none");
+			final String sender_name =invite_notification.getString("sender_name","none");
 			String invite_message = invite_notification.getString("message", "none");
-			System.out.println("you have a invite from " + invite_from + " " + invite_message);
+			System.out.println("you have a invite from " + sender_name + " " + invite_message);
 			
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 			alert.setTitle("Invite from " + invite_from);
@@ -219,11 +220,10 @@ public class Login extends Activity {
 								json.put("host", commondata.facebook_details.facebook);
 								json.put("to_id", invite_from); 
 								json.put("payload_type", "invite_accept");
-								json.put("event_refrence", event_reference);
+								json.put("event_reference", event_reference);
 								json.put("sender_name", commondata.facebook_details.name);
 								json.put("payload_message", "sounds great");
-							
-								
+						
 							} catch (JSONException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -239,17 +239,20 @@ public class Login extends Activity {
 								int whichButton) {
 							// gcm notify and join		
 							
-							// store in local and notify host
 							JSONObject json = new JSONObject(); 
 							try {
 								json.put("host", commondata.facebook_details.facebook);
 								json.put("to_id", invite_from); 
-								json.put("payload_type", "invite_reject"); 
-								json.put("payload_message", "I am sorry");
+								json.put("payload_type", "invite_reject");
+								json.put("event_reference", event_reference);
+								json.put("sender_name", commondata.facebook_details.name);
+								json.put("payload_message", "sounds great");
+									
 							} catch (JSONException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} 
+							System.out.println("in json" + json.toString());
 							gcm_send_data(commondata.facebook_details.facebook, invite_from, json.toString());
 							
 						}

@@ -85,8 +85,8 @@ public class GcmIntentService extends IntentService {
 	                	String  payload_type = gcmdata.getString("payload_type");
 	                	String  payload_message = gcmdata.getString("payload_message");
 	                	String sender_name = gcmdata.getString("sender_name");
-	                	String event_refrence = gcmdata.getString("event_refrence");
-	                	String[] data = payload_message.split("--");
+	                	String event_refrence = gcmdata.getString("event_reference");
+	                	//String[] data = payload_message.split("--");
 	                	
 	                	/*
 	                	 * payload_type : invite_check, invite_accept, invite_no
@@ -104,13 +104,13 @@ public class GcmIntentService extends IntentService {
 	                	 * 			this is when user bails out... let the host know by sending a gcm
 	                	 */
 	                	int type = 0;
-	                	if(payload_type == "invite_check") type = 0;
-	                	if(payload_type == "invite_accept") type = 1;
-	                	if(payload_type == "invite_reject") type = 2;
-	                	if(payload_type == "host_cancel") type = 3;
-	                	if(payload_type == "invite_drop") type = 4;
+	                	if(payload_type.contains("invite_check")) type = 0;
+	                	if(payload_type.contains("invite_accept") )type = 1;
+	                	if(payload_type.contains( "invite_reject")) type = 2;
+	                	if(payload_type.contains( "host_cancel")) type = 3;
+	                	if(payload_type.contains( "invite_drop")) type = 4;
 	                	
-	                	
+	                	Log.w("type",Integer.toString(type));
 	                	Log.w("from", host);
 	                    Log.w("message", to_id);
 	                    Log.w("type", payload_type);//id
@@ -125,15 +125,16 @@ public class GcmIntentService extends IntentService {
 	                            editor.putString("sender_name", sender_name);
 	                            editor.putString("message", "invite from" + sender_name);
 	                            editor.commit();
-	                            sendNotification("New Invite", event_refrence, "invite from " + sender_name);
+	                            createNotification(null, sender_name + " is inviting you for a event");
+	                      
 	                    		break;
 	                    	case 1:// invite_accept comes back on gcm
-	                    		
-	                    		sendNotification("Notification", data[1], "Accepted your invite");
+	                    		System.out.println("accepted your invite" + sender_name);
+	                    		createNotification(null, sender_name + " accepted your invite");
 	                    		
 	                    		break;
 	                    	case 2:// invite_reject comes back on gcm
-	                    		sendNotification("Notification", data[1], "Rejected your invite");
+	                    		createNotification(null, sender_name + " declined your invite");
 	                    		break;
 	                    	case 3:// host_cancelcomes on gcm
 	                    		break;
@@ -178,7 +179,7 @@ public class GcmIntentService extends IntentService {
 	    // Actions are just fake
 	    Notification noti = new Notification.Builder(this)
 	        .setContentTitle("Metster")
-	        .setContentText(message + " is requesting your location.").setSmallIcon(R.drawable.logo)
+	        .setContentText(message).setSmallIcon(R.drawable.logo)
 	        .setAutoCancel(true)
 	        .setContentIntent(pIntent).build();
 	    
@@ -189,17 +190,5 @@ public class GcmIntentService extends IntentService {
 	    notificationManager.notify(0, noti);
 
 	  }
-    
-    // Put the message into a notification and post it.
-    // This is just one simple example of what you might choose to do with
-    // a GCM message.
-    private void sendNotification(String name, String message, String event_id) {
-        mNotificationManager = (NotificationManager)
-                this.getSystemService(Context.NOTIFICATION_SERVICE);
-        	commondata.gcm_req.requester_name = name;
-        	commondata.gcm_req.event_id = event_id.replace(",", "");
-        	createNotification(null, name);
-        
-        
-    }
+   
 }
