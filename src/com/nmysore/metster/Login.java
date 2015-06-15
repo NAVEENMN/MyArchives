@@ -1562,10 +1562,10 @@ public class Login extends Activity {
 				String from_id = contents.getString("from_id");
 				String status = contents.getString("status");
 				String event_name = contents.getString("event_name");
-				//if(status.contains("pending")){
+				if(status.contains("pending")){
 					listhostnames.add(host_name);
 					listeventnames.add(event_name);
-				//}
+				}
 			}catch(Exception e){
 				System.out.println("json decode exception " + e);
 			}
@@ -1573,7 +1573,7 @@ public class Login extends Activity {
 		// listeventsnames insert
 		
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View layout = inflater.inflate(R.layout.invitelist,
+		final View layout = inflater.inflate(R.layout.invitelist,
 				(ViewGroup) findViewById(R.id.invitesection));
 		
 		ListView modeList = new ListView(this);
@@ -1586,7 +1586,7 @@ public class Login extends Activity {
 		        //ImageView icon;
 		        TextView title;
 		        TextView hostname;
-		        
+		        ImageButton accept;
 		    }
 
 		    public View getView(int position, View convertView,
@@ -1605,6 +1605,18 @@ public class Login extends Activity {
 		            holder.title = (TextView) convertView
 		                    .findViewById(R.id.event_title);
 		            holder.hostname = (TextView) convertView.findViewById(R.id.host_name);
+		            //View v = inflater.inflate( R.layout.invitelist, parent, false);
+		            holder.accept = (ImageButton) convertView.findViewById(R.id.buttonaccept);
+		            ImageButton reject = (ImageButton) convertView.findViewById(R.id.buttonreject);
+		            holder.accept.setTag(position);
+		            holder.accept.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							System.out.println("cli");
+						}
+					}); 
 		            convertView.setTag(holder);
 		        } else {
 		            // view already defined, retrieve view holder
@@ -1613,6 +1625,7 @@ public class Login extends Activity {
 		        System.out.println("setting" + listhostnames.get(position));
 		        holder.hostname.setText(listhostnames.get(position));
 		        holder.title.setText(listeventnames.get(position));
+		       
 		        // load from yelp and set async
 		        //Drawable drawable = getResources().getDrawable(R.drawable.eventbutton); //this is an image from the drawables folde
 		        return convertView;
