@@ -40,6 +40,15 @@ switch($type){
 				$message = $sender_name . "--" . $event_refrence;
 				invite_check($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_check", $message
 				, $sender_name, $event_refrence);
+				$TO = $incoming_data -> to_id;
+				$result = mysql_query("SELECT * FROM accounts WHERE USERID = '$TO'") or die(mysql_error());
+				$row = mysql_fetch_array($result);
+				if($row){
+					$payload = $row['INVITES'];
+					$payload = $payload . "--" . $incoming_data->host;
+					mysql_query("UPDATE accounts SET `INVITES`='$payload' WHERE USERID='$TO'") or die(mysql_error());
+				}
+	
 				break;
 	case "invite_accept" :
 				$message = "invite" . "--" . "accepted";
