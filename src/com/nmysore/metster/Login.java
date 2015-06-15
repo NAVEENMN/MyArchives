@@ -665,6 +665,7 @@ public class Login extends Activity {
 		    		while(dat.hasNext()){// this segment pulls users
 		    			DataSnapshot params = dat.next();	
 		    			if(params.getName().toString() == "eventname") hostnode.event_name = params.getValue().toString();
+		    			commondata.event_information.eventname = hostnode.event_name;
 		    			if(params.getName().toString() == "nodename") hostnode.nodename = params.getValue().toString();
 		    			if(params.getName().toString() == "nodetype") hostnode.nodetype = params.getValue().toString();
 	    				if(params.getName().toString() == "food") hostnode.food_type = params.getValue().toString();
@@ -684,6 +685,7 @@ public class Login extends Activity {
 	    				
 		    		}
 		    		nodelist.add(hostnode);	
+		    		
 		    	}
 		    	System.out.println("nodelist has this data : " +  nodelist.size());
 		    	if(flag){
@@ -1559,7 +1561,7 @@ public class Login extends Activity {
 				String event_name = contents.getString("event_reference");
 				System.out.println("event_ref" + event_name);
 				listhostnames.add(host_name);
-				listeventnames.add(host_name);
+				listeventnames.add(event_name);
 			}catch(Exception e){
 				System.out.println("json decode exception " + e);
 			}
@@ -1572,7 +1574,7 @@ public class Login extends Activity {
 		
 		ListView modeList = new ListView(this);
 		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
-				R.layout.listdisplay,
+				R.layout.invitelist,
 				listeventnames){
 		    ViewHolder holder;
 
@@ -1591,25 +1593,30 @@ public class Login extends Activity {
 
 		        if (convertView == null) {
 		            convertView = inflater.inflate(
-		                    R.layout.listdisplay, null);
+		                    R.layout.invitelist, null);
 
 		            holder = new ViewHolder();
 		           // holder.icon = (ImageView) convertView
 		            //        .findViewById(R.id.icon);
 		            holder.title = (TextView) convertView
-		                    .findViewById(R.id.title);
+		                    .findViewById(R.id.event_title);
 		            holder.hostname = (TextView) convertView.findViewById(R.id.host_name);
 		            convertView.setTag(holder);
 		        } else {
 		            // view already defined, retrieve view holder
 		            holder = (ViewHolder) convertView.getTag();
 		        }       
-
+		        System.out.println("setting" + listhostnames.get(position));
+		        holder.hostname.setText(listhostnames.get(position));
+		        holder.title.setText(listeventnames.get(position));
 		        // load from yelp and set async
 		        //Drawable drawable = getResources().getDrawable(R.drawable.eventbutton); //this is an image from the drawables folde
 		        return convertView;
 		    }
 		};
+		
+		
+		
 		modeList.setAdapter(modeAdapter);
 		
 		builder.setView(modeList);
