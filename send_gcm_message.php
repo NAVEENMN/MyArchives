@@ -15,7 +15,7 @@ $to_facebookid = $_POST['param2'];//check to whom to send with email
 $payload = $_POST['param3'];
 $incoming_data = json_decode($payload);
 $type = $incoming_data -> payload_type;
-$event_reference =  $incoming_data -> event_refrence;
+$event_reference =  $incoming_data -> event_reference;
 $sender_name = $incoming_data -> sender_name;//$incoming_data -> sender_name; 
 $result = mysql_query("SELECT * FROM accounts
  WHERE USERID ='$to_facebookid'") or die(mysql_error());
@@ -41,14 +41,20 @@ switch($type){
 				invite_check($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_check", $message
 				, $sender_name, $event_reference);
 				$TO = $incoming_data -> to_id;
+				$Event_Name = $incoming_data -> event_name;
 				$result = mysql_query("SELECT * FROM accounts WHERE USERID = '$TO'") or die(mysql_error());
 				$row = mysql_fetch_array($result);
-				$arr = array('from_id' => $incoming_data->host, 'from_name' => $sender_name, 'event_reference' => $event_reference);
+				# building a new payload
+				$arr = array('from_id' => $incoming_data->host, 'from_name' => $sender_name, 'event_reference' => $event_reference
+					     , 'status' => 'pending', 'event_name' => $Event_Name);
 				$new_data =  json_encode($arr);
-				if($row){
+				# key and payload ready
+				if($row['INVITES'] != NULL){
 					$payload = $row['INVITES'];
 					$payload = $payload . "%%" . $new_data;
 					mysql_query("UPDATE accounts SET `INVITES`='$payload' WHERE USERID='$TO'") or die(mysql_error());
+				}else{ // no previous data
+					mysql_query("UPDATE accounts SET `INVITES`='$new_data' WHERE USERID='$TO'") or die(mysql_error());
 				}
 	
 				break;
