@@ -236,12 +236,18 @@ public class HomescreenActivity extends Activity {
 					    	
 					    	response = 	postData("http://52.8.173.36/metster/setup_account.php", "setup" ,
 									json_to_server.toString() ,commondata.facebook_details.email );
+					    	
 					    	String invites_response = postData("http://52.8.173.36/metster/handel_invites.php",
 					    			"get_list",invites_to_server.toString(), commondata.facebook_details.email);
+					    	try{
+					    		String[] invites = invites_response.split("--");
+					    		commondata.event_information.invites = invites_response;
+					    	}catch(Exception e){
+					    		commondata.event_information.invites = null;	
+					    	}
 					    	System.out.println("after resonse");
 							System.out.println(response.toString());
 							System.out.println("invites server response" + invites_response);
-						
 							commondata.event_information.eventID = null;
 							
 							}

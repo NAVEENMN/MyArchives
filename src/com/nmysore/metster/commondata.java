@@ -50,6 +50,7 @@ public class commondata {
 	public static class event_information{
 		static String eventID;
 		static String host;
+		static String invites;
 		static HashMap<String, String> event_hosted_table = new HashMap<String, String>();
 		static HashMap<String, String> event_joined_table = new HashMap<String, String>();
 		static HashMap<String, ArrayList<host_event_node>> given_events_lookup = new HashMap<String, ArrayList<host_event_node>>();

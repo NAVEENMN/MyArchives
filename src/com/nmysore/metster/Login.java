@@ -190,13 +190,17 @@ public class Login extends Activity {
 		event_info.is_host = false;// by default no host access
 		
 		create_firebase_refrence();// use fbref object as the refrence.
-
 		
 		/*
 		 * check if invite exists
 		 */
 		SharedPreferences invite_notification = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE);
 		String invite_status = invite_notification.getString("invite_status", "none");
+		
+		if(commondata.event_information.invites != null){
+	
+			list_invites();
+		}
 		
 		if(invite_notification.toString() != "none"){
 			System.out.println();
@@ -1528,6 +1532,107 @@ public class Login extends Activity {
 	
 	
 	
+	/*
+	 * name : list_invites
+	 * @params : none
+	 * @return : void
+	 * @desp : This function list the invites in a dialog.
+	 */
+	
+	public void list_invites(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("New Invites");
+		ListView inviteslist = new ListView(this);
+		final ArrayList<String> listeventnames = new ArrayList<String>();
+		final ArrayList<String> listhostnames = new ArrayList<String>();
+		listeventnames.clear();
+		listhostnames.clear();
+		
+		String invitedata = commondata.event_information.invites;
+		String[] jsoncontents = invitedata.split("%%");
+		for(int i = 1; i< jsoncontents.length; i++){
+			String jdata = jsoncontents[i];
+			try{
+				JSONObject contents = new JSONObject(jdata);
+				String host_name = contents.getString("from_name");
+				System.out.println("host_name" + host_name);
+				String event_name = contents.getString("event_reference");
+				System.out.println("event_ref" + event_name);
+				listhostnames.add(host_name);
+				listeventnames.add(host_name);
+			}catch(Exception e){
+				System.out.println("json decode exception " + e);
+			}
+		}
+		// listeventsnames insert
+		
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View layout = inflater.inflate(R.layout.invitelist,
+				(ViewGroup) findViewById(R.id.invitesection));
+		
+		ListView modeList = new ListView(this);
+		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
+				R.layout.listdisplay,
+				listeventnames){
+		    ViewHolder holder;
+
+		    class ViewHolder {
+		        //ImageView icon;
+		        TextView title;
+		        TextView hostname;
+		        
+		    }
+
+		    public View getView(int position, View convertView,
+		            ViewGroup parent) {
+		        final LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+		                .getSystemService(
+		                        Context.LAYOUT_INFLATER_SERVICE);
+
+		        if (convertView == null) {
+		            convertView = inflater.inflate(
+		                    R.layout.listdisplay, null);
+
+		            holder = new ViewHolder();
+		           // holder.icon = (ImageView) convertView
+		            //        .findViewById(R.id.icon);
+		            holder.title = (TextView) convertView
+		                    .findViewById(R.id.title);
+		            holder.hostname = (TextView) convertView.findViewById(R.id.host_name);
+		            convertView.setTag(holder);
+		        } else {
+		            // view already defined, retrieve view holder
+		            holder = (ViewHolder) convertView.getTag();
+		        }       
+
+		        // load from yelp and set async
+		        //Drawable drawable = getResources().getDrawable(R.drawable.eventbutton); //this is an image from the drawables folde
+		        return convertView;
+		    }
+		};
+		modeList.setAdapter(modeAdapter);
+		
+		builder.setView(modeList);
+		builder.setPositiveButton("Done",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,
+							int whichButton) {
+						dialog.dismiss();
+					}
+				});
+		final Dialog dialog = builder.create();
+		dialog.show();
+	}
+	
+	
+	
+	
+	/*
+	 * name : list_rest
+	 * @params  : none
+	 * @return : void
+	 * @desp: This function lists the restraunts in a dialog.
+	 */
 	public void list_rest() {
 		// --------
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
