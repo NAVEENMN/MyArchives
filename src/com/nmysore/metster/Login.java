@@ -198,14 +198,13 @@ public class Login extends Activity {
 		SharedPreferences invite_notification = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE);
 		String invite_status = invite_notification.getString("invite_status", "none");
 		
-		
 		if(invite_notification.toString() != "none"){
+			System.out.println();
 			final String invite_from = invite_notification.getString("invite_from", "none"); // the one who sent it
 			final String event_reference = invite_notification.getString("eventid", "none");
 			final String sender_name =invite_notification.getString("sender_name","none");
 			String invite_message = invite_notification.getString("message", "none");
 			System.out.println("you have a invite from " + sender_name + " " + invite_message);
-			
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 			alert.setTitle("Invite from " + invite_from);
 			alert.setMessage(invite_message);

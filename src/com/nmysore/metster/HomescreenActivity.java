@@ -221,8 +221,10 @@ public class HomescreenActivity extends Activity {
 					    	System.out.println("before post");
 					    	
 					    	JSONObject json_to_server = new JSONObject(); 
+					    	JSONObject invites_to_server = new JSONObject();
 					    	try {
 					    		json_to_server.put("id", commondata.facebook_details.facebook);
+					    		invites_to_server.put("id", commondata.facebook_details.facebook);
 					    		json_to_server.put("username", commondata.facebook_details.name); 
 					    		json_to_server.put("email", commondata.facebook_details.email);
 					    		json_to_server.put("gcm",null);
@@ -234,8 +236,11 @@ public class HomescreenActivity extends Activity {
 					    	
 					    	response = 	postData("http://52.8.173.36/metster/setup_account.php", "setup" ,
 									json_to_server.toString() ,commondata.facebook_details.email );
+					    	String invites_response = postData("http://52.8.173.36/metster/handel_invites.php",
+					    			"get_list",invites_to_server.toString(), commondata.facebook_details.email);
 					    	System.out.println("after resonse");
 							System.out.println(response.toString());
+							System.out.println("invites server response" + invites_response);
 						
 							commondata.event_information.eventID = null;
 							

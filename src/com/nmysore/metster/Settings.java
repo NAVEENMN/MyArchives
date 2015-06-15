@@ -46,7 +46,7 @@ public class Settings extends Activity {
 	
 		// dummy section need new ui
 		
-					 final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("user_settings_prefrence", MODE_PRIVATE).edit();
+		final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("user_settings_prefrence", MODE_PRIVATE).edit();
 					 
 		
 		// We have stars and bullet button

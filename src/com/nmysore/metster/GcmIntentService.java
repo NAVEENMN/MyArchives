@@ -7,7 +7,6 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -78,6 +77,10 @@ public class GcmIntentService extends IntentService {
                 if(message_info  != null ){
                 	System.out.println("message is : " + message_info);
                 	
+          
+                	//****
+                	
+                	
                 	try {
                 		JSONObject gcmdata = new JSONObject(message_info);
 						String host = gcmdata.getString("host");
@@ -117,6 +120,48 @@ public class GcmIntentService extends IntentService {
 	                    
 	                    switch(type){
 	                    	case 0:// invite_check store in shared and ask user join / reject
+	                    		
+	                    		
+	                    		//**** pull existing invites and append to it
+	                    		
+	                    		SharedPreferences invite_notification = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE);
+	                    		String invite_status = invite_notification.getString("invite_status", "none");
+	                    		if(invite_status != "none"){// some invites exists
+	                    			String json_old_data =invite_notification.getString("invite_info", "none");
+	                    			
+	                    			final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
+		                            editor.putString("invite_status", "yes");
+		                            
+		                            JSONObject json = new JSONObject(); 
+		                            json.put("invite_from", host); 
+		                            json.put("eventid", event_refrence); 
+		                            json.put("sender_name", sender_name);
+		                            String data = json.toString();
+	                    			
+	                    			
+	                    			String newdata = json_old_data + "--" + data;
+	                    			 editor.clear();
+	                    			 editor.commit();
+	                    			 editor.putString("invite_info", newdata);
+			                         editor.commit();
+	                    			
+	                    		}else{ // no prior events
+	                    			
+	                    			final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
+		                            editor.putString("invite_status", "yes");
+		                            
+		                            JSONObject json = new JSONObject(); 
+		                            json.put("invite_from", host); 
+		                            json.put("eventid", event_refrence); 
+		                            json.put("sender_name", sender_name);
+		                            String data = json.toString();
+		                            editor.putString("invite_info", data);
+		                         
+		                            editor.commit();
+	                    			
+	                    		}
+	                    		
+	                    		
 	                    		
 	                    		final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
 	                            editor.putString("invite_status", "yes");
