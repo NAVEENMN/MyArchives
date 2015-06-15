@@ -15,7 +15,7 @@ $to_facebookid = $_POST['param2'];//check to whom to send with email
 $payload = $_POST['param3'];
 $incoming_data = json_decode($payload);
 $type = $incoming_data -> payload_type;
-$event_refrence =  $incoming_data -> event_reference;
+$event_reference =  $incoming_data -> event_refrence;
 $sender_name = $incoming_data -> sender_name;//$incoming_data -> sender_name; 
 $result = mysql_query("SELECT * FROM accounts
  WHERE USERID ='$to_facebookid'") or die(mysql_error());
@@ -37,15 +37,17 @@ $from_name = $from_data -> username;
 switch($type){	
 
 	case "invite_check" :
-				$message = $sender_name . "--" . $event_refrence;
+				$message = $sender_name . "--" . $event_reference;
 				invite_check($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_check", $message
-				, $sender_name, $event_refrence);
+				, $sender_name, $event_reference);
 				$TO = $incoming_data -> to_id;
 				$result = mysql_query("SELECT * FROM accounts WHERE USERID = '$TO'") or die(mysql_error());
 				$row = mysql_fetch_array($result);
+				$arr = array('from_id' => $incoming_data->host, 'from_name' => $sender_name, 'event_reference' => $event_reference);
+				$new_data =  json_encode($arr);
 				if($row){
 					$payload = $row['INVITES'];
-					$payload = $payload . "--" . $incoming_data->host;
+					$payload = $payload . "%%" . $new_data;
 					mysql_query("UPDATE accounts SET `INVITES`='$payload' WHERE USERID='$TO'") or die(mysql_error());
 				}
 	
@@ -53,12 +55,12 @@ switch($type){
 	case "invite_accept" :
 				$message = "invite" . "--" . "accepted";
 				invite_accept($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_accept",$message,
-				$sender_name, $event_refrence);
+				$sender_name, $event_reference);
 				break;
 	case "invite_reject" :
 				$message = "invite" . "--" . "rejected";
 				invite_reject($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_reject", $message,
-				$sender_name, $event_refrence);
+				$sender_name, $event_reference);
 				break;
 	case "host_cancel":
 				host_cancel();
