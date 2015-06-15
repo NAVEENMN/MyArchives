@@ -1,5 +1,7 @@
 package com.nmysore.metster;
 
+import java.util.Iterator;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -77,10 +79,6 @@ public class GcmIntentService extends IntentService {
                 if(message_info  != null ){
                 	System.out.println("message is : " + message_info);
                 	
-          
-                	//****
-                	
-                	
                 	try {
                 		JSONObject gcmdata = new JSONObject(message_info);
 						String host = gcmdata.getString("host");
@@ -118,27 +116,42 @@ public class GcmIntentService extends IntentService {
 	                    Log.w("message", to_id);
 	                    Log.w("type", payload_type);//id
 	                    
+	                    
+	                    /*
+	                     * open the shared pref and see if any invites exist
+	                     */
+	                    
+	                    
+	                    
 	                    switch(type){
 	                    	case 0:// invite_check store in shared and ask user join / reject
-	                    		
-	                    		
 	                    		//**** pull existing invites and append to it
 	                    		
 	                    		SharedPreferences invite_notification = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE);
 	                    		String invite_status = invite_notification.getString("invite_status", "none");
 	                    		if(invite_status != "none"){// some invites exists
-	                    			String json_old_data =invite_notification.getString("invite_info", "none");
+	                    			String json_old_data =invite_notification.getString("invite_notification", "none");
+	                    			
+	                    			JSONObject keys = new JSONObject(json_old_data);
+	                    			Iterator<String> invite_keys = keys.keys();
+	                    			while(invite_keys.hasNext()){
+	                    				System.out.println("keys are " + invite_keys.next().toString());
+	                    			}
+	                    			
 	                    			
 	                    			final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
 		                            editor.putString("invite_status", "yes");
-		                            
+		                            JSONObject key = new JSONObject();
 		                            JSONObject json = new JSONObject(); 
-		                            json.put("invite_from", host); 
+		                            json.put("status", "pending"); 
 		                            json.put("eventid", event_refrence); 
 		                            json.put("sender_name", sender_name);
 		                            String data = json.toString();
-	                    			
-	                    			
+		                            key.put(host, data);
+		                            /*
+		                             * jason format
+		                             * 9708098098 : {status : pending, event_id : ref , send_name : }
+		                             */
 	                    			String newdata = json_old_data + "--" + data;
 	                    			 editor.clear();
 	                    			 editor.commit();

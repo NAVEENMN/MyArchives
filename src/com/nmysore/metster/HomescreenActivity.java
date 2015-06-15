@@ -239,17 +239,20 @@ public class HomescreenActivity extends Activity {
 					    	
 					    	String invites_response = postData("http://52.8.173.36/metster/handel_invites.php",
 					    			"get_list",invites_to_server.toString(), commondata.facebook_details.email);
-					    	try{
-					    		String[] invites = invites_response.split("--");
+					    
+					    	if(invites_response.isEmpty()){ // no invites in db
+					    		System.out.println("invites server response is null");
+					    		commondata.event_information.invites = null;
+					    	}else{ // some invites in db
+					    		System.out.println("invites server response" + invites_response);
 					    		commondata.event_information.invites = invites_response;
-					    	}catch(Exception e){
-					    		commondata.event_information.invites = null;	
 					    	}
-					    	System.out.println("after resonse");
+					    
+					    	System.out.println("resonse to setup_account");
 							System.out.println(response.toString());
-							System.out.println("invites server response" + invites_response);
-							commondata.event_information.eventID = null;
 							
+							commondata.event_information.eventID = null;
+				
 							}
 					};
 

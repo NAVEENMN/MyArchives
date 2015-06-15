@@ -115,6 +115,7 @@ public class LoadHome extends Activity {
 		
 		
 		
+		
 		// this is prefrence section
 		if (prefs.toString()!= null) {
 		  float price_preference = prefs.getFloat("price_preference", (float) 2.5);//"No name defined" is the default value.

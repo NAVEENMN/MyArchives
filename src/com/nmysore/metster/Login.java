@@ -1552,16 +1552,20 @@ public class Login extends Activity {
 		
 		String invitedata = commondata.event_information.invites;
 		String[] jsoncontents = invitedata.split("%%");
-		for(int i = 1; i< jsoncontents.length; i++){
+		for(int i = 0; i< jsoncontents.length; i++){
 			String jdata = jsoncontents[i];
+			System.out.println("contents from ino" + jdata);
 			try{
 				JSONObject contents = new JSONObject(jdata);
+				
 				String host_name = contents.getString("from_name");
-				System.out.println("host_name" + host_name);
-				String event_name = contents.getString("event_reference");
-				System.out.println("event_ref" + event_name);
-				listhostnames.add(host_name);
-				listeventnames.add(event_name);
+				String from_id = contents.getString("from_id");
+				String status = contents.getString("status");
+				String event_name = contents.getString("event_name");
+				//if(status.contains("pending")){
+					listhostnames.add(host_name);
+					listeventnames.add(event_name);
+				//}
 			}catch(Exception e){
 				System.out.println("json decode exception " + e);
 			}
