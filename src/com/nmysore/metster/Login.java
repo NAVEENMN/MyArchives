@@ -1092,6 +1092,26 @@ public class Login extends Activity {
 		
 		thread.start();
     	
+		JSONObject json = new JSONObject(); 
+		try {
+			json.put("host", commondata.facebook_details.facebook);
+			json.put("to_id", hostid); 
+			json.put("payload_type", "invite_reject");
+			json.put("event_reference", event_reference);
+			json.put("sender_name", commondata.facebook_details.name);
+			json.put("payload_message", "sounds great");
+	
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		System.out.println("in json" + json.toString());
+		
+		System.out.println("respoding to " + hostid + "from" + commondata.facebook_details.facebook);
+		gcm_send_data(commondata.facebook_details.facebook, hostid, json.toString());
+		
+		
+		
 	}
 	
 	
@@ -1215,7 +1235,23 @@ public class Login extends Activity {
 		 
 		 //****************
 		 
-		 
+			JSONObject json = new JSONObject(); 
+			try {
+				json.put("host", commondata.facebook_details.facebook);
+				json.put("to_id", host); 
+				json.put("payload_type", "invite_accept");
+				json.put("event_reference", event_reference);
+				json.put("sender_name", commondata.facebook_details.name);
+				json.put("payload_message", "sounds great");
+		
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			System.out.println("in json" + json.toString());
+			
+			System.out.println("respoding to " + host + "from" + commondata.facebook_details.facebook);
+			gcm_send_data(commondata.facebook_details.facebook, host, json.toString());
 		
 	}
 		
@@ -2267,8 +2303,9 @@ public class Login extends Activity {
 			
 			newev.child(eventid).child(commondata.facebook_details.facebook).removeValue();
 			
-			
 			//********************************
+			
+			
 			
 			
 			Intent intent = new Intent(Login.this, Login.class);
