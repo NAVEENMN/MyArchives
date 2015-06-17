@@ -1028,7 +1028,6 @@ public class Login extends Activity {
 	private void on_invite_declined(final String event_reference){
 	
     	final JSONObject invites_to_server = new JSONObject();
-    	
     	String[] id = event_reference.split("-->");
     	String hostid = id[0];
     	
@@ -1043,32 +1042,42 @@ public class Login extends Activity {
     	
     	
     	Thread thread = new Thread() {
-			String server_resp;
-			String response = "error";
-			ArrayList<String> new_invites = new ArrayList<String>();
+	
 			@Override
 			public void run() {
 				
 				String invites_response = postData("http://52.8.173.36/metster/handel_invites.php",
 		    			"get_list",invites_to_server.toString(), commondata.facebook_details.email);
 				
-				String[] lists = invites_response.split("%%");
-				for(int i =0; i<lists.length; i++){
-					if(lists[i].contains(event_reference)){
-						// dont add to this list
-					}else{
-						new_invites.add(lists[i]);
-						new_invites.add("%%");
+				String new_invites_data = null;
+				if(invites_response != null){
+					String[] lists = invites_response.split("%%");
+					for(int i =0; i<lists.length; i++){
+						if(lists[i].contains(event_reference)){
+							// dont add to this list
+						}else{
+							new_invites_data += lists[i];
+						}	
 					}
-					
+				}else{
+					//some error calls
 				}
 				
-				System.out.println("updating this data" + new_invites.toString());
+				try {
+		    		
+		    		invites_to_server.put("id", commondata.facebook_details.facebook);
+		    		invites_to_server.put("data", new_invites_data);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+				
+				
+				
+				System.out.println("updating this data" + new_invites_data);
 				invites_response = postData("http://52.8.173.36/metster/handel_invites.php",
-		    			"update",new_invites.toString(), commondata.facebook_details.email);
-				
-				
-				
+		    			"update",invites_to_server.toString(), commondata.facebook_details.email);
+			
 				System.out.println("in invites on server " + invites_response);
 			}
 		};
