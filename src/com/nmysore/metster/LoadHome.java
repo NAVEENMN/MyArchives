@@ -113,9 +113,6 @@ public class LoadHome extends Activity {
 
 		SharedPreferences prefs = getApplicationContext().getSharedPreferences("user_settings_prefrence", MODE_PRIVATE);
 		
-		
-		
-		
 		// this is prefrence section
 		if (prefs.toString()!= null) {
 		  float price_preference = prefs.getFloat("price_preference", (float) 2.5);//"No name defined" is the default value.

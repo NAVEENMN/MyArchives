@@ -202,8 +202,12 @@ public class Login extends Activity {
 			list_invites();
 		}
 		
+		
+		// this section contains code to accept or reject invite use it later.
+		
+		/*
+		
 		if(invite_notification.toString() != "none"){
-			System.out.println();
 			final String invite_from = invite_notification.getString("invite_from", "none"); // the one who sent it
 			final String event_reference = invite_notification.getString("eventid", "none");
 			final String sender_name =invite_notification.getString("sender_name","none");
@@ -268,7 +272,7 @@ public class Login extends Activity {
 			System.out.println("no invite exists");
 		}
 
-		
+		*/
 		/*
 		 * check if you are on any event
 		 */
@@ -1010,6 +1014,122 @@ public class Login extends Activity {
  
 	}
 		
+	
+	
+	/*
+	 * name : on_invite_declined
+	 * @params : event_id
+	 * @return : none
+	 * @desp : This function pulls invite data from the server and removes this event_id
+	 * 			listing and updates the invites tabel on the sever.
+	 */
+	
+	
+	private void on_invite_declined(final String event_reference){
+	
+    	final JSONObject invites_to_server = new JSONObject();
+    	
+    	String[] id = event_reference.split("-->");
+    	String hostid = id[0];
+    	
+    	try {
+    		
+    		invites_to_server.put("id", commondata.facebook_details.facebook);
+    		
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+    	
+    	
+    	Thread thread = new Thread() {
+			String server_resp;
+			String response = "error";
+			ArrayList<String> new_invites = new ArrayList<String>();
+			@Override
+			public void run() {
+				
+				String invites_response = postData("http://52.8.173.36/metster/handel_invites.php",
+		    			"get_list",invites_to_server.toString(), commondata.facebook_details.email);
+				
+				String[] lists = invites_response.split("%%");
+				for(int i =0; i<lists.length; i++){
+					if(lists[i].contains(event_reference)){
+						// dont add to this list
+					}else{
+						new_invites.add(lists[i]);
+						new_invites.add("%%");
+					}
+					
+				}
+				
+				System.out.println("updating this data" + new_invites.toString());
+				invites_response = postData("http://52.8.173.36/metster/handel_invites.php",
+		    			"update",new_invites.toString(), commondata.facebook_details.email);
+				
+				
+				
+				System.out.println("in invites on server " + invites_response);
+			}
+		};
+		
+		thread.start();
+    	
+	}
+	
+	
+	/*
+	 * name : on_event_accepted
+	 * @params : event_id
+	 * @return : none
+	 * @desp : This function takes the invited event refrence and stores in the 
+	 * 			shared pref. The user can see this event in show events and data 
+	 * 			related to this event will be pulled there and launched.
+	 */
+	
+	public void on_invite_accepted(String event_reference){
+		
+		//************ pull data from local db
+		
+		SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
+		String joinedevents = prefs.getString("joinedevents", null);
+		String []events = null;
+		if (joinedevents != null) {
+		  String joinedeventlist = prefs.getString("joinedevents", "None");//"No name defined" is the default value.
+		  events = joinedeventlist.split("<<");
+		}
+		final String eventreference = event_reference;
+		String[] dat = event_reference.split("-->");
+		String host = dat[0];
+		String url = "https://met-ster-event.firebaseio.com/";
+		url = url + host +"/"+eventreference + "/" + commondata.facebook_details.facebook;
+		
+		final HashMap<String, String> fb_data = new HashMap<String, String>();
+		fb_data.put("nodename",commondata.facebook_details.name );
+		fb_data.put("eventname",event_reference);
+		fb_data.put("Latitude", commondata.user_information.latitude.toString());
+		fb_data.put("Longitude", commondata.user_information.longitude.toString());
+		fb_data.put("price", Float.toString(commondata.prefrences.price));
+		fb_data.put("travel", Double.toString(commondata.prefrences.travel));
+		fb_data.put("food", commondata.prefrences.food);
+		fb_data.put("nodetype", "host");
+		
+		StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+		strBuilder.append(host);
+		String refg = strBuilder.toString();
+		Firebase newev = new Firebase(refg);
+		
+		newev.child(eventreference).child(commondata.facebook_details.facebook).setValue(fb_data);
+		
+		
+		//fb_event_ref.firebaseobj.child(eventrefrence).child(commondata.facebook_details.facebook).setValue(fb_data);
+		System.out.println("storing " + eventreference );
+		//************** store this new event copy to local data base
+		SharedPreferences.Editor editor = getSharedPreferences("myevents", MODE_PRIVATE).edit();
+		 editor.putString("joinedevents", joinedevents +"<<"+eventreference);
+		 editor.commit();
+		
+	}
 		
 	/*
 	 * name : on_event_selected
@@ -1375,8 +1495,9 @@ public class Login extends Activity {
 					payload.put("to_id", commondata.facebook_details.facebook);// need to fetch and send
 					payload.put("payload_type", "invite_check");
 					payload.put("payload_message", "dinner tonight");
-					payload.put("event_refrence", commondata.event_information.eventID);
-					payload.put("sender_name", commondata.facebook_details.name);
+					payload.put("event_reference", "123456-->event-->0");
+					payload.put("event_name", "lunch and discuss");
+					payload.put("sender_name", "alan turing");
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1433,8 +1554,11 @@ public class Login extends Activity {
 		//************ pull data from local db
 		//**** hosted
 		SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
-		String hostedevents = prefs.getString("hostedevents", null);
+		String hostedevents = prefs.getString("hostedevents", "None");
+		String invitedevents = prefs.getString("joinedevents", "None");
+		System.out.println("invited listing" + invitedevents);
 		String []events = null;
+		String []invitedeventsarray = null;
 		if (hostedevents != null) {
 		  String hostedeventlist = prefs.getString("hostedevents", "None");//"No name defined" is the default value.
 		  if(hostedeventlist == "none"){
@@ -1442,6 +1566,14 @@ public class Login extends Activity {
 		  }else{
 			  events = hostedeventlist.split("<<");
 		  }
+		}
+		if(invitedevents != null){
+			String invitedeventslist = prefs.getString("joinedevents", "None");//"No name defined" is the default value.
+			  if(invitedeventslist == "none"){
+				  invitedeventsarray = null;
+			  }else{
+				  invitedeventsarray = invitedeventslist.split("<<");
+			  }
 		}
 		//**** implement joined
 		boolean flag = true;
@@ -1455,6 +1587,17 @@ public class Login extends Activity {
 			flag = false;
 			toast_info("no events");
 		}
+		
+		if(invitedevents != null){
+			//--------------------
+				for(int i=1; i<invitedeventsarray.length; i++){
+					eventtitle.add(invitedeventsarray[i]);
+				}
+			}else{
+				//show no events
+				flag = false;
+				toast_info("no events");
+			}
 		if(flag){
 		//******* display on the list
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1547,8 +1690,10 @@ public class Login extends Activity {
 		ListView inviteslist = new ListView(this);
 		final ArrayList<String> listeventnames = new ArrayList<String>();
 		final ArrayList<String> listhostnames = new ArrayList<String>();
+		final ArrayList<String> listeventreferences = new ArrayList<String>();
 		listeventnames.clear();
 		listhostnames.clear();
+		listeventreferences.clear();
 		
 		String invitedata = commondata.event_information.invites;
 		String[] jsoncontents = invitedata.split("%%");
@@ -1562,9 +1707,11 @@ public class Login extends Activity {
 				String from_id = contents.getString("from_id");
 				String status = contents.getString("status");
 				String event_name = contents.getString("event_name");
+				String event_reference = contents.getString("event_reference");
 				if(status.contains("pending")){
 					listhostnames.add(host_name);
 					listeventnames.add(event_name);
+					listeventreferences.add(event_reference);
 				}
 			}catch(Exception e){
 				System.out.println("json decode exception " + e);
@@ -1587,10 +1734,11 @@ public class Login extends Activity {
 		        TextView title;
 		        TextView hostname;
 		        ImageButton accept;
+		        ImageButton reject;
 		    }
 
 		    public View getView(int position, View convertView,
-		            ViewGroup parent) {
+		            final ViewGroup parent) {
 		        final LayoutInflater inflater = (LayoutInflater) getApplicationContext()
 		                .getSystemService(
 		                        Context.LAYOUT_INFLATER_SERVICE);
@@ -1607,16 +1755,35 @@ public class Login extends Activity {
 		            holder.hostname = (TextView) convertView.findViewById(R.id.host_name);
 		            //View v = inflater.inflate( R.layout.invitelist, parent, false);
 		            holder.accept = (ImageButton) convertView.findViewById(R.id.buttonaccept);
-		            ImageButton reject = (ImageButton) convertView.findViewById(R.id.buttonreject);
+		            holder.reject = (ImageButton) convertView.findViewById(R.id.buttonreject);
 		            holder.accept.setTag(position);
+		            holder.reject.setTag(position);
 		            holder.accept.setOnClickListener(new OnClickListener() {
 						
 						@Override
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
-							System.out.println("cli");
+							System.out.println("accepted " + listeventreferences.get(Integer.parseInt(v.getTag().toString())));
+							parent.getChildAt(Integer.parseInt(v.getTag().toString())).setBackgroundColor(Color.BLUE);
+							// this will store in shared pref
+							on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
+							// On a new thread handle this case
+							
+							
 						}
 					}); 
+		            holder.reject.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							
+							// TODO Auto-generated method stub
+							System.out.println("rejected " + v.getTag().toString());
+							parent.getChildAt(Integer.parseInt(v.getTag().toString())).setBackgroundColor(Color.RED);
+							on_invite_declined(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
+							// On a new thread handle this case
+						}
+					});
 		            convertView.setTag(holder);
 		        } else {
 		            // view already defined, retrieve view holder

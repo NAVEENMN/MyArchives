@@ -126,63 +126,7 @@ public class GcmIntentService extends IntentService {
 	                    switch(type){
 	                    	case 0:// invite_check store in shared and ask user join / reject
 	                    		//**** pull existing invites and append to it
-	                    		
-	                    		SharedPreferences invite_notification = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE);
-	                    		String invite_status = invite_notification.getString("invite_status", "none");
-	                    		if(invite_status != "none"){// some invites exists
-	                    			String json_old_data =invite_notification.getString("invite_notification", "none");
-	                    			
-	                    			JSONObject keys = new JSONObject(json_old_data);
-	                    			Iterator<String> invite_keys = keys.keys();
-	                    			while(invite_keys.hasNext()){
-	                    				System.out.println("keys are " + invite_keys.next().toString());
-	                    			}
-	                    			
-	                    			
-	                    			final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
-		                            editor.putString("invite_status", "yes");
-		                            JSONObject key = new JSONObject();
-		                            JSONObject json = new JSONObject(); 
-		                            json.put("status", "pending"); 
-		                            json.put("eventid", event_refrence); 
-		                            json.put("sender_name", sender_name);
-		                            String data = json.toString();
-		                            key.put(host, data);
-		                            /*
-		                             * jason format
-		                             * 9708098098 : {status : pending, event_id : ref , send_name : }
-		                             */
-	                    			String newdata = json_old_data + "--" + data;
-	                    			 editor.clear();
-	                    			 editor.commit();
-	                    			 editor.putString("invite_info", newdata);
-			                         editor.commit();
-	                    			
-	                    		}else{ // no prior events
-	                    			
-	                    			final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
-		                            editor.putString("invite_status", "yes");
-		                            
-		                            JSONObject json = new JSONObject(); 
-		                            json.put("invite_from", host); 
-		                            json.put("eventid", event_refrence); 
-		                            json.put("sender_name", sender_name);
-		                            String data = json.toString();
-		                            editor.putString("invite_info", data);
-		                         
-		                            editor.commit();
-	                    			
-	                    		}
-	                    		
-	                    		
-	                    		
-	                    		final SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE).edit();
-	                            editor.putString("invite_status", "yes");
-	                            editor.putString("invite_from", host);
-	                            editor.putString("eventid", event_refrence);
-	                            editor.putString("sender_name", sender_name);
-	                            editor.putString("message", "invite from" + sender_name);
-	                            editor.commit();
+	                    		// this invite will be stored in server
 	                            createNotification(null, sender_name + " is inviting you for a event");
 	                      
 	                    		break;
