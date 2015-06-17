@@ -13,12 +13,12 @@ elon = "865432107380812"
 alan = "812345607380812"
 
 payload = dict()
-payload['host'] = elon # elon invite
+payload['host'] = alan # elon invite
 payload['to_id'] = "859842507380812"
 payload['payload_type'] = "invite_check"
 payload['payload_message'] = "dinner?"
-payload['sender_name'] = "elon musk"
-payload['event_reference'] =  elon + "-->event-->0"
+payload['sender_name'] = "alan turing"
+payload['event_reference'] =  alan + "-->event-->0"
 payload['event_name'] = "lunch"
 
 jdata = json.dumps(payload)
