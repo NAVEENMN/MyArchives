@@ -1104,7 +1104,7 @@ public class Login extends Activity {
 	 * 			related to this event will be pulled there and launched.
 	 */
 	
-	public void on_invite_accepted(String event_reference){
+	public void on_invite_accepted(final String event_reference){
 		
 		//************ pull data from local db
 		
@@ -1137,14 +1137,85 @@ public class Login extends Activity {
 		Firebase newev = new Firebase(refg);
 		
 		newev.child(eventreference).child(commondata.facebook_details.facebook).setValue(fb_data);
-		
-		
-		//fb_event_ref.firebaseobj.child(eventrefrence).child(commondata.facebook_details.facebook).setValue(fb_data);
 		System.out.println("storing " + eventreference );
 		//************** store this new event copy to local data base
 		SharedPreferences.Editor editor = getSharedPreferences("myevents", MODE_PRIVATE).edit();
 		 editor.putString("joinedevents", joinedevents +"<<"+eventreference);
+		//editor.clear();
 		 editor.commit();
+		 
+		 
+		 //** once accepted to the invite remove the copy in sever else it will keep showing 
+		 
+		 
+		 final JSONObject invites_to_server = new JSONObject();
+	     String[] id = event_reference.split("-->");
+	     String hostid = id[0];
+	    	
+	    	try {
+	    		
+	    		invites_to_server.put("id", commondata.facebook_details.facebook);
+	    		
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+	    	
+	    	
+	    	Thread thread = new Thread() {
+		
+				@Override
+				public void run() {
+					
+					String invites_response = postData("http://52.8.173.36/metster/handel_invites.php",
+			    			"get_list",invites_to_server.toString(), commondata.facebook_details.email);
+					
+					String new_invites_data = null;
+					if(invites_response != null){
+						String[] lists = invites_response.split("%%");
+						for(int i =0; i<lists.length; i++){
+							if(lists[i].contains(event_reference)){
+								// dont add to this list
+							}else{
+								
+									if(new_invites_data == null){
+										new_invites_data = lists[i];
+									}else{
+										new_invites_data = new_invites_data + "%%"+ lists[i];
+									}
+									
+								
+								
+							}	
+						}
+					}else{
+						//some error calls
+					}
+					
+					try {
+			    		
+			    		invites_to_server.put("id", commondata.facebook_details.facebook);
+			    		invites_to_server.put("data", new_invites_data);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} 
+					
+					
+					
+					System.out.println("updating this data" + new_invites_data);
+					invites_response = postData("http://52.8.173.36/metster/handel_invites.php",
+			    			"update",invites_to_server.toString(), commondata.facebook_details.email);
+				
+					System.out.println("in invites on server " + invites_response);
+				}
+			};
+			
+			thread.start();
+		 
+		 //****************
+		 
+		 
 		
 	}
 		
@@ -2156,6 +2227,90 @@ public class Login extends Activity {
 	}
 	
 	
+	/*
+	 * name : drop_a_event()
+	 * @params : event_id
+	 * return : none
+	 * @desp : this funtion clears the current event stored in the shared pref
+	 * 		   and refesh the event 
+	 */
+	
+	
+	private void drop_a_event(String eventid){
+		
+		if(!eventid.contains(commondata.facebook_details.facebook)){ // this is a hosted event
+			
+
+			Editor eventsstored = getApplicationContext().getSharedPreferences("myevents", MODE_PRIVATE).edit();
+			
+			//************ remove from local db
+			SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
+			String hostedevents = prefs.getString("hostedevents", null);
+			String joinedevents = prefs.getString("joinedevents", null);
+			String []events = null;
+			String[] joinedlist = joinedevents.split("<<");
+		
+			String stemmed = joinedevents.replaceAll( "<<"+ eventid + "<<", "<<").replaceAll("<<"+ eventid, "").replaceAll("null", "");
+			System.out.println("after cleaer" + stemmed);
+			eventsstored.clear();
+			eventsstored.commit();
+			eventsstored.putString("joinedevents", stemmed);
+			eventsstored.commit();
+			
+			//*********** remove from firebase
+			
+			String[] ids = eventid.split("-->");
+			StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+			strBuilder.append(ids[0]);
+			String refg = strBuilder.toString();
+			Firebase newev = new Firebase(refg);
+			
+			newev.child(eventid).child(commondata.facebook_details.facebook).removeValue();
+			
+			
+			//********************************
+			
+			
+			Intent intent = new Intent(Login.this, Login.class);
+			startActivity(intent);
+			finish();
+			
+			
+		}else{ // its a joined event
+			
+		}
+		
+	
+	
+		
+		
+		/*
+		 *  first check which event has to be dropped
+		 *  case hosted event : 
+		 *  		if hosted event has to dropped then all joined memeber has to be notified
+		 *  		on gcm notified clear their shared pref if they had accepted the invite
+		 *  
+		 *  	NOTE: in accept or reject events first check if that event exists
+		 *  
+		 *  
+		 *  case joined event :
+		 *  	clear you shared pref, drop from firebase and notify the host
+		 *  
+		 *   
+		 */
+		
+		
+		/*
+		if (hostedevents != null) {
+		  String hostedeventlist = prefs.getString("hostedevents", "None");//"No name defined" is the default value.
+		  events = hostedeventlist.split("<<");
+		  number_of_hosted_events = events.length+1;
+		}
+		*/
+		
+		
+	}
+	
 
 	/**
 	 * Set up the {@link android.app.ActionBar}.
@@ -2550,8 +2705,11 @@ public class Login extends Activity {
 			return true;
 
 		case R.id.delete_icon:
-			drop_all_event();
+			//drop_all_event();
 			//drop_event();
+			if(commondata.event_information.eventID != null){
+				drop_a_event(commondata.event_information.eventID);
+			}
 			return true;
 		case R.id.settings_icon:
 			
