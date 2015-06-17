@@ -18,7 +18,7 @@ def main():
 	data = eventid.replace("-->", " ").split()
 	root = data[0]
 	url = "https://met-ster-event.firebaseio.com/"
-	url = url + root +"/"+ eventid # path
+	#url = url + root +"/"+ eventid # path
 	payload = dict()
 	lat = 37.4421975
 	lon = -122.1616956
@@ -26,14 +26,15 @@ def main():
 	lon = lon + random.uniform(0.01, 0.09)
 	payload['Latitude']= str(lat)
 	payload['Longitude']= str(lon)
-	payload['eventname']= "dinner"
+	payload['eventname']= "lunch"
 	payload['food']= random.choice(food)
 	chosen_id = random.choice(ids)
-	payload['nodename'] = random.choice(names)
+	payload['nodename'] = "steve woz"
 	payload['nodetype'] = "member"
 	payload['price'] = "3.6"
 	payload['travel'] = "5.0"
-	url = url + "/" + chosen_id
+	url = url + "/" + "812345607380812/" + "812345607380812-->event-->0"
+	url = url + "/" + "812365407380812"
 	fb = Firebase(url)
 	fb.put( payload)
 

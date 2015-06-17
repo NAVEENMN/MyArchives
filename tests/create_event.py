@@ -29,15 +29,15 @@ def build_payload(host):
         payload['Longitude']= str(lon)
         payload['eventname']= random.choice(eventname)
         payload['food']= random.choice(food)
-        payload['nodename'] = random.choice(nodename)
+        payload['nodename'] = "alan turing"
         payload['nodetype'] = "host"
         payload['price'] = random.choice(price)
         payload['travel'] = random.choice(travel)
 	return payload
 
 def new_event(host):
-	eventid = host + "-->event-->0" 
-	path = URL + host + "/" + eventid
+	eventid = host + "-->event-->3" 
+	path = URL + host + "/" + eventid + "/" + host
 	payload = build_payload(host)
 	fb = Firebase(path)
 	fb.put(payload)
@@ -46,16 +46,8 @@ def new_event(host):
 
 
 def add_event():
-	# we will create three events and host will be first three
-	event_ids = list()
-	for x in range(0, 3):
-		event_ids.append(new_event(members[x]))
-	# we have created three events
-	for event in event_ids:
-		print "adding a member to ", event
-		for x in range(0, 2):
-			cmd = "python add_a_user_to_fb.py "+ event.replace("-->","--")
-			os.system(cmd)
+	host_id = "812345607380812"
+	new_event(host_id)
 
 def main():
 	add_event()

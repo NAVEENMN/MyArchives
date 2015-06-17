@@ -5,18 +5,21 @@ import random
 url = 'http://52.8.173.36/metster/send_gcm_message.php'
 names = ["allie","david","jinfeng","mike","chris","kamayaki"]
 event_name = ["dinner", "birthday", "party tonight"]
-param1 = "859842507380812"
+param1 = "812345607380812"
 param2 = "859842507380812"
-event = "859842507380812-->event-->0"
+event =  "812345607380812-->event-->0"
+
+elon = "865432107380812"
+alan = "812345607380812"
 
 payload = dict()
-payload['host'] = param1
-payload['to_id'] = param2
+payload['host'] = elon # elon invite
+payload['to_id'] = "859842507380812"
 payload['payload_type'] = "invite_check"
 payload['payload_message'] = "dinner?"
-payload['sender_name'] = random.choice(names)
-payload['event_reference'] =  event
-payload['event_name'] = random.choice(event_name)
+payload['sender_name'] = "elon musk"
+payload['event_reference'] =  elon + "-->event-->0"
+payload['event_name'] = "lunch"
 
 jdata = json.dumps(payload)
 

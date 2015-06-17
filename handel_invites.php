@@ -15,6 +15,7 @@ $payload = $_POST['param2'];
 
 $json_data = json_decode($payload, true);
 $user_id = $json_data['id'];
+$invite_data = $json_data['data'];
 
 if($operation == "get_list"){
 	$result = mysql_query("SELECT * FROM accounts WHERE USERID = '$user_id'") or die(mysql_error());
@@ -27,7 +28,7 @@ if($operation == "get_list"){
 
 if($operation == "update"){
 
-	mysql_query("UPDATE accounts SET `INVITES`='$payload' WHERE USERID='$user_id'") or die(mysql_error());
+	mysql_query("UPDATE accounts SET `INVITES`='$invite_data' WHERE USERID='$user_id'") or die(mysql_error());
 	echo "updated";
 }
 
