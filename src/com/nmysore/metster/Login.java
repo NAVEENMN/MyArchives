@@ -1056,7 +1056,15 @@ public class Login extends Activity {
 						if(lists[i].contains(event_reference)){
 							// dont add to this list
 						}else{
-							new_invites_data += lists[i];
+							
+								if(new_invites_data == null){
+									new_invites_data = lists[i];
+								}else{
+									new_invites_data = new_invites_data + "%%"+ lists[i];
+								}
+								
+							
+							
 						}	
 					}
 				}else{
