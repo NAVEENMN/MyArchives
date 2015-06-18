@@ -2,6 +2,8 @@ package com.nmysore.metster;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -638,10 +640,149 @@ public class Login extends Activity {
 	
 	private void display_events(JSONObject host_data){
 		System.out.println("display_events");
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Your Events");
 		
+		ListView inviteslist = new ListView(this);
+		final ArrayList<String> listhostnames = new ArrayList<String>();
+		final ArrayList<String> listmembers = new ArrayList<String>();
+		final ArrayList<String> listeventnames = new ArrayList<String>();
+		final ArrayList<Bitmap> listhostimages = new ArrayList<Bitmap>();
+		final ArrayList<String> listhostref = new ArrayList<String>();
+		listhostnames.clear();
+		listeventnames.clear();
+		listhostimages.clear();
+		listmembers.clear();
+		listhostref.clear();
 		// all events come here now we need to parse and display.
 		
 		System.out.println("host_data" + host_data);
+		
+		
+		Iterator<String> events = host_data.keys();
+		while(events.hasNext()){
+			String eventid = events.next();
+			try{
+			JSONObject event_data = (JSONObject) host_data.get(eventid);
+			String hostname = event_data.getString("hostname");
+			String eventname = event_data.getString("eventname");
+			String members = event_data.getString("number_of_children");
+			String host_ref = event_data.getString("host_id");
+			System.out.println("hostname" + hostname);
+			
+			//***
+			/*
+			URL img_value = new URL("https://graph.facebook.com/" + host_ref
+					+ "/picture?type=large");
+			final Bitmap himage = BitmapFactory.decodeStream(img_value
+					.openConnection().getInputStream());
+			listhostimages.add(himage);
+			*/
+			//****
+			
+			listhostnames.add(hostname +" (host)");
+			listmembers.add(members);
+			listeventnames.add(eventname);
+			listhostref.add(host_ref);
+			
+			}catch(Exception e){
+				System.out.println("exception " + e);
+			}
+		}
+		
+		
+		// display section
+		
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View layout = inflater.inflate(R.layout.myevents,
+				(ViewGroup) findViewById(R.id.myeventssection));
+		
+		ListView modeList = new ListView(this);
+		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
+				R.layout.myevents,
+				listhostnames){
+		    ViewHolder holder;
+
+		    class ViewHolder {
+		        ImageView himage;
+		        TextView fullname;
+		        TextView eventname;
+		        ImageButton accept;
+		    }
+
+		    public View getView(int position, View convertView,
+		            final ViewGroup parent) {
+		        final LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+		                .getSystemService(
+		                        Context.LAYOUT_INFLATER_SERVICE);
+
+		        if (convertView == null) {
+		            convertView = inflater.inflate(
+		                    R.layout.myevents, null);
+
+		            holder = new ViewHolder();
+		           // holder.icon = (ImageView) convertView
+		            //        .findViewById(R.id.icon);
+		            holder.fullname = (TextView) convertView
+		                    .findViewById(R.id.fullname);
+		            holder.eventname = (TextView) convertView.findViewById(R.id.eventname);
+		            //View v = inflater.inflate( R.layout.invitelist, parent, false);
+		            holder.accept = (ImageButton) convertView.findViewById(R.id.myevent_friendinvite);
+		            holder.himage = (ImageView)  convertView.findViewById(R.id.myeventhostimage);
+		            holder.accept.setTag(position);
+		           
+		            holder.accept.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							System.out.println("accepted " + listeventnames.get(Integer.parseInt(v.getTag().toString())));
+							parent.getChildAt(Integer.parseInt(v.getTag().toString())).setBackgroundColor(Color.BLUE);
+							// this will store in shared pref
+							//on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
+							// On a new thread handle this case
+							
+							
+						}
+					}); 
+		            
+		            convertView.setTag(holder);
+		        } else {
+		            // view already defined, retrieve view holder
+		            holder = (ViewHolder) convertView.getTag();
+		        }       
+		        System.out.println("setting" + listhostnames.get(position));
+		        holder.fullname.setText(listhostnames.get(position));
+		        holder.eventname.setText(listeventnames.get(position) + " (" +listmembers.get(position)+")");
+		        //holder.himage.setImageBitmap(listhostimages.get(position));
+		        new ImageDownloaderTask(holder.himage).execute(listhostref.get(position));
+		        // load from yelp and set async
+		        //Drawable drawable = getResources().getDrawable(R.drawable.eventbutton); //this is an image from the drawables folde
+		        return convertView;
+		    }
+		};
+		
+		
+		
+		modeList.setAdapter(modeAdapter);
+		
+		builder.setView(modeList);
+		builder.setPositiveButton("Done",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,
+							int whichButton) {
+						dialog.dismiss();
+					}
+				});
+		final Dialog dialog = builder.create();
+		dialog.show();
+		
+		
+		
+		//*****************
+		
+		
+		
 	}
 	
 	/*
@@ -2701,6 +2842,50 @@ public class Login extends Activity {
 				}
 			}
 		});
+	}
+	
+	
+	
+	private class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+	    private final WeakReference<ImageView> imageViewReference;
+
+	    public ImageDownloaderTask(ImageView imageView) {
+	        imageViewReference = new WeakReference<ImageView>(imageView);
+	    }
+
+	    @Override
+	    protected Bitmap doInBackground(String... params) {
+	        Bitmap himage = null;
+	    	try{
+	        URL img_value = new URL("https://graph.facebook.com/" + params[0]
+					+ "/picture?type=large");
+			himage = BitmapFactory.decodeStream(img_value
+					.openConnection().getInputStream());
+	    	}catch(Exception e){
+	    		
+	    	}
+			return himage;
+	        
+	    }
+
+	    @Override
+	    protected void onPostExecute(Bitmap bitmap) {
+	        if (isCancelled()) {
+	            bitmap = null;
+	        }
+
+	        if (imageViewReference != null) {
+	            ImageView imageView = imageViewReference.get();
+	            if (imageView != null) {
+	                if (bitmap != null) {
+	                    imageView.setImageBitmap(bitmap);
+	                } else {
+	                    Drawable placeholder = imageView.getContext().getResources().getDrawable(R.drawable.chooseimage);
+	                    imageView.setImageDrawable(placeholder);
+	                }
+	            }
+	        }
+	    }
 	}
 	
 	

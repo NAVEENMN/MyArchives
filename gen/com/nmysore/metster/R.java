@@ -1977,12 +1977,12 @@ containing a value of this type.
         public static final int meet_up=0x7f050077;
         public static final int middle=0x7f05002f;
         public static final int monochrome=0x7f05001e;
-        public static final int myevenssection=0x7f0500c6;
         public static final int myevent_event_details=0x7f0500c9;
         public static final int myevent_friendinvite=0x7f0500cd;
         public static final int myevent_friendssend=0x7f0500cc;
         public static final int myeventhostimage=0x7f0500c8;
         public static final int myeventsimageection=0x7f0500c7;
+        public static final int myeventssection=0x7f0500c6;
         public static final int nameandratings=0x7f0500b7;
         public static final int never=0x7f050027;
         public static final int new_event_root=0x7f050098;

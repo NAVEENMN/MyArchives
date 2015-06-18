@@ -661,12 +661,12 @@ int id match_parent 0x7f050017
 int id meet_up 0x7f050077
 int id middle 0x7f05002f
 int id monochrome 0x7f05001e
-int id myevenssection 0x7f0500c6
 int id myevent_event_details 0x7f0500c9
 int id myevent_friendinvite 0x7f0500cd
 int id myevent_friendssend 0x7f0500cc
 int id myeventhostimage 0x7f0500c8
 int id myeventsimageection 0x7f0500c7
+int id myeventssection 0x7f0500c6
 int id nameandratings 0x7f0500b7
 int id never 0x7f050027
 int id new_event_root 0x7f050098
