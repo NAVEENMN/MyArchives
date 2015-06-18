@@ -629,6 +629,128 @@ public class Login extends Activity {
 	
 	
 	/*
+	 * name : display_events
+	 * @params : json data
+	 * @return : none
+	 * @desp : this function displays the event data after pulling from firebase 
+	 */
+	
+	
+	private void display_events(JSONObject host_data){
+		System.out.println("display_events");
+		
+		// all events come here now we need to parse and display.
+		
+		System.out.println("host_data" + host_data);
+	}
+	
+	/*
+	 * name : pull_host_info
+	 * @params : eventid
+	 * @return : none
+	 * @desp : this funtion returns the host info for the event.
+	 */
+	
+	private void pull_host_info(String eventslisting){
+		System.out.println("incoming pull_host_info" + eventslisting);
+		final String[] eventsids = eventslisting.split("<<");
+		final String last_event = eventsids[eventsids.length - 1];
+		final JSONObject all_events = new JSONObject();
+		for(int i=0; i < eventsids.length ; i++){
+		if(!eventsids[i].isEmpty()){	
+			System.out.println("hosting " + eventsids[i]);	
+			final String eventid = eventsids[i];
+			String[] data = eventid.split("-->");
+			final String host = data[0];
+			final String eventref = data[1]+"-->"+data[2];//event-->1
+			StringBuilder strBuilder = new StringBuilder(
+					"https://met-ster-event.firebaseio.com/");
+			strBuilder.append(host+"/"+host+"-->"+eventref);
+			strBuilder.append("/" + host);
+			final String baseref = strBuilder.toString();
+			//https://met-ster-event.firebaseio.com/80897978789/80897978789-->event-->1 /80897978789
+			final Firebase event_fb_ref = new Firebase(baseref);
+			System.out.println("pulling data for " + eventref + "from " + baseref);
+			final JSONObject host_data = new JSONObject();
+			// This is called only once
+			// gets the host data
+				event_fb_ref.addValueEventListener(new ValueEventListener() {
+					
+					@Override
+					public void onDataChange(final DataSnapshot snapshot) {
+						 
+						Firebase parent = event_fb_ref.getParent();
+						// gets the number of member for this event
+						parent.addValueEventListener(new ValueEventListener() {
+							
+							@Override
+							public void onDataChange(DataSnapshot parentref) {
+								// TODO Auto-generated method stub
+								long number_of_children = 0;
+								try {
+									number_of_children = parentref.getChildrenCount();
+									if(number_of_children != 0){
+										host_data.put("number_of_children", number_of_children);
+										host_data.put("host_id", host);
+										Iterable<DataSnapshot> host_attr = snapshot.getChildren();
+										
+										Iterator<DataSnapshot> params = host_attr.iterator();
+										while(params.hasNext()){
+										DataSnapshot val = params.next();
+										if(val.getName().toString() == "nodename") host_data.put("hostname", val.getValue());
+										if(val.getName().toString() == "eventname") host_data.put("eventname", val.getValue());
+										}
+									}
+										
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} 
+								
+								if(eventid == last_event){
+									
+									try{
+										all_events.put(eventid, host_data);
+										display_events(all_events);
+										}catch(Exception e){
+											System.out.println("exception " + e);
+										}
+								
+								}else{
+									try{
+									all_events.put(eventid, host_data);
+									}catch(Exception e){
+										System.out.println("exception " + e);
+									}
+								}
+								
+								
+							}
+							
+							@Override
+							public void onCancelled(FirebaseError arg0) {
+								// TODO Auto-generated method stub
+								
+							}
+						});
+						
+					  
+						
+				    }
+					
+					
+					@Override
+					public void onCancelled(FirebaseError arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+			}	
+		}
+	}
+	
+	
+	/*
 	 * name : pull_data_from_firevbase
 	 * @params : user_root (facebookid)
 	 * @return :
@@ -1348,7 +1470,7 @@ public class Login extends Activity {
 		if (commondata.event_information.eventID == null){
 			toast_info("Please join or create an event to add friends.");
 		} else {
-			list_friends();
+			list_friend();
 		}
 	}
 	
@@ -1668,7 +1790,8 @@ public class Login extends Activity {
 	 */
 	
 	public void view_events(View v){
-		System.out.println("view");
+		System.out.println("view events");	
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		ListView modeList = new ListView(this);
 		builder.setTitle("Your events");
@@ -1681,6 +1804,29 @@ public class Login extends Activity {
 		String hostedevents = prefs.getString("hostedevents", "None");
 		String invitedevents = prefs.getString("joinedevents", "None");
 		System.out.println("invited listing" + invitedevents);
+		System.out.println("hosted listing" + hostedevents);
+		
+		String newlisting = null;
+		
+		if(invitedevents != "None"){
+			if(invitedevents != null){
+				newlisting = invitedevents ;
+			}
+		}
+		
+		if(hostedevents != "None"){
+			if(hostedevents != null){
+				newlisting = newlisting + "<<" + hostedevents;
+			}
+		}
+		
+		pull_host_info(newlisting);
+		
+		/*
+		 * we just have eventids in shared pref. we have to get the event details from the firebase
+		 * eventid has hostid... go to the event pull host info
+		 */
+		
 		String []events = null;
 		String []invitedeventsarray = null;
 		if (hostedevents != null) {
@@ -1704,6 +1850,7 @@ public class Login extends Activity {
 		if(events != null){
 		//--------------------
 			for(int i=1; i<events.length; i++){
+				
 				eventtitle.add(events[i]);
 			}
 		}else{
@@ -1715,6 +1862,7 @@ public class Login extends Activity {
 		if(invitedevents != null){
 			//--------------------
 				for(int i=1; i<invitedeventsarray.length; i++){
+					
 					eventtitle.add(invitedeventsarray[i]);
 				}
 			}else{
@@ -1941,6 +2089,159 @@ public class Login extends Activity {
 	
 	
 	
+	/*
+	 * name : list_friends
+	 * @params : none
+	 * @return : void
+	 * @desp : This function list the invites in a dialog.
+	 */
+	
+	public void list_friend(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Add your friends");
+		
+		ListView inviteslist = new ListView(this);
+		final ArrayList<String> listfirstnames = new ArrayList<String>();
+		final ArrayList<String> listids = new ArrayList<String>();
+		final ArrayList<Bitmap> listimages = new ArrayList<Bitmap>();
+		listfirstnames.clear();
+		listids.clear();
+		listimages.clear();
+		
+		// build data
+		
+		JSONArray frnd_list = commondata.facebook_details.friends;
+		for (int i = 0; i < frnd_list.length(); i++) {
+
+			JSONObject json_data = null;
+			try {
+				json_data = frnd_list.getJSONObject(i);
+				listfirstnames.add(json_data.get("name").toString());
+				listids.add(json_data.get("id").toString());
+				listimages.add((Bitmap)json_data.get("image"));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		// listeventsnames insert
+		
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View layout = inflater.inflate(R.layout.friends_list,
+				(ViewGroup) findViewById(R.id.friendssection));
+		
+		ListView modeList = new ListView(this);
+		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
+				R.layout.friends_list,
+				listfirstnames){
+		    ViewHolder holder;
+
+		    class ViewHolder {
+		        //ImageView icon;
+		        TextView firstname;
+		        TextView lastname;
+		        ImageView image;
+		        ImageButton invite;
+		    }
+
+		    public View getView(int position, View convertView,
+		            final ViewGroup parent) {
+		        final LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+		                .getSystemService(
+		                        Context.LAYOUT_INFLATER_SERVICE);
+
+		        if (convertView == null) {
+		            convertView = inflater.inflate(
+		                    R.layout.friends_list, null);
+
+		            holder = new ViewHolder();
+		           // holder.icon = (ImageView) convertView
+		            //        .findViewById(R.id.icon);
+		            holder.firstname = (TextView) convertView
+		                    .findViewById(R.id.firstname);
+		            holder.lastname = (TextView) convertView.findViewById(R.id.lastname);
+		            //View v = inflater.inflate( R.layout.invitelist, parent, false);
+		            holder.image = (ImageView) convertView.findViewById(R.id.friendimage);
+		            holder.invite = (ImageButton) convertView.findViewById(R.id.friendinvite);
+		            
+		            
+		            holder.invite.setTag(position);
+		           
+		            
+		            holder.invite.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							System.out.println("sendinvite to  " + listids.get(Integer.parseInt(v.getTag().toString())));
+							parent.getChildAt(Integer.parseInt(v.getTag().toString())).setBackgroundColor(Color.BLUE);
+							// this will store in shared pref
+							//on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
+							// On a new thread handle this case
+							
+							
+							JSONObject payload = new JSONObject(); 
+							
+							try {
+								payload.put("host", commondata.facebook_details.facebook); 
+								payload.put("to_id", commondata.facebook_details.facebook);// need to fetch and send
+								payload.put("payload_type", "invite_check");
+								payload.put("payload_message", "dinner tonight");
+								payload.put("event_reference", "123456-->event-->0");
+								payload.put("event_name", "lunch and discuss");
+								payload.put("sender_name", "alan turing");
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} 
+							
+							//String server_response = gcm_send_data(commondata.facebook_details.facebook, friendid.get(it).toString(), "dinner tonight?");
+							String server_response = gcm_send_data(commondata.facebook_details.facebook, commondata.facebook_details.facebook, payload.toString());
+
+							
+							
+							
+							
+						}
+					}); 
+		            
+					
+		            convertView.setTag(holder);
+		        } else {
+		            // view already defined, retrieve view holder
+		            holder = (ViewHolder) convertView.getTag();
+		        }       
+		        System.out.println("setting" + listfirstnames.get(position));
+		        String[] name = listfirstnames.get(position).split(" ");
+		        holder.firstname.setText(name[0]);
+		        holder.lastname.setText(name[1]);
+		        holder.image.setImageBitmap(listimages.get(position));
+		       
+		        // load from yelp and set async
+		        //Drawable drawable = getResources().getDrawable(R.drawable.eventbutton); //this is an image from the drawables folde
+		        return convertView;
+		    }
+		};
+		
+		
+		
+		modeList.setAdapter(modeAdapter);
+		
+		builder.setView(modeList);
+		builder.setPositiveButton("Done",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,
+							int whichButton) {
+						dialog.dismiss();
+					}
+				});
+		
+		final Dialog dialog = builder.create();
+		dialog.show();
+	}
+	
+	
+	
 	
 	/*
 	 * name : list_rest
@@ -1950,6 +2251,12 @@ public class Login extends Activity {
 	 */
 	public void list_rest() {
 		// --------
+		
+		LinearLayout ll = (LinearLayout) findViewById(R.id.Profiledata);
+			View v = (View) findViewById(R.id.Dividerone);
+			
+			v.setBackgroundColor(Color.parseColor("#2E64FE"));
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Pick your choices");
 
@@ -2071,9 +2378,6 @@ public class Login extends Activity {
 		    }
 		};
 		modeList.setAdapter(modeAdapter);
-		
-		
-		
 		
 		modeList.setOnItemClickListener(new OnItemClickListener() {
 
@@ -2416,7 +2720,7 @@ public class Login extends Activity {
 			count_limit = params[3];
 			
 			//****************************
-			
+		
 			// Create a new HttpClient and Post Header
 			
 		    HttpClient httpclient = new DefaultHttpClient();
@@ -2463,12 +2767,14 @@ public class Login extends Activity {
 		@Override
         protected void onPostExecute(String result) {
 			async_counter +=1;
+		
         	System.out.println("pushing " + choice);
         	commondata.server_res.server_says.put(choice, result);
         	if(async_counter.toString() == count_limit){
         		System.out.println("good to list");
         		async_counter = 0;
         		String status = extract_data();
+        		
         		list_rest();
         	}
         	
@@ -2607,6 +2913,8 @@ public class Login extends Activity {
         	 String eventres = commondata.event_information.eventID;
         	 eventres = eventres.replaceAll("-->", "--");
         	 
+        	
+        	 
         	//************** this segment handles food choices.
         	 ArrayList<host_event_node> looks = commondata.event_information.given_events_lookup.get(commondata.event_information.eventID);
         	 Iterator<host_event_node> per = looks.iterator();
@@ -2651,6 +2959,7 @@ public class Login extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
+        	 
         	System.out.println("status " + result);
         	
         }
@@ -2658,6 +2967,9 @@ public class Login extends Activity {
         @Override
         protected void onPreExecute() {
         	
+        	
+  			View v = (View) findViewById(R.id.Dividerone);
+  			v.setBackgroundColor(Color.parseColor("#2EFEC8"));
         	toast_info("Exploring...");
         }
 
@@ -2745,6 +3057,7 @@ public class Login extends Activity {
 			//drop_all_event();
 			//drop_event();
 			if(commondata.event_information.eventID != null){
+				
 				drop_a_event(commondata.event_information.eventID);
 			}
 			return true;

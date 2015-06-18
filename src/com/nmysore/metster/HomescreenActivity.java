@@ -348,7 +348,12 @@ public class HomescreenActivity extends Activity {
             for(int i=0;i<jArray.length();i++){
 
                     JSONObject json_data = jArray.getJSONObject(i);
-        
+                    URL img_value = new URL("https://graph.facebook.com/" + json_data.getString("id")
+        					+ "/picture?type=large");
+        			final Bitmap mIcon2 = BitmapFactory.decodeStream(img_value
+        					.openConnection().getInputStream());
+                    json_data.put("image", mIcon2);
+                    System.out.println(json_data);
                     
              }
 			final String mUserId = profile.getString("id");
