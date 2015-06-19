@@ -766,13 +766,26 @@ public class Login extends Activity {
 		        //holder.himage.setImageBitmap(listhostimages.get(position));
 		         
 		        
+		        if(commondata.lazyload.image_ref.containsKey(listhostref.get(position))){
+		       
+		        	holder.himage.setImageBitmap( commondata.lazyload.image_ref.get(listhostref.get(position)));
+		        }else{
 		        new Thread(new Runnable() { 
-		            public void run(){        
-		            	new ImageDownloaderTask(holder.himage).execute(listhostref.get(position));
+		            public void run(){  
+		            	System.out.println("thread issued");
+		            
+		            	try {
+							new ImageDownloaderTask(holder.himage).execute(listhostref.get(position)).get();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 		            }
 		        }).start();
-		        
-					 
+		    }
 				
 		        
 		        // load from yelp and set async
@@ -2745,6 +2758,8 @@ public class Login extends Activity {
 	private class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
 	    private final WeakReference<ImageView> imageViewReference;
 
+	    String facebookid;
+	    
 	    public ImageDownloaderTask(ImageView imageView) {
 	        imageViewReference = new WeakReference<ImageView>(imageView);
 	    }
@@ -2753,6 +2768,7 @@ public class Login extends Activity {
 	    protected Bitmap doInBackground(String... params) {
 	        Bitmap himage = null;
 	        System.out.println("trying to get image for " + params[0]);
+	        facebookid = params[0];
 	    	try{
 	        URL img_value = new URL("https://graph.facebook.com/" + params[0]
 					+ "/picture?type=large");
@@ -2776,6 +2792,7 @@ public class Login extends Activity {
 	            if (imageView != null) {
 	                if (bitmap != null) {
 	                    imageView.setImageBitmap(bitmap);
+	                    commondata.lazyload.image_ref.put(facebookid, bitmap);
 	                } else {
 	                    Drawable placeholder = imageView.getContext().getResources().getDrawable(R.drawable.chooseimage);
 	                    imageView.setImageDrawable(placeholder);

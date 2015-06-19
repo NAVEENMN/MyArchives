@@ -61,6 +61,11 @@ public class commondata {
 		static SharedPreferences sp;
 	}
 	
+	
+	public static class lazyload{
+		static HashMap<String, Bitmap> image_ref = new HashMap<String, Bitmap>();
+	}
+	
 	public static class prefrences{
 		static Double travel;
 		static float price;
