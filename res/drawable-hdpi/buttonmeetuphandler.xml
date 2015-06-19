@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/meetup" android:state_pressed="true"></item>
-    <item android:drawable="@drawable/meetup"></item>
+    <item android:drawable="@drawable/meetup_aclick" android:state_pressed="true"></item>
+    <item android:drawable="@drawable/meetup_bclick"></item>
 </selector>

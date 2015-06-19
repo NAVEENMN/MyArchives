@@ -78,7 +78,7 @@
 		            android:layout_width="60dp"
 					android:layout_height="60dp"
 					android:gravity="center"
-					android:background = "@drawable/accept"
+					android:background = "@drawable/accept_button_handler"
 					android:scaleType="centerCrop"
 		            android:contentDescription="@string/desc"
 		            android:onClick="on_image_click" />

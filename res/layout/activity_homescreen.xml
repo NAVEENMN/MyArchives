@@ -12,6 +12,16 @@
         android:background="#F2F2F2"
         android:baselineAligned="false"
         android:gravity="center" >
+        
+        
+        <!-- View #0 -->
+
+        <ImageView
+            android:id="@+id/imageView0"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/apphomecopy"
+            android:contentDescription="@string/desc" />
 
         <!-- View #1 -->
 

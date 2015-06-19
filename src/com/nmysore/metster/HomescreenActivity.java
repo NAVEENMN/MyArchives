@@ -6,7 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -43,6 +43,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ViewFlipper;
 
 import com.facebook.Request;
@@ -346,14 +347,28 @@ public class HomescreenActivity extends Activity {
 			JSONArray jArray = profilefriends.getJSONArray("data");
 			commondata.facebook_details.friends = profilefriends.getJSONArray("data");
             for(int i=0;i<jArray.length();i++){
-
-                    JSONObject json_data = jArray.getJSONObject(i);
-                    URL img_value = new URL("https://graph.facebook.com/" + json_data.getString("id")
-        					+ "/picture?type=large");
-        			final Bitmap mIcon2 = BitmapFactory.decodeStream(img_value
-        					.openConnection().getInputStream());
-                    json_data.put("image", mIcon2);
-                    System.out.println(json_data);
+ 	
+                    final JSONObject json_data = jArray.getJSONObject(i);
+                    
+                    new Thread(new Runnable() { 
+    		            public void run(){  
+    		            	System.out.println("thread issued");
+    		            	
+    							try {
+									new AllImageDownloaderTask().execute(json_data.getString("id")).get();
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (ExecutionException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+    						
+    		            }
+    		        }).start();
                     
              }
 			final String mUserId = profile.getString("id");
@@ -369,6 +384,7 @@ public class HomescreenActivity extends Activity {
 			commondata.facebook_details.name = mUserName;
 			commondata.facebook_details.email = mUserEmail;
 			commondata.facebook_details.profile_image = mIcon1;
+			commondata.lazyload.image_ref.put(mUserId, mIcon1);
 			System.out.println(Integer
 					.toString(commondata.facebook_details.profile_image
 							.getHeight()));
@@ -409,6 +425,45 @@ public class HomescreenActivity extends Activity {
 
 	}
 
+	
+	
+	private class AllImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+	   
+	    String facebookid;
+
+	    @Override
+	    protected Bitmap doInBackground(String... params) {
+	        Bitmap himage = null;
+	        System.out.println("trying to get image for " + params[0]);
+	        facebookid = params[0];
+	    	try{
+	        URL img_value = new URL("https://graph.facebook.com/" + params[0]
+					+ "/picture?type=large");
+			himage = BitmapFactory.decodeStream(img_value
+					.openConnection().getInputStream());
+	    	}catch(Exception e){
+	    		
+	    	}
+			return himage;
+	        
+	    }
+
+	    @Override
+	    protected void onPostExecute(Bitmap bitmap) {
+	        if (isCancelled()) {
+	            bitmap = null;
+	        }
+      
+	                if (bitmap != null) {
+	                    commondata.lazyload.image_ref.put(facebookid, bitmap);
+	                } 
+	            
+	        
+	        return ;
+	    }
+	}
+	
+	
 	/*
 	 * name : postData
 	 * @params : String url, String parameter, String parameter, String parameter

@@ -685,7 +685,7 @@ public class Login extends Activity {
 			*/
 			//****
 			
-			listhostnames.add(hostname +" (host)");
+			listhostnames.add(hostname);
 			listmembers.add(members);
 			listeventnames.add(eventname);
 			listhostref.add(host_ref);
@@ -918,7 +918,7 @@ public class Login extends Activity {
 					}
 				});
 			}else{
-				toast_info("no events, please join or create a event");
+				//toast_info("no events, please join or create a event");
 				
 			}
 		}
@@ -1062,6 +1062,8 @@ public class Login extends Activity {
 			Iterator<host_event_node> node = nodes.iterator();
 			commondata.places_found.latitudes.clear();
 			commondata.places_found.longitudes.clear();
+			commondata.places_found.names.clear();
+			commondata.places_found.tokens.clear();
 			while(node.hasNext()){
 				host_event_node data = node.next();
 				System.out.println("location" + data.Latitude +", " + data.Longitude );
@@ -1178,7 +1180,22 @@ public class Login extends Activity {
 			try {
 				for (int i = 0; i < commondata.places_found.latitudes.size(); i++) {
 					
-					System.out.println("setting up : " + commondata.places_found.latitudes.get(i) + ", " + commondata.places_found.longitudes.get(i) );
+					System.out.println("token " + commondata.places_found.tokens.get(i));
+					
+						if ( commondata.places_found.tokens.get(i).contains("host")){
+							mMap.addMarker(new MarkerOptions()
+							.position(
+									new LatLng(
+											commondata.places_found.latitudes
+													.get(i),
+											commondata.places_found.longitudes
+													.get(i)))
+							.icon(BitmapDescriptorFactory
+									.fromResource(R.drawable.host))
+							.title(commondata.places_found.names.get(i))
+							);	
+						}else{
+					
 								mMap.addMarker(new MarkerOptions()
 										.position(
 												new LatLng(
@@ -1190,6 +1207,7 @@ public class Login extends Activity {
 												.fromResource(R.drawable.pin))
 										.title(commondata.places_found.names.get(i))
 										);	
+						}
 				}
 
 				mMap.setMyLocationEnabled(true);
@@ -2168,7 +2186,9 @@ public class Login extends Activity {
 				json_data = frnd_list.getJSONObject(i);
 				listfirstnames.add(json_data.get("name").toString());
 				listids.add(json_data.get("id").toString());
-				listimages.add((Bitmap)json_data.get("image"));
+				
+				Bitmap image = commondata.lazyload.image_ref.get(json_data.get("id").toString());
+				listimages.add(image);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
