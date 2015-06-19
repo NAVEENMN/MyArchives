@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -384,6 +385,7 @@ public class Login extends Activity {
 					commondata.user_information.longitude = location
 							.getLongitude();
 					if (commondata.event_information.eventID != null) {
+						/*
 						create_firebase_refrence();
 						fb_event_ref.firebaseobj
 								.child(commondata.facebook_details.facebook
@@ -397,6 +399,7 @@ public class Login extends Activity {
 										+ commondata.facebook_details.name)
 								.child("Longitude")
 								.setValue(commondata.user_information.longitude);
+								*/
 					}
 				} else {
 					System.out.println("location is null");
@@ -649,6 +652,7 @@ public class Login extends Activity {
 		final ArrayList<String> listeventnames = new ArrayList<String>();
 		final ArrayList<Bitmap> listhostimages = new ArrayList<Bitmap>();
 		final ArrayList<String> listhostref = new ArrayList<String>();
+		final ArrayList<String> listeventids = new ArrayList<String>();
 		listhostnames.clear();
 		listeventnames.clear();
 		listhostimages.clear();
@@ -662,6 +666,7 @@ public class Login extends Activity {
 		Iterator<String> events = host_data.keys();
 		while(events.hasNext()){
 			String eventid = events.next();
+			listeventids.add(eventid);
 			try{
 			JSONObject event_data = (JSONObject) host_data.get(eventid);
 			String hostname = event_data.getString("hostname");
@@ -710,7 +715,7 @@ public class Login extends Activity {
 		        ImageButton accept;
 		    }
 
-		    public View getView(int position, View convertView,
+		    public View getView(final int position, View convertView,
 		            final ViewGroup parent) {
 		        final LayoutInflater inflater = (LayoutInflater) getApplicationContext()
 		                .getSystemService(
@@ -736,13 +741,17 @@ public class Login extends Activity {
 						@Override
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
-							System.out.println("accepted " + listeventnames.get(Integer.parseInt(v.getTag().toString())));
+							System.out.println("launching... " + listeventids.get(Integer.parseInt(v.getTag().toString())));
 							parent.getChildAt(Integer.parseInt(v.getTag().toString())).setBackgroundColor(Color.BLUE);
+					
+						
+							String eventid = listeventids.get(Integer.parseInt(v.getTag().toString()));
+							System.out.println("event to be launched" + eventid);
+							pull_data_from_firebase(eventid);
+							
 							// this will store in shared pref
 							//on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
-							// On a new thread handle this case
-							
-							
+							// On a new thread handle this case	
 						}
 					}); 
 		            
@@ -755,7 +764,17 @@ public class Login extends Activity {
 		        holder.fullname.setText(listhostnames.get(position));
 		        holder.eventname.setText(listeventnames.get(position) + " (" +listmembers.get(position)+")");
 		        //holder.himage.setImageBitmap(listhostimages.get(position));
-		        new ImageDownloaderTask(holder.himage).execute(listhostref.get(position));
+		         
+		        
+		        new Thread(new Runnable() { 
+		            public void run(){        
+		            	new ImageDownloaderTask(holder.himage).execute(listhostref.get(position));
+		            }
+		        }).start();
+		        
+					 
+				
+		        
 		        // load from yelp and set async
 		        //Drawable drawable = getResources().getDrawable(R.drawable.eventbutton); //this is an image from the drawables folde
 		        return convertView;
@@ -771,14 +790,13 @@ public class Login extends Activity {
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog,
 							int whichButton) {
+						
 						dialog.dismiss();
 					}
 				});
 		final Dialog dialog = builder.create();
-		dialog.show();
-		
-		
-		
+		dialog.setCancelable(false);
+		dialog.show();	
 		//*****************
 		
 		
@@ -798,7 +816,7 @@ public class Login extends Activity {
 		final String last_event = eventsids[eventsids.length - 1];
 		final JSONObject all_events = new JSONObject();
 		for(int i=0; i < eventsids.length ; i++){
-		if(!eventsids[i].isEmpty()){	
+		if(!eventsids[i].isEmpty() && eventsids[i].contains("event")){	
 			System.out.println("hosting " + eventsids[i]);	
 			final String eventid = eventsids[i];
 			String[] data = eventid.split("-->");
@@ -886,7 +904,10 @@ public class Login extends Activity {
 						
 					}
 				});
-			}	
+			}else{
+				toast_info("no events, please join or create a event");
+				
+			}
 		}
 	}
 	
@@ -1564,7 +1585,7 @@ public class Login extends Activity {
 			  number_of_hosted_events = events.length+1;
 			}
 			final String eventrefrence = commondata.facebook_details.facebook+"-->"+"event"+"-->"+ number_of_hosted_events;
-			fb_event_ref.firebaseobj.child(eventrefrence).child(commondata.facebook_details.facebook+"-->"+"host").setValue(fb_data);
+			fb_event_ref.firebaseobj.child(eventrefrence).child(commondata.facebook_details.facebook).setValue(fb_data);
 			//************** get data from firebase and update local
 			pull_data_from_firebase(eventrefrence);
 			//************** store this new event copy to local data base
@@ -1591,11 +1612,9 @@ public class Login extends Activity {
 	 */
 	
 	public void Create_A_New_Event(View V) {
-		if (commondata.event_information.eventID == null) {// no event exist
+
 			create_event_notification();
-		} else{
-			toast_info("You are already in an event.");
-		}
+		
 	}
 	
 	
@@ -1932,10 +1951,6 @@ public class Login extends Activity {
 	
 	public void view_events(View v){
 		System.out.println("view events");	
-		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		ListView modeList = new ListView(this);
-		builder.setTitle("Your events");
 		//******* get all the events and put a array list
 		final ArrayList<String> eventtitle = new ArrayList<String>();
 		eventtitle.clear();
@@ -1960,131 +1975,12 @@ public class Login extends Activity {
 				newlisting = newlisting + "<<" + hostedevents;
 			}
 		}
-		
-		pull_host_info(newlisting);
-		
-		/*
-		 * we just have eventids in shared pref. we have to get the event details from the firebase
-		 * eventid has hostid... go to the event pull host info
-		 */
-		
-		String []events = null;
-		String []invitedeventsarray = null;
-		if (hostedevents != null) {
-		  String hostedeventlist = prefs.getString("hostedevents", "None");//"No name defined" is the default value.
-		  if(hostedeventlist == "none"){
-			  events = null;
-		  }else{
-			  events = hostedeventlist.split("<<");
-		  }
-		}
-		if(invitedevents != null){
-			String invitedeventslist = prefs.getString("joinedevents", "None");//"No name defined" is the default value.
-			  if(invitedeventslist == "none"){
-				  invitedeventsarray = null;
-			  }else{
-				  invitedeventsarray = invitedeventslist.split("<<");
-			  }
-		}
-		//**** implement joined
-		boolean flag = true;
-		if(events != null){
-		//--------------------
-			for(int i=1; i<events.length; i++){
-				
-				eventtitle.add(events[i]);
-			}
+		if(newlisting == null){
+			toast_info("No events to list, please join or create one");
 		}else{
-			//show no events
-			flag = false;
-			toast_info("no events");
+			newlisting.replaceAll("null<<", "").replaceAll("<<null<<", "<<");
+			pull_host_info(newlisting);
 		}
-		
-		if(invitedevents != null){
-			//--------------------
-				for(int i=1; i<invitedeventsarray.length; i++){
-					
-					eventtitle.add(invitedeventsarray[i]);
-				}
-			}else{
-				//show no events
-				flag = false;
-				toast_info("no events");
-			}
-		if(flag){
-		//******* display on the list
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View layout = inflater.inflate(R.layout.listevents,
-				(ViewGroup) findViewById(R.id.eventlistdetails));
-	
-		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
-				R.layout.listdisplay,
-				eventtitle){
-		    ViewHolder holder;
-		    //Drawable icon;
-
-		    class ViewHolder {
-		        //ImageView icon;
-		        TextView title;
-		        
-		    }
-
-		    public View getView(int position, View convertView,
-		            ViewGroup parent) {
-		        final LayoutInflater inflater = (LayoutInflater) getApplicationContext()
-		                .getSystemService(
-		                        Context.LAYOUT_INFLATER_SERVICE);
-
-		        if (convertView == null) {
-		            convertView = inflater.inflate(
-		                    R.layout.listevents, null);
-
-		            holder = new ViewHolder();
-		           // holder.icon = (ImageView) convertView
-		            //        .findViewById(R.id.icon);
-		            holder.title = (TextView) convertView
-		                    .findViewById(R.id.title);
-		            convertView.setTag(holder);
-		        } else {
-		            // view already defined, retrieve view holder
-		            holder = (ViewHolder) convertView.getTag();
-		        }       
-
-		        //Drawable drawable = getResources().getDrawable(R.drawable.flag); //this is an image from the drawables folder
-
-		        holder.title.setText(eventtitle.get(position));
-		        
-		        return convertView;
-		    }
-		};
-		modeList.setAdapter(modeAdapter);
-		modeList.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> items, View arg1, int order,
-					long arg3) {
-				
-				System.out.println("selected " + items.getItemIdAtPosition(order)); // order is also traced to rank
-				// view that event
-			
-				String eventid = eventtitle.get(order);
-				pull_data_from_firebase(eventid);
-			
-			}
-
-		});
-		builder.setView(modeList);
-		builder.setPositiveButton("Done",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
-						dialog.dismiss();
-					}
-				});
-		final Dialog dialog = builder.create();
-		dialog.show();	
-		}
-		
 	}
 	
 	
@@ -2719,7 +2615,7 @@ public class Login extends Activity {
 	
 	private void drop_a_event(String eventid){
 		
-		if(!eventid.contains(commondata.facebook_details.facebook)){ // this is a hosted event
+		if(!eventid.contains(commondata.facebook_details.facebook)){ // this is a joined event
 			
 
 			Editor eventsstored = getApplicationContext().getSharedPreferences("myevents", MODE_PRIVATE).edit();
@@ -2758,7 +2654,7 @@ public class Login extends Activity {
 			finish();
 			
 			
-		}else{ // its a joined event
+		}else{ // its a hosted event
 			
 		}
 		
@@ -2856,6 +2752,7 @@ public class Login extends Activity {
 	    @Override
 	    protected Bitmap doInBackground(String... params) {
 	        Bitmap himage = null;
+	        System.out.println("trying to get image for " + params[0]);
 	    	try{
 	        URL img_value = new URL("https://graph.facebook.com/" + params[0]
 					+ "/picture?type=large");
@@ -2885,6 +2782,7 @@ public class Login extends Activity {
 	                }
 	            }
 	        }
+	        return ;
 	    }
 	}
 	
