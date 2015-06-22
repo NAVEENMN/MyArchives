@@ -11,6 +11,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
@@ -86,7 +87,7 @@ public class GcmIntentService extends IntentService {
 	                	String  payload_type = gcmdata.getString("payload_type");
 	                	String  payload_message = gcmdata.getString("payload_message");
 	                	String sender_name = gcmdata.getString("sender_name");
-	                	String event_refrence = gcmdata.getString("event_reference");
+	                	String event_reference = gcmdata.getString("event_reference");
 	                	//String[] data = payload_message.split("--");
 	                	
 	                	/*
@@ -139,6 +140,62 @@ public class GcmIntentService extends IntentService {
 	                    		createNotification(null, sender_name + " declined your invite");
 	                    		break;
 	                    	case 3:// host_cancelcomes on gcm
+	                    		
+	                    		// clear the cache and drop from firebase
+	                    		
+	                    		Editor eventsstored = getApplicationContext().getSharedPreferences("myevents", MODE_PRIVATE).edit();
+	                			String eventid = event_reference;
+	                			//************ remove from local db
+	                			SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
+	                			String hostedevents = prefs.getString("hostedevents", null);
+	                			String joinedevents = prefs.getString("joinedevents", null);
+	                			String []events = null;
+	                			if(joinedevents != null){
+	                				String[] joinedlist = joinedevents.split("<<");
+	                				String stemmed = joinedevents.replaceAll( "<<"+ eventid + "<<", "<<").replaceAll("<<"+ eventid, "").replaceAll("null", "");
+		                			System.out.println("after cleaer" + stemmed);
+		                			eventsstored.clear();
+		                			eventsstored.commit();
+		                			eventsstored.putString("joinedevents", stemmed);
+		                			eventsstored.commit();
+		                			//*********** remove from firebase
+		                			
+		                			String[] ids = eventid.split("-->");
+		                			StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+		                			strBuilder.append(ids[0]);
+		                			String refg = strBuilder.toString();
+		                			Firebase newev = new Firebase(refg);
+		                			
+		                			newev.child(eventid).child(commondata.facebook_details.facebook).removeValue();
+		                    		
+		                    		createNotification(null, sender_name + "The host dropped this event");
+	                			}else{
+	                				System.out.println("no joined events");
+	                			}
+	                			
+	                			if(hostedevents != null){
+	                				String[] hostedlist = hostedevents.split("<<");
+	                				String stemmed = hostedevents.replaceAll( "<<"+ eventid + "<<", "<<").replaceAll("<<"+ eventid, "").replaceAll("null", "");
+		                			System.out.println("after cleaer" + stemmed);
+		                			eventsstored.clear();
+		                			eventsstored.commit();
+		                			eventsstored.putString("joinedevents", stemmed);
+		                			eventsstored.commit();
+		                			//*********** remove from firebase
+		                			
+		                			String[] ids = eventid.split("-->");
+		                			StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+		                			strBuilder.append(ids[0]);
+		                			String refg = strBuilder.toString();
+		                			Firebase newev = new Firebase(refg);
+		                			
+		                			newev.child(eventid).child(commondata.facebook_details.facebook).removeValue();
+		                    		
+		                    		createNotification(null, sender_name + "The host dropped this event");
+	                			}else{
+	                				
+	                			}
+	               
 	                    		break;
 	                    	case 4:// invite_drop comes on gcm
 	                    		break;

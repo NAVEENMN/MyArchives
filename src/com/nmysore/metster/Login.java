@@ -577,6 +577,52 @@ public class Login extends Activity {
 			public void onChildRemoved(DataSnapshot arg0) {
 				// TODO Auto-generated method stub
 				System.out.println("child removed");
+				//--- check who dropped of its host then drop this user also by default and clear his/her cache
+				
+				System.out.println("this user dropped " + arg0.getName());
+				
+				if(commondata.facebook_details.facebook.contains(arg0.getName())){ // tells host dropped
+					System.out.println("you are the host and you dropped it");
+				}
+				
+				if(commondata.event_information.eventID.contains(arg0.getName())){
+					// this is a event you have joined and the host just dropped it
+					// clear cache and firebase
+					Editor eventsstored = getApplicationContext().getSharedPreferences("myevents", MODE_PRIVATE).edit();
+					String eventid = commondata.event_information.eventID;
+					//************ remove from local db
+					SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
+					String hostedevents = prefs.getString("hostedevents", null);
+					String joinedevents = prefs.getString("joinedevents", null);
+					String []events = null;
+					String[] joinedlist = joinedevents.split("<<");
+				
+					String stemmed = joinedevents.replaceAll( "<<"+ eventid + "<<", "<<").replaceAll("<<"+ eventid, "").replaceAll("null", "");
+					System.out.println("after cleaer" + stemmed);
+					
+					eventsstored.clear();
+					eventsstored.commit();
+					eventsstored.putString("joinedevents", stemmed);
+					eventsstored.commit();
+					
+					//*********** remove from firebase
+					
+					String[] ids = eventid.split("-->");
+					StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+					strBuilder.append(ids[0]);
+					String refg = strBuilder.toString();
+					Firebase newev = new Firebase(refg);
+					
+					newev.child(eventid).child(commondata.facebook_details.facebook).removeValue();
+					
+					//********************************
+
+					Intent intent = new Intent(Login.this, Login.class);
+					startActivity(intent);
+					finish();
+					
+					
+				}
 			}
 			
 			@Override
@@ -2678,16 +2724,81 @@ public class Login extends Activity {
 			newev.child(eventid).child(commondata.facebook_details.facebook).removeValue();
 			
 			//********************************
-			
-			
-			
-			
+
 			Intent intent = new Intent(Login.this, Login.class);
 			startActivity(intent);
 			finish();
 			
 			
 		}else{ // its a hosted event
+			Editor eventsstored = getApplicationContext().getSharedPreferences("myevents", MODE_PRIVATE).edit();
+			//************ remove from local db
+			SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
+			String hostedevents = prefs.getString("hostedevents", null);
+			String joinedevents = prefs.getString("joinedevents", null);
+			String []events = null;
+			String[] hostedlist = hostedevents.split("<<");
+		
+			String stemmed = hostedevents.replaceAll( "<<"+ eventid + "<<", "<<").replaceAll("<<"+ eventid, "").replaceAll("null", "");
+			System.out.println("after cleaer" + stemmed);
+			//eventsstored.clear();
+			//eventsstored.commit();
+			//eventsstored.putString("hostedevents", stemmed);
+			//eventsstored.commit();
+			
+			//*********** remove from firebase
+			
+			//******************
+			
+			String[] ids = eventid.split("-->");
+			StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+			strBuilder.append(ids[0]);
+			String refg = strBuilder.toString();
+			Firebase newev = new Firebase(refg);
+			
+			newev.child(eventid).addListenerForSingleValueEvent(new ValueEventListener() {
+				
+				@Override
+				public void onDataChange(DataSnapshot arg0) {
+					// TODO Auto-generated method stub
+					Iterable<DataSnapshot> members = arg0.getChildren();
+					Iterator<DataSnapshot> memref = members.iterator();
+					while(memref.hasNext()){
+						String member_refrence = memref.next().getName();
+						System.out.println("member is " + member_refrence);
+						
+						JSONObject json = new JSONObject(); 
+						try {
+							json.put("host", commondata.facebook_details.facebook);
+							json.put("to_id", member_refrence); 
+							json.put("payload_type", "host_cancel");
+							json.put("event_reference", commondata.event_information.eventID);
+							json.put("sender_name", commondata.facebook_details.name);
+							json.put("payload_message", "sounds great");
+					
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} 
+						
+						System.out.println("notifying " + member_refrence + "from" + commondata.facebook_details.facebook);
+						gcm_send_data(commondata.facebook_details.facebook, member_refrence, json.toString());
+						
+					}
+				}
+				
+				@Override
+				public void onCancelled(FirebaseError arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+			
+			
+			//newev.child(eventid).child(commondata.facebook_details.facebook).removeValue(); // remove the event
+			
+			
+			
 			
 		}
 		
