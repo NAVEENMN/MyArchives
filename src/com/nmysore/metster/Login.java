@@ -2389,6 +2389,7 @@ public class Login extends Activity {
 		final ArrayList<String> listsnippets = new ArrayList<String>();
 		final ArrayList<String> dollar = new ArrayList<String>();
 		final ArrayList<String> listplace_url = new ArrayList<String>();
+		final ArrayList<String> listimage_url = new ArrayList<String>();
 		
 		listtitle.clear();
 		listaddress.clear();
@@ -2401,6 +2402,7 @@ public class Login extends Activity {
 		listtotalratings.clear();
 		listsnippets.clear();
 		listplace_url.clear();
+		listimage_url.clear();
 		/*
 		 * this section sets up the common data from the server in sorted order
 		 */
@@ -2417,6 +2419,7 @@ public class Login extends Activity {
 			listtypes.add(node.types);
 			listsnippets.add(node.snippet);
 			listplace_url.add(node.website);
+			listimage_url.add(node.image_url);
 			
 		}
 		
@@ -2431,7 +2434,7 @@ public class Login extends Activity {
 		    //Drawable icon;
 
 		    class ViewHolder {
-		        //ImageView icon;
+		        ImageView icon;
 		        TextView title;
 		        TextView placeaddress;
 		        TextView placereviews;
@@ -2441,8 +2444,10 @@ public class Login extends Activity {
 		        
 		    }
 
-		    public View getView(int position, View convertView,
+		    
+		    public View getView(final int position, View convertView,
 		            ViewGroup parent) {
+		    	
 		        final LayoutInflater inflater = (LayoutInflater) getApplicationContext()
 		                .getSystemService(
 		                        Context.LAYOUT_INFLATER_SERVICE);
@@ -2452,8 +2457,9 @@ public class Login extends Activity {
 		                    R.layout.listdisplay, null);
 
 		            holder = new ViewHolder();
-		           // holder.icon = (ImageView) convertView
-		            //        .findViewById(R.id.icon);
+		            holder.icon = (ImageView) convertView
+		                    .findViewById(R.id.placesimage);
+		            System.out.println("this one");
 		            holder.title = (TextView) convertView
 		                    .findViewById(R.id.title);
 		            holder.placeaddress = (TextView) convertView.findViewById(R.id.placeaddress);
@@ -2489,6 +2495,25 @@ public class Login extends Activity {
 		        holder.placereviews.setText(listtotalratings.get(position) +" user reviews   "+ " " + dollarsign);
 		        }
 		        //holder.icon.setImageDrawable(drawable);
+		        
+		        new Thread(new Runnable() { 
+		            public void run(){  
+		            	System.out.println("thread issued");
+		            
+		            	try {
+							new YelpImageDownloaderTask(holder.icon).execute(listimage_url.get(position)).get();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+		            }
+		        }).start();
+		        
+		        
+		        
 		        dollar.clear();
 		        return convertView;
 		    }
@@ -2886,6 +2911,52 @@ public class Login extends Activity {
 	
 	
 	
+	private class YelpImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+	    private final WeakReference<ImageView> imageViewReference;
+	    
+	    public YelpImageDownloaderTask(ImageView imageView) {
+	        imageViewReference = new WeakReference<ImageView>(imageView);
+	    }
+
+	    @Override
+	    protected Bitmap doInBackground(String... params) {
+	        Bitmap himage = null;
+	        System.out.println("trying to get image for " + params[0]);
+	       
+	    	try{
+	        URL img_value = new URL(params[0]);
+			himage = BitmapFactory.decodeStream(img_value
+					.openConnection().getInputStream());
+	    	}catch(Exception e){
+	    		
+	    	}
+			return himage;
+	        
+	    }
+
+	    @Override
+	    protected void onPostExecute(Bitmap bitmap) {
+	        if (isCancelled()) {
+	            bitmap = null;
+	        }
+
+	        if (imageViewReference != null) {
+	            ImageView imageView = imageViewReference.get();
+	            if (imageView != null) {
+	                if (bitmap != null) {
+	                    imageView.setImageBitmap(bitmap);
+	                    
+	                } else {
+	                    Drawable placeholder = imageView.getContext().getResources().getDrawable(R.drawable.chooseimage);
+	                    imageView.setImageDrawable(placeholder);
+	                }
+	            }
+	        }
+	        return ;
+	    }
+	}
+	
+	
 	private class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
 	    private final WeakReference<ImageView> imageViewReference;
 
@@ -3100,6 +3171,9 @@ public class Login extends Activity {
 				 if(info_about_place.has("address")){
 					 address = info_about_place.getString("address");
 				 }
+				 if(info_about_place.has("image_url")){
+					 image_url = info_about_place.getString("image_url");
+				 }
 				 
 				 
 				// creat a new node and set its value 
@@ -3117,6 +3191,7 @@ public class Login extends Activity {
 					node.longitude = longitude;
 					node.snippet =snippet;
 					node.image_url = image_url;
+					
 					commondata.places_found.ranking_places.put(rank, place_id);
  					commondata.places_found.ranking_nodes.put(place_id, node);
  					rank +=1;
