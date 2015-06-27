@@ -90,7 +90,7 @@ def query_api(term, location, type):
             info = dict()
             try:
                 info['rank'] = str(x);
-                info['ratings'] = str(r['ratings'])
+                info['ratings'] = str(r['rating'])
                 info['name'] = str(r['name'])
                 info['review_count'] = str(r['review_count'])
                 info['phone'] = str(r['display_phone'])
@@ -127,7 +127,7 @@ def query_api(term, location, type):
                     info['phone'] = str(r['display_phone'])
                     info['address'] = str(r['location']['display_address'])
                     info['coordinate'] = str(r['location']['coordinate'])
-                    info['snippet']  = str(r['snippet_text'])
+                    info['snippet']  = "no"#str(r['snippet_text'])
                     info['url'] = str(r['mobile_url'])
 		    info['image_url'] = str(r['image_url'])
                     info['category'] = str(r['categories'])
@@ -152,7 +152,7 @@ def get_region(people):
     return top_right, left_bottom
 
 
-def get_results(people, item):
+def get_results(people, item, point):
     
     payload = None
     
@@ -182,7 +182,8 @@ def get_results(people, item):
     if(len(people) == 2):
         # compute centroid and make query
         try:
-            data = query_api(item, centroid_location, "a")
+	    point = str(point[0]) +","+str(point[1])
+            data = query_api(item, point, "a")
             payload = data
        	except urllib2.HTTPError as error:
             sys.exit('Encountered HTTP error {0}. Abort program.'.format(error.code))
@@ -197,7 +198,7 @@ def get_results(people, item):
     return payload
 
 
-def pull_data_from_firebase(event_id, choice):
+def pull_data_from_firebase(event_id, choice, point):
     people = list() # holds data in this format [[latitude, longitude],[lat, long],[...]]
     
     '''
@@ -214,7 +215,7 @@ def pull_data_from_firebase(event_id, choice):
             fb_lon = float(data[key]['Longitude'])
             people.append([fb_lat, fb_lon])
     
-    payload = get_results(people, choice)
+    payload = get_results(people, choice, point)
     return payload
 
 def main():

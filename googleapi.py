@@ -46,10 +46,9 @@ def get_distance(a, b):
 def req_place_details(lat, long, food_type, radius):
     radius = str( int(round(radius * 10,-1)) )
     ratings = list()
-    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + long + "&radius="+radius+"&types=food&keyword="+food_type+"&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE"
+    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + long + "&radius=400"+"&types=food&keyword="+food_type+"&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE"
     response = urllib2.urlopen(url).read()
     jason_data = json.loads(response)
-    #print jason_data
     for place in jason_data['results']:
         
         n = node()

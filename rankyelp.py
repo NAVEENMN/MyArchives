@@ -8,7 +8,6 @@ import sys
 FIREBASE_URL = "https://met-ster-event.firebaseio.com/"
 
 # these are dictonaries which keep holds keys and nodes
-google_lookup = dict()
 yelp_lookup = dict()
 payload = dict()
 
@@ -27,23 +26,6 @@ class yelp_node():
     snippet = None
     url = None
     phone = None
-
-# pulls data from google and creats multiple nodes.
-class google_node():
-    name = None
-    rank = None
-    rating = None
-    refrence = None
-    location = None
-    review_count = None
-    image_url = None
-    address = None
-    category = None
-    url = None
-    phone = None
-    price_level = None
-    sinppet = None
-
 '''
     name : get_region
     params : people list

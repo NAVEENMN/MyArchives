@@ -10,7 +10,7 @@ param2 = "859842507380812"
 event =  "812345607380812-->event-->0"
 
 elon = "865432107380812"
-alan = "812345607380812"
+alan = "119979305002439"
 
 payload = dict()
 payload['host'] = alan # elon invite
@@ -19,7 +19,7 @@ payload['payload_type'] = "invite_check"
 payload['payload_message'] = "dinner?"
 payload['sender_name'] = "alan turing"
 payload['event_reference'] =  alan + "-->event-->0"
-payload['event_name'] = "lunch"
+payload['event_name'] = "meeting"
 
 jdata = json.dumps(payload)
 

@@ -69,7 +69,9 @@ switch($type){
 				$sender_name, $event_reference);
 				break;
 	case "host_cancel":
-				host_cancel();
+				$message = "host" . "--" . "drop";
+				host_cancle($incoming_data->host,$incoming_data->to_id, $to_gcm, "host_cancel", $message,
+				$sender_name, $event_reference);
 				break;
 	case "invite_drop":	
 				invite_drop();
@@ -86,12 +88,12 @@ else{
 }	
 
 /*
-	name : invite_check
+	name : host_cancel
 	param: 
 	return :
 	desp : This function checks which type of message and build a payload for that 
 */
-function invite_check($from, $to, $togcm, $type, $message, $sender_name, $event_refrence){
+function host_cancle($from, $to, $togcm, $type, $message, $sender_name, $event_refrence){
 $arr = array("host" => $from,
 	     "to_id" => $to,
 	     "payload_type" => $type,
