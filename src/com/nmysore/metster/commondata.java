@@ -19,6 +19,7 @@ import com.facebook.android.Facebook;
 
 public class commondata {
 
+	static Boolean pull_host_info; // its a temporary fix
 	
 	public static class facebook_details{
 		static String facebook;
@@ -64,6 +65,7 @@ public class commondata {
 	
 	public static class lazyload{
 		static HashMap<String, Bitmap> image_ref = new HashMap<String, Bitmap>();
+		static HashMap<String, Bitmap> yelp_images = new HashMap<String, Bitmap>();
 	}
 	
 	public static class prefrences{

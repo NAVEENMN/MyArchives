@@ -68,6 +68,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -688,7 +689,9 @@ public class Login extends Activity {
 	
 	
 	private void display_events(JSONObject host_data){
-		System.out.println("display_events");
+		if(commondata.pull_host_info){
+		System.out.println("enter display_events");
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Your Events");
 		
@@ -808,7 +811,7 @@ public class Login extends Activity {
 		        }       
 		        System.out.println("setting" + listhostnames.get(position));
 		        holder.fullname.setText(listhostnames.get(position));
-		        holder.eventname.setText(listeventnames.get(position) + " (" +listmembers.get(position)+")");
+		        holder.eventname.setText(listeventnames.get(position));
 		        //holder.himage.setImageBitmap(listhostimages.get(position));
 		         
 		        
@@ -859,7 +862,9 @@ public class Login extends Activity {
 		//*****************
 		
 		
-		
+		System.out.println("exit display_events");
+	}
+		commondata.pull_host_info = false;
 	}
 	
 	/*
@@ -870,7 +875,8 @@ public class Login extends Activity {
 	 */
 	
 	private void pull_host_info(String eventslisting){
-		System.out.println("incoming pull_host_info" + eventslisting);
+	
+		System.out.println("entering pull_host_info" + eventslisting);
 		final String[] eventsids = eventslisting.split("<<");
 		final String last_event = eventsids[eventsids.length - 1];
 		final JSONObject all_events = new JSONObject();
@@ -892,82 +898,83 @@ public class Login extends Activity {
 			final JSONObject host_data = new JSONObject();
 			// This is called only once
 			// gets the host data
-				event_fb_ref.addValueEventListener(new ValueEventListener() {
-					
-					@Override
-					public void onDataChange(final DataSnapshot snapshot) {
-						 
-						Firebase parent = event_fb_ref.getParent();
-						// gets the number of member for this event
-						parent.addValueEventListener(new ValueEventListener() {
-							
-							@Override
-							public void onDataChange(DataSnapshot parentref) {
-								// TODO Auto-generated method stub
-								long number_of_children = 0;
-								try {
-									number_of_children = parentref.getChildrenCount();
-									if(number_of_children != 0){
-										host_data.put("number_of_children", number_of_children);
-										host_data.put("host_id", host);
-										Iterable<DataSnapshot> host_attr = snapshot.getChildren();
-										
-										Iterator<DataSnapshot> params = host_attr.iterator();
-										while(params.hasNext()){
-										DataSnapshot val = params.next();
-										if(val.getName().toString() == "nodename") host_data.put("hostname", val.getValue());
-										if(val.getName().toString() == "eventname") host_data.put("eventname", val.getValue());
-										}
-									}
-										
-								} catch (JSONException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								} 
-								
-								if(eventid == last_event){
+			 event_fb_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+				
+				@Override
+				public void onDataChange(final DataSnapshot snapshot) {
+					// TODO Auto-generated method stub
+					Firebase parent = event_fb_ref.getParent();
+					// gets the number of member for this event
+					parent.addValueEventListener(new ValueEventListener() {
+						
+						@Override
+						public void onDataChange(DataSnapshot parentref) {
+							// TODO Auto-generated method stub
+							long number_of_children = 0;
+							System.out.println("this should not be");
+							try {
+								number_of_children = parentref.getChildrenCount();
+								if(number_of_children != 0){
+									host_data.put("number_of_children", number_of_children);
+									host_data.put("host_id", host);
+									Iterable<DataSnapshot> host_attr = snapshot.getChildren();
 									
-									try{
-										all_events.put(eventid, host_data);
-										display_events(all_events);
-										}catch(Exception e){
-											System.out.println("exception " + e);
-										}
+									Iterator<DataSnapshot> params = host_attr.iterator();
+									while(params.hasNext()){
+									DataSnapshot val = params.next();
+									if(val.getName().toString() == "nodename") host_data.put("hostname", val.getValue());
+									if(val.getName().toString() == "eventname") host_data.put("eventname", val.getValue());
+									}
+								}
+									
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} 
+							
+							if(eventid == last_event){
 								
-								}else{
-									try{
+								try{
 									all_events.put(eventid, host_data);
+									display_events(all_events);
 									}catch(Exception e){
 										System.out.println("exception " + e);
 									}
+							
+							}else{
+								try{
+								all_events.put(eventid, host_data);
+								}catch(Exception e){
+									System.out.println("exception " + e);
 								}
-								
-								
 							}
 							
-							@Override
-							public void onCancelled(FirebaseError arg0) {
-								// TODO Auto-generated method stub
-								
-							}
-						});
+							
+						}
 						
-					  
-						
-				    }
+						@Override
+						public void onCancelled(FirebaseError arg0) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
 					
+				}
+				
+				@Override
+				public void onCancelled(FirebaseError arg0) {
+					// TODO Auto-generated method stub
 					
-					@Override
-					public void onCancelled(FirebaseError arg0) {
-						// TODO Auto-generated method stub
-						
-					}
-				});
+				}
+			});
+			
 			}else{
 				//toast_info("no events, please join or create a event");
 				
 			}
 		}
+		System.out.println("exit pull_host_info" + eventslisting);
+	
 	}
 	
 	
@@ -981,6 +988,7 @@ public class Login extends Activity {
 	 * 			input is of this form 80897978789-->event-->1 
 	 */
 	private void pull_data_from_firebase(final String eventid){
+		System.out.println("enter"  + "pull_data_from_firebase");
 		commondata.event_information.given_events_lookup.clear();
 		String[] data = eventid.split("-->");
 		final String host = data[0];// this give refrence to facebook id
@@ -1057,6 +1065,7 @@ public class Login extends Activity {
 		});
 		
 		ChildEventListener lister = set_firebase_listner(eventid);
+		System.out.println("exit"  + "pull_data_from_firebase");
 	}
 	
 	/*
@@ -1067,7 +1076,7 @@ public class Login extends Activity {
 	 */
 	
 	private void display_node_data(){
-		System.out.println("displaying all node");
+		System.out.println("enter display_node_data");
 		Set<String> eventkeys = commondata.event_information.given_events_lookup.keySet();
 		System.out.println("its keys are" + eventkeys);
 		Iterator<String> keys = eventkeys.iterator();
@@ -1085,7 +1094,7 @@ public class Login extends Activity {
 			}
 			
 		}
-		
+		System.out.println("exit display_node_data");
 	}
 	
 	/*
@@ -1098,6 +1107,7 @@ public class Login extends Activity {
 	 *  		and launches based on that.
 	 */
 	private void launch_event(String eventid){
+		System.out.println("enter launch_event");
 		commondata.event_information.eventID = eventid;
 		System.out.println("handling event " + eventid);		
 		Set<String> keys = commondata.event_information.given_events_lookup.keySet();
@@ -1122,7 +1132,7 @@ public class Login extends Activity {
 		
 		//** all members are added
 		set_up_map_view();
-				
+		System.out.println("exit launch_event");		
 	}
 	
 	/*
@@ -1159,7 +1169,7 @@ public class Login extends Activity {
 	 * @desp : This function is used to setup the initial screen upon loading. 
 	 */
 	public void SetupUIdata() {
-
+		System.out.println("enter SetupUIdata");
 		// ------------> Setup the GUI with data acquired
 		TextView fname = (TextView) findViewById(R.id.FirstName);
 		String first_name;
@@ -1205,7 +1215,7 @@ public class Login extends Activity {
 		map.getUiSettings().setZoomControlsEnabled(false);
 
 		// --------------------------------------------------------------------------------------------
-
+		System.out.println("exit SetupUIdata");
 	}
 
 	
@@ -1217,7 +1227,7 @@ public class Login extends Activity {
 	 */
 	public void set_up_map_view() {
 				
-		
+		System.out.println("enter set_up_map_view");
 		try {
 			mMap = ((MapFragment) getFragmentManager().findFragmentById(
 					R.id.visitormap)).getMap();
@@ -1241,6 +1251,24 @@ public class Login extends Activity {
 							.title(commondata.places_found.names.get(i))
 							);	
 						}else{
+							
+							if(commondata.places_found.tokens.get(i).contains("place")){
+								
+								
+								mMap.addMarker(new MarkerOptions()
+								.position(
+										new LatLng(
+												commondata.places_found.latitudes
+														.get(i),
+												commondata.places_found.longitudes
+														.get(i)))
+								.icon(BitmapDescriptorFactory
+										.fromResource(R.drawable.places))
+								.title(commondata.places_found.names.get(i))
+								);
+
+								
+							}else{
 					
 								mMap.addMarker(new MarkerOptions()
 										.position(
@@ -1252,7 +1280,8 @@ public class Login extends Activity {
 										.icon(BitmapDescriptorFactory
 												.fromResource(R.drawable.pin))
 										.title(commondata.places_found.names.get(i))
-										);	
+										);
+							}
 						}
 				}
 
@@ -1269,6 +1298,8 @@ public class Login extends Activity {
 		} catch (Exception e) {
 			System.out.println("unable to put maps");
 		}
+		
+		System.out.println("exit set_up_map_view");
 	}
 
 	public void stopRepeatingTask() {
@@ -1726,7 +1757,23 @@ public class Login extends Activity {
 			if (commondata.event_information.eventID != null) {
 				System.out.println("long pressed");
 				toast_info("finding a meetup place...");
-
+				Double mid_lat = 0.0;
+				Iterator<Double> latiter = commondata.places_found.latitudes.iterator();
+				while ( latiter.hasNext() ){
+					mid_lat  = mid_lat + latiter.next();
+				}
+				Double mid_lon = 0.0;
+				Iterator<Double> loniter = commondata.places_found.longitudes.iterator();
+				while ( loniter.hasNext() ){
+					mid_lon  = mid_lon + loniter.next();
+				}
+				mid_lat = mid_lat / commondata.places_found.latitudes.size();
+				mid_lon = mid_lon / commondata.places_found.longitudes.size();
+				LatLng currlocation = new LatLng(
+						mid_lat,
+						mid_lon);// centroid for camera.
+				mMap.getUiSettings().setZoomControlsEnabled(false);
+				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
 				mMap.animateCamera(CameraUpdateFactory.zoomTo(12), 2000,
 						null);
 
@@ -2028,6 +2075,7 @@ public class Login extends Activity {
 	
 	public void view_events(View v){
 		System.out.println("view events");	
+		commondata.pull_host_info = true;
 		//******* get all the events and put a array list
 		final ArrayList<String> eventtitle = new ArrayList<String>();
 		eventtitle.clear();
@@ -2495,7 +2543,10 @@ public class Login extends Activity {
 		        holder.placereviews.setText(listtotalratings.get(position) +" user reviews   "+ " " + dollarsign);
 		        }
 		        //holder.icon.setImageDrawable(drawable);
-		        
+		        if(commondata.lazyload.yelp_images.containsKey(listimage_url.get(position))){
+				       
+		        	holder.icon.setImageBitmap( commondata.lazyload.yelp_images.get(listimage_url.get(position)));
+		        }else{
 		        new Thread(new Runnable() { 
 		            public void run(){  
 		            	System.out.println("thread issued");
@@ -2511,8 +2562,7 @@ public class Login extends Activity {
 						}
 		            }
 		        }).start();
-		        
-		        
+		        }
 		        
 		        dollar.clear();
 		        return convertView;
@@ -2520,12 +2570,12 @@ public class Login extends Activity {
 		};
 		modeList.setAdapter(modeAdapter);
 		
-		modeList.setOnItemClickListener(new OnItemClickListener() {
+		modeList.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> items, View arg1, int order,
-					long arg3) {
-				
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int order, long arg3) {
+				// TODO Auto-generated method stub
 				System.out.println("held" + order);
 				String link = listplace_url.get(order);
 				if(link != "null"){
@@ -2538,17 +2588,28 @@ public class Login extends Activity {
 		        Intent intent = new Intent(Intent.ACTION_VIEW, url);
 		        startActivity(intent);
 				}
+
 				
-				/*
+				return false;
+			}
+		});
+		
+		modeList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> items, View arg1, int order,
+					long arg3) {
+								
+				
 				System.out.println("selected " + items.getItemIdAtPosition(order)); // order is also traced to rank
 				
 				create_firebase_refrence();
 				
-				double rank = (double)items.getItemIdAtPosition(order); // we have to select item of that rank
+				//double rank = (double)items.getItemIdAtPosition(order); // we have to select item of that rank
 				
-				String current_place_refrence = commondata.places_found.ranking_places.get(rank);
+				String current_place_refrence = commondata.places_found.ranking_places.get(order);
 				final place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
-				
+			
 				
 				AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
     			alert.setTitle(node.place_name);
@@ -2562,22 +2623,31 @@ public class Login extends Activity {
     			alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
     			  public void onClick(DialogInterface dialog, int whichButton) {
     				  
-    					fb_event_ref.firebaseobj
-    					.child("rest*0--"
+    					fb_event_ref.firebaseobj.child(commondata.event_information.eventID)
+    					.child("rest--"
     							+ node.place_name.replace(".", ""))
     					.child("Latitude")
     					.setValue(node.latitude);
-    					fb_event_ref.firebaseobj
-    					.child("rest*0--"
+    					fb_event_ref.firebaseobj.child(commondata.event_information.eventID)
+    					.child("rest--"
     							+ node.place_name.replace(".", ""))
     					.child("Longitude")
     					.setValue(node.longitude);
-    				  
-    				  
+    					fb_event_ref.firebaseobj.child(commondata.event_information.eventID)
+    					.child("rest--"
+    							+ node.place_name.replace(".", ""))
+    					.child("nodetype")
+    					.setValue("place");
+    					fb_event_ref.firebaseobj.child(commondata.event_information.eventID)
+    					.child("rest--"
+    							+ node.place_name.replace(".", ""))
+    					.child("nodename")
+    					.setValue(node.place_name);
+    				
     			  }
     			});
     			alert.show();
-				*/
+				
 			
 			}
 
@@ -2913,7 +2983,7 @@ public class Login extends Activity {
 	
 	private class YelpImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
 	    private final WeakReference<ImageView> imageViewReference;
-	    
+	    String image_rf;
 	    public YelpImageDownloaderTask(ImageView imageView) {
 	        imageViewReference = new WeakReference<ImageView>(imageView);
 	    }
@@ -2922,7 +2992,7 @@ public class Login extends Activity {
 	    protected Bitmap doInBackground(String... params) {
 	        Bitmap himage = null;
 	        System.out.println("trying to get image for " + params[0]);
-	       
+	       image_rf = params[0];
 	    	try{
 	        URL img_value = new URL(params[0]);
 			himage = BitmapFactory.decodeStream(img_value
@@ -2945,7 +3015,7 @@ public class Login extends Activity {
 	            if (imageView != null) {
 	                if (bitmap != null) {
 	                    imageView.setImageBitmap(bitmap);
-	                    
+	                    commondata.lazyload.yelp_images.put(image_rf, bitmap);
 	                } else {
 	                    Drawable placeholder = imageView.getContext().getResources().getDrawable(R.drawable.chooseimage);
 	                    imageView.setImageDrawable(placeholder);
