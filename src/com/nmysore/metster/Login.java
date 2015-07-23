@@ -1911,8 +1911,7 @@ public class Login extends Activity {
 	 */
 	
 	public String gcm_send_data(String facebook_id, final String to_facebook_id, final String payload){
-	
-	   
+	System.out.println("enter gcm_send_data");
 		Thread thread = new Thread() {
 			String server_resp;
 			String response = "error";
@@ -1923,13 +1922,14 @@ public class Login extends Activity {
 					Thread thread = new Thread() {
 					    @Override
 					    public void run() {
+					    	System.out.println("from " + commondata.facebook_details.facebook + " " + "to"+ to_facebook_id);
 					    	response = postData("http://52.8.173.36/metster/send_gcm_message.php", commondata.facebook_details.facebook, to_facebook_id, payload);
-					    	System.out.println("gcm_server : " + server_resp);
+					    	System.out.println("gcm_server : " + response);
 					    }
 					};
 					thread.start();
 					thread.join();
-					if (server_resp.contains("doesnot-exist")) {
+					if (response.contains("doesnot-exist")) {
 						runOnUiThread(new Runnable() {
 
 							@Override
@@ -1940,9 +1940,9 @@ public class Login extends Activity {
 						});
 
 					} else {
-						int offst = server_resp.indexOf("success");
+						int offst = response.indexOf("success");
 
-						char response_of_gcm = server_resp
+						char response_of_gcm = response
 								.charAt(offst + 9);
 						if (response_of_gcm == '1') {
 							runOnUiThread(new Runnable() {
@@ -1992,7 +1992,7 @@ public class Login extends Activity {
 		final ArrayList<String> friendid = new ArrayList<String>();
 		friendname.clear();
 		friendid.clear();
-		JSONArray frnd_list = commondata.facebook_details.friends;
+		final JSONArray frnd_list = commondata.facebook_details.friends;
 		for (int i = 0; i < frnd_list.length(); i++) {
 
 			JSONObject json_data = null;
@@ -2021,8 +2021,8 @@ public class Login extends Activity {
 				JSONObject payload = new JSONObject(); 
 				
 				try {
-					payload.put("host", commondata.facebook_details.facebook); 
-					payload.put("to_id", commondata.facebook_details.facebook);// need to fetch and send
+					payload.put("host", commondata.facebook_details.facebook);
+					payload.put("to_id", friendid.get(arg2).toString());// need to fetch and send
 					payload.put("payload_type", "invite_check");
 					payload.put("payload_message", "dinner tonight");
 					payload.put("event_reference", "123456-->event-->0");
@@ -2033,8 +2033,8 @@ public class Login extends Activity {
 					e.printStackTrace();
 				} 
 				
-				//String server_response = gcm_send_data(commondata.facebook_details.facebook, friendid.get(it).toString(), "dinner tonight?");
-				String server_response = gcm_send_data(commondata.facebook_details.facebook, commondata.facebook_details.facebook, payload.toString());
+				String server_response = gcm_send_data(commondata.facebook_details.facebook, friendid.get(arg2).toString(), "dinner tonight?");
+				//String server_response = gcm_send_data(commondata.facebook_details.facebook, to_id, payload.toString());
 
 			}
 
@@ -2223,7 +2223,6 @@ public class Login extends Activity {
 		            // view already defined, retrieve view holder
 		            holder = (ViewHolder) convertView.getTag();
 		        }       
-		        System.out.println("setting" + listhostnames.get(position));
 		        holder.hostname.setText(listhostnames.get(position));
 		        holder.title.setText(listeventnames.get(position));
 		       
@@ -2337,7 +2336,8 @@ public class Login extends Activity {
 						@Override
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
-							System.out.println("sendinvite to  " + listids.get(Integer.parseInt(v.getTag().toString())));
+						    System.out.println("tag " + Integer.parseInt(v.getTag().toString()));
+							System.out.println("sendinvite to  "+listfirstnames.get(Integer.parseInt(v.getTag().toString()))+ listids.get(Integer.parseInt(v.getTag().toString())));
 							parent.getChildAt(Integer.parseInt(v.getTag().toString())).setBackgroundColor(Color.BLUE);
 							// this will store in shared pref
 							//on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
@@ -2348,10 +2348,10 @@ public class Login extends Activity {
 							
 							try {
 								payload.put("host", commondata.facebook_details.facebook); 
-								payload.put("to_id", commondata.facebook_details.facebook);// need to fetch and send
+								payload.put("to_id", listids.get(Integer.parseInt(v.getTag().toString())));// need to fetch and send
 								payload.put("payload_type", "invite_check");
 								payload.put("payload_message", "dinner tonight");
-								payload.put("event_reference", "123456-->event-->0");
+								payload.put("event_reference", "859842507380812-->event-->0");
 								payload.put("event_name", "lunch and discuss");
 								payload.put("sender_name", "alan turing");
 							} catch (JSONException e) {
@@ -2360,11 +2360,7 @@ public class Login extends Activity {
 							} 
 							
 							//String server_response = gcm_send_data(commondata.facebook_details.facebook, friendid.get(it).toString(), "dinner tonight?");
-							String server_response = gcm_send_data(commondata.facebook_details.facebook, commondata.facebook_details.facebook, payload.toString());
-
-							
-							
-							
+							String server_response = gcm_send_data(commondata.facebook_details.facebook,listids.get(Integer.parseInt(v.getTag().toString())), payload.toString());
 							
 						}
 					}); 
@@ -2375,7 +2371,7 @@ public class Login extends Activity {
 		            // view already defined, retrieve view holder
 		            holder = (ViewHolder) convertView.getTag();
 		        }       
-		        System.out.println("setting" + listfirstnames.get(position));
+		
 		        String[] name = listfirstnames.get(position).split(" ");
 		        holder.firstname.setText(name[0]);
 		        holder.lastname.setText(name[1]);
