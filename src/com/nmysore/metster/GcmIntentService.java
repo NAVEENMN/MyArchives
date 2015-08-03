@@ -83,9 +83,9 @@ public class GcmIntentService extends IntentService {
                 	try {
                 		JSONObject gcmdata = new JSONObject(message_info);
 						String host = gcmdata.getString("host");
-						String  to_id = gcmdata.getString("to_id");
-	                	String  payload_type = gcmdata.getString("payload_type");
-	                	String  payload_message = gcmdata.getString("payload_message");
+						String to_id = gcmdata.getString("to_id");
+	                	String payload_type = gcmdata.getString("payload_type");
+	                	String payload_message = gcmdata.getString("payload_message");
 	                	String sender_name = gcmdata.getString("sender_name");
 	                	String event_reference = gcmdata.getString("event_reference");
 	                	//String[] data = payload_message.split("--");

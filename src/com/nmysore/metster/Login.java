@@ -196,6 +196,58 @@ public class Login extends Activity {
 		create_firebase_refrence();// use fbref object as the refrence.
 		
 		/*
+		 * sync local cache to firebase
+		 */
+		// clean up local db
+		SharedPreferences.Editor editor = getSharedPreferences("myevents", MODE_PRIVATE).edit();
+		editor.putString("hostedevents", null);
+		editor.commit();
+		
+		StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
+		strBuilder.append(commondata.facebook_details.facebook);
+		String refg = strBuilder.toString();
+		Firebase newev = new Firebase(refg);
+		
+		newev.addListenerForSingleValueEvent(new ValueEventListener() {
+			
+			@Override
+			public void onDataChange(DataSnapshot arg0) {
+				// TODO Auto-generated method stub
+				Iterable<DataSnapshot> members = arg0.getChildren();
+				Iterator<DataSnapshot> memref = members.iterator();
+				while(memref.hasNext()){ // dont send notification to your self
+					String eventa = memref.next().getName();
+					System.out.println("your hosted events " + eventa);	
+					
+					//************ pull data from local db
+					SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
+					String hostedevents = prefs.getString("hostedevents", null);
+					//************** store this new event copy to local data base
+					
+					SharedPreferences.Editor editor = getSharedPreferences("myevents", MODE_PRIVATE).edit();
+					editor.putString("hostedevents", hostedevents +"<<"+eventa);
+					editor.commit();
+				
+				}
+			}
+			
+			@Override
+			public void onCancelled(FirebaseError arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
+		
+		
+		/*
+		//************** store this new event copy to local data base
+		SharedPreferences.Editor editor = getSharedPreferences("myevents", MODE_PRIVATE).edit();
+		 editor.putString("hostedevents", hostedevents +"<<"+eventrefrence);
+		 editor.commit();
+		*/
+		
+		/*
 		 * check if invite exists
 		 */
 		SharedPreferences invite_notification = getApplicationContext().getSharedPreferences("invite_notification", MODE_PRIVATE);
@@ -204,6 +256,7 @@ public class Login extends Activity {
 		if(commondata.event_information.invites != null){
 	
 			list_invites();
+			commondata.event_information.invites = null; // this is temporary string clean it up
 		}
 		
 		
@@ -308,6 +361,7 @@ public class Login extends Activity {
 				String event_id = entry.getKey();
 	            String event_name = entry.getValue().toString();
 	            commondata.event_information.event_joined_table.put(event_id, event_name);
+	            System.out.println("shared pref eventjoined has " + event_id +" " + event_name);
 			}
 		}
 		
@@ -572,6 +626,7 @@ public class Login extends Activity {
 		Firebase event_fb_ref = new Firebase(baseref);
 		
 		
+		// these method is invoked if online we need a clean data clean up on offline mode.
 		ChildEventListener listner = event_fb_ref.addChildEventListener(new ChildEventListener() {
 			
 			@Override
@@ -584,45 +639,25 @@ public class Login extends Activity {
 				
 				if(commondata.facebook_details.facebook.contains(arg0.getName())){ // tells host dropped
 					System.out.println("you are the host and you dropped it");
+					
+					// The members of this event could be online of offline
+					
+					/*
+					 *  case 1: if online :
+					 *  	just delete your refrence and in members check if host dropped and trigger thier exit.
+					 *  case 2: if offline:
+					 *  	send gcm notification which cleans up thier cache 
+					 *  	delete firebase base refrence
+					 */
+					
 				}
 				
-				if(commondata.event_information.eventID.contains(arg0.getName())){
+				if(commondata.event_information.eventID.contains(arg0.getName())){ // case 1
 					// this is a event you have joined and the host just dropped it
 					// clear cache and firebase
-					Editor eventsstored = getApplicationContext().getSharedPreferences("myevents", MODE_PRIVATE).edit();
-					String eventid = commondata.event_information.eventID;
-					//************ remove from local db
-					SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
-					String hostedevents = prefs.getString("hostedevents", null);
-					String joinedevents = prefs.getString("joinedevents", null);
-					String []events = null;
-					String[] joinedlist = joinedevents.split("<<");
-				
-					String stemmed = joinedevents.replaceAll( "<<"+ eventid + "<<", "<<").replaceAll("<<"+ eventid, "").replaceAll("null", "");
-					System.out.println("after cleaer" + stemmed);
 					
-					eventsstored.clear();
-					eventsstored.commit();
-					eventsstored.putString("joinedevents", stemmed);
-					eventsstored.commit();
-					
-					//*********** remove from firebase
-					
-					String[] ids = eventid.split("-->");
-					StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
-					strBuilder.append(ids[0]);
-					String refg = strBuilder.toString();
-					Firebase newev = new Firebase(refg);
-					
-					newev.child(eventid).child(commondata.facebook_details.facebook).removeValue();
-					
-					//********************************
-
-					Intent intent = new Intent(Login.this, Login.class);
-					startActivity(intent);
-					finish();
-					
-					
+					drop_a_event(commondata.event_information.eventID);
+									
 				}
 			}
 			
@@ -718,6 +753,7 @@ public class Login extends Activity {
 			listeventids.add(eventid);
 			try{
 			JSONObject event_data = (JSONObject) host_data.get(eventid);
+			System.out.println("raw json " + event_data);
 			String hostname = event_data.getString("hostname");
 			String eventname = event_data.getString("eventname");
 			String members = event_data.getString("number_of_children");
@@ -783,7 +819,7 @@ public class Login extends Activity {
 		            //View v = inflater.inflate( R.layout.invitelist, parent, false);
 		            holder.accept = (ImageButton) convertView.findViewById(R.id.myevent_friendinvite);
 		            holder.himage = (ImageView)  convertView.findViewById(R.id.myeventhostimage);
-		            holder.accept.setTag(position);
+		            
 		           
 		            holder.accept.setOnClickListener(new OnClickListener() {
 						
@@ -810,6 +846,7 @@ public class Login extends Activity {
 		            holder = (ViewHolder) convertView.getTag();
 		        }       
 		        System.out.println("setting" + listhostnames.get(position));
+		        holder.accept.setTag(position);
 		        holder.fullname.setText(listhostnames.get(position));
 		        holder.eventname.setText(listeventnames.get(position));
 		        //holder.himage.setImageBitmap(listhostimages.get(position));
@@ -1519,7 +1556,7 @@ public class Login extends Activity {
 	public void on_invite_accepted(final String event_reference){
 		
 		//************ pull data from local db
-		
+		System.out.println("entering on_invite_accepted");
 		SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
 		String joinedevents = prefs.getString("joinedevents", null);
 		String []events = null;
@@ -1532,7 +1569,7 @@ public class Login extends Activity {
 		String host = dat[0];
 		String url = "https://met-ster-event.firebaseio.com/";
 		url = url + host +"/"+eventreference + "/" + commondata.facebook_details.facebook;
-		
+		System.out.println("putting data to" + url);
 		final HashMap<String, String> fb_data = new HashMap<String, String>();
 		fb_data.put("nodename",commondata.facebook_details.name );
 		fb_data.put("eventname",event_reference);
@@ -1644,7 +1681,7 @@ public class Login extends Activity {
 			
 			System.out.println("respoding to " + host + "from" + commondata.facebook_details.facebook);
 			gcm_send_data(commondata.facebook_details.facebook, host, json.toString());
-		
+		   System.out.println("exiting on_invite_accepted");
 	}
 		
 	/*
@@ -1697,13 +1734,12 @@ public class Login extends Activity {
 			//************** get data from firebase and update local
 			pull_data_from_firebase(eventrefrence);
 			//************** store this new event copy to local data base
-			SharedPreferences.Editor editor = getSharedPreferences("myevents", MODE_PRIVATE).edit();
-			 editor.putString("hostedevents", hostedevents +"<<"+eventrefrence);
-			 editor.commit();
+			// on event reset we now do this at top
 			//************** prepare for launch
 			remove_location_listners();
 			Intent intent = new Intent(Login.this, Login.class);
 			startActivity(intent);
+			toast_info("check My events");
 			finish();
 		  }
 		});
@@ -1949,7 +1985,7 @@ public class Login extends Activity {
 
 								@Override
 								public void run() {
-									toast_info("invite sent");
+									toast_info("response sent - check My events");
 								}
 							});
 
@@ -1977,89 +2013,7 @@ public class Login extends Activity {
 
 	}
 	
-	
-	/*
-	 * name : list_friends
-	 * @params : None
-	 * @return : void
-	 * @desp : This function lists all Facebook friends and send invite upon click.
-	 */
-	private void list_friends() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Add a friend");
-		ListView modeList = new ListView(this);
-		final ArrayList<String> friendname = new ArrayList<String>();
-		final ArrayList<String> friendid = new ArrayList<String>();
-		friendname.clear();
-		friendid.clear();
-		final JSONArray frnd_list = commondata.facebook_details.friends;
-		for (int i = 0; i < frnd_list.length(); i++) {
-
-			JSONObject json_data = null;
-			try {
-				json_data = frnd_list.getJSONObject(i);
-				friendname.add(json_data.get("name").toString());
-				friendid.add(json_data.get("id").toString());
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, android.R.id.text1,
-				friendname);
-		modeList.setAdapter(modeAdapter);
-		modeList.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				final int it = arg2;
-				final String name = arg0.getItemAtPosition(arg2).toString();
-				// TODO Auto-generated method stub	
-				
-				JSONObject payload = new JSONObject(); 
-				
-				try {
-					payload.put("host", commondata.facebook_details.facebook);
-					payload.put("to_id", friendid.get(arg2).toString());// need to fetch and send
-					payload.put("payload_type", "invite_check");
-					payload.put("payload_message", "dinner tonight");
-					payload.put("event_reference", "123456-->event-->0");
-					payload.put("event_name", "lunch and discuss");
-					payload.put("sender_name", "alan turing");
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} 
-				
-				String server_response = gcm_send_data(commondata.facebook_details.facebook, friendid.get(arg2).toString(), "dinner tonight?");
-				//String server_response = gcm_send_data(commondata.facebook_details.facebook, to_id, payload.toString());
-
-			}
-
-		});
-		builder.setView(modeList);
-		builder.setPositiveButton("Done",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
-						
-						runOnUiThread(new Runnable() {
-
-							@Override
-							public void run() {
-								toast_info("Once members join long press the home key to explore ");
-							}
-						});
-					}
-				});
-		final Dialog dialog = builder.create();
 		
-		dialog.show();
-	}
-
-	
 	/*
 	 * name : view_events
 	 * @params : View v
@@ -2087,7 +2041,7 @@ public class Login extends Activity {
 		System.out.println("invited listing" + invitedevents);
 		System.out.println("hosted listing" + hostedevents);
 		
-		String newlisting = null;
+		String newlisting = null; // combined both invited and hosted events.
 		
 		if(invitedevents != "None"){
 			if(invitedevents != null){
@@ -2104,6 +2058,7 @@ public class Login extends Activity {
 			toast_info("No events to list, please join or create one");
 		}else{
 			newlisting.replaceAll("null<<", "").replaceAll("<<null<<", "<<");
+			System.out.println("your all events "+ newlisting);
 			pull_host_info(newlisting);
 		}
 	}
@@ -2119,6 +2074,7 @@ public class Login extends Activity {
 	 */
 	
 	public void list_invites(){
+		System.out.println("entering the list_invites");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("New Invites");
 		ListView inviteslist = new ListView(this);
@@ -2190,8 +2146,7 @@ public class Login extends Activity {
 		            //View v = inflater.inflate( R.layout.invitelist, parent, false);
 		            holder.accept = (ImageButton) convertView.findViewById(R.id.buttonaccept);
 		            holder.reject = (ImageButton) convertView.findViewById(R.id.buttonreject);
-		            holder.accept.setTag(position);
-		            holder.reject.setTag(position);
+		
 		            holder.accept.setOnClickListener(new OnClickListener() {
 						
 						@Override
@@ -2223,6 +2178,8 @@ public class Login extends Activity {
 		            // view already defined, retrieve view holder
 		            holder = (ViewHolder) convertView.getTag();
 		        }       
+	            holder.accept.setTag(position);
+	            holder.reject.setTag(position);
 		        holder.hostname.setText(listhostnames.get(position));
 		        holder.title.setText(listeventnames.get(position));
 		       
@@ -2246,12 +2203,13 @@ public class Login extends Activity {
 				});
 		final Dialog dialog = builder.create();
 		dialog.show();
+		System.out.println("exiting the invites_list");
 	}
 	
 	
 	
 	/*
-	 * name : list_friends
+	 * name : list_friend
 	 * @params : none
 	 * @return : void
 	 * @desp : This function list the invites in a dialog.
@@ -2325,21 +2283,16 @@ public class Login extends Activity {
 		            holder.lastname = (TextView) convertView.findViewById(R.id.lastname);
 		            //View v = inflater.inflate( R.layout.invitelist, parent, false);
 		            holder.image = (ImageView) convertView.findViewById(R.id.friendimage);
-		            holder.invite = (ImageButton) convertView.findViewById(R.id.friendinvite);
-		            
-		            
-		            holder.invite.setTag(position);
-		           
-		            
+		            holder.invite = (ImageButton) convertView.findViewById(R.id.friendinvite);	            
 		            holder.invite.setOnClickListener(new OnClickListener() {
 						
 						@Override
 						public void onClick(View v) {
 							// TODO Auto-generated method stub
-						    System.out.println("tag " + Integer.parseInt(v.getTag().toString()));
+						    System.out.println("tag " + v.getTag());
 							System.out.println("sendinvite to  "+listfirstnames.get(Integer.parseInt(v.getTag().toString()))+ listids.get(Integer.parseInt(v.getTag().toString())));
-							parent.getChildAt(Integer.parseInt(v.getTag().toString())).setBackgroundColor(Color.BLUE);
-							// this will store in shared pref
+		
+	      					// this will store in shared pref
 							//on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
 							// On a new thread handle this case
 							
@@ -2350,10 +2303,10 @@ public class Login extends Activity {
 								payload.put("host", commondata.facebook_details.facebook); 
 								payload.put("to_id", listids.get(Integer.parseInt(v.getTag().toString())));// need to fetch and send
 								payload.put("payload_type", "invite_check");
-								payload.put("payload_message", "dinner tonight");
-								payload.put("event_reference", "859842507380812-->event-->0");
-								payload.put("event_name", "lunch and discuss");
-								payload.put("sender_name", "alan turing");
+								payload.put("payload_message", "meetup?");
+								payload.put("event_reference", commondata.event_information.eventID);
+								payload.put("event_name", commondata.event_information.eventname);
+								payload.put("sender_name", commondata.facebook_details.name);
 							} catch (JSONException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -2371,7 +2324,8 @@ public class Login extends Activity {
 		            // view already defined, retrieve view holder
 		            holder = (ViewHolder) convertView.getTag();
 		        }       
-		
+		        holder.invite.setTag(position);
+		        System.out.println("position is" + position);
 		        String[] name = listfirstnames.get(position).split(" ");
 		        holder.firstname.setText(name[0]);
 		        holder.lastname.setText(name[1]);
@@ -2618,23 +2572,31 @@ public class Login extends Activity {
 
     			alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
     			  public void onClick(DialogInterface dialog, int whichButton) {
-    				  
-    					fb_event_ref.firebaseobj.child(commondata.event_information.eventID)
+    				    String[] parts = commondata.event_information.eventID.split("-->");
+    				    System.out.println("to split" +parts[0] ); // come here
+    				    
+    					StringBuilder strBuilder = new StringBuilder(
+    							"https://met-ster-event.firebaseio.com/");
+    					strBuilder.append(parts[0]);
+    					String frt = strBuilder.toString();
+    					Firebase ft = new Firebase(frt);
+    				    
+    					ft.child(commondata.event_information.eventID)
     					.child("rest--"
     							+ node.place_name.replace(".", ""))
     					.child("Latitude")
     					.setValue(node.latitude);
-    					fb_event_ref.firebaseobj.child(commondata.event_information.eventID)
+    					ft.child(commondata.event_information.eventID)
     					.child("rest--"
     							+ node.place_name.replace(".", ""))
     					.child("Longitude")
     					.setValue(node.longitude);
-    					fb_event_ref.firebaseobj.child(commondata.event_information.eventID)
+    					ft.child(commondata.event_information.eventID)
     					.child("rest--"
     							+ node.place_name.replace(".", ""))
     					.child("nodetype")
     					.setValue("place");
-    					fb_event_ref.firebaseobj.child(commondata.event_information.eventID)
+    					ft.child(commondata.event_information.eventID)
     					.child("rest--"
     							+ node.place_name.replace(".", ""))
     					.child("nodename")
@@ -2785,9 +2747,10 @@ public class Login extends Activity {
 	
 	private void drop_a_event(String eventid){
 		
-		if(!eventid.contains(commondata.facebook_details.facebook)){ // this is a joined event
-			
-
+		System.out.println("entering drop_a_event");
+		
+		if(!eventid.contains(commondata.facebook_details.facebook)){ // this is a joined event  => you have not hosted
+			System.out.println("this case is joined event");
 			Editor eventsstored = getApplicationContext().getSharedPreferences("myevents", MODE_PRIVATE).edit();
 			
 			//************ remove from local db
@@ -2822,24 +2785,24 @@ public class Login extends Activity {
 			
 			
 		}else{ // its a hosted event
+			System.out.println("this case is hosted event");
 			Editor eventsstored = getApplicationContext().getSharedPreferences("myevents", MODE_PRIVATE).edit();
 			//************ remove from local db
 			SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
 			String hostedevents = prefs.getString("hostedevents", null);
 			String joinedevents = prefs.getString("joinedevents", null);
 			String []events = null;
+			System.out.println("hosted events contains " + hostedevents);
 			String[] hostedlist = hostedevents.split("<<");
 		
 			String stemmed = hostedevents.replaceAll( "<<"+ eventid + "<<", "<<").replaceAll("<<"+ eventid, "").replaceAll("null", "");
-			System.out.println("after cleaer" + stemmed);
+			System.out.println("hosted events cleaned " + stemmed);
 			//eventsstored.clear();
 			//eventsstored.commit();
-			//eventsstored.putString("hostedevents", stemmed);
-			//eventsstored.commit();
+			eventsstored.putString("hostedevents", stemmed);
+			eventsstored.commit();
 			
-			//*********** remove from firebase
-			
-			//******************
+	
 			
 			String[] ids = eventid.split("-->");
 			StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
@@ -2854,10 +2817,10 @@ public class Login extends Activity {
 					// TODO Auto-generated method stub
 					Iterable<DataSnapshot> members = arg0.getChildren();
 					Iterator<DataSnapshot> memref = members.iterator();
-					while(memref.hasNext()){
+					while(memref.hasNext()){ // dont send notification to your self
 						String member_refrence = memref.next().getName();
-						System.out.println("member is " + member_refrence);
-						
+						System.out.println("sending host drop notifcication to" + member_refrence);
+						if(!commondata.facebook_details.facebook.contains(member_refrence)){ // dont send this to yourself.
 						JSONObject json = new JSONObject(); 
 						try {
 							json.put("host", commondata.facebook_details.facebook);
@@ -2865,7 +2828,7 @@ public class Login extends Activity {
 							json.put("payload_type", "host_cancel");
 							json.put("event_reference", commondata.event_information.eventID);
 							json.put("sender_name", commondata.facebook_details.name);
-							json.put("payload_message", "sounds great");
+							json.put("payload_message", "sorry");
 					
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -2874,7 +2837,7 @@ public class Login extends Activity {
 						
 						System.out.println("notifying " + member_refrence + "from" + commondata.facebook_details.facebook);
 						gcm_send_data(commondata.facebook_details.facebook, member_refrence, json.toString());
-						
+						}	
 					}
 				}
 				
@@ -2885,9 +2848,14 @@ public class Login extends Activity {
 				}
 			});
 			
-			
-			//newev.child(eventid).child(commondata.facebook_details.facebook).removeValue(); // remove the event
-			
+			// drop from event
+			newev.child(eventid).child(commondata.facebook_details.facebook).removeValue(); // remove the event
+			newev.child(eventid).removeValue(); // remove the base link coz restarants may be in the listing.
+			//********************************
+
+			Intent intent = new Intent(Login.this, Login.class);
+			startActivity(intent);
+			finish();
 			
 			
 			
