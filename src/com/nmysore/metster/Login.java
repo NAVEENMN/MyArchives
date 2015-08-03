@@ -6,6 +6,7 @@ import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -1391,17 +1392,22 @@ public class Login extends Activity {
 				.setPositiveButton("Yes",
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								stopRepeatingTask();
-								remove_location_listners();
+								// there is a bug here... app simply restarts 
+								// temp fix commented remove_location_listners.
+								//stopRepeatingTask();
+								//remove_location_listners();
 								try {
 									/*
 									 * while existing remove firebase listners
 									 */
-									remove_firebase_listners();
+									//remove_firebase_listners();
 								} catch (Exception e) {
 									System.out.println("no fb ref");
 								}
 
+								//Intent intent = new Intent(Login.this, Login.class);
+								//startActivity(intent);
+								//finish();
 								Login.this.finish();
 								System.exit(0);
 							}
@@ -2410,11 +2416,42 @@ public class Login extends Activity {
 			String current_place_refrence = commondata.places_found.ranking_places.get(rnk);
 			place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
 			listtitle.add(node.place_name);
-			listaddress.add(node.address);
+			
+			// we need to clean up the address
+			ArrayList<String> cleaned_location = new ArrayList<String>();
+			try{
+			String locadd = node.address;
+			String[] parts = locadd.split("'");
+			cleaned_location.add(parts[1]);
+			cleaned_location.add(parts[3]);
+			cleaned_location.add(parts[5]);
+			}catch(Exception e){
+				System.out.println("error exception : " + e );
+			}
+			
+			listaddress.add(cleaned_location.toString());
+			System.out.println(" node ratings is" + node.rating);
 			listrating.add(node.rating);
 			listtotalratings.add(node.total_ratings);
 			listprice.add(node.price_level);
-			listtypes.add(node.types);
+			
+			// we need to clean up the types
+						ArrayList<String> cleaned_types = new ArrayList<String>();
+			
+						
+						try{
+						String locadd = node.types;
+						String[] parts = locadd.split("'");
+						for(int i = 0; i< parts.length; i++){
+							if(!(i%2==0)){ // take only odd values
+							cleaned_types.add(parts[i].toLowerCase().replaceAll(" ", ""));
+							}
+						}
+						}catch(Exception e){
+							System.out.println("error exception : " + e );
+						}
+		    HashSet types_cleaning = new HashSet(cleaned_types);
+			listtypes.add(types_cleaning.toString());
 			listsnippets.add(node.snippet);
 			listplace_url.add(node.website);
 			listimage_url.add(node.image_url);
@@ -2569,7 +2606,24 @@ public class Login extends Activity {
     				
     			  }
     			});
+    			alert.setNeutralButton("View",  new DialogInterface.OnClickListener() {
+        			public void onClick(DialogInterface dialog, int whichButton) {
+        				String link = node.website;
+        				if(link != "null"){
+        					/*
+        					webView = (WebView) findViewById(R.id.webView1);
+        				    webView.getSettings().setJavaScriptEnabled(true);
+        				    webView.loadUrl(link);
+        					*/
+        				Uri url = Uri.parse(link);
+        		        Intent intent = new Intent(Intent.ACTION_VIEW, url);
+        		        startActivity(intent);
+        				}
 
+
+      			  }
+      			} );
+    			
     			alert.setPositiveButton("Add", new DialogInterface.OnClickListener() {
     			  public void onClick(DialogInterface dialog, int whichButton) {
     				    String[] parts = commondata.event_information.eventID.split("-->");
@@ -3180,7 +3234,7 @@ public class Login extends Activity {
    					 System.out.println("location" + latitude +", " + longitude);
    				 }
 					
-   				 if(info_about_place.has("rating")){ rating = Double.parseDouble(info_about_place.getString("rating"));}
+   				 if(info_about_place.has("ratings")){ rating = Double.parseDouble(info_about_place.getString("ratings"));}
 				 if(info_about_place.has("review_count")){total_ratings = info_about_place.getString("review_count");}
 				 if(info_about_place.has("image_url")){image_url = info_about_place.getString("image_url");}
 				 if(info_about_place.has("name")){

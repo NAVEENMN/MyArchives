@@ -138,7 +138,7 @@
         		android:src="@drawable/foodicon" />
             <TextView
                 android:id="@+id/placetype"
-                android:textColor="#D8D8D8"
+                android:textColor="#848484"
                 android:textSize="9sp"
                 android:text="@string/Gender"
                 android:layout_width="match_parent"
@@ -160,7 +160,7 @@
         		android:src="@drawable/speakicon" />
             <TextView
                 android:id="@+id/snippet"
-                android:textColor="#D8D8D8"
+                android:textColor="#848484"
                 android:textSize="9sp"
                 android:text="@string/Gender"
                 android:layout_width="match_parent"
