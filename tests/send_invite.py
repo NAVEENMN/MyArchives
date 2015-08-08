@@ -11,10 +11,11 @@ event =  "812345607380812-->event-->0"
 
 elon = "865432107380812"
 alan = "119979305002439"
+event = alan+"-->event-->0" #alan_fb-->event
 
 payload = dict()
 payload['host'] = alan # elon invite
-payload['to_id'] = "859842507380812"
+payload['to_id'] = "859842507380812" # send to naveen
 payload['payload_type'] = "invite_check"
 payload['payload_message'] = "dinner?"
 payload['sender_name'] = "alan turing"

@@ -29,15 +29,15 @@ def build_payload(host):
         payload['Longitude']= str(lon)
         payload['eventname']= "meeting"
         payload['food']= random.choice(food)
-        payload['nodename'] = random.choice(nodename)
-        payload['nodetype'] = "member"
+        payload['nodename'] = "alan turing"#random.choice(nodename)
+        payload['nodetype'] = "host"
         payload['price'] = random.choice(price)
         payload['travel'] = random.choice(travel)
 	return payload 
 
 def new_event(host):
 	eventid = host + "-->event-->0" 
-	path = URL + host + "/" + eventid +"/" +random.choice(members)
+	path = URL + host + "/" + eventid +"/" +host # adding alan to his event
 	payload = build_payload(host)
 	fb = Firebase(path)
 	fb.put(payload)
@@ -46,7 +46,7 @@ def new_event(host):
 
 
 def add_event():
-	host_id = "119979305002439"
+	host_id = "119979305002439" # alan`s id
 	new_event(host_id)
 
 def main():

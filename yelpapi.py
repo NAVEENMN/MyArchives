@@ -1,3 +1,7 @@
+'''
+yelpapi.py
+This is the implementation of getting data from yelp
+'''
 import argparse
 import json
 import pprint

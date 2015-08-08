@@ -9,7 +9,7 @@ def build_payload():
 	data['payload_type'] = sys.argv[3]
 	data['payload_message'] = sys.argv[4]
 	json_data = json.dumps(data)
-	#os.system("php send_gcm_message.php " + sys.argv[1] +" " + sys.argv[2] + " "+ json_data)
+	os.system("php send_gcm_message.php " + sys.argv[1] +" " + sys.argv[2] + " "+ json_data)
 
 def main():
 	build_payload()

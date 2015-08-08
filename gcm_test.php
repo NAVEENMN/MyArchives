@@ -10,13 +10,11 @@ payload format
         }
 */
 include 'databaseauth.php';
-$from_accountnumber = $_POST['param1'];//who sent it
-$to_facebookid = $_POST['param2'];//check to whom to send with email
-$payload = $_POST['param3'];
-$incoming_data = json_decode($payload);
-$type = $incoming_data -> payload_type;
-$event_reference =  $incoming_data -> event_reference;
-$sender_name = $incoming_data -> sender_name;//$incoming_data -> sender_name; 
+$from_accountnumber = 859842507380812;//who sent it
+$to_facebookid = "10152491626312681";//check to whom to send with email
+$type = "invite_check";
+$event_reference =  "859842507380812-->event-->0";
+$sender_name = "Naveen Mysore";//$incoming_data -> sender_name; 
 $result = mysql_query("SELECT * FROM accounts
  WHERE USERID ='$to_facebookid'") or die(mysql_error());
 $row = mysql_fetch_array( $result );
