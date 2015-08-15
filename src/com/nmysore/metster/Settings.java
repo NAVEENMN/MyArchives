@@ -18,6 +18,7 @@ import android.widget.RatingBar.OnRatingBarChangeListener;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
+import com.nmetster.metster.R;
 
 public class Settings extends Activity {
 	SharedPreferences sp;

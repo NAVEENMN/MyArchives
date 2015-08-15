@@ -46,14 +46,16 @@ import com.firebase.client.Firebase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.nmetster.metster.R;
 import com.nmysore.metster.util.SystemUiHider;
+
 
 public class LoadHome extends Activity {
 	public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    String SENDER_ID = "613142100758";
+    String SENDER_ID = "421425027996";
     static final String TAG = "GCMDemo";
 	private static final boolean AUTO_HIDE = true;
 	private static final int AUTO_HIDE_DELAY_MILLIS = 3000;

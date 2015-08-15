@@ -56,6 +56,7 @@ import com.facebook.android.FacebookError;
 import com.facebook.android.Util;
 import com.facebook.model.GraphUser;
 import com.firebase.client.Firebase;
+import com.nmetster.metster.R;
 
 /*
  * 	This class opens up when the App starts

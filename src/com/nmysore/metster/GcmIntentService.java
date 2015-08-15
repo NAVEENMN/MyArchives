@@ -20,6 +20,7 @@ import android.view.View;
 
 import com.firebase.client.Firebase;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.nmetster.metster.R;
 import com.nmysore.metster.Login.fb_event_ref;
 
 public class GcmIntentService extends IntentService {
@@ -231,8 +232,6 @@ public class GcmIntentService extends IntentService {
     public void createNotification(View view, String message) {
 	    // Prepare intent which is triggered if the
 	    // notification is selected
-	    Intent intent = new Intent(this, Login.class);
-	    PendingIntent pIntent = PendingIntent.getActivity(this, 0, new Intent(this, Accept_invite.class), 0);
 	    
 	    // Build notification
 	    // Actions are just fake
@@ -240,7 +239,7 @@ public class GcmIntentService extends IntentService {
 	        .setContentTitle("Metster")
 	        .setContentText(message).setSmallIcon(R.drawable.logo)
 	        .setAutoCancel(true)
-	        .setContentIntent(pIntent).build();
+	        .build();
 	    
 	    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	    // hide the notification after its selected

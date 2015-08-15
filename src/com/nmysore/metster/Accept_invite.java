@@ -48,6 +48,7 @@ import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
 import android.widget.Toast;
 
+import com.nmetster.metster.R;
 import com.nmysore.metster.Login.fb_event_ref;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
@@ -55,7 +56,7 @@ import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
 import com.facebook.android.Util;
 import com.firebase.client.Firebase;
-import com.nmysore.metster.R;
+
 
 public class Accept_invite extends Activity {
 	Facebook fb;

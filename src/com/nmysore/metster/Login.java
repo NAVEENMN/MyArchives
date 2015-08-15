@@ -66,6 +66,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -93,6 +94,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nmetster.metster.R;
 import com.nmysore.metster.commondata.host_event_node;
 import com.nmysore.metster.commondata.place_details;
 
@@ -167,12 +169,15 @@ public class Login extends Activity {
 	String server_response;
 	Integer async_counter = 0;
 	private WebView webView;
+	Integer marker_counter = 0;// this is used to navigate from point to point.
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);//Above setContentView, very important
 		setContentView(R.layout.activity_login);
 		setupActionBar();// Show the Up button in the action bar.
 		getActionBar().setIcon( new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+		
 		setTitle("New Event");
 		Firebase.setAndroidContext(this);
 				
@@ -1302,9 +1307,10 @@ public class Login extends Activity {
 														.get(i)))
 								.icon(BitmapDescriptorFactory
 										.fromResource(R.drawable.places))
+								.snippet("votes: ")
 								.title(commondata.places_found.names.get(i))
 								);
-
+					
 								
 							}else{
 					
@@ -1577,6 +1583,8 @@ public class Login extends Activity {
 		url = url + host +"/"+eventreference + "/" + commondata.facebook_details.facebook;
 		System.out.println("putting data to" + url);
 		final HashMap<String, String> fb_data = new HashMap<String, String>();
+		// **** get food pref from user 
+		
 		fb_data.put("nodename",commondata.facebook_details.name );
 		fb_data.put("eventname",event_reference);
 		fb_data.put("Latitude", commondata.user_information.latitude.toString());
@@ -1584,7 +1592,7 @@ public class Login extends Activity {
 		fb_data.put("price", Float.toString(commondata.prefrences.price));
 		fb_data.put("travel", Double.toString(commondata.prefrences.travel));
 		fb_data.put("food", commondata.prefrences.food);
-		fb_data.put("nodetype", "host");
+		fb_data.put("nodetype", "member");
 		
 		StringBuilder strBuilder = new StringBuilder("https://met-ster-event.firebaseio.com/");
 		strBuilder.append(host);
@@ -1687,7 +1695,11 @@ public class Login extends Activity {
 			
 			System.out.println("respoding to " + host + "from" + commondata.facebook_details.facebook);
 			gcm_send_data(commondata.facebook_details.facebook, host, json.toString());
-		   System.out.println("exiting on_invite_accepted");
+			//************* take this users food preference and set it on firebase
+			// landmark
+			//**** 
+		    System.out.println("exiting on_invite_accepted");	   
+		   
 	}
 		
 	/*
@@ -1945,6 +1957,126 @@ public class Login extends Activity {
 
 	
 	/*
+	 * name : pick_food_type_on_invite
+	 * @params : None
+	 * @return : void
+	 * @desp : This function prompts a dialog for user to pick food type and the same is set in firebase.
+	 */
+
+	public String pick_food_type_on_invite(final String event_reference) {
+		String[] parts = event_reference.split("-->");
+		String url = "https://met-ster-event.firebaseio.com/";
+		url = url + parts[0] +"/"+event_reference+ "/" + commondata.facebook_details.facebook;
+		final Firebase ft = new Firebase(url);
+	   
+		// Strings to Show In Dialog with Radio Buttons
+		final CharSequence[] items = { " Chinese ", " Coffee ", " American ",
+				"Sea Food", " Pizza ", " Asian ", " Japanese ", " Mexican ",
+				" Italian ", " Indian", "Ice Cream" };
+
+		// Creating and Building the Dialog
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("Select your Preference");
+		builder.setSingleChoiceItems(items, -1,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
+
+						switch (item) {
+						case 0:
+							commondata.prefrences.food = "chinese";
+							System.out.println("your preference is " + commondata.prefrences.food );
+							ft.child("food")
+							.setValue(commondata.prefrences.food);
+							break;
+						case 1:
+							// Your code when 2nd option seletced
+							commondata.prefrences.food = "coffee";
+							System.out.println("your preference is " + commondata.prefrences.food );
+							ft.child("food")
+							.setValue(commondata.prefrences.food);
+							break;
+						case 2:
+							// Your code when 3rd option seletced
+							commondata.prefrences.food = "american";
+							System.out.println("your preference is " + commondata.prefrences.food );
+							ft.child("food")
+							.setValue(commondata.prefrences.food);
+							break;
+						case 3:
+							// Your code when 4th option seletced
+							commondata.prefrences.food = "seafood";
+							System.out.println("your preference is " + commondata.prefrences.food );
+							ft.child("food")
+							.setValue(commondata.prefrences.food);
+							break;
+						case 4:
+							// Your code when first option seletced
+							commondata.prefrences.food = "pizza";
+							System.out.println("your preference is " + commondata.prefrences.food );
+							ft.child("food")
+							.setValue(commondata.prefrences.food);
+			
+							break;
+						case 5:
+							commondata.prefrences.food = "asian";
+							System.out.println("your preference is " + commondata.prefrences.food );
+							ft.child("food")
+							.setValue(commondata.prefrences.food);
+							
+							break;
+						case 6:
+							commondata.prefrences.food = "japanese";
+							System.out.println("your preference is " + commondata.prefrences.food );
+							ft.child("food")
+							.setValue(commondata.prefrences.food);
+						
+							break;
+						case 7:
+							commondata.prefrences.food = "mexican";
+							System.out.println("your preference is " + commondata.prefrences.food );
+							ft.child("food")
+							.setValue(commondata.prefrences.food);
+							
+							break;
+						case 8:
+							commondata.prefrences.food = "italian";
+							System.out.println("your preference is " + commondata.prefrences.food );
+							ft.child("food")
+							.setValue(commondata.prefrences.food);
+						
+							break;
+						case 9:
+							commondata.prefrences.food = "indian";
+							System.out.println("your preference is " + commondata.prefrences.food );
+							ft.child("food")
+							.setValue(commondata.prefrences.food);
+							
+							break;
+						case 10:
+							commondata.prefrences.food = "icecream";
+							System.out.println("your preference is " + commondata.prefrences.food );
+							ft.child("food")
+							.setValue(commondata.prefrences.food);
+							
+							break;
+						default:
+							commondata.prefrences.food = "american";
+							System.out.println("your preference is " + commondata.prefrences.food );
+							ft.child("food")
+							.setValue(commondata.prefrences.food);
+							break;
+
+						}
+						levelDialog.dismiss();
+					}
+				});
+		levelDialog = builder.create();
+		levelDialog.show();
+		return commondata.prefrences.food;
+	}
+	
+	
+	/*
 	 * name : gcm_send_data
 	 * @params : facebook_id, to_facebook_id, message
 	 * @return : server response
@@ -2161,6 +2293,7 @@ public class Login extends Activity {
 							System.out.println("accepted " + listeventreferences.get(Integer.parseInt(v.getTag().toString())));
 							parent.getChildAt(Integer.parseInt(v.getTag().toString())).setBackgroundColor(Color.BLUE);
 							// this will store in shared pref
+							pick_food_type_on_invite(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
 							on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
 							// On a new thread handle this case
 							
@@ -2371,11 +2504,9 @@ public class Login extends Activity {
 	 */
 	public void list_rest() {
 		// --------
-		
+		setProgressBarIndeterminateVisibility(false);
 		LinearLayout ll = (LinearLayout) findViewById(R.id.Profiledata);
 			View v = (View) findViewById(R.id.Dividerone);
-			
-			v.setBackgroundColor(Color.parseColor("#2E64FE"));
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Pick your choices");
@@ -2655,6 +2786,15 @@ public class Login extends Activity {
     							+ node.place_name.replace(".", ""))
     					.child("nodename")
     					.setValue(node.place_name);
+    					
+    					HashSet<String> voteset = new HashSet<String>();
+    					voteset.add(commondata.facebook_details.facebook);
+    					
+    					ft.child(commondata.event_information.eventID)
+    					.child("rest--"
+    							+ node.place_name.replace(".", ""))
+    					.child("votes")
+    					.setValue(voteset);
     				
     			  }
     			});
@@ -2980,12 +3120,6 @@ public class Login extends Activity {
 					break;
 				case 2:
 					imgFp.setImageResource(R.drawable.infotwo);
-					break;
-				case 3:
-					imgFp.setImageResource(R.drawable.infothree);
-					break;
-				case 4:
-					imgFp.setImageResource(R.drawable.infofour);
 					infocounter = 0;
 					break;
 				default:
@@ -3353,7 +3487,7 @@ public class Login extends Activity {
 
         @Override
         protected void onPostExecute(String result) {
-        	 
+        	
         	System.out.println("status " + result);
         	
         }
@@ -3361,9 +3495,7 @@ public class Login extends Activity {
         @Override
         protected void onPreExecute() {
         	
-        	
-  			View v = (View) findViewById(R.id.Dividerone);
-  			v.setBackgroundColor(Color.parseColor("#2EFEC8"));
+        	setProgressBarIndeterminateVisibility(true);
         	toast_info("Exploring...");
         }
 
@@ -3439,8 +3571,34 @@ public class Login extends Activity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			if (commondata.event_information.eventID != null) {
+				if(marker_counter > commondata.places_found.latitudes.size()-1){
+					marker_counter = 0;
+				}
 				mMap.animateCamera(CameraUpdateFactory.zoomTo(12), 2000, null);
+                	
+				// Get a handler that can be used to post to the main thread
+				Handler mainHandler = new Handler(getApplicationContext().getMainLooper());
+				mainHandler.postDelayed( new Runnable() {
+					
+					@Override
+					public void run() {
+						if(marker_counter > commondata.places_found.latitudes.size()-1){
+							marker_counter = 0;
+						}
+						mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+								commondata.places_found.latitudes
+								.get(marker_counter),
+						commondata.places_found.longitudes
+								.get(marker_counter)),
+					            15));
+						
+						marker_counter  = marker_counter + 1;
+						
+					}
+				}, 2000);
+				
 			}
+			
 			return true;
 
 		case R.id.about_icon:
