@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/exitbase"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">  
+
+<LinearLayout 
+     android:id="@+id/exitbaselayer1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_rect_background"
+    android:orientation="vertical" >
+    
+	<TextView
+                android:id="@+id/Exit"
+                android:textColor="#CEE3F6"
+                android:textSize="28sp"
+                
+                android:layout_marginBottom="20dp"
+                android:text="@string/exit"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+</LinearLayout>
+<LinearLayout 
+     android:id="@+id/exitbaselayer2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="horizontal" >
+
+  <Button
+	    android:id="@+id/exit_no"
+	    style="?android:attr/buttonBarButtonStyle"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:background="@android:color/transparent"
+	    android:drawableTop="@drawable/buttonhandler"
+	     android:layout_gravity="center"
+	    android:onClick="Add_Friends" />
+  
+    <Button
+	    android:id="@+id/exit_yes"
+	    style="?android:attr/buttonBarButtonStyle"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:background="@android:color/transparent"
+	    android:drawableTop="@drawable/buttonhandler"
+	     android:layout_gravity="center"
+	    android:onClick="Add_Friends" />
+  </LinearLayout>
+
+</LinearLayout>

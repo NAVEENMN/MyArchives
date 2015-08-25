@@ -80,6 +80,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,9 +91,12 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nmetster.metster.R;
 import com.nmysore.metster.commondata.host_event_node;
@@ -178,7 +182,7 @@ public class Login extends Activity {
 		setupActionBar();// Show the Up button in the action bar.
 		getActionBar().setIcon( new ColorDrawable(getResources().getColor(android.R.color.transparent)));
 		
-		setTitle("New Event");
+		setTitle("View Next");
 		Firebase.setAndroidContext(this);
 				
 		// This is just a verification		
@@ -426,7 +430,7 @@ public class Login extends Activity {
 			
 
 		} else {// event is not there
-			setTitle("New Event");// tell user to setup new event
+			//setTitle("New Event");// tell user to setup new event
 		}
 
 		// --------
@@ -677,6 +681,7 @@ public class Login extends Activity {
 			public void onChildChanged(DataSnapshot arg0, String arg1) {
 				// TODO Auto-generated method stub
 				System.out.println("child changed");
+				get_votes();
 			}
 			
 			@Override
@@ -761,7 +766,13 @@ public class Login extends Activity {
 			JSONObject event_data = (JSONObject) host_data.get(eventid);
 			System.out.println("raw json " + event_data);
 			String hostname = event_data.getString("hostname");
+			if( hostname.length() > 10 ){
+				hostname = hostname.substring(0, 7) + "...";
+			}
 			String eventname = event_data.getString("eventname");
+			if( eventname.length() > 10 ){
+				eventname = eventname.substring(0, 7) + "...";
+			}
 			String members = event_data.getString("number_of_children");
 			String host_ref = event_data.getString("host_id");
 			System.out.println("hostname" + hostname);
@@ -804,6 +815,7 @@ public class Login extends Activity {
 		        TextView fullname;
 		        TextView eventname;
 		        ImageButton accept;
+		        ImageButton reject;
 		    }
 
 		    public View getView(final int position, View convertView,
@@ -823,7 +835,8 @@ public class Login extends Activity {
 		                    .findViewById(R.id.fullname);
 		            holder.eventname = (TextView) convertView.findViewById(R.id.eventname);
 		            //View v = inflater.inflate( R.layout.invitelist, parent, false);
-		            holder.accept = (ImageButton) convertView.findViewById(R.id.myevent_friendinvite);
+		            holder.accept = (ImageButton) convertView.findViewById(R.id.myevent_accept);
+		            holder.reject = (ImageButton) convertView.findViewById(R.id.myevent_reject);
 		            holder.himage = (ImageView)  convertView.findViewById(R.id.myeventhostimage);
 		            
 		           
@@ -839,12 +852,36 @@ public class Login extends Activity {
 							String eventid = listeventids.get(Integer.parseInt(v.getTag().toString()));
 							System.out.println("event to be launched" + eventid);
 							pull_data_from_firebase(eventid);
+							//dialog.dismiss();
+							// this will store in shared pref
+							//on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
+							// On a new thread handle this case	
+						}
+						
+						
+						
+						
+					});
+		            
+		            
+		            holder.reject.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							System.out.println("deleting... " + listeventids.get(Integer.parseInt(v.getTag().toString())));
+							
 							
 							// this will store in shared pref
 							//on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
 							// On a new thread handle this case	
 						}
-					}); 
+						
+						
+						
+						
+					});
+		            
 		            
 		            convertView.setTag(holder);
 		        } else {
@@ -853,6 +890,7 @@ public class Login extends Activity {
 		        }       
 		        System.out.println("setting" + listhostnames.get(position));
 		        holder.accept.setTag(position);
+		        holder.reject.setTag(position);
 		        holder.fullname.setText(listhostnames.get(position));
 		        holder.eventname.setText(listeventnames.get(position));
 		        //holder.himage.setImageBitmap(listhostimages.get(position));
@@ -1111,6 +1149,20 @@ public class Login extends Activity {
 		System.out.println("exit"  + "pull_data_from_firebase");
 	}
 	
+	
+	/*
+	 * name : on_chat_click
+	 * @params : View
+	 * @return : null
+	 * @desp : this starts the chat intent
+	 */
+	
+	public void on_chat_click(View v){
+		Intent intent = new Intent(this, Chat.class);
+
+	    startActivity(intent);
+	}
+	
 	/*
 	 * name : display_node_data
 	 * @params : None
@@ -1248,11 +1300,24 @@ public class Login extends Activity {
 		// ----------- Section Maps
 		GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(
 				R.id.visitormap)).getMap();
+		
+		// set the my location button position
+					View mapView = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getView();
+					View btnMyLocation = ((View) mapView.findViewById(1).getParent()).findViewById(2);
+					
+					map.setMyLocationEnabled(true);
+					RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(120,120); // size of button in dp
+				    params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+				    params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+				    params.setMargins(0, 0, 0, 0);
+				    btnMyLocation.setLayoutParams(params);
+				    
+				    
 
 		LatLng currlocation = new LatLng(commondata.user_information.latitude,
 				commondata.user_information.longitude);// yours
 
-		map.setMyLocationEnabled(true);
+		
 		
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
 		map.getUiSettings().setZoomControlsEnabled(false);
@@ -1276,7 +1341,41 @@ public class Login extends Activity {
 					R.id.visitormap)).getMap();
 			mMap.clear();
 			mMap.setTrafficEnabled(true);
+			mMap.animateCamera(CameraUpdateFactory.zoomTo(12), 1000, null);
+			
+			// set the my location button position
+			View mapView = ((MapFragment) getFragmentManager().findFragmentById(R.id.visitormap)).getView();
+			View btnMyLocation = ((View) mapView.findViewById(1).getParent()).findViewById(2);
+			
+			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(80,80); // size of button in dp
+		    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+		    params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+		    params.setMargins(0, 0, 0, 0);
+		    btnMyLocation.setLayoutParams(params);
+			
 			try {
+				
+				// setup the votes
+				get_votes();
+				
+				/*
+				for(Integer rnk = 0; rnk < commondata.places_found.ranking_places.size(); rnk = rnk + 1){
+					String current_place_refrence = commondata.places_found.ranking_places.get(rnk);
+					place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
+					
+				}
+				
+				*/
+				// we know that rank starts from zero
+				// when we hit a place update rank counter and pull data for that node.
+				
+				System.out.println("to print on map");
+				for(int i=0; i< commondata.places_found.latitudes.size(); i++){
+					System.out.println(commondata.places_found.names);
+				}
+				
+				Integer rank = 0;
+				
 				for (int i = 0; i < commondata.places_found.latitudes.size(); i++) {
 					
 					System.out.println("token " + commondata.places_found.tokens.get(i));
@@ -1296,7 +1395,21 @@ public class Login extends Activity {
 						}else{
 							
 							if(commondata.places_found.tokens.get(i).contains("place")){
+								// ***** we need to get vote counts and set icon based on that
+							
+								//String current_place_refrence = commondata.places_found.ranking_places.get(rank);
+								//place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
+								//System.out.println("this should have listed first " + node.place_name.toString());
+								System.out.println("rank " + rank.toString());
+								get_votes();
 								
+								Integer vote_count = commondata.places_found.place_votes
+										.get(commondata.places_found.names.get(i));
+								
+								if(vote_count == null){
+									vote_count = 0;
+									
+								}
 								
 								mMap.addMarker(new MarkerOptions()
 								.position(
@@ -1306,12 +1419,84 @@ public class Login extends Activity {
 												commondata.places_found.longitudes
 														.get(i)))
 								.icon(BitmapDescriptorFactory
-										.fromResource(R.drawable.places))
-								.snippet("votes: ")
+										.fromResource(R.drawable.places_votes_1))
+								.snippet("votes: " + vote_count)
+								
 								.title(commondata.places_found.names.get(i))
 								);
-					
 								
+								
+								mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+									
+									@Override
+									public boolean onMarkerClick(Marker arg0) {
+										// TODO Auto-generated method stub
+										System.out.println("marker clicked " + arg0.getId() +" " + arg0.getTitle());
+										return false;
+									}
+								});
+								
+								mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+									
+									@Override
+									public void onInfoWindowClick(Marker arg0) {
+										// TODO Auto-generated method stub
+										try{
+														System.out.println("info window clicked " + arg0.getId() + " title : "+arg0.getTitle());
+														
+														final String place_name = arg0.getTitle();
+														
+														String[] parts = commondata.event_information.eventID.split("-->");
+								    				    System.out.println("to split" +parts[0] ); // come here
+								    				    
+								    					StringBuilder strBuilder = new StringBuilder(
+								    							"https://met-ster-event.firebaseio.com/");
+								    					strBuilder.append(parts[0]);
+								    					String frt = strBuilder.toString();
+								    					final Firebase ft = new Firebase(frt);
+								    				    
+								    	try{
+								    					ft.child(commondata.event_information.eventID)
+								    					.child("rest--"
+								    							+ place_name.replace(".", ""))
+								    					.child("votes").addListenerForSingleValueEvent(new ValueEventListener() {
+															
+															@Override
+															public void onDataChange(DataSnapshot arg0) {
+																// TODO Auto-generated method stub
+																if(arg0.getValue() != null){
+																String list = arg0.getValue().toString();
+																
+										    					list = list + "--" + commondata.facebook_details.facebook;
+																ft.child(commondata.event_information.eventID)
+										    					.child("rest--"
+										    							+ place_name.replace(".", ""))
+										    					.child("votes")
+										    					.setValue(list);
+																
+																toast_info("voted up");
+																}
+															}
+															
+															@Override
+															public void onCancelled(FirebaseError arg0) {
+																// TODO Auto-generated method stub
+																
+															}
+														});
+								    	}catch(Exception e){
+								    		System.out.println("no child");
+								    	}
+								    					get_votes(); // update votes		
+								    					next_place();
+								    					
+									} catch (Exception e) {
+										System.out.println("We are aware that people has no vote");
+									}
+									}
+								});
+					
+								rank = rank + 1;
 							}else{
 					
 								mMap.addMarker(new MarkerOptions()
@@ -1336,13 +1521,13 @@ public class Login extends Activity {
 				mMap.getUiSettings().setZoomControlsEnabled(false);
 				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currlocation, 18));
 			} catch (Exception e) {
-				System.out.println("something fishy in setting up map");
+				System.out.println("something fishy in setting up map " + e);
 				// ret_data();
 			}
 		} catch (Exception e) {
 			System.out.println("unable to put maps");
 		}
-		
+		next_place();
 		System.out.println("exit set_up_map_view");
 	}
 
@@ -1390,7 +1575,7 @@ public class Login extends Activity {
 	 */
 	@Override
 	public void onBackPressed() {
-
+	
 		new AlertDialog.Builder(this)
 				.setView(
 						getLayoutInflater().inflate(R.layout.custom_exit, null))
@@ -1418,6 +1603,18 @@ public class Login extends Activity {
 								System.exit(0);
 							}
 						}).setNegativeButton("No", null).show();
+		
+		/*
+		final Dialog dialog = new Dialog(Login.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.custom_exit);
+        dialog.show();
+		*/
+		
+		
+		
 	}
 
 	/*
@@ -2132,7 +2329,7 @@ public class Login extends Activity {
 
 								@Override
 								public void run() {
-									toast_info("We encountered some error while adding this person!!");
+									toast_info("We encountered some error!!");
 								}
 							});
 
@@ -2548,7 +2745,7 @@ public class Login extends Activity {
 			place_details node = commondata.places_found.ranking_nodes.get(current_place_refrence);
 			listtitle.add(node.place_name);
 			
-			// we need to clean up the address
+			// we need to clean up the address clean the special chars
 			ArrayList<String> cleaned_location = new ArrayList<String>();
 			try{
 			String locadd = node.address;
@@ -2610,7 +2807,6 @@ public class Login extends Activity {
 		        
 		    }
 
-		    
 		    public View getView(final int position, View convertView,
 		            ViewGroup parent) {
 		    	
@@ -2667,7 +2863,7 @@ public class Login extends Activity {
 		        }else{
 		        new Thread(new Runnable() { 
 		            public void run(){  
-		            	System.out.println("thread issued");
+		            	System.out.println("yelp image retrieve thread issued");
 		            
 		            	try {
 							new YelpImageDownloaderTask(holder.icon).execute(listimage_url.get(position)).get();
@@ -2787,14 +2983,17 @@ public class Login extends Activity {
     					.child("nodename")
     					.setValue(node.place_name);
     					
-    					HashSet<String> voteset = new HashSet<String>();
-    					voteset.add(commondata.facebook_details.facebook);
+    					
+    					//HashSet<String> voteset = new HashSet<String>();
+    					//voteset.add(commondata.facebook_details.facebook);
+    					
+    					String fbid = commondata.facebook_details.facebook;
     					
     					ft.child(commondata.event_information.eventID)
     					.child("rest--"
     							+ node.place_name.replace(".", ""))
     					.child("votes")
-    					.setValue(voteset);
+    					.setValue(fbid);
     				
     			  }
     			});
@@ -3120,6 +3319,9 @@ public class Login extends Activity {
 					break;
 				case 2:
 					imgFp.setImageResource(R.drawable.infotwo);
+					break;
+				case 3:
+					imgFp.setImageResource(R.drawable.infosix);
 					infocounter = 0;
 					break;
 				default:
@@ -3505,9 +3707,105 @@ public class Login extends Activity {
         }
     }
 
+/*
+ * name : next_place
+ */
+private void next_place(){
+	if (commondata.event_information.eventID != null) {
+		if(marker_counter > commondata.places_found.latitudes.size()-1){
+			marker_counter = 0;
+		}
+		mMap.animateCamera(CameraUpdateFactory.zoomTo(12), 1000, null);
+		
+		// Get a handler that can be used to post to the main thread
+		Handler mainHandler = new Handler(getApplicationContext().getMainLooper());
+		mainHandler.postDelayed( new Runnable() {
+			
+			@Override
+			public void run() {
+				if(marker_counter > commondata.places_found.latitudes.size()-1){
+					marker_counter = 0;
+				}
+				
+				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+						commondata.places_found.latitudes
+						.get(marker_counter),
+				commondata.places_found.longitudes
+						.get(marker_counter)),
+			            15));
+				
+				marker_counter  = marker_counter + 1;
+				
+			}
+		}, 2000);
+		
+	}else{
+		toast_info("click on My events to join a event");
+	}
+}
+	
 
+/*
+ * name : get_votes
+ */
+private void get_votes(){
+	// get votes
+	for(int i=0; i<commondata.places_found.latitudes.size() ; i++ ) {
+		
+		if(commondata.places_found.tokens.get(i) != null) {
+					
+					if(commondata.places_found.tokens.get(i).contains("place")){ // if place get votes
+							final String place_name = commondata.places_found.names.get(i);
+							if(place_name != null ){
+							String[] parts = commondata.event_information.eventID.split("-->");
+						    System.out.println("to split" +parts[0] ); // come here
+						    
+							StringBuilder strBuilder = new StringBuilder(
+									"https://met-ster-event.firebaseio.com/");
+							strBuilder.append(parts[0]);
+							String frt = strBuilder.toString();
+							final Firebase ft = new Firebase(frt);
+						
+							ft.child(commondata.event_information.eventID)
+							.child("rest--"
+									+ place_name.replace(".", ""))
+							.child("votes").addListenerForSingleValueEvent(new ValueEventListener() {
+								
+								@Override
+								public void onDataChange(DataSnapshot arg0) {
+									// TODO Auto-generated method stub
+									if(arg0.getValue() != null){
+											String idlist = arg0.getValue().toString();
+											String[] votes = idlist.split("--");
+											HashSet hashSet = new HashSet();
+					                        for(int i=0; i<votes.length ; i ++){
+					                        	hashSet.add(votes[i]);
+					                        }
+											System.out.println("list ids" + votes.length);			
+											commondata.places_found.votes_places.add(votes.length);
+											System.out.println("index " + "votes :" + votes.length);
+											System.out.println("list hasd" +  idlist);
+										
+											System.out.println("hash size" + hashSet.size());
+											commondata.places_found.place_votes.put(
+													 place_name.replace(".", ""), hashSet.size());
+									}
+								}
+								
+								@Override
+								public void onCancelled(FirebaseError arg0) {
+									// TODO Auto-generated method stub
+									
+								}
+							});
+							
+					}
+					}
+					
+	}
 	
-	
+	}
+}
 	
 	/*
 	 * name : postData
@@ -3570,34 +3868,8 @@ public class Login extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			if (commondata.event_information.eventID != null) {
-				if(marker_counter > commondata.places_found.latitudes.size()-1){
-					marker_counter = 0;
-				}
-				mMap.animateCamera(CameraUpdateFactory.zoomTo(12), 2000, null);
-                	
-				// Get a handler that can be used to post to the main thread
-				Handler mainHandler = new Handler(getApplicationContext().getMainLooper());
-				mainHandler.postDelayed( new Runnable() {
-					
-					@Override
-					public void run() {
-						if(marker_counter > commondata.places_found.latitudes.size()-1){
-							marker_counter = 0;
-						}
-						mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-								commondata.places_found.latitudes
-								.get(marker_counter),
-						commondata.places_found.longitudes
-								.get(marker_counter)),
-					            15));
-						
-						marker_counter  = marker_counter + 1;
-						
-					}
-				}, 2000);
-				
-			}
+			
+			next_place();
 			
 			return true;
 

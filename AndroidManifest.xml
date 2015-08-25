@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nmetster.metster"
-    android:versionCode="11"
+    android:versionCode="13"
     android:versionName="1.0" >
 
     <uses-sdk
@@ -17,7 +17,8 @@
         android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
+    <uses-permission android:name="android.permission.VIBRATE" >
+    </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
@@ -62,7 +63,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-   
         <activity android:name="com.facebook.LoginActivity" />
         <activity
             android:name="com.nmysore.metster.Login"
@@ -77,19 +77,18 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <!-- release  AIzaSyDmkqR_CqB0KKutsRFWr5V1CKrnrXNhawI -->
+        <!-- debug AIzaSyDUL5JCD2DCnOROSKAnWhZ-q6Z8gn3PSnI -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDUL5JCD2DCnOROSKAnWhZ-q6Z8gn3PSnI" />
-           <!-- android:value="AIzaSyDmkqR_CqB0KKutsRFWr5V1CKrnrXNhawI" /> -->
+        <!-- android:value="AIzaSyDmkqR_CqB0KKutsRFWr5V1CKrnrXNhawI" /> -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-    
-
         <uses-library android:name="com.google.android.maps" />
 
-  
         <activity
             android:name="com.nmysore.metster.LoadHome"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -104,8 +103,6 @@
             android:name="com.nmysore.metster.Settings"
             android:label="@string/title_activity_settings" >
         </activity>
-      
-     
         <activity
             android:name="com.nmysore.metster.ViewPlaces"
             android:label="@string/title_activity_view_places" >
@@ -127,6 +124,12 @@
         <activity
             android:name="com.nmysore.metster.Accept_invite"
             android:label="@string/title_activity_accept_invite" >
+        </activity>
+        <activity
+            android:name="com.nmysore.metster.Chat"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_chat"
+            android:theme="@style/FullscreenTheme" >
         </activity>
     </application>
 

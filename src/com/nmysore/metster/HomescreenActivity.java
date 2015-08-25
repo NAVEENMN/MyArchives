@@ -220,7 +220,7 @@ public class HomescreenActivity extends Activity {
 					Thread thread = new Thread() {
 					    @Override
 					    public void run() {
-					    	System.out.println("before post");
+					    	System.out.println("putting user data to database");
 					    	
 					    	JSONObject json_to_server = new JSONObject(); 
 					    	JSONObject invites_to_server = new JSONObject();
@@ -338,23 +338,20 @@ public class HomescreenActivity extends Activity {
 	private void getProfileInformation() {
 		System.out.println("getprofilebefore");
 		try {
-			System.out.println("getprofile");
+			System.out.println("geting your profile and your friends");
 			JSONObject profile = Util.parseJson(commondata.facebook_details.fb
 					.request("me"));
 			JSONObject profilefriends = Util.parseJson(commondata.facebook_details.fb
 					.request("me/friends"));
 			
-			Log.e("Profile", "" + profile);
 			JSONArray jArray = profilefriends.getJSONArray("data");
 			commondata.facebook_details.friends = profilefriends.getJSONArray("data");
+			
+			System.out.println("Executing image download task for " + jArray.length() + " friends");
             for(int i=0;i<jArray.length();i++){
- 	
-                    final JSONObject json_data = jArray.getJSONObject(i);
-                    
+                    final JSONObject json_data = jArray.getJSONObject(i);  
                     new Thread(new Runnable() { 
     		            public void run(){  
-    		            	System.out.println("thread issued");
-    		            	
     							try {
 									new AllImageDownloaderTask().execute(json_data.getString("id")).get();
 								} catch (JSONException e) {
@@ -366,12 +363,11 @@ public class HomescreenActivity extends Activity {
 								} catch (ExecutionException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
-								}
-    						
+								}	
     		            }
-    		        }).start();
-                    
+    		        }).start();      
              }
+            System.out.println("checking if thread is blocked");
 			final String mUserId = profile.getString("id");
 			final String mUserName = profile.getString("name");
 			final String mUserEmail = profile.getString("email");
@@ -386,9 +382,7 @@ public class HomescreenActivity extends Activity {
 			commondata.facebook_details.email = mUserEmail;
 			commondata.facebook_details.profile_image = mIcon1;
 			commondata.lazyload.image_ref.put(mUserId, mIcon1);
-			System.out.println(Integer
-					.toString(commondata.facebook_details.profile_image
-							.getHeight()));
+			
 			commondata.user_information.profileimage = BitMapToString(mIcon1);
 			
 			Request.executeMyFriendsRequestAsync(commondata.facebook_details.fb.getSession(),

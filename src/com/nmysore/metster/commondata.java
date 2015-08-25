@@ -20,6 +20,7 @@ import com.facebook.android.Facebook;
 public class commondata {
 
 	static Boolean pull_host_info; // its a temporary fix
+	static int votes;
 	
 	public static class facebook_details{
 		static String facebook;
@@ -88,11 +89,14 @@ public class commondata {
 		static ArrayList<Double> ratings = new ArrayList<Double>();
 		static ArrayList<String> names = new ArrayList<String>();
 		static ArrayList<String> tokens = new ArrayList<String>();
+		static String votes_list;
 		static ArrayList<String> rankedplaces = new ArrayList<String>();
 		static ArrayList<Double> rankedlatitudes = new ArrayList<Double>();
+		static ArrayList<Integer> votes_places = new ArrayList<Integer>();
 		static ArrayList<Double> rankedlongitudes = new ArrayList<Double>();
 		static HashMap<Integer, String> ranking_places = new HashMap<Integer, String>(); // This hashmap links rank as key and place as value
 		static HashMap<String, place_details> ranking_nodes = new HashMap<String, place_details>();
+		static HashMap<String, Integer> place_votes = new HashMap<String, Integer>();
 	}
 	
 	public static class server_res{
@@ -114,6 +118,7 @@ public class commondata {
 		Double longitude;
 		String total_ratings;
 		String types;
+		String votes;
 		String snippet;
 		String image_url;
 		

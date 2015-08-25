@@ -16,7 +16,7 @@
 
 
     <!-- Home screen -->
- 	<string name="app_name" translatable="false">Metster</string>
+    <string name="app_name" translatable="false">Metster</string>
     <!-- ******************************************************** -->
 
 
@@ -35,23 +35,20 @@
     <string name="StudentType">Graduate</string>
     <string name="Major">Major</string>
     <string name="Gender">M</string>
-   
     <string name="CurrentLocation">Location</string>
     <string name="CurrentCounty">County</string>
     <string name="CurrentCountry">Country</string>
     <string name="updateprofile">update profile</string>
-    
     <string name="breakfast">Breakfast</string>
     <string name="lunch">Lunch</string>
     <string name="linner">Linner</string>
     <string name="dinner">Dinner</string>
-    
+
     <!-- ******************************************************** -->
 
 
     <!-- Update Profile -->
 
-   
     <string name="Update">Submit</string> <!-- Button Update -->
     <string name="facebook_app_id">1500888230193192</string>
     <!-- ******************************************************** -->
@@ -68,7 +65,7 @@
 
     <!-- Settings -->
 
-	<string name="ProfileSettings">Profile Settings</string>
+    <string name="ProfileSettings">Profile Settings</string>
     <string name="AboutMetster">About Metster</string>
     <string name="Support">Support</string>
     <string name="Privacy">Privacy</string>
@@ -79,19 +76,19 @@
     <!-- ******************************************************** -->
 
 
-  
     <!-- ******************************************************** -->
 
 
     <!-- Others -->
-    
+
     <string name="action_settings">Settings</string>
     <string name="hello_world">Metster</string>
     <string name="desc">User Image</string>
-    
+
     <!-- ******************************************************** -->
     <string name="new_event">Do you want to setup a new event?</string>
     <string name="event_name"> My Events </string>
+    <string name="event_chat"> Chat </string>
     <string name="event_type"> Food</string>
     <string name="event_date"> Pick a Date</string>
     <string name="start_time">Pick start time</string>
@@ -129,16 +126,14 @@
     <string name="title_activity_getlocation">Getlocation</string>
     <string name="title_activity_gcm_handle">GCM_handle</string>
     <string name="title_activity_accept_invite">Accept_invite</string>
-    
     <string name="plan">What`s the plan?</string>
     <string name="facebookpost">*We do not post anything on facebook.</string>
     <string name="infonext">Next</string>
-    
-     <string name="exit">Do you want to exit?</string>
-     
-     
-     <!-- ******************************************************-->
-     
-     <string name="profile_settings"> Profile Settings </string>
+    <string name="exit">Do you want to exit?</string>
+
+    <!-- ****************************************************** -->
+
+    <string name="profile_settings"> Profile Settings </string>
+    <string name="title_activity_chat">Chat</string>
 
 </resources>
