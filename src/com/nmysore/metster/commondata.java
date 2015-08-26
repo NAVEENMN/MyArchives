@@ -97,6 +97,7 @@ public class commondata {
 		static HashMap<Integer, String> ranking_places = new HashMap<Integer, String>(); // This hashmap links rank as key and place as value
 		static HashMap<String, place_details> ranking_nodes = new HashMap<String, place_details>();
 		static HashMap<String, Integer> place_votes = new HashMap<String, Integer>();
+		static HashMap<String, place_details> place_to_map = new HashMap<String, place_details>();
 	}
 	
 	public static class server_res{

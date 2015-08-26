@@ -64,7 +64,7 @@
 		        android:orientation="horizontal" >
        
        		<TextView
-        		android:id="@+id/title"
+        		android:id="@+id/place_to_map_title"
         		android:textColor="#424242"
         		android:textSize="18sp"
         		android:text=""
@@ -92,7 +92,7 @@
         		android:src="@drawable/mappin" />
      	   
             <TextView
-                android:id="@+id/placeaddress"
+                android:id="@+id/mapplaceaddress"
                 android:textColor="#848484"
                 android:textSize="10sp"
                 android:text="@string/Name"
@@ -114,16 +114,10 @@
         		android:layout_height="15dp"
         		android:contentDescription="@string/AboutMetster"
         		android:src="@drawable/thumb" />
-            <TextView
-                android:id="@+id/placereviews"
-                android:textColor="#848484"
-                android:textSize="10sp"
-                android:text="@string/StudentType"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
+  
             
             	<RatingBar
-                android:id="@+id/placeratings"
+                android:id="@+id/mapplaceratings"
                 android:layout_width="wrap_content"
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_gravity="right"
@@ -136,7 +130,7 @@
             
         
             <LinearLayout
-		        android:id="@+id/typessections"
+		        android:id="@+id/maptypessections"
 		        android:baselineAligned="false"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
@@ -149,7 +143,7 @@
         		android:contentDescription="@string/AboutMetster"
         		android:src="@drawable/foodicon" />
             <TextView
-                android:id="@+id/placetype"
+                android:id="@+id/mapplacetype"
                 android:textColor="#848484"
                 android:textSize="9sp"
                 android:text="@string/Gender"
@@ -171,7 +165,7 @@
         		android:contentDescription="@string/AboutMetster"
         		android:src="@drawable/speakicon" />
             <TextView
-                android:id="@+id/snippet"
+                android:id="@+id/mapsnippet"
                 android:textColor="#848484"
                 android:textSize="9sp"
                 android:text="@string/Gender"

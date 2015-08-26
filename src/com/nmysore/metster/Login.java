@@ -89,6 +89,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.firebase.client.snapshot.Node;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
@@ -995,7 +996,6 @@ public class Login extends Activity {
 									host_data.put("number_of_children", number_of_children);
 									host_data.put("host_id", host);
 									Iterable<DataSnapshot> host_attr = snapshot.getChildren();
-									
 									Iterator<DataSnapshot> params = host_attr.iterator();
 									while(params.hasNext()){
 									DataSnapshot val = params.next();
@@ -1067,6 +1067,7 @@ public class Login extends Activity {
 	private void pull_data_from_firebase(final String eventid){
 		System.out.println("enter"  + "pull_data_from_firebase");
 		commondata.event_information.given_events_lookup.clear();
+		commondata.places_found.place_to_map.clear();
 		String[] data = eventid.split("-->");
 		final String host = data[0];// this give refrence to facebook id
 		final String eventref = data[1]+"-->"+data[2];//event-->1
@@ -1094,36 +1095,99 @@ public class Login extends Activity {
 		    		System.out.println("event "+ hostnode.eventid );// bug
 		    		Iterable<DataSnapshot> data = eventkey.getChildren();
 		    		Iterator<DataSnapshot> dat = data.iterator();
+		    		
+		    		System.out.println("member   : " + eventkey.getName().toString());
+		    		
+		    		place_details place_node = new place_details();
 		    		while(dat.hasNext()){// this segment pulls users
-		    			DataSnapshot params = dat.next();	
-		    			if(params.getName().toString() == "eventname") hostnode.event_name = params.getValue().toString();
-		    			commondata.event_information.eventname = hostnode.event_name;
-		    			if(params.getName().toString() == "nodename") hostnode.nodename = params.getValue().toString();
-		    			if(params.getName().toString() == "nodetype") hostnode.nodetype = params.getValue().toString();
-	    				if(params.getName().toString() == "food") hostnode.food_type = params.getValue().toString();
-	    				if(params.getName().toString() == "price") hostnode.price = params.getValue().toString();
-	    				if(params.getName().toString() == "travel") hostnode.travel = params.getValue().toString();
-	    				if(params.getName().toString() == "Latitude") {
-	    					hostnode.Latitude = Double.parseDouble(params.getValue().toString());
-	    					System.out.println("values added location "+ hostnode.Latitude + hostnode.Longitude);
-	    				}
-	    				if(params.getName().toString() == "Longitude"){
-	    					hostnode.Longitude = Double.parseDouble(params.getValue().toString());
-	    					System.out.println("values added location "+ hostnode.Latitude + hostnode.Longitude);
-	    				}
-	    				if(hostnode.Longitude != null || hostnode.Longitude != null){
-	    					flag = true;
-	    				}
-	    				
+		    			DataSnapshot params = dat.next();
+		    			
+		    			// data inconsitency needs to be fixed.
+		    			// we are storing place data in extra hash table.
+		    			String pinmap = eventkey.getName().toString();
+		    			if(pinmap.contains("rest")){
+		    				
+		    				// ---- to put on map
+		    				if(params.getName().toString() == "nodename") hostnode.nodename = params.getValue().toString();
+		    				if(params.getName().toString() == "nodetype") hostnode.nodetype = params.getValue().toString();
+		    				if(params.getName().toString() == "Latitude") {
+		    					hostnode.Latitude = Double.parseDouble(params.getValue().toString());
+		    				}
+		    				if(params.getName().toString() == "Longitude"){
+		    					hostnode.Longitude = Double.parseDouble(params.getValue().toString());
+		    					
+		    				}
+		    				if(hostnode.Longitude != null || hostnode.Longitude != null){
+		    					flag = true;
+		    				}
+		    				if(params.getName().toString() == "nodename") hostnode.nodename = params.getValue().toString();
+		    				//----- for local db
+		    				
+		    				/*
+		    				place_node.address;
+		    				place_node.contact;
+		    				place_node.image_url;
+		    				place_node.latitude;
+		    				place_node.longitude;
+		    				place_node.place_name;
+		    				place_node.price_level;
+		    				place_node.rating;
+		    				place_node.snippet;
+		    				place_node.types;
+		    				place_node.website;
+		    				place_node.total_ratings;
+		    				*/
+		    				if(params.getName().toString() == "nodename") place_node.place_name = params.getValue().toString();
+		    				if(params.getName().toString() == "address" && params.getValue() != null) {place_node.address = params.getValue().toString();System.out.println("address add " + place_node.address);}
+		    				
+		    				if(params.getName().toString() == "price_level" && params.getValue() != null) 
+		    					 place_node.price_level = (Double) params.getValue();
+		    				if(params.getName().toString() == "rating" && params.getValue() != null) 
+		    					place_node.rating = (Double) params.getValue();
+		    				if(params.getName().toString() == "snippet"  && params.getValue() != null) place_node.snippet = params.getValue().toString();
+		    				if(params.getName().toString() == "types" && params.getValue() != null) place_node.types = params.getValue().toString();
+		    				if(params.getName().toString() == "website" && params.getValue() != null) place_node.website = params.getValue().toString();
+		    				if(params.getName().toString() == "image_url" && params.getValue() != null) place_node.image_url = params.getValue().toString();
+		    				if(params.getName().toString() == "Latitude") {
+		    					place_node.latitude = Double.parseDouble(params.getValue().toString());
+		    					
+		    				}
+		    				if(params.getName().toString() == "Longitude"){
+		    					place_node.longitude = Double.parseDouble(params.getValue().toString());
+		    					
+		    				}
+		    				
+		    				
+		    			}else{
+		    				if(params.getName().toString() == "eventname") hostnode.event_name = params.getValue().toString();
+		    				commondata.event_information.eventname = hostnode.event_name;
+		    				if(params.getName().toString() == "nodename") hostnode.nodename = params.getValue().toString();
+		    				if(params.getName().toString() == "nodetype") hostnode.nodetype = params.getValue().toString();
+		    				if(params.getName().toString() == "food") hostnode.food_type = params.getValue().toString();
+		    				if(params.getName().toString() == "price") hostnode.price = params.getValue().toString();
+		    				if(params.getName().toString() == "travel") hostnode.travel = params.getValue().toString();
+		    				if(params.getName().toString() == "Latitude") {
+		    					hostnode.Latitude = Double.parseDouble(params.getValue().toString());	
+		    				}
+		    				if(params.getName().toString() == "Longitude"){
+		    					hostnode.Longitude = Double.parseDouble(params.getValue().toString());	
+		    				}
+		    				if(hostnode.Longitude != null || hostnode.Longitude != null){
+		    					flag = true;
+		    				}
+		    			}
 		    		}
 		    		nodelist.add(hostnode);	
+		    		String key = place_node.place_name+"--"+ hostnode.Latitude.toString();
+    				commondata.places_found.place_to_map.put(key, place_node);
 		    		
 		    	}
 		    	System.out.println("nodelist has this data : " +  nodelist.size());
 		    	if(flag){
 		    	commondata.event_information.given_events_lookup.put(host+"-->"+eventref, nodelist);
-		    	System.out.println("and ppp " + commondata.event_information.given_events_lookup.keySet().toString());
-		    	System.out.println("checking " + commondata.event_information.given_events_lookup.size());
+		    	
+		    	//*** pull all places in the firebase.
+		    	
 		    	launch_event(host+"-->"+eventref);
 		    	flag = false;
 		    	}else{
@@ -1386,7 +1450,7 @@ public class Login extends Activity {
 													.get(i)))
 							.icon(BitmapDescriptorFactory
 									.fromResource(R.drawable.host))
-							.title(commondata.places_found.names.get(i))
+							.title(commondata.places_found.names.get(i)+"--"+commondata.places_found.latitudes.toString())
 							);	
 						}else{
 							
@@ -1416,9 +1480,8 @@ public class Login extends Activity {
 														.get(i)))
 								.icon(BitmapDescriptorFactory
 										.fromResource(R.drawable.places_votes_1))
-								.snippet("votes: " + vote_count)
 								
-								.title(commondata.places_found.names.get(i))
+								.title(commondata.places_found.names.get(i)+"--"+commondata.places_found.latitudes.get(i).toString())
 								);
 								
 								
@@ -1428,71 +1491,12 @@ public class Login extends Activity {
 									public boolean onMarkerClick(Marker arg0) {
 										// TODO Auto-generated method stub
 										System.out.println("marker clicked " + arg0.getId() +" " + arg0.getTitle());
-										display_place();
+										display_place(arg0.getTitle());
 										return false;
 									}
 								});
 								
-								mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
-									
-									@Override
-									public void onInfoWindowClick(Marker arg0) {
-										// TODO Auto-generated method stub
-										try{
-														System.out.println("info window clicked " + arg0.getId() + " title : "+arg0.getTitle());
-														
-														final String place_name = arg0.getTitle();
-														
-														String[] parts = commondata.event_information.eventID.split("-->");
-								    				    System.out.println("to split" +parts[0] ); // come here
-								    				    
-								    					StringBuilder strBuilder = new StringBuilder(
-								    							"https://met-ster-event.firebaseio.com/");
-								    					strBuilder.append(parts[0]);
-								    					String frt = strBuilder.toString();
-								    					final Firebase ft = new Firebase(frt);
-								    				    
-								    	try{
-								    					ft.child(commondata.event_information.eventID)
-								    					.child("rest--"
-								    							+ place_name.replace(".", ""))
-								    					.child("votes").addListenerForSingleValueEvent(new ValueEventListener() {
-															
-															@Override
-															public void onDataChange(DataSnapshot arg0) {
-																// TODO Auto-generated method stub
-																if(arg0.getValue() != null){
-																String list = arg0.getValue().toString();
-																
-										    					list = list + "--" + commondata.facebook_details.facebook;
-																ft.child(commondata.event_information.eventID)
-										    					.child("rest--"
-										    							+ place_name.replace(".", ""))
-										    					.child("votes")
-										    					.setValue(list);
-																
-																toast_info("voted up");
-																}
-															}
-															
-															@Override
-															public void onCancelled(FirebaseError arg0) {
-																// TODO Auto-generated method stub
-																
-															}
-														});
-								    	}catch(Exception e){
-								    		System.out.println("no child");
-								    	}
-								    					get_votes(); // update votes		
-								    					next_place();
-								    					
-									} catch (Exception e) {
-										System.out.println("We are aware that people has no vote");
-									}
-									}
-								});
-					
+								
 								rank = rank + 1;
 							}else{
 					
@@ -1663,15 +1667,116 @@ public class Login extends Activity {
 	 * @params : null
 	 * @desp : this function displays the place details.
 	 */
-	public void display_place(){
+	public void display_place(String refdb){
+		System.out.println("key: "  + refdb);
+		final place_details node = commondata.places_found.place_to_map.get(refdb);
 		final Dialog dialog = new Dialog(Login.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.custom_view_place);
         dialog.show();
+        
+        
+        TextView title = (TextView) dialog.findViewById(R.id.place_to_map_title);
+        title.setText(node.place_name);
+        
+        TextView maptypes = (TextView) dialog.findViewById(R.id.mapplacetype);
+        maptypes.setText(node.types);
+        
+        TextView mapaddress = (TextView) dialog.findViewById(R.id.mapplaceaddress);
+        mapaddress.setText(node.address);
+        
+        System.out.println("address is" + node.address);
+        RatingBar maprat = (RatingBar) dialog.findViewById(R.id.mapplaceratings);
+        if(node.rating != null){
+        	maprat.setRating(Float.parseFloat(node.rating.toString()));	
+        }
+        
+        TextView snippet = (TextView) dialog.findViewById(R.id.mapsnippet);
+        snippet.setText(node.snippet);
+        
         ImageButton button1 = (ImageButton) dialog.findViewById(R.id.viewplace_upvote);
         ImageButton button2 = (ImageButton) dialog.findViewById(R.id.viewplace_ignore);
+        
+        
+        button1.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				System.out.println("upvote");
+				
+				
+				
+				try{
+					
+					
+					final String place_name = node.place_name;
+					
+					String[] parts = commondata.event_information.eventID.split("-->");
+				    System.out.println("to split" +parts[0] ); // come here
+				    
+					StringBuilder strBuilder = new StringBuilder(
+							"https://met-ster-event.firebaseio.com/");
+					strBuilder.append(parts[0]);
+					String frt = strBuilder.toString();
+					final Firebase ft = new Firebase(frt);
+				    
+	try{
+					ft.child(commondata.event_information.eventID)
+					.child("rest--"
+							+ place_name.replace(".", ""))
+					.child("votes").addListenerForSingleValueEvent(new ValueEventListener() {
+						
+						@Override
+						public void onDataChange(DataSnapshot arg0) {
+							// TODO Auto-generated method stub
+							if(arg0.getValue() != null){
+							String list = arg0.getValue().toString();
+							
+	    					list = list + "--" + commondata.facebook_details.facebook;
+							ft.child(commondata.event_information.eventID)
+	    					.child("rest--"
+	    							+ place_name.replace(".", ""))
+	    					.child("votes")
+	    					.setValue(list);
+							
+							toast_info("voted up");
+							}
+						}
+						
+						@Override
+						public void onCancelled(FirebaseError arg0) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+	}catch(Exception e){
+		System.out.println("no child");
+	}
+					get_votes(); // update votes		
+					next_place();
+					
+} catch (Exception e) {
+	System.out.println("We are aware that people has no vote");
+}
+				
+				
+				
+			}
+
+		});
+		
+		button2.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				System.out.println("dismiss");
+				dialog.dismiss();
+			}
+
+		});
+        
 
 	}
 	
