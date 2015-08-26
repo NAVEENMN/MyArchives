@@ -11,14 +11,13 @@
      android:id="@+id/exitbaselayer1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/round_rect_background"
+    android:background="@android:color/transparent" 
     android:orientation="vertical" >
     
 	<TextView
                 android:id="@+id/Exit"
-                android:textColor="#CEE3F6"
-                android:textSize="28sp"
-                
+                android:textColor="#F2F2F2"
+                android:textSize="30sp"
                 android:layout_marginBottom="20dp"
                 android:text="@string/exit"
                 android:gravity="center"
@@ -26,32 +25,39 @@
                 android:layout_height="match_parent"/>
 
 </LinearLayout>
-<LinearLayout 
-     android:id="@+id/exitbaselayer2"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:orientation="horizontal" >
 
-  <Button
-	    android:id="@+id/exit_no"
-	    style="?android:attr/buttonBarButtonStyle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:background="@android:color/transparent"
-	    android:drawableTop="@drawable/buttonhandler"
-	     android:layout_gravity="center"
-	    android:onClick="Add_Friends" />
-  
-    <Button
-	    android:id="@+id/exit_yes"
-	    style="?android:attr/buttonBarButtonStyle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:background="@android:color/transparent"
-	    android:drawableTop="@drawable/buttonhandler"
-	     android:layout_gravity="center"
-	    android:onClick="Add_Friends" />
-  </LinearLayout>
+ 		<LinearLayout
+ 		    android:id="@+id/myevent_exit"
+ 		    android:layout_width="match_parent"
+ 		    android:layout_height="wrap_content"
+ 		    android:layout_marginTop="20dp"
+ 		    android:background="@android:color/transparent" 
+ 		    android:layout_weight="1"
+ 		    android:baselineAligned="false"
+ 		    android:gravity="center"
+ 		    android:orientation="horizontal" >
+     	       
+     	       <ImageButton
+		            android:id="@+id/myevent_doexit"
+		            android:layout_width="60dp"
+					android:layout_height="60dp"
+					android:gravity="center"
+					android:background = "@drawable/accept_button_handler"
+					android:scaleType="centerCrop"
+		            android:contentDescription="@string/desc"
+		             />
+     	       
+     	       <ImageButton
+		            android:id="@+id/myevent_dontexit"
+		            android:layout_width="60dp"
+					android:layout_height="60dp"
+					android:gravity="center"
+					android:layout_marginLeft="20dp"
+					android:background = "@drawable/reject_button_handler"
+					android:scaleType="centerCrop"
+		            android:contentDescription="@string/desc"
+		             />
+     	       
+            </LinearLayout>
 
 </LinearLayout>

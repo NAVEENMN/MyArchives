@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/viewplacebase"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">  
+
+<LinearLayout 
+     android:id="@+id/viewplacelayer1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_rect_background"
+    android:orientation="vertical" >
+    
+<LinearLayout
+    android:id="@+id/placesection"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:gravity="top"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">  
+          
+      <LinearLayout
+		android:id="@+id/placesimageection"
+		android:baselineAligned="false"
+		android:layout_width="100dp"
+		android:layout_height="100dp"
+		android:background="#1C1C1C"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+		android:gravity="left"
+		android:orientation="horizontal" >
+       	
+     	
+        <ImageView
+        android:id="@+id/placesimage"
+        android:layout_width="100dp"
+		android:layout_height="100dp"
+		android:gravity="center"
+		android:background = "@drawable/loginbg"
+		android:scaleType="centerCrop"
+        android:contentDescription="@string/desc" />
+     	           	       
+   </LinearLayout>
+    
+    
+       
+    <LinearLayout
+            android:id="@+id/placedetails"
+            android:layout_width="0dip"
+			android:layout_weight="1"
+            android:layout_height="100dp"
+            android:paddingLeft="2dp"
+            android:orientation="vertical" >
+            
+     	   <LinearLayout
+		        android:id="@+id/nameandratings"
+		        android:baselineAligned="false"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="#FAFAFA"
+		        android:orientation="horizontal" >
+       
+       		<TextView
+        		android:id="@+id/title"
+        		android:textColor="#424242"
+        		android:textSize="18sp"
+        		android:text=""
+        		android:layout_gravity="left"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content" />
+       		
+       	
+       		</LinearLayout>
+      
+     	   
+     	   <LinearLayout
+		        android:id="@+id/addresssections"
+		        android:baselineAligned="false"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="#FAFAFA"
+		        android:orientation="horizontal" >
+       		
+     	   <ImageView
+        		android:id="@+id/pingicon"
+        		android:layout_width="15dp"
+        		android:layout_height="15dp"
+        		android:contentDescription="@string/AboutMetster"
+        		android:src="@drawable/mappin" />
+     	   
+            <TextView
+                android:id="@+id/placeaddress"
+                android:textColor="#848484"
+                android:textSize="10sp"
+                android:text="@string/Name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            </LinearLayout>
+           
+            <LinearLayout
+		        android:id="@+id/reviewsections"
+		        android:baselineAligned="false"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="#FAFAFA"
+		        android:orientation="horizontal" >
+            
+            <ImageView
+        		android:id="@+id/thumbicon"
+        		android:layout_width="15dp"
+        		android:layout_height="15dp"
+        		android:contentDescription="@string/AboutMetster"
+        		android:src="@drawable/thumb" />
+            <TextView
+                android:id="@+id/placereviews"
+                android:textColor="#848484"
+                android:textSize="10sp"
+                android:text="@string/StudentType"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+            
+            	<RatingBar
+                android:id="@+id/placeratings"
+                android:layout_width="wrap_content"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_gravity="right"
+                android:layout_height="20sp"
+                android:numStars="5"
+                android:scaleX="0.8"
+                android:scaleY="0.8" />
+            
+            </LinearLayout>
+            
+        
+            <LinearLayout
+		        android:id="@+id/typessections"
+		        android:baselineAligned="false"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="#FAFAFA"
+		        android:orientation="horizontal" >
+           <ImageView
+        		android:id="@+id/foodicon"
+        		android:layout_width="15dp"
+        		android:layout_height="15dp"
+        		android:contentDescription="@string/AboutMetster"
+        		android:src="@drawable/foodicon" />
+            <TextView
+                android:id="@+id/placetype"
+                android:textColor="#848484"
+                android:textSize="9sp"
+                android:text="@string/Gender"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            </LinearLayout>
+            
+            <LinearLayout
+		        android:id="@+id/snippetsections"
+		        android:baselineAligned="false"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background="#FAFAFA"
+		        android:orientation="horizontal" >
+             <ImageView
+        		android:id="@+id/snippeticon"
+        		android:layout_width="15dp"
+        		android:layout_height="15dp"
+        		android:contentDescription="@string/AboutMetster"
+        		android:src="@drawable/speakicon" />
+            <TextView
+                android:id="@+id/snippet"
+                android:textColor="#848484"
+                android:textSize="9sp"
+                android:text="@string/Gender"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            </LinearLayout>
+            
+        </LinearLayout>
+    
+</LinearLayout>
+
+</LinearLayout>
+
+ 		<LinearLayout
+ 		    android:id="@+id/viewplace_option"
+ 		    android:layout_width="match_parent"
+ 		    android:layout_height="wrap_content"
+ 		    android:layout_marginTop="20dp"
+ 		    android:background="@android:color/transparent" 
+ 		    android:layout_weight="1"
+ 		    android:baselineAligned="false"
+ 		    android:gravity="center"
+ 		    android:orientation="horizontal" >
+     	       
+     	       <ImageButton
+		            android:id="@+id/viewplace_ignore"
+		            android:layout_width="60dp"
+					android:layout_height="60dp"
+					android:gravity="center"
+					android:background = "@drawable/reject_button_handler"
+					android:scaleType="centerCrop"
+		            android:contentDescription="@string/desc"
+		             />
+     	       
+     	       <ImageButton
+		            android:id="@+id/viewplace_upvote"
+		            android:layout_width="60dp"
+					android:layout_height="60dp"
+					android:gravity="center"
+					android:layout_marginLeft="20dp"
+					android:background = "@drawable/accept_button_handler"
+					android:scaleType="centerCrop"
+		            android:contentDescription="@string/desc"
+		             />
+     	       
+            </LinearLayout>
+
+</LinearLayout>

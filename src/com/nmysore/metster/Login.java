@@ -174,6 +174,7 @@ public class Login extends Activity {
 	Integer async_counter = 0;
 	private WebView webView;
 	Integer marker_counter = 0;// this is used to navigate from point to point.
+	Dialog dialog_refrence;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -847,11 +848,11 @@ public class Login extends Activity {
 							// TODO Auto-generated method stub
 							System.out.println("launching... " + listeventids.get(Integer.parseInt(v.getTag().toString())));
 							parent.getChildAt(Integer.parseInt(v.getTag().toString())).setBackgroundColor(Color.BLUE);
-					
-						
+				
 							String eventid = listeventids.get(Integer.parseInt(v.getTag().toString()));
 							System.out.println("event to be launched" + eventid);
 							pull_data_from_firebase(eventid);
+							dialog_refrence.dismiss();
 							//dialog.dismiss();
 							// this will store in shared pref
 							//on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
@@ -871,7 +872,7 @@ public class Login extends Activity {
 							// TODO Auto-generated method stub
 							System.out.println("deleting... " + listeventids.get(Integer.parseInt(v.getTag().toString())));
 							
-							
+							dialog_refrence.dismiss();
 							// this will store in shared pref
 							//on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
 							// On a new thread handle this case	
@@ -929,17 +930,12 @@ public class Login extends Activity {
 		modeList.setAdapter(modeAdapter);
 		
 		builder.setView(modeList);
-		builder.setPositiveButton("Done",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
-						
-						dialog.dismiss();
-					}
-				});
+		
 		final Dialog dialog = builder.create();
+		dialog_refrence = dialog;
 		dialog.setCancelable(false);
 		dialog.show();	
+		
 		//*****************
 		
 		
@@ -1432,6 +1428,7 @@ public class Login extends Activity {
 									public boolean onMarkerClick(Marker arg0) {
 										// TODO Auto-generated method stub
 										System.out.println("marker clicked " + arg0.getId() +" " + arg0.getTitle());
+										display_place();
 										return false;
 									}
 								});
@@ -1575,48 +1572,57 @@ public class Login extends Activity {
 	 */
 	@Override
 	public void onBackPressed() {
-	
-		new AlertDialog.Builder(this)
-				.setView(
-						getLayoutInflater().inflate(R.layout.custom_exit, null))
-				.setCancelable(false)
-				.setPositiveButton("Yes",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								// there is a bug here... app simply restarts 
-								// temp fix commented remove_location_listners.
-								//stopRepeatingTask();
-								//remove_location_listners();
-								try {
-									/*
-									 * while existing remove firebase listners
-									 */
-									//remove_firebase_listners();
-								} catch (Exception e) {
-									System.out.println("no fb ref");
-								}
-
-								//Intent intent = new Intent(Login.this, Login.class);
-								//startActivity(intent);
-								//finish();
-								Login.this.finish();
-								System.exit(0);
-							}
-						}).setNegativeButton("No", null).show();
-		
-		/*
+			
 		final Dialog dialog = new Dialog(Login.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.custom_exit);
+        dialog.setContentView(R.layout.custom_exit_new);
         dialog.show();
-		*/
+        ImageButton button1 = (ImageButton) dialog.findViewById(R.id.myevent_doexit);
+        ImageButton button2 = (ImageButton) dialog.findViewById(R.id.myevent_dontexit);
+
+		button1.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				System.out.println("exitting");
+				// there is a bug here... app simply restarts 
+				// temp fix commented remove_location_listners.
+				//stopRepeatingTask();
+				//remove_location_listners();
+				try {
+					/*
+					 * while existing remove firebase listners
+					 */
+					//remove_firebase_listners();
+				} catch (Exception e) {
+					System.out.println("no fb ref");
+				}
+
+				//Intent intent = new Intent(Login.this, Login.class);
+				//startActivity(intent);
+				//finish();
+				Login.this.finish();
+				System.exit(0);
+			}
+
+		});
 		
+		button2.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				System.out.println("dismiss");
+				dialog.dismiss();
+			}
+
+		});
 		
 		
 	}
 
+	
 	/*
 	 * name : removed_firebase_listners
 	 * @params : None
@@ -1652,7 +1658,22 @@ public class Login extends Activity {
  
 	}
 		
-	
+	/*
+	 * name : display_place
+	 * @params : null
+	 * @desp : this function displays the place details.
+	 */
+	public void display_place(){
+		final Dialog dialog = new Dialog(Login.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.custom_view_place);
+        dialog.show();
+        ImageButton button1 = (ImageButton) dialog.findViewById(R.id.viewplace_upvote);
+        ImageButton button2 = (ImageButton) dialog.findViewById(R.id.viewplace_ignore);
+
+	}
 	
 	/*
 	 * name : on_invite_declined
@@ -2963,25 +2984,63 @@ public class Login extends Activity {
     					Firebase ft = new Firebase(frt);
     				    
     					ft.child(commondata.event_information.eventID)
+    					//--- latitude
     					.child("rest--"
     							+ node.place_name.replace(".", ""))
     					.child("Latitude")
     					.setValue(node.latitude);
+    					//--- longitude
     					ft.child(commondata.event_information.eventID)
     					.child("rest--"
     							+ node.place_name.replace(".", ""))
     					.child("Longitude")
     					.setValue(node.longitude);
+    					//--- nodetype
     					ft.child(commondata.event_information.eventID)
     					.child("rest--"
     							+ node.place_name.replace(".", ""))
     					.child("nodetype")
     					.setValue("place");
+    					//--- nodename
     					ft.child(commondata.event_information.eventID)
     					.child("rest--"
     							+ node.place_name.replace(".", ""))
     					.child("nodename")
     					.setValue(node.place_name);
+    					//--- place address, ratings, type, link
+    					ft.child(commondata.event_information.eventID)
+    					.child("rest--"
+    							+ node.place_name.replace(".", ""))
+    					.child("address")
+    					.setValue(node.address);
+    					
+    					//--- place address, ratings, type, link
+    					ft.child(commondata.event_information.eventID)
+    					.child("rest--"
+    							+ node.place_name.replace(".", ""))
+    					.child("image_url")
+    					.setValue(node.image_url);
+    					
+    					//--- place address, ratings, type, link
+    					ft.child(commondata.event_information.eventID)
+    					.child("rest--"
+    							+ node.place_name.replace(".", ""))
+    					.child("rating")
+    					.setValue(node.rating);
+    					
+    					//--- place address, ratings, type, link
+    					ft.child(commondata.event_information.eventID)
+    					.child("rest--"
+    							+ node.place_name.replace(".", ""))
+    					.child("snippet")
+    					.setValue(node.snippet);
+    					
+    					//--- place address, ratings, type, link
+    					ft.child(commondata.event_information.eventID)
+    					.child("rest--"
+    							+ node.place_name.replace(".", ""))
+    					.child("website")
+    					.setValue(node.website);
     					
     					
     					//HashSet<String> voteset = new HashSet<String>();
