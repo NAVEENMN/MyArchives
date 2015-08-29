@@ -135,5 +135,6 @@
 
     <string name="profile_settings"> Profile Settings </string>
     <string name="title_activity_chat">Chat</string>
+    <string name="title_activity_chatlayer">Chatlayer</string>
 
 </resources>

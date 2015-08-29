@@ -131,6 +131,10 @@
             android:label="@string/title_activity_chat"
             android:theme="@style/FullscreenTheme" >
         </activity>
+        <activity
+            android:name="com.nmysore.metster.Chatlayer"
+            android:label="@string/title_activity_chatlayer" >
+        </activity>
     </application>
 
 </manifest>

@@ -1218,7 +1218,7 @@ public class Login extends Activity {
 	 */
 	
 	public void on_chat_click(View v){
-		Intent intent = new Intent(this, Chat.class);
+		Intent intent = new Intent(this, Chatlayer.class);
 
 	    startActivity(intent);
 	}
