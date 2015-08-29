@@ -3,6 +3,7 @@ package com.nmysore.metster;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -22,10 +23,14 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
 
     // The mUsername for this client. We use this to indicate which messages originated from this user
     private String mUsername;
+    Typeface tf;
 
     public ChatListAdapter(Query ref, Activity activity, int layout, String mUsername) {
         super(ref, Chat.class, layout, activity);
         this.mUsername = mUsername;
+        tf = Typeface.createFromAsset(activity.getAssets(),
+                "fonts/OpenSansSemibold.ttf");  
+      
     }
 
     /**
@@ -44,7 +49,8 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
         authorText.setText(author + ": ");
 
         TextView messageText = (TextView) view.findViewById(R.id.message);
-
+        messageText.setTypeface(tf);
+       
         LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.chatItem);
         // If the message was sent by this user, color it differently
         if (author != null && author.equals(mUsername)) {

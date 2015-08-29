@@ -1,16 +1,11 @@
 package com.nmysore.metster;
 
-import com.nmetster.metster.R;
-import com.nmetster.metster.R.layout;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import java.util.Random;
 
 import android.app.ListActivity;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,8 +19,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-
-import java.util.Random;
+import com.nmetster.metster.R;
 
 
 public class Chatlayer extends ListActivity {
@@ -49,9 +43,14 @@ public class Chatlayer extends ListActivity {
 
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(FIREBASE_URL).child("chat");
-
+            
+        
+      
         // Setup our input methods. Enter key on the keyboard or pushing the send button
         EditText inputText = (EditText) findViewById(R.id.messageInput);
+        Typeface tf = Typeface.createFromAsset(getAssets(),
+                "fonts/OpenSansLight.ttf");
+        inputText.setTypeface(tf);
         inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -119,14 +118,19 @@ public class Chatlayer extends ListActivity {
         if (mUsername == null) {
             Random r = new Random();
             // Assign a random user name if we don't have one saved.
-            mUsername = "JavaUser" + r.nextInt(100000);
+            mUsername = commondata.facebook_details.name;
             prefs.edit().putString("username", mUsername).commit();
         }
     }
 
     private void sendMessage() {
         EditText inputText = (EditText) findViewById(R.id.messageInput);
+        Typeface tf = Typeface.createFromAsset(getAssets(),
+                "fonts/OpenSansLight.ttf");
+        inputText.setTypeface(tf);
+        
         String input = inputText.getText().toString();
+        input = "  " + input + "  "; // adding whitespace to fit inside chat cloud
         if (!input.equals("")) {
             // Create our 'model', a Chat object
             Chat chat = new Chat(input, mUsername);
