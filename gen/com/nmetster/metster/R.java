@@ -22,6 +22,11 @@ public final class R {
         public static final int out_left=0x7f04000a;
         public static final int out_right=0x7f04000b;
     }
+    public static final class array {
+        /**  ****** choices 
+         */
+        public static final int choiceList=0x7f0c0000;
+    }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
@@ -1718,7 +1723,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f02007a;
         public static final int com_facebook_loginbutton_silver=0x7f02007b;
         public static final int com_facebook_logo=0x7f02007c;
-        public static final int com_facebook_picker_default_separator_color=0x7f02010e;
+        public static final int com_facebook_picker_default_separator_color=0x7f02010f;
         public static final int com_facebook_picker_item_background=0x7f02007d;
         public static final int com_facebook_picker_list_focused=0x7f02007e;
         public static final int com_facebook_picker_list_longpressed=0x7f02007f;
@@ -1856,23 +1861,22 @@ containing a value of this type.
         public static final int round_rect_background=0x7f020103;
         public static final int roundedbutton=0x7f020104;
         public static final int roundedbuttonclicked=0x7f020105;
-        public static final int rounder_edittext=0x7f020106;
-        public static final int settingsbackground=0x7f020107;
-        public static final int settingsbuttonafter=0x7f020108;
-        public static final int settingsbuttonbefore=0x7f020109;
-        public static final int settingsbuttonhandler=0x7f02010a;
-        public static final int shape=0x7f02010b;
-        public static final int speakicon=0x7f02010c;
-        public static final int thumb=0x7f02010d;
+        public static final int rounder_edit_text_map=0x7f020106;
+        public static final int rounder_edittext=0x7f020107;
+        public static final int settingsbackground=0x7f020108;
+        public static final int settingsbuttonafter=0x7f020109;
+        public static final int settingsbuttonbefore=0x7f02010a;
+        public static final int settingsbuttonhandler=0x7f02010b;
+        public static final int shape=0x7f02010c;
+        public static final int speakicon=0x7f02010d;
+        public static final int thumb=0x7f02010e;
     }
     public static final class id {
         public static final int AboutMetster=0x7f050080;
         public static final int ActionButtons=0x7f05007a;
-        public static final int CurrentCity=0x7f050075;
         public static final int DeleteAccount=0x7f050084;
         public static final int Dividerevent=0x7f05005a;
         public static final int Dividerimagelogin=0x7f05006a;
-        public static final int Dividerone=0x7f050076;
         public static final int Exit=0x7f0500ab;
         public static final int FAQ=0x7f050082;
         public static final int FirstName=0x7f050072;
@@ -1911,6 +1915,7 @@ containing a value of this type.
         public static final int always=0x7f050029;
         public static final int authButton=0x7f05006b;
         public static final int author=0x7f050086;
+        public static final int autoComplete=0x7f050076;
         public static final int beginning=0x7f05002e;
         public static final int book_now=0x7f05001b;
         public static final int bottom=0x7f050006;
@@ -2070,6 +2075,7 @@ containing a value of this type.
         public static final int right=0x7f05000b;
         public static final int sandbox=0x7f050013;
         public static final int satellite=0x7f05000d;
+        public static final int search=0x7f050075;
         public static final int search_badge=0x7f05004f;
         public static final int search_bar=0x7f05004e;
         public static final int search_button=0x7f050050;
@@ -2213,16 +2219,16 @@ containing a value of this type.
         public static final int webview=0x7f03003f;
     }
     public static final class menu {
-        public static final int centra_dash=0x7f0c0000;
-        public static final int global=0x7f0c0001;
-        public static final int login=0x7f0c0002;
-        public static final int main_activity_action=0x7f0c0003;
-        public static final int meet_up=0x7f0c0004;
-        public static final int profilelist=0x7f0c0005;
-        public static final int rend_activity_actions=0x7f0c0006;
-        public static final int update_profile=0x7f0c0007;
-        public static final int view_places=0x7f0c0008;
-        public static final int visitor_profile=0x7f0c0009;
+        public static final int centra_dash=0x7f0d0000;
+        public static final int global=0x7f0d0001;
+        public static final int login=0x7f0d0002;
+        public static final int main_activity_action=0x7f0d0003;
+        public static final int meet_up=0x7f0d0004;
+        public static final int profilelist=0x7f0d0005;
+        public static final int rend_activity_actions=0x7f0d0006;
+        public static final int update_profile=0x7f0d0007;
+        public static final int view_places=0x7f0d0008;
+        public static final int visitor_profile=0x7f0d0009;
     }
     public static final class string {
         public static final int AboutMetster=0x7f08006b;

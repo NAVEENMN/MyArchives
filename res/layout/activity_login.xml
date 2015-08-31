@@ -4,9 +4,7 @@
     android:layout_height="match_parent"
     android:background="#F2F2F2"
     tools:context=".Login" >
-    <!--  ******************************************************************  User Basic Profile data -->
-    
-    
+    <!--  ******************************************************************  User Basic Profile data --> 
 
     <LinearLayout
         android:id="@+id/Profiledata"
@@ -28,16 +26,14 @@
                
         <ImageButton
             android:id="@+id/ProfileImage"
-            android:layout_width="120dp"
-			android:layout_height="120dp"
+            android:layout_width="80dp"
+			android:layout_height="80dp"
 			android:gravity="center"
 			android:background = "@drawable/loginbg"
 			android:scaleType="centerCrop"
             android:contentDescription="@string/desc"
             android:onClick="on_image_click" />
-        
-   
-        
+            
         </LinearLayout>
                 
 
@@ -47,21 +43,21 @@
 			android:layout_weight="1"
             android:layout_height="wrap_content"
             android:paddingLeft="2dp"
-			android:paddingTop="10dp"
+			android:paddingTop="5dp"
             android:orientation="vertical" >
        
       
             <TextView
                 android:id="@+id/FirstName"
                 android:textColor="#D8D8D8"
-                android:textSize="28sp"
+                android:textSize="20sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <TextView
                 android:id="@+id/LastName"
                 android:textColor="#D8D8D8"
-                android:textSize="28sp"
+                android:textSize="20sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -75,34 +71,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
- 
-            <TextView
-                android:id="@+id/CurrentCity"
-                android:textColor="#D8D8D8"
-                android:textSize="12sp"
-                android:text="@string/Gender"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
             
         </LinearLayout>
         
     </LinearLayout>
     
     
+    <!--  ****************************************************************** search section -->
+    
+       <LinearLayout
+        android:id="@+id/search"
+        android:layout_below="@+id/Profiledata"
+        android:layout_width="match_parent"
+        android:background="#2E9AFE"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+      
+  
+              <AutoCompleteTextView
+		        android:id="@+id/autoComplete"
+		        android:layout_width="0dp"
+                android:layout_height="match_parent"
+		        android:paddingLeft="10dp"
+	            android:layout_marginBottom="5dp"
+	            android:layout_marginLeft="5dp"
+	            android:layout_marginTop="5dp"
+	            android:layout_marginRight="5dp"
+	            android:textSize="20sp"
+	            android:fontFamily="OpenSansSemiBold"
+	            android:inputType="textShortMessage"
+	            android:background="@drawable/rounder_edit_text_map"
+	            android:layout_weight=".75" />
+
+   
+    </LinearLayout>
+    
     <!--  ******************************************************************  User Basic Profile data -->
-    
-    <View
-    android:id="@+id/Dividerone"
-    android:layout_below="@+id/Profiledata"
-    android:layout_width="match_parent"
-    android:layout_height="4dp"
-    android:background="#2E9AFE" /> 
-    
+
      <!--  ****************************************************************** Information area        -->
     <RelativeLayout
         android:id="@+id/Information"
         android:baselineAligned="false"
-        android:layout_below="@+id/Dividerone"
+        android:layout_below="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#E6E6E6"
@@ -186,5 +196,7 @@
 
     </RelativeLayout>
              
+    
+    
 
 </RelativeLayout>

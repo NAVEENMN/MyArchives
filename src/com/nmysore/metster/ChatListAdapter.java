@@ -46,7 +46,7 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
         // Map a Chat object to an entry in our listview
         String author = chat.getAuthor();
         TextView authorText = (TextView) view.findViewById(R.id.author);
-        authorText.setText(author + ": ");
+        authorText.setText(author);
 
         TextView messageText = (TextView) view.findViewById(R.id.message);
         messageText.setTypeface(tf);
@@ -54,13 +54,14 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
         LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.chatItem);
         // If the message was sent by this user, color it differently
         if (author != null && author.equals(mUsername)) {
-
-            authorText.setTextColor(Color.RED);
             linearLayout.setGravity(Gravity.LEFT);
+            messageText.setTypeface(tf);
+            messageText.setTextColor(Color.parseColor("#2E2E2E"));
             messageText.setBackgroundResource(R.drawable.out_message_bg);
         } else {
             linearLayout.setGravity(Gravity.RIGHT);
-            authorText.setTextColor(Color.BLUE);
+            messageText.setTypeface(tf);
+            messageText.setTextColor(Color.parseColor("#FAFAFA"));
             messageText.setBackgroundResource(R.drawable.in_message_bg);
         }
         ((TextView) view.findViewById(R.id.message)).setText(chat.getMessage());

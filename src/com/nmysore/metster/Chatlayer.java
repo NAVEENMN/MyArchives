@@ -24,7 +24,7 @@ import com.nmetster.metster.R;
 
 public class Chatlayer extends ListActivity {
 	 // TODO: change this to your own Firebase URL
-    private static final String FIREBASE_URL = "https://glowing-torch-4939.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://metster-chat.firebaseio.com/" +  commondata.event_information.eventID +"/";
 
     private String mUsername;
     private Firebase mFirebaseRef;
@@ -39,12 +39,11 @@ public class Chatlayer extends ListActivity {
         // Make sure we have a mUsername
         setupUsername();
 
-        setTitle("Chatting as " + mUsername);
+        setTitle("Discuss about this event here!!");
 
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(FIREBASE_URL).child("chat");
             
-        
       
         // Setup our input methods. Enter key on the keyboard or pushing the send button
         EditText inputText = (EditText) findViewById(R.id.messageInput);
@@ -113,14 +112,7 @@ public class Chatlayer extends ListActivity {
     }
 
     private void setupUsername() {
-        SharedPreferences prefs = getApplication().getSharedPreferences("ChatPrefs", 0);
-        mUsername = prefs.getString("username", null);
-        if (mUsername == null) {
-            Random r = new Random();
-            // Assign a random user name if we don't have one saved.
-            mUsername = commondata.facebook_details.name;
-            prefs.edit().putString("username", mUsername).commit();
-        }
+        mUsername = commondata.facebook_details.name;
     }
 
     private void sendMessage() {
@@ -130,9 +122,9 @@ public class Chatlayer extends ListActivity {
         inputText.setTypeface(tf);
         
         String input = inputText.getText().toString();
-        input = "  " + input + "  "; // adding whitespace to fit inside chat cloud
         if (!input.equals("")) {
             // Create our 'model', a Chat object
+        	input = "  " + input + "  "; // adding whitespace to fit inside chat cloud
             Chat chat = new Chat(input, mUsername);
             // Create a new, auto-generated child of that chat location, and save our chat data there
             mFirebaseRef.push().setValue(chat);

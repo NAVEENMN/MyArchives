@@ -67,17 +67,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -89,10 +92,8 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.firebase.client.snapshot.Node;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -176,6 +177,14 @@ public class Login extends Activity {
 	private WebView webView;
 	Integer marker_counter = 0;// this is used to navigate from point to point.
 	Dialog dialog_refrence;
+	
+	//** search
+	 private AutoCompleteTextView autoComplete;
+	 private MultiAutoCompleteTextView multiAutoComplete;
+	 private ArrayAdapter<String> adapter;
+
+	//**
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -270,94 +279,6 @@ public class Login extends Activity {
 			list_invites();
 			commondata.event_information.invites = null; // this is temporary string clean it up
 		}
-		
-		
-		// this section contains code to accept or reject invite use it later.
-		
-		/*
-		
-		if(invite_notification.toString() != "none"){
-			final String invite_from = invite_notification.getString("invite_from", "none"); // the one who sent it
-			final String event_reference = invite_notification.getString("eventid", "none");
-			final String sender_name =invite_notification.getString("sender_name","none");
-			String invite_message = invite_notification.getString("message", "none");
-			System.out.println("you have a invite from " + sender_name + " " + invite_message);
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-			alert.setTitle("Invite from " + invite_from);
-			alert.setMessage(invite_message);
-			alert.setPositiveButton("Accept",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-							// gcm notify accept
-							// store in local and notify host
-							JSONObject json = new JSONObject(); 
-							try {
-								json.put("host", commondata.facebook_details.facebook);
-								json.put("to_id", invite_from); 
-								json.put("payload_type", "invite_accept");
-								json.put("event_reference", event_reference);
-								json.put("sender_name", commondata.facebook_details.name);
-								json.put("payload_message", "sounds great");
-						
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} 
-							System.out.println("in json" + json.toString());
-							gcm_send_data(commondata.facebook_details.facebook, invite_from, json.toString());
-						}
-					});
-
-			alert.setNegativeButton("Reject",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-							// gcm notify and join		
-							
-							JSONObject json = new JSONObject(); 
-							try {
-								json.put("host", commondata.facebook_details.facebook);
-								json.put("to_id", invite_from); 
-								json.put("payload_type", "invite_reject");
-								json.put("event_reference", event_reference);
-								json.put("sender_name", commondata.facebook_details.name);
-								json.put("payload_message", "sounds great");
-									
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} 
-							System.out.println("in json" + json.toString());
-							gcm_send_data(commondata.facebook_details.facebook, invite_from, json.toString());
-							
-						}
-					});
-			alert.setCancelable(false);
-			
-			alert.show();
-			
-		}else{
-			System.out.println("no invite exists");
-		}
-
-		*/
-		/*
-		 * check if you are on any event
-		 */
-		
-		/*
-		 * case a - 0 : user has hosted few events
-		 * case b - 1: user is part of few events
-		 * case c - 2: user has hosted and also part of few events
-		 * case d - 3: user is not part of any event
-		 * 
-		 * case d --> this is a new event case
-		 * case a --> we will display most recent hosted event but can view any
-		 * case c --> if user has hosted then will display most recent hosted so it reduced to case a
-		 * case b --> we will display most recent event the user is part of.
-		 */
-		
 		
 		// to be safe lets pull shared pref on event here.
 		int event_case = 3;
@@ -615,6 +536,79 @@ public class Login extends Activity {
 		// ----------------------------------------------------------------------->
 		// Button Actions
 		SetupUIdata();
+		
+		// show events after 2 sec delay
+		final Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+		  @Override
+		  public void run() {
+		    //Do something after 100ms
+			  view_events(null);
+		  }
+		}, 2000);
+		
+		
+		
+		//**** search bar section
+		
+		// get the defined string-array
+        String[] colors = getResources().getStringArray(R.array.choiceList);
+
+        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,colors);
+
+        autoComplete = (AutoCompleteTextView) findViewById(R.id.autoComplete);
+        //multiAutoComplete = (MultiAutoCompleteTextView) findViewById(R.id.multiAutoComplete);
+
+        // set adapter for the auto complete fields
+        autoComplete.setAdapter(adapter);
+        //multiAutoComplete.setAdapter(adapter);
+
+        // specify the minimum type of characters before drop-down list is shown
+        autoComplete.setThreshold(1);
+        //multiAutoComplete.setThreshold(1);
+        // comma to separate the different colors
+        //multiAutoComplete.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+
+        // when the user clicks an item of the drop-down list
+        autoComplete.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+                
+                commondata.prefrences.food = arg0.getItemAtPosition(arg2).toString();
+                
+                if(commondata.event_information.eventID != null) { // set choice on fb
+                
+		                String[] parts = commondata.event_information.eventID.split("-->");
+					    
+						StringBuilder strBuilder = new StringBuilder(
+								"https://met-ster-event.firebaseio.com/");
+						strBuilder.append(parts[0]);
+						String frt = strBuilder.toString();
+						Firebase ft = new Firebase(frt);
+					    
+						ft.child(commondata.event_information.eventID)
+						//--- latitude
+						.child(commondata.facebook_details.facebook)
+						.child("food")
+						.setValue(commondata.prefrences.food);
+						
+						// hide keyboard
+						
+						View view = Login.this.getCurrentFocus();
+						if (view != null) {  
+						    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+						    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+						}
+						
+                } else {
+                	toast_info("please select a event from my event");
+                }
+                
+            }
+        });
+
 		
 		// ----------------------- long pressed ends here
 	
@@ -1219,7 +1213,6 @@ public class Login extends Activity {
 	
 	public void on_chat_click(View v){
 		Intent intent = new Intent(this, Chatlayer.class);
-
 	    startActivity(intent);
 	}
 	
@@ -1345,9 +1338,8 @@ public class Login extends Activity {
 		TextView lname = (TextView) findViewById(R.id.LastName);
 		lname.setText(last_name);
 		TextView prof = (TextView) findViewById(R.id.address_line);
-		prof.setText((String) commondata.user_information.addressline);
-		TextView cc = (TextView) findViewById(R.id.CurrentCity);
-		cc.setText((String) commondata.user_information.cityname);
+		String my_address = (String) commondata.user_information.addressline + ", " + (String) commondata.user_information.cityname;
+		prof.setText(my_address);
 		// ----------- Section Profile Image
 		if (commondata.user_information.profileimage != null) {
 			byte[] decodedString = Base64.decode(
@@ -1372,8 +1364,7 @@ public class Login extends Activity {
 				    params.setMargins(0, 0, 0, 0);
 				    btnMyLocation.setLayoutParams(params);
 				    
-				    
-
+				   
 		LatLng currlocation = new LatLng(commondata.user_information.latitude,
 				commondata.user_information.longitude);// yours
 
@@ -1548,17 +1539,15 @@ public class Login extends Activity {
 		if (listnerflag) {
 			listnerflag = false;
 			LinearLayout ll = (LinearLayout) findViewById(R.id.Profiledata);
-			View v = (View) findViewById(R.id.Dividerone);
+			
 			ll.setBackgroundColor(Color.parseColor("#FE642E"));
-			v.setBackgroundColor(Color.parseColor("#FE642E"));
+			
 			locationManager.removeUpdates(locationListener);
 
 		} else {
 			listnerflag = true;
 			LinearLayout ll = (LinearLayout) findViewById(R.id.Profiledata);
 			ll.setBackgroundColor(Color.parseColor("#2E9AFE"));
-			View v = (View) findViewById(R.id.Dividerone);
-			v.setBackgroundColor(Color.parseColor("#2E9AFE"));
 			locationManager.requestLocationUpdates(
 					LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 		}
@@ -2829,7 +2818,6 @@ public class Login extends Activity {
 		// --------
 		setProgressBarIndeterminateVisibility(false);
 		LinearLayout ll = (LinearLayout) findViewById(R.id.Profiledata);
-			View v = (View) findViewById(R.id.Dividerone);
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("Pick your choices");
