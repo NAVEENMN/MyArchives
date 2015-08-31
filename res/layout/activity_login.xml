@@ -170,14 +170,6 @@
 	    android:drawableTop="@drawable/buttonhandler"
 	    android:onClick="Add_Friends" />
    
-   <Button
-	    android:id="@+id/meet_up"
-	    style="?android:attr/buttonBarStyle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:background="@android:color/transparent"
-	    android:drawableTop="@drawable/buttonmeetuphandler"
-	    android:onClick="Meet_Up" />
     
 </LinearLayout>
 

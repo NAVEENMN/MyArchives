@@ -602,6 +602,17 @@ public class Login extends Activity {
 						    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 						}
 						
+						// find places after awww sec delay
+						final Handler handler = new Handler();
+						handler.postDelayed(new Runnable() {
+						  @Override
+						  public void run() {
+						    //Do something after 100ms
+							  Meet_Up();
+						  }
+						}, 1000);
+						
+						
                 } else {
                 	toast_info("please select a event from my event");
                 }
@@ -2116,7 +2127,7 @@ public class Login extends Activity {
 	 *  		add lists meetup places
 	 */
 		
-	public void Meet_Up(View V){
+	public void Meet_Up(){
 		if (commondata.event_information.eventID == null){
 			toast_info("Please join or create an event to add friends.");
 		} else {
@@ -3680,6 +3691,9 @@ public class Login extends Activity {
 		System.out.println("number of sets " + commondata.server_res.server_says.size());
 		// this loop through choices.
 		Integer rank = 0;
+		// clean old query results
+		commondata.places_found.ranking_places.clear();
+		commondata.places_found.ranking_nodes.clear();
 		while(choice_iterator.hasNext()){
 			
 			String choice = choice_iterator.next();
