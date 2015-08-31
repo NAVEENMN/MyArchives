@@ -84,10 +84,22 @@
         android:layout_below="@+id/Profiledata"
         android:layout_width="match_parent"
         android:background="#2E9AFE"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:orientation="horizontal">
       
   
+           <Button
+		        android:id="@+id/myeventsbutton"
+		        android:layout_width="50dp"
+		        android:layout_height="50dp"
+		        android:padding="3dp"
+			    android:paddingLeft="2dp"
+		        android:onClick="view_events"
+		        android:background="@android:color/transparent"
+			    android:drawableTop="@drawable/my_events"
+		        />
+           
+           
               <AutoCompleteTextView
 		        android:id="@+id/autoComplete"
 		        android:layout_width="0dp"
@@ -125,53 +137,8 @@
           android:layout_height="match_parent"
           android:name="com.google.android.gms.maps.MapFragment"/> 
 
-    <Button
-        android:id="@+id/myeventsbutton"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_gravity="right|top"
-        android:padding="10dp"
-	    android:paddingLeft="40dp"
-        android:onClick="view_events"
-        android:background="@android:color/transparent"
-	    android:drawableTop="@drawable/find_event"
-        />
 
 	<!-- ******************************************************************* Map region               -->
-	<LinearLayout 
-    	android:id="@+id/ActionButtons"
-    	style="?android:attr/buttonBarButtonStyle"
-        android:background="@android:color/transparent"
-        android:paddingTop="2dp"
-        android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-    
-  
-
-   <Button
-	    android:id="@+id/create_a_new_event"
-	    style="?android:attr/buttonBarStyle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:background="@android:color/transparent"
-	    android:drawableTop="@drawable/buttoneventhandler"
-	    android:onClick="Create_A_New_Event" />
-   
-   <Button
-	    android:id="@+id/add_friends"
-	    style="?android:attr/buttonBarButtonStyle"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:background="@android:color/transparent"
-	    android:drawableTop="@drawable/buttonhandler"
-	    android:onClick="Add_Friends" />
-   
-    
-</LinearLayout>
 
 	<Button
 	    android:id="@+id/chaticon"
@@ -184,6 +151,34 @@
 	    android:paddingRight="40dp"
 	    android:background="@android:color/transparent"
 	    android:drawableTop="@drawable/chaticon"
+	    android:text="@string/event_chat" />
+
+	<Button
+	    android:id="@+id/add_friends"
+	    android:layout_width="60dp"
+	    android:layout_height="60dp"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="true"
+	    android:layout_marginRight="42dp"
+	    android:background="@android:color/transparent"
+	    android:drawableTop="@drawable/addfriends"
+	    android:onClick="Add_Friends"
+	    android:padding="10dp"
+	    android:paddingRight="40dp"
+	    android:text="@string/event_chat" />
+
+	<Button
+	    android:id="@+id/addeventicon"
+	    android:layout_width="50dp"
+	    android:layout_height="50dp"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentLeft="true"
+	    android:layout_marginBottom="17dp"
+	    android:background="@android:color/transparent"
+	    android:drawableTop="@drawable/add_event"
+	    android:onClick="Create_A_New_Event"
+	    android:padding="10dp"
+	    android:paddingRight="40dp"
 	    android:text="@string/event_chat" />
 
     </RelativeLayout>
