@@ -3,30 +3,28 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/listeventroot"
     android:baselineAligned="false"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:gravity="top"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">  
-        
-       
-     	<LinearLayout
-            android:id="@+id/eventlistdetails"
-            android:layout_width="0dip"
-			android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:paddingLeft="2dp"
-			android:paddingTop="10dp"
-            android:orientation="vertical" >
-       
-       		<TextView
-        		android:id="@+id/title"
-        		android:textColor="#424242"
-        		android:textSize="18sp"
-        		android:text=""
-        		android:layout_gravity="left"
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content" />
-            
-        </LinearLayout>
+   <View
+	    android:layout_width="fill_parent"
+	    android:layout_height="2dip"
+	    android:background="#2E9AFE" />
     
+
+          <ListView
+              android:id="@+id/Eventlist"
+              android:layout_height="wrap_content"
+              android:layout_width="match_parent">
+         </ListView>
+
+                    <Button
+                    android:id="@+id/new_event_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#819FF7"
+                    android:textColor="#FAFAFA"
+                    android:text="New Event"
+                    android:layout_marginTop="2dp" />
 </LinearLayout>

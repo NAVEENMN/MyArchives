@@ -4,7 +4,10 @@
     android:id="@+id/myeventssection"
     android:baselineAligned="false"
     android:orientation="horizontal"
+    android:background="#E0F2F7"
     android:gravity="top"
+    android:paddingBottom="2dp"
+    android:paddingTop="2dp"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">  
       
@@ -12,9 +15,9 @@
    <LinearLayout
 		android:id="@+id/myeventsimageection"
 		android:baselineAligned="false"
-		android:layout_width="60dp"
-		android:layout_height="60dp"
-		android:background="#1C1C1C"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@android:color/transparent"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
 		android:gravity="left"
@@ -26,7 +29,7 @@
         android:layout_width="60dp"
 		android:layout_height="60dp"
 		android:gravity="center"
-		android:background = "@drawable/loginbg"
+		android:background = "@android:color/transparent"
 		android:scaleType="centerCrop"
         android:contentDescription="@string/desc" />
      	           	       
@@ -39,7 +42,7 @@
 	android:paddingLeft="5dp"
 	android:layout_width="wrap_content"
 	android:layout_height="60dp"
-	android:background="#FAFAFA"
+	android:background="#E0F2F7"
 	android:orientation="vertical" >
        
        		<TextView
@@ -68,30 +71,19 @@
 		        android:layout_width="0dp"
 		        android:layout_height="wrap_content"
 		        android:layout_weight="1"
-		        android:background="#FAFAFA"
+		        android:background="#E0F2F7"
 		        android:gravity="right"
 		        android:orientation="horizontal" >
-       	
-     	       
-     	       <ImageButton
-		            android:id="@+id/myevent_accept"
-		            android:layout_width="60dp"
-					android:layout_height="60dp"
-					android:gravity="center"
-					android:background = "@drawable/accept_button_handler"
-					android:scaleType="centerCrop"
-		            android:contentDescription="@string/desc"
-		            android:onClick="on_image_click" />
-     	       
-     	       <ImageButton
-		            android:id="@+id/myevent_reject"
-		            android:layout_width="60dp"
-					android:layout_height="60dp"
-					android:gravity="center"
-					android:background = "@drawable/reject_button_handler"
-					android:scaleType="centerCrop"
-		            android:contentDescription="@string/desc"
-		            android:onClick="on_image_click" />
+
+  			<ImageButton
+  			    android:id="@+id/myevent_accept"
+  			    android:layout_width="60dp"
+  			    android:layout_height="60dp"
+  			    android:background="@drawable/right"
+  			    android:contentDescription="@string/desc"
+  			    android:gravity="center"
+  			    android:onClick="on_image_click"
+  			    android:scaleType="centerCrop" />
      	       
             </LinearLayout>
    

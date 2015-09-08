@@ -1,15 +1,14 @@
 package com.nmysore.metster;
 
-import java.util.Random;
-
 import android.app.ListActivity;
-import android.content.SharedPreferences;
+import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,12 +33,19 @@ public class Chatlayer extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chatlayer);
+        setContentView(R.layout.layout_two);
 
         // Make sure we have a mUsername
         setupUsername();
 
         setTitle("Discuss about this event here!!");
+        
+        // Check if no view has focus:
+        View view = Chatlayer.this.getCurrentFocus();
+        if (view != null) {  
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
 
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(FIREBASE_URL).child("chat");

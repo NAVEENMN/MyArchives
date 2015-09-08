@@ -47,22 +47,46 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
         String author = chat.getAuthor();
         TextView authorText = (TextView) view.findViewById(R.id.author);
         authorText.setText(author);
-
+   
         TextView messageText = (TextView) view.findViewById(R.id.message);
         messageText.setTypeface(tf);
+        Integer chattype = 1;
+        if(messageText.length() > 80){
+        	chattype = 2;
+        } else {
+        	chattype = 1;
+        }
        
         LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.chatItem);
         // If the message was sent by this user, color it differently
         if (author != null && author.equals(mUsername)) {
             linearLayout.setGravity(Gravity.LEFT);
+            messageText.setGravity(Gravity.LEFT);
             messageText.setTypeface(tf);
-            messageText.setTextColor(Color.parseColor("#2E2E2E"));
-            messageText.setBackgroundResource(R.drawable.out_message_bg);
+            authorText.setTypeface(tf);
+            messageText.setTextColor(Color.parseColor("#F2F2F2"));
+            authorText.setTextColor(Color.parseColor("#585858"));
+            switch(chattype){
+            case 1:
+            	messageText.setBackgroundResource(R.drawable.out_message_bg_typed);
+            	break;
+            case 2:
+            	messageText.setBackgroundResource(R.drawable.out_message_bg_typee);
+            	break;
+            default:
+            	messageText.setBackgroundResource(R.drawable.out_message_bg_typed);
+            	break;
+            }
+            
+            //messageText.setBackgroundResource(R.drawable.out_message_bg);
         } else {
             linearLayout.setGravity(Gravity.RIGHT);
+            messageText.setGravity(Gravity.RIGHT);
             messageText.setTypeface(tf);
-            messageText.setTextColor(Color.parseColor("#FAFAFA"));
-            messageText.setBackgroundResource(R.drawable.in_message_bg);
+            authorText.setTypeface(tf);
+            authorText.setTextColor(Color.parseColor("#585858"));
+            messageText.setTextColor(Color.parseColor("#F2F2F2"));
+            messageText.setBackgroundResource(R.drawable.in_message_bg_typed);
         }
         ((TextView) view.findViewById(R.id.message)).setText(chat.getMessage());
     }

@@ -2,9 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layout_main"
     android:background="#F2F2F2"
     tools:context=".Login" >
     <!--  ******************************************************************  User Basic Profile data --> 
+    
+       <View
+           android:layout_width="fill_parent"
+           android:layout_height="3dip"
+           android:layout_alignParentTop="true"
+           android:background="#FE642E" />
 
     <LinearLayout
         android:id="@+id/Profiledata"
@@ -77,11 +84,44 @@
     </LinearLayout>
     
     
-    <!--  ****************************************************************** search section -->
+
+    
+    <!--  ******************************************************************  User Basic Profile data -->
+
+     <!--  ****************************************************************** Information area        -->
+     <ViewFlipper
+        android:id="@+id/view_flipper_panel"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/Profiledata"
+        android:background="#F2F2F2"
+        android:baselineAligned="false"
+        android:gravity="center" >   
+        
+                    <!-- View #1 -->
+     <include  
+        layout="@layout/listevents" 
+        android:id="@+id/id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="2sp"
+        android:layout_marginRight="2sp"
+      />
+        
+    <RelativeLayout
+        android:id="@+id/Information"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E6E6E6"
+        android:gravity="top"
+        android:orientation="vertical" >
+            
+      <!--  ****************************************************************** search section -->
     
        <LinearLayout
         android:id="@+id/search"
-        android:layout_below="@+id/Profiledata"
         android:layout_width="match_parent"
         android:background="#2E9AFE"
         android:layout_height="50dp"
@@ -94,9 +134,9 @@
 		        android:layout_height="50dp"
 		        android:padding="3dp"
 			    android:paddingLeft="2dp"
-		        android:onClick="view_events"
+		        android:onClick="back_to_events"
 		        android:background="@android:color/transparent"
-			    android:drawableTop="@drawable/my_events"
+			    android:drawableTop="@drawable/left"
 		        />
            
            
@@ -117,22 +157,11 @@
 
    
     </LinearLayout>
-    
-    <!--  ******************************************************************  User Basic Profile data -->
-
-     <!--  ****************************************************************** Information area        -->
-    <RelativeLayout
-        android:id="@+id/Information"
-        android:baselineAligned="false"
-        android:layout_below="@+id/search"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#E6E6E6"
-        android:gravity="top"
-        android:orientation="horizontal" >
-    <!-- ******************************************************************* Map region               -->        
+    <!-- ******************************************************************* Map region               -->   
+     
     <fragment 
           android:id="@+id/visitormap"
+           android:layout_below="@+id/search"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:name="com.google.android.gms.maps.MapFragment"/> 
@@ -171,19 +200,30 @@
 	    android:id="@+id/addeventicon"
 	    android:layout_width="50dp"
 	    android:layout_height="50dp"
-	    android:layout_alignParentBottom="true"
-	    android:layout_alignParentLeft="true"
-	    android:layout_marginBottom="17dp"
+	    android:layout_alignParentTop="true"
+	    android:layout_marginRight="26dp"
+	    android:layout_toLeftOf="@+id/chaticon"
 	    android:background="@android:color/transparent"
 	    android:drawableTop="@drawable/add_event"
 	    android:onClick="Create_A_New_Event"
 	    android:padding="10dp"
 	    android:paddingRight="40dp"
 	    android:text="@string/event_chat" />
-
+	
     </RelativeLayout>
-             
     
+
+        <!-- View #2 -->
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/hometwo"
+            android:contentDescription="@string/desc" />
+   
+  </ViewFlipper>             
+   
     
 
 </RelativeLayout>

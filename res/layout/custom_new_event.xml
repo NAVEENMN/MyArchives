@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/custom_new_event_base"
+    android:background="@drawable/round_rect_background"
+    android:orientation="vertical" >
+    
+	<TextView
+                android:id="@+id/New_Event"
+                android:textColor="#CEE3F6"
+                android:textSize="28sp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/custom_new_event_title"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+   
+       <LinearLayout
+        android:id="@+id/listFooter"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        
+          <EditText
+            android:id="@+id/new_event_name_type"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:textSize="20sp"
+            android:fontFamily="OpenSansSemiBold"
+            android:inputType="textShortMessage"
+            android:background="@drawable/rounder_edittext"
+            android:layout_weight=".75" />
+          
+          	<Button
+			    android:id="@+id/new_event_set"
+			    android:layout_width="40dp"
+			    android:layout_height="40dp"
+			    android:layout_marginTop="4dp"
+			    android:onClick="on_chat_click"
+			    android:background="@android:color/transparent"
+			    android:drawableTop="@drawable/ic_action_send" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

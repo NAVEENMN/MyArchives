@@ -28,7 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -39,8 +40,11 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -55,7 +59,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Editable;
+import android.support.v4.app.FragmentActivity;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.view.Display;
 import android.view.Gravity;
@@ -63,10 +69,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.AdapterView;
@@ -86,6 +94,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -94,6 +103,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -104,7 +114,7 @@ import com.nmetster.metster.R;
 import com.nmysore.metster.commondata.host_event_node;
 import com.nmysore.metster.commondata.place_details;
 
-public class Login extends Activity {
+public class Login extends FragmentActivity {
 
 	public static class group {
 		static String curr_person;
@@ -177,7 +187,21 @@ public class Login extends Activity {
 	private WebView webView;
 	Integer marker_counter = 0;// this is used to navigate from point to point.
 	Dialog dialog_refrence;
+	private ViewFlipper flip_view;
+	private float downXValue;
 	
+ String[] yelp_countries = new String[]{ "AR", "ARG", "AU", "AUS", "AT", "AUT", 
+		                                 "BE", "BEL", "BR", "BRA", "CA", "CAN", 
+		                                 "CL", "CHL", "CZ", "CZE", "DK", "DNK", 
+		                                 "FIN", "FI", "FR", "FRA", "DE", "DEU", 
+		                                 "HK", "HKG", "IE", "IRL", "IT", "ITA", 
+		                                 "JP", "JPN", "MY", "MYS", "MX", "MEX", 
+		                                 "NL", "NLD", "NZ", "NZL", "NO", "NOR", 
+		                                 "PH", "PHL", "PL", "POL", "PT", "PRT", 
+		                                 "SG", "SGP", "ES", "ESP", "SE", "SWE", 
+		                                 "CH", "CHE", "TW", "TWN", "TR", "TUR", 
+		                                 "GB", "GBR", "UK", "US", "USA" };
+	;
 	//** search
 	 private AutoCompleteTextView autoComplete;
 	 private MultiAutoCompleteTextView multiAutoComplete;
@@ -190,11 +214,16 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);//Above setContentView, very important
 		setContentView(R.layout.activity_login);
-		setupActionBar();// Show the Up button in the action bar.
+		flip_view = (ViewFlipper) findViewById(R.id.view_flipper_panel);
+		// Add these two lines
+        setupActionBar();// Show the Up button in the action bar.
 		getActionBar().setIcon( new ColorDrawable(getResources().getColor(android.R.color.transparent)));
 		
 		setTitle("View Next");
 		Firebase.setAndroidContext(this);
+		
+		ActionBar bar = getActionBar();
+		bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2E9AFE")));
 				
 		// This is just a verification		
 		if (commondata.facebook_details.facebook == null) {
@@ -248,6 +277,17 @@ public class Login extends Activity {
 					SharedPreferences.Editor editor = getSharedPreferences("myevents", MODE_PRIVATE).edit();
 					editor.putString("hostedevents", hostedevents +"<<"+eventa);
 					editor.commit();
+					
+					// show events after 2 sec delay
+					final Handler handler = new Handler();
+					handler.postDelayed(new Runnable() {
+					  @Override
+					  public void run() {
+					    //Do something after 100ms
+						  view_events(null);
+					  }
+					}, 1000);
+					
 				
 				}
 			}
@@ -497,6 +537,7 @@ public class Login extends Activity {
 							.getLatitude();
 					commondata.user_information.longitude = postion_get
 							.getLongitude();
+					
 					System.out.println("loc from gps ");
 				} else {
 
@@ -523,8 +564,12 @@ public class Login extends Activity {
 						.getCountryCode();
 				commondata.user_information.zip = addresses.get(0)
 						.getPostalCode();
+				commondata.user_information.countrycode = addresses.get(0).getCountryCode();
 				commondata.user_information.addressline = addresses.get(0)
 						.getThoroughfare();
+				
+				System.out.println("country code is : " + commondata.user_information.countrycode);
+				
 			} else {
 				System.out.println("address was zero");
 			}
@@ -537,15 +582,6 @@ public class Login extends Activity {
 		// Button Actions
 		SetupUIdata();
 		
-		// show events after 2 sec delay
-		final Handler handler = new Handler();
-		handler.postDelayed(new Runnable() {
-		  @Override
-		  public void run() {
-		    //Do something after 100ms
-			  view_events(null);
-		  }
-		}, 2000);
 		
 		
 		
@@ -553,7 +589,7 @@ public class Login extends Activity {
 		
 		// get the defined string-array
         String[] colors = getResources().getStringArray(R.array.choiceList);
-
+       
         adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,colors);
 
         autoComplete = (AutoCompleteTextView) findViewById(R.id.autoComplete);
@@ -732,6 +768,28 @@ public class Login extends Activity {
 	}
 	*/
 	
+	public Bitmap getRoundedShape(Bitmap scaleBitmapImage) {
+	    int targetWidth = 60;
+	    int targetHeight = 60;
+	    Bitmap targetBitmap = Bitmap.createBitmap(targetWidth, 
+	                        targetHeight,Bitmap.Config.ARGB_8888);
+
+	    Canvas canvas = new Canvas(targetBitmap);
+	    Path path = new Path();
+	    path.addCircle(((float) targetWidth - 1) / 2,
+	        ((float) targetHeight - 1) / 2,
+	        (Math.min(((float) targetWidth), 
+	        ((float) targetHeight)) / 2),
+	        Path.Direction.CCW);
+
+	    canvas.clipPath(path);
+	    Bitmap sourceBitmap = scaleBitmapImage;
+	    canvas.drawBitmap(sourceBitmap, 
+	        new Rect(0, 0, sourceBitmap.getWidth(),
+	        sourceBitmap.getHeight()), 
+	        new Rect(0, 0, targetWidth, targetHeight), null);
+	    return targetBitmap;
+	}
 	
 	/*
 	 * name : display_events
@@ -745,8 +803,8 @@ public class Login extends Activity {
 		if(commondata.pull_host_info){
 		System.out.println("enter display_events");
 		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Your Events");
+		//AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		//builder.setTitle("Your Events");
 		
 		ListView inviteslist = new ListView(this);
 		final ArrayList<String> listhostnames = new ArrayList<String>();
@@ -773,11 +831,11 @@ public class Login extends Activity {
 			JSONObject event_data = (JSONObject) host_data.get(eventid);
 			System.out.println("raw json " + event_data);
 			String hostname = event_data.getString("hostname");
-			if( hostname.length() > 10 ){
+			if( hostname.length() > 20 ){
 				hostname = hostname.substring(0, 7) + "...";
 			}
-			String eventname = event_data.getString("eventname");
-			if( eventname.length() > 10 ){
+			String eventname = "Event "+ event_data.getString("eventname");
+			if( eventname.length() > 20 ){
 				eventname = eventname.substring(0, 7) + "...";
 			}
 			String members = event_data.getString("number_of_children");
@@ -810,7 +868,8 @@ public class Login extends Activity {
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		final View layout = inflater.inflate(R.layout.myevents,
 				(ViewGroup) findViewById(R.id.myeventssection));
-		
+		 // Get ListView object from xml
+		final ListView listView = (ListView) findViewById(R.id.Eventlist);
 		ListView modeList = new ListView(this);
 		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
 				R.layout.myevents,
@@ -822,7 +881,6 @@ public class Login extends Activity {
 		        TextView fullname;
 		        TextView eventname;
 		        ImageButton accept;
-		        ImageButton reject;
 		    }
 
 		    public View getView(final int position, View convertView,
@@ -840,10 +898,16 @@ public class Login extends Activity {
 		            //        .findViewById(R.id.icon);
 		            holder.fullname = (TextView) convertView
 		                    .findViewById(R.id.fullname);
+		            Typeface tf = Typeface.createFromAsset(getAssets(),
+			                "fonts/OpenSansSemibold.ttf");
+		            Typeface tf2 = Typeface.createFromAsset(getAssets(),
+			                "fonts/OpenSansLight.ttf");
+		            holder.fullname.setTypeface(tf);
+		            holder.fullname.setTextColor(Color.parseColor("#5882FA"));
 		            holder.eventname = (TextView) convertView.findViewById(R.id.eventname);
+		            holder.eventname.setTypeface(tf2);
 		            //View v = inflater.inflate( R.layout.invitelist, parent, false);
 		            holder.accept = (ImageButton) convertView.findViewById(R.id.myevent_accept);
-		            holder.reject = (ImageButton) convertView.findViewById(R.id.myevent_reject);
 		            holder.himage = (ImageView)  convertView.findViewById(R.id.myeventhostimage);
 		            
 		           
@@ -858,27 +922,16 @@ public class Login extends Activity {
 							String eventid = listeventids.get(Integer.parseInt(v.getTag().toString()));
 							System.out.println("event to be launched" + eventid);
 							pull_data_from_firebase(eventid);
-							dialog_refrence.dismiss();
-							//dialog.dismiss();
-							// this will store in shared pref
-							//on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
-							// On a new thread handle this case	
-						}
-						
-						
-						
-						
-					});
-		            
-		            
-		            holder.reject.setOnClickListener(new OnClickListener() {
-						
-						@Override
-						public void onClick(View v) {
-							// TODO Auto-generated method stub
-							System.out.println("deleting... " + listeventids.get(Integer.parseInt(v.getTag().toString())));
 							
-							dialog_refrence.dismiss();
+							//** change view also update event data
+							
+							view_events(null);
+							flip_view.setInAnimation(Login.this, R.anim.in_right);
+							//flip_view.setOutAnimation(this, R.anim.out_left);
+							flip_view.showNext();
+							
+							//dialog_refrence.dismiss();
+							//dialog.dismiss();
 							// this will store in shared pref
 							//on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
 							// On a new thread handle this case	
@@ -897,15 +950,14 @@ public class Login extends Activity {
 		        }       
 		        System.out.println("setting" + listhostnames.get(position));
 		        holder.accept.setTag(position);
-		        holder.reject.setTag(position);
 		        holder.fullname.setText(listhostnames.get(position));
 		        holder.eventname.setText(listeventnames.get(position));
 		        //holder.himage.setImageBitmap(listhostimages.get(position));
 		         
 		        
 		        if(commondata.lazyload.image_ref.containsKey(listhostref.get(position))){
-		       
-		        	holder.himage.setImageBitmap( commondata.lazyload.image_ref.get(listhostref.get(position)));
+		        	Bitmap circle_image = getRoundedShape(commondata.lazyload.image_ref.get(listhostref.get(position)));
+		        	holder.himage.setImageBitmap(circle_image);
 		        }else{
 		        new Thread(new Runnable() { 
 		            public void run(){  
@@ -933,14 +985,36 @@ public class Login extends Activity {
 		
 		
 		
-		modeList.setAdapter(modeAdapter);
+		listView.setAdapter(modeAdapter);
 		
-		builder.setView(modeList);
+        // ListView Item Click Listener
+        listView.setOnItemClickListener(new OnItemClickListener() {
+
+              @Override
+              public void onItemClick(AdapterView<?> parent, View view,
+                 int position, long id) {
+                
+               // ListView Clicked item index
+               int itemPosition     = position;
+               
+               // ListView Clicked item value
+               String  itemValue    = (String) listView.getItemAtPosition(position);
+                  
+                // Show Alert 
+                Toast.makeText(getApplicationContext(),
+                  "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
+                  .show();
+             
+              }
+
+         });
 		
-		final Dialog dialog = builder.create();
-		dialog_refrence = dialog;
-		dialog.setCancelable(false);
-		dialog.show();	
+		//builder.setView(modeList);
+		
+		//final Dialog dialog = builder.create();
+		//dialog_refrence = dialog;
+	//	dialog.setCancelable(false);
+	//	dialog.show();	
 		
 		//*****************
 		
@@ -1452,6 +1526,7 @@ public class Login extends Activity {
 													.get(i)))
 							.icon(BitmapDescriptorFactory
 									.fromResource(R.drawable.host))
+							
 							.title(commondata.places_found.names.get(i)+"--"+commondata.places_found.latitudes.toString())
 							);	
 						}else{
@@ -1481,11 +1556,12 @@ public class Login extends Activity {
 												commondata.places_found.longitudes
 														.get(i)))
 								.icon(BitmapDescriptorFactory
-										.fromResource(R.drawable.places_votes_1))
+										.fromResource(R.drawable.place_location_pin))
 								
 								.title(commondata.places_found.names.get(i)+"--"+commondata.places_found.latitudes.get(i).toString())
 								);
 								
+								mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
 								
 								mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
 									
@@ -1493,7 +1569,7 @@ public class Login extends Activity {
 									public boolean onMarkerClick(Marker arg0) {
 										// TODO Auto-generated method stub
 										System.out.println("marker clicked " + arg0.getId() +" " + arg0.getTitle());
-										display_place(arg0.getTitle());
+										//display_place(arg0.getTitle());
 										return false;
 									}
 								});
@@ -1657,8 +1733,11 @@ public class Login extends Activity {
 	 */
 	@SuppressWarnings("deprecation")
 	public void create_event_notification() {
+		
+		commondata.prefrences.food = "american";
+		
+		on_event_selected();
 
-		String food_type = pick_food_type();
  
 	}
 		
@@ -2039,53 +2118,67 @@ public class Login extends Activity {
 		final HashMap<String, String> fb_data = new HashMap<String, String>();
 		//************* get hosted event count
 		//************** get event name from user
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("Event Name");
-		alert.setMessage("Event name helps your friends to identify");
-		//************** check how many events you have hosted.
 		
-		// Set an EditText view to get user input 
-		final EditText input = new EditText(this);
-		alert.setView(input);
-		alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int whichButton) {
-		  Editable value = input.getText();
-		  String event_name = value.toString();
-		  fb_data.put("nodename",commondata.facebook_details.name );
-			fb_data.put("eventname",event_name);
-			fb_data.put("Latitude", commondata.user_information.latitude.toString());
-			fb_data.put("Longitude", commondata.user_information.longitude.toString());
-			fb_data.put("price", Float.toString(commondata.prefrences.price));
-			fb_data.put("travel", Double.toString(commondata.prefrences.travel));
-			fb_data.put("food", commondata.prefrences.food);
-			fb_data.put("nodetype", "host");
-			create_firebase_refrence();
-			//************ pull data from local db
-			SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
-			String hostedevents = prefs.getString("hostedevents", null);
-			int number_of_hosted_events = 0;
-			String []events = null;
-			if (hostedevents != null) {
-			  String hostedeventlist = prefs.getString("hostedevents", "None");//"No name defined" is the default value.
-			  events = hostedeventlist.split("<<");
-			  number_of_hosted_events = events.length+1;
-			}
-			final String eventrefrence = commondata.facebook_details.facebook+"-->"+"event"+"-->"+ number_of_hosted_events;
-			fb_event_ref.firebaseobj.child(eventrefrence).child(commondata.facebook_details.facebook).setValue(fb_data);
-			//************** get data from firebase and update local
-			pull_data_from_firebase(eventrefrence);
-			//************** store this new event copy to local data base
-			// on event reset we now do this at top
-			//************** prepare for launch
-			remove_location_listners();
-			Intent intent = new Intent(Login.this, Login.class);
-			startActivity(intent);
-			toast_info("check My events");
-			finish();
-		  }
-		});
-		alert.show();
-	
+		// tag-
+		
+		// custom dialog
+		        final Dialog dialog = new Dialog(Login.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //dialog.setCancelable(false);
+               dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+               dialog.setContentView(R.layout.custom_new_event);
+               dialog.show();
+      
+						// Setup our input methods. Enter key on the keyboard or pushing the send button
+			        final EditText inputText = (EditText) dialog.findViewById(R.id.new_event_name_type);
+			        Typeface tf = Typeface.createFromAsset(getAssets(),
+			                "fonts/OpenSansLight.ttf");
+			        inputText.setTypeface(tf);
+			        inputText.setHint("Give this event a name.");
+			        
+			        dialog.findViewById(R.id.new_event_set).setOnClickListener(new View.OnClickListener() {
+			            @Override
+			            public void onClick(View view) {
+			         
+			    		  String event_name = inputText.getText().toString();
+			    		  if(event_name == null){
+			    			  event_name = commondata.facebook_details.name +"`s event"; 
+			    		  }
+			    		    fb_data.put("nodename",commondata.facebook_details.name );
+			    			fb_data.put("eventname",event_name);
+			    			fb_data.put("Latitude", commondata.user_information.latitude.toString());
+			    			fb_data.put("Longitude", commondata.user_information.longitude.toString());
+			    			fb_data.put("price", Float.toString(commondata.prefrences.price));
+			    			fb_data.put("travel", Double.toString(commondata.prefrences.travel));
+			    			fb_data.put("food", commondata.prefrences.food);
+			    			fb_data.put("nodetype", "host");
+			    			create_firebase_refrence();
+			    			//************ pull data from local db
+			    			SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE); 
+			    			String hostedevents = prefs.getString("hostedevents", null);
+			    			int number_of_hosted_events = 0;
+			    			String []events = null;
+			    			if (hostedevents != null) {
+			    			  String hostedeventlist = prefs.getString("hostedevents", "None");//"No name defined" is the default value.
+			    			  events = hostedeventlist.split("<<");
+			    			  number_of_hosted_events = events.length+1;
+			    			}
+			    			final String eventrefrence = commondata.facebook_details.facebook+"-->"+"event"+"-->"+ number_of_hosted_events;
+			    			fb_event_ref.firebaseobj.child(eventrefrence).child(commondata.facebook_details.facebook).setValue(fb_data);
+			    			//************** get data from firebase and update local
+			    			pull_data_from_firebase(eventrefrence);
+			    			//************** store this new event copy to local data base
+			    			// on event reset we now do this at top
+			    			//************** prepare for launch
+			    			remove_location_listners();
+			    			Intent intent = new Intent(Login.this, Login.class);
+			    			startActivity(intent);
+			    			finish();
+			                
+			            }
+			        });
+
+					dialog.show();	
 	}
 
 	/*
@@ -2171,234 +2264,7 @@ public class Login extends Activity {
 		}
 	}
 	
-	
-	
-	
-	
-	/*
-	 * name : pick_food_type
-	 * @params : None
-	 * @return : void
-	 * @desp : This function prompts a dialog for user to pick food type and the same is set in firebase.
-	 */
 
-	public String pick_food_type() {
-
-		// Strings to Show In Dialog with Radio Buttons
-		final CharSequence[] items = { " Chinese ", " Coffee ", " American ",
-				"Sea Food", " Pizza ", " Asian ", " Japanese ", " Mexican ",
-				" Italian ", " Indian", "Ice Cream" };
-
-		// Creating and Building the Dialog
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Select food type");
-		builder.setSingleChoiceItems(items, -1,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int item) {
-
-						switch (item) {
-						case 0:
-							commondata.prefrences.food = "chinese";
-							
-							on_event_selected();
-
-							break;
-						case 1:
-							// Your code when 2nd option seletced
-							commondata.prefrences.food = "coffee";
-							on_event_selected();
-							
-							break;
-						case 2:
-							// Your code when 3rd option seletced
-							commondata.prefrences.food = "american";
-							on_event_selected();
-							
-							break;
-						case 3:
-							// Your code when 4th option seletced
-							commondata.prefrences.food = "seafood";
-							on_event_selected();
-							
-							break;
-						case 4:
-							// Your code when first option seletced
-							commondata.prefrences.food = "pizza";
-							on_event_selected();
-						
-							break;
-						case 5:
-							commondata.prefrences.food = "asian";
-							
-							on_event_selected();
-							// Your code when 2nd option seletced
-							break;
-						case 6:
-							commondata.prefrences.food = "japanese";
-							on_event_selected();
-					
-							// Your code when 3rd option seletced
-							break;
-						case 7:
-							commondata.prefrences.food = "mexican";
-							on_event_selected();
-							
-							// Your code when 4th option seletced
-							break;
-						case 8:
-							commondata.prefrences.food = "italian";
-							on_event_selected();
-							
-							// Your code when first option seletced
-							break;
-						case 9:
-							commondata.prefrences.food = "indian";
-							on_event_selected();
-						
-							// Your code when 2nd option seletced
-							break;
-						case 10:
-							commondata.prefrences.food = "icecream";
-							on_event_selected();
-						
-							// Your code when 3rd option seletced
-							break;
-						default:
-							commondata.prefrences.food = "american";
-							on_event_selected();
-							
-							break;
-
-						}
-						levelDialog.dismiss();
-					}
-				});
-		levelDialog = builder.create();
-		levelDialog.show();
-		return commondata.prefrences.food;
-	}
-
-	
-	/*
-	 * name : pick_food_type_on_invite
-	 * @params : None
-	 * @return : void
-	 * @desp : This function prompts a dialog for user to pick food type and the same is set in firebase.
-	 */
-
-	public String pick_food_type_on_invite(final String event_reference) {
-		String[] parts = event_reference.split("-->");
-		String url = "https://met-ster-event.firebaseio.com/";
-		url = url + parts[0] +"/"+event_reference+ "/" + commondata.facebook_details.facebook;
-		final Firebase ft = new Firebase(url);
-	   
-		// Strings to Show In Dialog with Radio Buttons
-		final CharSequence[] items = { " Chinese ", " Coffee ", " American ",
-				"Sea Food", " Pizza ", " Asian ", " Japanese ", " Mexican ",
-				" Italian ", " Indian", "Ice Cream" };
-
-		// Creating and Building the Dialog
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Select your Preference");
-		builder.setSingleChoiceItems(items, -1,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int item) {
-
-						switch (item) {
-						case 0:
-							commondata.prefrences.food = "chinese";
-							System.out.println("your preference is " + commondata.prefrences.food );
-							ft.child("food")
-							.setValue(commondata.prefrences.food);
-							break;
-						case 1:
-							// Your code when 2nd option seletced
-							commondata.prefrences.food = "coffee";
-							System.out.println("your preference is " + commondata.prefrences.food );
-							ft.child("food")
-							.setValue(commondata.prefrences.food);
-							break;
-						case 2:
-							// Your code when 3rd option seletced
-							commondata.prefrences.food = "american";
-							System.out.println("your preference is " + commondata.prefrences.food );
-							ft.child("food")
-							.setValue(commondata.prefrences.food);
-							break;
-						case 3:
-							// Your code when 4th option seletced
-							commondata.prefrences.food = "seafood";
-							System.out.println("your preference is " + commondata.prefrences.food );
-							ft.child("food")
-							.setValue(commondata.prefrences.food);
-							break;
-						case 4:
-							// Your code when first option seletced
-							commondata.prefrences.food = "pizza";
-							System.out.println("your preference is " + commondata.prefrences.food );
-							ft.child("food")
-							.setValue(commondata.prefrences.food);
-			
-							break;
-						case 5:
-							commondata.prefrences.food = "asian";
-							System.out.println("your preference is " + commondata.prefrences.food );
-							ft.child("food")
-							.setValue(commondata.prefrences.food);
-							
-							break;
-						case 6:
-							commondata.prefrences.food = "japanese";
-							System.out.println("your preference is " + commondata.prefrences.food );
-							ft.child("food")
-							.setValue(commondata.prefrences.food);
-						
-							break;
-						case 7:
-							commondata.prefrences.food = "mexican";
-							System.out.println("your preference is " + commondata.prefrences.food );
-							ft.child("food")
-							.setValue(commondata.prefrences.food);
-							
-							break;
-						case 8:
-							commondata.prefrences.food = "italian";
-							System.out.println("your preference is " + commondata.prefrences.food );
-							ft.child("food")
-							.setValue(commondata.prefrences.food);
-						
-							break;
-						case 9:
-							commondata.prefrences.food = "indian";
-							System.out.println("your preference is " + commondata.prefrences.food );
-							ft.child("food")
-							.setValue(commondata.prefrences.food);
-							
-							break;
-						case 10:
-							commondata.prefrences.food = "icecream";
-							System.out.println("your preference is " + commondata.prefrences.food );
-							ft.child("food")
-							.setValue(commondata.prefrences.food);
-							
-							break;
-						default:
-							commondata.prefrences.food = "american";
-							System.out.println("your preference is " + commondata.prefrences.food );
-							ft.child("food")
-							.setValue(commondata.prefrences.food);
-							break;
-
-						}
-						levelDialog.dismiss();
-					}
-				});
-		levelDialog = builder.create();
-		levelDialog.show();
-		return commondata.prefrences.food;
-	}
-	
-	
 	/*
 	 * name : gcm_send_data
 	 * @params : facebook_id, to_facebook_id, message
@@ -2474,6 +2340,18 @@ public class Login extends Activity {
 
 	}
 	
+	/*
+	 * name : back_to_events
+	 * @prams : View v
+	 * @return : void
+	 * @desp : This function runs flipper back to events view
+	 */
+	public void back_to_events(View v){
+		view_events(null);
+		flip_view.setInAnimation(Login.this, R.anim.in_right);
+		flip_view.setOutAnimation(this, R.anim.out_left);
+		flip_view.showPrevious();
+	}
 		
 	/*
 	 * name : view_events
@@ -2517,6 +2395,11 @@ public class Login extends Activity {
 		}
 		if(newlisting == null){
 			toast_info("No events to list, please join or create one");
+			try{
+				pull_host_info(newlisting);
+			}catch(Exception e){
+				System.out.println("error : " + e);
+			}
 		}else{
 			newlisting.replaceAll("null<<", "").replaceAll("<<null<<", "<<");
 			System.out.println("your all events "+ newlisting);
@@ -2524,7 +2407,93 @@ public class Login extends Activity {
 		}
 	}
 	
-	
+	/**
+	 * This class creates a Custom a InfoWindowAdapter that is used to show
+	 * popup on map when user taps on a pin on the map. Current implementation
+	 * of this class will show a Title and a snippet with one static image.
+	 * 
+	 */
+	public class CustomInfoWindowAdapter implements InfoWindowAdapter
+	{
+
+		/** The contents view. */
+		private final View mContents;
+
+		/**
+		 * Instantiates a new custom info window adapter.
+		 */
+		@SuppressLint("InflateParams")
+		CustomInfoWindowAdapter()
+		{
+
+			mContents = Login.this.getLayoutInflater().inflate(
+					R.layout.map_popup, null);
+		}
+
+		/* (non-Javadoc)
+		 * @see com.google.android.gms.maps.GoogleMap.InfoWindowAdapter#getInfoWindow(com.google.android.gms.maps.model.Marker)
+		 */
+		@Override
+		public View getInfoWindow(Marker marker)
+		{
+
+			render(marker, mContents);
+			return mContents;
+		}
+
+		/* (non-Javadoc)
+		 * @see com.google.android.gms.maps.GoogleMap.InfoWindowAdapter#getInfoContents(com.google.android.gms.maps.model.Marker)
+		 */
+		@Override
+		public View getInfoContents(Marker marker)
+		{
+
+			return null;
+		}
+
+		/**
+		 * Render the marker content on Popup view. Customize this as per your
+		 * need.
+		 * 
+		 * @param marker
+		 *            the marker
+		 * @param view
+		 *            the content view
+		 */
+		private void render(final Marker marker, View view)
+		{
+
+			String title = marker.getTitle();
+			TextView titleUi = (TextView) view.findViewById(R.id.title);
+			if (title != null)
+			{
+				SpannableString titleText = new SpannableString(title);
+				titleText.setSpan(new ForegroundColorSpan(Color.WHITE), 0,
+						titleText.length(), 0);
+				titleUi.setText(titleText);
+			}
+			else
+			{
+				titleUi.setText("");
+			}
+
+			String snippet = marker.getSnippet();
+			TextView snippetUi = (TextView) view.findViewById(R.id.snippet);
+			if (snippet != null)
+			{
+				SpannableString snippetText = new SpannableString(snippet);
+				snippetText.setSpan(new ForegroundColorSpan(getResources()
+						.getColor(Color.parseColor("#0040FF"))), 0, snippet.length(),
+						0);
+				snippetUi.setText(snippetText);
+			}
+			else
+			{
+				snippetUi.setText("");
+			}
+
+		}
+	}
 	
 	
 	/*
@@ -2616,7 +2585,6 @@ public class Login extends Activity {
 							System.out.println("accepted " + listeventreferences.get(Integer.parseInt(v.getTag().toString())));
 							parent.getChildAt(Integer.parseInt(v.getTag().toString())).setBackgroundColor(Color.BLUE);
 							// this will store in shared pref
-							pick_food_type_on_invite(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
 							on_invite_accepted(listeventreferences.get(Integer.parseInt(v.getTag().toString())));
 							// On a new thread handle this case
 							
@@ -3408,7 +3376,6 @@ public class Login extends Activity {
 			newev.child(eventid).child(commondata.facebook_details.facebook).removeValue(); // remove the event
 			newev.child(eventid).removeValue(); // remove the base link coz restarants may be in the listing.
 			//********************************
-
 			Intent intent = new Intent(Login.this, Login.class);
 			startActivity(intent);
 			finish();
@@ -3647,6 +3614,9 @@ public class Login extends Activity {
 		    } catch (IOException e) {
 		        // TODO Auto-generated catch block
 		    }
+		    
+		    System.out.println("server response on exe yelp: " + responseString);
+		    
 		    return responseString;
 			
 			//****************************
@@ -3727,13 +3697,13 @@ public class Login extends Activity {
  					String content = rest_list.getString(place_id);
  					JSONObject info_about_place = new  JSONObject(content);
 					// fetch the co ordinates.
-   				 if(info_about_place.has("coordinate")) {
-   					 System.out.println("cor");
-   					 String s = info_about_place.getString("coordinate");
-   					 String[] ss = s.split(",");
-   					 latitude = Double.parseDouble(ss[0].replace("latitude", "").replace("{u'':", "").replace(",", ""));
-   					 longitude = Double.parseDouble(ss[1].replace("longitude", "").replace("u'':", "").replace("}", ""));
-   					 System.out.println("location" + latitude +", " + longitude);
+   				 
+   				 if(info_about_place.has("latitude")){
+   					latitude = Double.parseDouble(info_about_place.getString("latitude"));
+   					 
+   				 }
+   				 if(info_about_place.has("longitude")){
+   					longitude = Double.parseDouble(info_about_place.getString("longitude"));
    				 }
 					
    				 if(info_about_place.has("ratings")){ rating = Double.parseDouble(info_about_place.getString("ratings"));}
@@ -3843,9 +3813,11 @@ public class Login extends Activity {
 
  					    	String list;
  					    	System.out.println("posting for" + choice);
- 					    	
- 					    	new post_req().execute("http://52.8.173.36/metster/exe_yelp.php", eventid, choice, Integer.toString(keys.size()));	
- 			        		 
+ 					    	if(commondata.user_information.countrycode == "IN"){
+ 					    	    new post_req().execute("http://52.8.173.36/metster/exe_google.php", eventid, choice, Integer.toString(keys.size()));	
+ 					    	} else {
+ 					    		new post_req().execute("http://52.8.173.36/metster/exe_yelp.php", eventid, choice, Integer.toString(keys.size()));		
+ 					    	}
         	 }
         	 
         	 
@@ -4021,6 +3993,54 @@ private void get_votes(){
 	    return responseString;
 	} 
 
+	
+	public boolean onTouch(View arg0, MotionEvent arg1) {
+
+        // Get the action that was done on this touch event
+        switch (arg1.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+            {
+                // store the X value when the user's finger was pressed down
+                downXValue = arg1.getX();
+                break;
+            }
+
+            case MotionEvent.ACTION_UP:
+            {
+                // Get the X value when the user released his/her finger
+                float currentX = arg1.getX();            
+
+                // going backwards: pushing stuff to the right
+                if (downXValue < currentX)
+                {
+                    // Get a reference to the ViewFlipper
+                     ViewFlipper vf = (ViewFlipper) findViewById(R.id.view_flipper_panel);
+                     // Set the animation
+                      vf.setAnimation(AnimationUtils.loadAnimation(this, R.anim.out_left));
+                      // Flip!
+                      vf.showPrevious();
+                }
+
+                // going forwards: pushing stuff to the left
+                if (downXValue > currentX)
+                {
+                    // Get a reference to the ViewFlipper
+                    ViewFlipper vf = (ViewFlipper) findViewById(R.id.view_flipper_panel);
+                     // Set the animation
+                     vf.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.in_right));
+                      // Flip!
+                     vf.showNext();
+                }
+                break;
+            }
+        }
+
+        // if you return false, these actions will not be recorded
+        return true;
+    }
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// getMenuInflater().inflate(R.menu.login, menu);
@@ -4035,8 +4055,17 @@ private void get_votes(){
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			
-			next_place();
+			//next_place();
 			
+			view_events(null);
+			flip_view.setInAnimation(Login.this, R.anim.in_right);
+			flip_view.setOutAnimation(this, R.anim.out_left);
+			flip_view.showNext();
+			
+	        /*
+			Intent intent = new Intent(getBaseContext(), ViewPagerStyle1Activity.class);
+            Login.this.startActivity(intent);
+            */
 			return true;
 
 		case R.id.about_icon:

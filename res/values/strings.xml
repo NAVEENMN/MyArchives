@@ -136,39 +136,45 @@
     <string name="profile_settings"> Profile Settings </string>
     <string name="title_activity_chat">Chat</string>
     <string name="title_activity_chatlayer">Chatlayer</string>
+    <string name="custom_new_event_title">New Event.</string>
+    <string name="custom_new_event_title_hint">Give this event name.</string>
 
-    
     <!-- ****** choices -->
-    
-        <string-array name="choiceList">
-        <item >Asian</item>
-        <item >American</item>
-        <item >Asian fusion</item>
-        <item >Bar</item>
-        <item >Breakfast</item>
-        <item >Brunch</item>
-        <item >Chinese</item>
-        <item >Coffee</item>
-        <item >Breakfast</item>
-        <item >Donuts</item>
-        <item >Fast food</item>
-        <item >Hookah</item>
-        <item >Italian</item>
-        <item >Indian</item>
-        <item >Ice cream</item>
-        <item >Japanese</item>
-        <item >Juice</item>
-        <item >Korean</item>
-        <item >Lebanese</item>
-        <item >Mexican</item>
-        <item >Mediterranean</item>
-        <item >Pizza</item>
-        <item >Pho</item>
-        <item >Sushi</item>
-        <item >Sea Food</item>
-        <item >Steak</item>
-        <item >Thai</item>
-        <item >Vietnamese</item>
-        <item >Yogurt</item>
+
+    <string-array name="choiceList">
+        <item>Asian</item>
+        <item>American</item>
+        <item>Asian fusion</item>
+        <item>Bar</item>
+        <item>Breakfast</item>
+        <item>Brunch</item>
+        <item>Chinese</item>
+        <item>Coffee</item>
+        <item>Breakfast</item>
+        <item>Donuts</item>
+        <item>Fast food</item>
+        <item>Hookah</item>
+        <item>Italian</item>
+        <item>Indian</item>
+        <item>Ice cream</item>
+        <item>Japanese</item>
+        <item>Juice</item>
+        <item>Korean</item>
+        <item>Lebanese</item>
+        <item>Mexican</item>
+        <item>Mediterranean</item>
+        <item>Pizza</item>
+        <item>Pho</item>
+        <item>Sushi</item>
+        <item>Sea Food</item>
+        <item>Steak</item>
+        <item>Thai</item>
+        <item>Vietnamese</item>
+        <item>Yogurt</item>
     </string-array>
+
+    <string name="title_activity_panel">Panel</string>
+    <string name="title_activity_viewhold">Viewhold</string>
+    <string name="title_activity_view_pager_style1">ViewPagerStyle1Activity</string>
+
 </resources>

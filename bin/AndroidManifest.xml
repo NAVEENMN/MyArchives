@@ -135,6 +135,18 @@
             android:name="com.nmysore.metster.Chatlayer"
             android:label="@string/title_activity_chatlayer" >
         </activity>
+        <activity
+            android:name="com.nmysore.metster.Panel"
+            android:label="@string/title_activity_panel" >
+        </activity>
+        <activity
+            android:name="com.nmysore.metster.Viewhold"
+            android:label="@string/title_activity_viewhold" >
+        </activity>
+        <activity
+            android:name="com.nmysore.metster.ViewPagerStyle1Activity"
+            android:label="@string/title_activity_view_pager_style1" >
+        </activity>
     </application>
 
 </manifest>

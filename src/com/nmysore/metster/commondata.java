@@ -47,6 +47,7 @@ public class commondata {
 		static String country;
 		static String zip;
 		static String addressline;
+		static String countrycode;
 	}
 	
 	public static class event_information{
