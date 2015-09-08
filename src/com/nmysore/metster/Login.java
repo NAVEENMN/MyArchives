@@ -44,10 +44,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -2464,19 +2466,74 @@ public class Login extends FragmentActivity {
 		{
 
 			String title = marker.getTitle();
+			System.out.println("key: "  + title);
+			final place_details node = commondata.places_found.place_to_map.get(title);
+			
+			final ImageView popimage = (ImageView) view.findViewById(R.id.popupimage);
+			
+			
+			
+			
+			if(node.image_url !=null){
+				
+				if(commondata.lazyload.yelp_images.containsKey(node.image_url)){
+				       
+					popimage.setImageBitmap( commondata.lazyload.yelp_images.get(node.image_url));
+		        }else{
+		        new Thread(new Runnable() { 
+		            public void run(){  
+		            	System.out.println("yelp image retrieve thread issued");
+		            
+		            	try {
+							new YelpImageDownloaderTask(popimage).execute(node.image_url).get();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+		            }
+		        }).start();
+		        }
+				
+			}else{
+				
+			}
+		try{
+			RatingBar place_ratings = (RatingBar) view.findViewById(R.id.placeratings);
+			place_ratings.setRating(node.rating.floatValue());//#BFFF00
+			LayerDrawable stars = (LayerDrawable) place_ratings.getProgressDrawable();
+			stars.getDrawable(2).setColorFilter(Color.YELLOW,PorterDuff.Mode.SRC_ATOP);
+		}catch (Exception e){
+			
+		}
+			
 			TextView titleUi = (TextView) view.findViewById(R.id.title);
 			if (title != null)
 			{
 				SpannableString titleText = new SpannableString(title);
 				titleText.setSpan(new ForegroundColorSpan(Color.WHITE), 0,
 						titleText.length(), 0);
-				titleUi.setText(titleText);
+				titleUi.setText(node.place_name);
 			}
 			else
 			{
 				titleUi.setText("");
 			}
 
+			
+			TextView addressui = (TextView) view.findViewById(R.id.placeaddress);
+			if (node.address != null)
+			{
+				
+				addressui.setText(node.address);
+			}
+			else
+			{
+				addressui.setText("");
+			}
+			
 			String snippet = marker.getSnippet();
 			TextView snippetUi = (TextView) view.findViewById(R.id.snippet);
 			if (snippet != null)
@@ -2485,7 +2542,7 @@ public class Login extends FragmentActivity {
 				snippetText.setSpan(new ForegroundColorSpan(getResources()
 						.getColor(Color.parseColor("#0040FF"))), 0, snippet.length(),
 						0);
-				snippetUi.setText(snippetText);
+				snippetUi.setText(node.address);
 			}
 			else
 			{

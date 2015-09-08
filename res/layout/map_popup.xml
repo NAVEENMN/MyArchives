@@ -13,7 +13,7 @@
         android:paddingRight="10dp">
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/popupimage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/map_popup_pic" 
@@ -36,6 +36,22 @@
                 android:text="TextView"
                 android:textColor="#F2F2F2"
                 android:textSize="15sp" />
+           <TextView
+                android:id="@+id/placeaddress"
+                android:textColor="#848484"
+                android:textSize="10sp"
+                android:text="@string/Name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+           <RatingBar
+                android:id="@+id/placeratings"
+                android:layout_width="wrap_content"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_gravity="left"
+                android:layout_height="20sp"
+                android:numStars="5"
+                android:scaleX="0.8"
+                android:scaleY="0.8" />
             <TextView
                 android:id="@+id/snippet"
                 android:layout_width="wrap_content"
@@ -43,6 +59,7 @@
                 android:text="TextView TextView \nTextView"
                 android:textColor="#0040FF"
                 android:textSize="12sp" />
+            
 
         </LinearLayout>
 

@@ -174,7 +174,8 @@
 	    android:layout_width="60dp"
 	    android:layout_height="60dp"
 	    android:layout_alignParentRight="true"
-	    android:layout_alignParentTop="true"
+	    android:layout_alignParentTop="false"
+	    android:layout_alignParentBottom="true"
 	    android:onClick="on_chat_click"
 	    android:padding="10dp"
 	    android:paddingRight="40dp"
@@ -187,7 +188,8 @@
 	    android:layout_width="60dp"
 	    android:layout_height="60dp"
 	    android:layout_alignParentRight="true"
-	    android:layout_alignParentTop="true"
+	    android:layout_alignParentTop="false"
+	    android:layout_alignParentBottom="true"
 	    android:layout_marginRight="42dp"
 	    android:background="@android:color/transparent"
 	    android:drawableTop="@drawable/addfriends"
@@ -196,20 +198,7 @@
 	    android:paddingRight="40dp"
 	    android:text="@string/event_chat" />
 
-	<Button
-	    android:id="@+id/addeventicon"
-	    android:layout_width="50dp"
-	    android:layout_height="50dp"
-	    android:layout_alignParentTop="true"
-	    android:layout_marginRight="26dp"
-	    android:layout_toLeftOf="@+id/chaticon"
-	    android:background="@android:color/transparent"
-	    android:drawableTop="@drawable/add_event"
-	    android:onClick="Create_A_New_Event"
-	    android:padding="10dp"
-	    android:paddingRight="40dp"
-	    android:text="@string/event_chat" />
-	
+
     </RelativeLayout>
     
 
