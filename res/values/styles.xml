@@ -75,8 +75,12 @@
         <style name="indicator_style">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">4dip</item>
-        
         <item name="android:orientation">vertical</item>
+    </style>
+    
+        <style name="lbl_list_gray" parent="android:Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/side_menu_divider</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

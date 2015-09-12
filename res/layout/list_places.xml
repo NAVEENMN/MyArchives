@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listeventroot"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:gravity="top"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">  
+    
+  
+   <View
+	    android:layout_width="fill_parent"
+	    android:layout_height="2dip"
+	    android:background="#2E9AFE" />
+    
+
+          <ListView
+              android:id="@+id/Placelist"
+              android:gravity="top"
+              android:layout_height="wrap_content"
+              android:layout_width="match_parent">
+         </ListView>
+
+
+                      <Button
+                    android:id="@+id/place_list_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#819FF7"
+                    android:textColor="#FAFAFA"
+                    android:gravity="bottom"
+                    android:text="Back"
+                    android:onClick="place_list_go_back"
+                    android:layout_marginTop="2dp" />
+
+</LinearLayout>

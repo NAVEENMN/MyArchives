@@ -870,7 +870,11 @@ public class Login extends FragmentActivity {
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		final View layout = inflater.inflate(R.layout.myevents,
 				(ViewGroup) findViewById(R.id.myeventssection));
+		
+		
 		 // Get ListView object from xml
+		 // reference tag
+		
 		final ListView listView = (ListView) findViewById(R.id.Eventlist);
 		ListView modeList = new ListView(this);
 		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
@@ -926,12 +930,16 @@ public class Login extends FragmentActivity {
 							pull_data_from_firebase(eventid);
 							
 							//** change view also update event data
+							 commondata.event_information.host = listhostnames.get(Integer.parseInt(v.getTag().toString()));
+							 System.out.println("setting host name : " + listhostnames.get(Integer.parseInt(v.getTag().toString())));
+						     commondata.event_information.eventname = listeventnames.get(Integer.parseInt(v.getTag().toString()));
+							  
 							
 							view_events(null);
 							flip_view.setInAnimation(Login.this, R.anim.in_right);
 							//flip_view.setOutAnimation(this, R.anim.out_left);
 							flip_view.showNext();
-							
+						     // come here
 							//dialog_refrence.dismiss();
 							//dialog.dismiss();
 							// this will store in shared pref
@@ -1461,6 +1469,9 @@ public class Login extends FragmentActivity {
 		map.getUiSettings().setZoomControlsEnabled(false);
 
 		// --------------------------------------------------------------------------------------------
+		
+		
+		
 		System.out.println("exit SetupUIdata");
 	}
 
@@ -1513,6 +1524,12 @@ public class Login extends FragmentActivity {
 				}
 				
 				Integer rank = 0;
+				
+				TextView text1 = (TextView) findViewById(R.id.map_event_name);
+				text1.setText("Event: " + commondata.event_information.eventname);
+				
+				TextView text2 = (TextView) findViewById(R.id.map_event_host);
+				text2.setText("Host: " + commondata.event_information.host);
 				
 				for (int i = 0; i < commondata.places_found.latitudes.size(); i++) {
 					
@@ -1746,7 +1763,7 @@ public class Login extends FragmentActivity {
 	/*
 	 * name : display_place
 	 * @params : null
-	 * @desp : this function displays the place details.
+	 * @desp : this function displays the place details in a list view.
 	 */
 	public void display_place(String refdb){
 		System.out.println("key: "  + refdb);
@@ -1773,10 +1790,7 @@ public class Login extends FragmentActivity {
         if(node.rating != null){
         	maprat.setRating(Float.parseFloat(node.rating.toString()));	
         }
-        
-        TextView snippet = (TextView) dialog.findViewById(R.id.mapsnippet);
-        snippet.setText(node.snippet);
-        
+                
         ImageButton button1 = (ImageButton) dialog.findViewById(R.id.viewplace_upvote);
         ImageButton button2 = (ImageButton) dialog.findViewById(R.id.viewplace_ignore);
         
@@ -2853,12 +2867,8 @@ public class Login extends FragmentActivity {
 	public void list_rest() {
 		// --------
 		setProgressBarIndeterminateVisibility(false);
-		LinearLayout ll = (LinearLayout) findViewById(R.id.Profiledata);
+	
 		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Pick your choices");
-
-		ListView modeList = new ListView(this);
 		final ArrayList<String> listtitle = new ArrayList<String>();//
 		final ArrayList<String> listaddress = new ArrayList<String>();//
 		final ArrayList<Double> listrating = new ArrayList<Double>();//
@@ -2935,10 +2945,43 @@ public class Login extends FragmentActivity {
 			listimage_url.add(node.image_url);
 			
 		}
+	
+		
+		
+		
+		/*
+		 // display section
 		
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View layout = inflater.inflate(R.layout.listdisplay,
+		final View layout = inflater.inflate(R.layout.myevents,
+				(ViewGroup) findViewById(R.id.myeventssection));
+		
+		
+		 // Get ListView object from xml
+		 // reference tag
+		
+		final ListView listView = (ListView) findViewById(R.id.Eventlist);
+		ListView modeList = new ListView(this);
+		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
+				R.layout.myevents,
+				listhostnames){
+		    ViewHolder holder;
+
+		    class ViewHolder {
+		        ImageView himage;
+		        TextView fullname;
+		        TextView eventname;
+		        ImageButton accept;
+		    } 
+		 
+		 */
+		
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View layout = inflater.inflate(R.layout.list_places,
 				(ViewGroup) findViewById(R.id.placesection));
+	
+				final ListView listView = (ListView) findViewById(R.id.Placelist);
+				ListView modeList = new ListView(this);
 		
 		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
 				R.layout.listdisplay,
@@ -2953,7 +2996,6 @@ public class Login extends FragmentActivity {
 		        TextView placereviews;
 		        RatingBar placeratings;
 		        TextView placetype;
-		        TextView snippet;
 		        
 		    }
 
@@ -2978,13 +3020,13 @@ public class Login extends FragmentActivity {
 		            holder.placereviews = (TextView) convertView.findViewById(R.id.placereviews);
 		            holder.placeratings = (RatingBar) convertView.findViewById(R.id.placeratings);
 		            holder.placetype = (TextView) convertView.findViewById(R.id.placetype);
-		            holder.snippet = (TextView) convertView.findViewById(R.id.snippet);
 		            convertView.setTag(holder);
 		        } else {
 		            // view already defined, retrieve view holder
 		            holder = (ViewHolder) convertView.getTag();
 		        }       
 
+		            
 		        // load from yelp and set async
 		        Drawable drawable = getResources().getDrawable(R.drawable.eventbutton); //this is an image from the drawables folder
 
@@ -2994,7 +3036,6 @@ public class Login extends FragmentActivity {
 		        holder.placeaddress.setText(address);
 		        holder.placeratings.setRating(listrating.get(position).floatValue());
 		        holder.placetype.setText(listtypes.get(position));
-		        holder.snippet.setText(listsnippets.get(position));
 		        System.out.println("types " + listtypes.get(position));
 		        // set up $
 		        for(Double i = 0.0; i<listprice.get(position);i=i+1.0){
@@ -3032,7 +3073,8 @@ public class Login extends FragmentActivity {
 		        return convertView;
 		    }
 		};
-		modeList.setAdapter(modeAdapter);
+		//modeList.setAdapter(modeAdapter);
+		listView.setAdapter(modeAdapter);
 		
 		modeList.setOnItemLongClickListener(new OnItemLongClickListener() {
 
@@ -3192,17 +3234,10 @@ public class Login extends FragmentActivity {
 
 		});
 		
+		flip_view.setInAnimation(Login.this, R.anim.in_up);
+		//flip_view.setOutAnimation(this, R.anim.in_up);
+		flip_view.showNext();
 		
-		builder.setView(modeList);
-		builder.setPositiveButton("Done",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
-						dialog.dismiss();
-					}
-				});
-		final Dialog dialog = builder.create();
-		dialog.show();
 
 	}
 
@@ -3316,6 +3351,20 @@ public class Login extends FragmentActivity {
 		finish();
 	}
 	
+	
+	
+	/*
+	 * name : place_list_go_back
+	 * @params : View v
+	 * return : none
+	 * @desp : this funtion flips the view back to map
+	 */
+	
+	public void place_list_go_back(View v){
+		flip_view.setInAnimation(Login.this, R.anim.buttom_down);
+		flip_view.setOutAnimation(this, R.anim.in_up);
+		flip_view.showPrevious();	
+	}
 	
 	/*
 	 * name : drop_a_event()
@@ -4115,8 +4164,8 @@ private void get_votes(){
 			//next_place();
 			
 			view_events(null);
-			flip_view.setInAnimation(Login.this, R.anim.in_right);
-			flip_view.setOutAnimation(this, R.anim.out_left);
+			flip_view.setInAnimation(Login.this, R.anim.in_up);
+			//flip_view.setOutAnimation(this, R.anim.in_up);
 			flip_view.showNext();
 			
 	        /*

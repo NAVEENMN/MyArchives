@@ -165,6 +165,36 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:name="com.google.android.gms.maps.MapFragment"/> 
+          
+    <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:id="@+id/map_event_details"
+                android:orientation="vertical"
+                android:layout_alignParentBottom="true"
+                android:padding="10dp"
+                android:gravity="bottom"
+                android:background="@drawable/gradient_back" >
+
+                <TextView
+                    android:id="@+id/map_event_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:text="Event : dinner" />
+                <TextView
+                    android:id="@+id/map_event_host"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:text="Host : Naveen Mysore" 
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"/>
+     
+            </LinearLayout>
 
 
 	<!-- ******************************************************************* Map region               -->
@@ -204,12 +234,16 @@
 
         <!-- View #2 -->
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@drawable/hometwo"
-            android:contentDescription="@string/desc" />
+                  <!-- View #1 -->
+     <include  
+        layout="@layout/list_places" 
+        android:id="@+id/id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="2sp"
+        android:layout_marginRight="2sp"
+      />
    
   </ViewFlipper>             
    

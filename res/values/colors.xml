@@ -1,5 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <color name="black_overlay">#66000000</color>
-
+    <color name="theme_black">#393939</color>
+    <drawable name="theme_black">#393939</drawable>
+    <color name="theme_yellow">#FFDC00</color>
+    <drawable name="theme_yellow">#FFDC00</drawable>
+     <color name="black_overlay">#66000000</color>
+    
+    <color name="red_light">#e74c3c</color>
+    <color name="gray_dk">#313031</color>
+    <color name="white_smoke">#F7F7F7</color>
+    <color name="white">#ffffff</color>
+    <drawable name="white">#ffffff</drawable>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="blue_sky">#33b5e5</color>
+    <color name="gray">#5B5B5B</color>
+    <drawable name="trans_draw">#00000000</drawable>
+    
+    
+    <color name="main_red">#EC384D</color>
+    <color name="main_red_lt">#faa2ac</color>
+    <color name="main_blue_lt">#8dc2eb</color>
+    <drawable name="main_red_lt">#faa2ac</drawable>
+    <color name="home_logo_bg">#BAC4C8</color>
+    <color name="main_grey_dk">#666666</color>
+    <color name="main_grey_lt">#e5e5e5</color>
+    <color name="side_menu_bg">#353942</color>
+    <color name="side_menu_divider">#999999</color>
 </resources>
