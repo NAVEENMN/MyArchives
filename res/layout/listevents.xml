@@ -10,7 +10,8 @@
    <View
 	    android:layout_width="fill_parent"
 	    android:layout_height="2dip"
-	    android:background="#2E9AFE" />
+	    android:background="@color/white"
+	     />
     
 
           <ListView

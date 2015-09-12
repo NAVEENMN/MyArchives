@@ -2110,10 +2110,10 @@ containing a value of this type.
         public static final int pingicon=0x7f0500c7;
         public static final int place_list_back=0x7f0500ec;
         public static final int place_to_map_title=0x7f0500c5;
-        public static final int placeaddress=0x7f0500ef;
+        public static final int placeaddress=0x7f0500f0;
         public static final int placedetails=0x7f0500c3;
         public static final int placeratings=0x7f0500ee;
-        public static final int placereviews=0x7f0500f0;
+        public static final int placereviews=0x7f0500ef;
         public static final int placesection=0x7f0500c0;
         public static final int placesimage=0x7f0500c2;
         public static final int placesimageection=0x7f0500c1;

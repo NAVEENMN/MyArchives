@@ -790,10 +790,10 @@ int id picker_subtitle 0x7f0500a2
 int id pingicon 0x7f0500c7
 int id place_list_back 0x7f0500ec
 int id place_to_map_title 0x7f0500c5
-int id placeaddress 0x7f0500ef
+int id placeaddress 0x7f0500f0
 int id placedetails 0x7f0500c3
 int id placeratings 0x7f0500ee
-int id placereviews 0x7f0500f0
+int id placereviews 0x7f0500ef
 int id placesection 0x7f0500c0
 int id placesimage 0x7f0500c2
 int id placesimageection 0x7f0500c1

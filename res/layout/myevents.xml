@@ -4,7 +4,7 @@
     android:id="@+id/myeventssection"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    android:background="#E0F2F7"
+    android:background="@color/white"
     android:gravity="top"
     android:paddingBottom="2dp"
     android:paddingTop="2dp"
@@ -42,12 +42,12 @@
 	android:paddingLeft="5dp"
 	android:layout_width="wrap_content"
 	android:layout_height="60dp"
-	android:background="#E0F2F7"
+	android:background="@color/white"
 	android:orientation="vertical" >
        
        		<TextView
         		android:id="@+id/fullname"
-        		android:textColor="#424242"
+        		android:textColor="@color/main_red"
         		android:textSize="20sp"
         		android:text=""
         		android:layout_gravity="left"
@@ -56,7 +56,7 @@
        		
        		<TextView
         		android:id="@+id/eventname"
-        		android:textColor="#424242"
+        		android:textColor="@color/main_red"
         		android:textSize="20sp"
         		android:text=""
         		android:layout_gravity="left"
@@ -71,7 +71,7 @@
 		        android:layout_width="0dp"
 		        android:layout_height="wrap_content"
 		        android:layout_weight="1"
-		        android:background="#E0F2F7"
+		        android:background="@color/white"
 		        android:gravity="right"
 		        android:orientation="horizontal" >
 
