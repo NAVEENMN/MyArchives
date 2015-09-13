@@ -131,6 +131,14 @@
     <string name="infonext">Next</string>
     <string name="exit">Do you want to exit?</string>
 
+    
+    <!-- ****************************************************** -->
+    <string name="thirty_min">30min</string>
+    <string name="one_hr">1hr</string>
+    <string name="two_hr">2hr</string>
+    <string name="three_hr">3hr</string>
+    <string name="three_plus_hr">3+ hr</string>
+    
     <!-- ****************************************************** -->
 
     <string name="profile_settings"> Profile Settings </string>

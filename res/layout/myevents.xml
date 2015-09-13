@@ -56,7 +56,7 @@
        		
        		<TextView
         		android:id="@+id/eventname"
-        		android:textColor="@color/main_red"
+        		android:textColor="#A4A4A4"
         		android:textSize="20sp"
         		android:text=""
         		android:layout_gravity="left"

@@ -48,6 +48,8 @@
 			    android:onClick="on_chat_click"
 			    android:background="@android:color/transparent"
 			    android:drawableTop="@drawable/chat_send" />
+          	
+          	
 
 
     </LinearLayout>

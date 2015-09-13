@@ -1,140 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/placesection"
-    android:baselineAligned="false"
-    android:orientation="horizontal"
-    android:gravity="top"
-    android:background="@color/white"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">  
-         
-    
-    <RelativeLayout 
-		android:id="@+id/placesimagesection" 
-		android:baselineAligned="false"
-	    android:layout_width="100dp"
-		android:layout_height="100dp"
-		android:background="@color/white"
-		android:gravity="left"
-		android:orientation="horizontal" >
-     <ImageView
-        android:id="@+id/placesimage"
-        android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:gravity="center"
-		android:background="@color/white"
-		android:scaleType="centerCrop"
-        android:contentDescription="@string/desc" />
-   
-   
-          <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_alignParentBottom="true"
-                android:padding="10dp"
-                android:gravity="bottom"
-                android:background="@drawable/card_img_shadow" >
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:baselineAligned="false"
+    android:gravity="top"
+    android:orientation="horizontal" >
 
-              <RatingBar
-                  android:id="@+id/placeratings"
-                  style="?android:attr/ratingBarStyleSmall"
-                  android:layout_width="wrap_content"
-                  android:layout_height="20sp"
-                  android:gravity="left"
-                  android:numStars="5"
-                  android:scaleX="0.6"
-                  android:scaleY="0.6" />
-                         	
-              <TextView
-					                android:id="@+id/placereviews"
-					                android:textColor="#848484"
-					                android:gravity="left"
-					                android:textSize="10sp"
-					                android:text="review"
-					                android:layout_width="wrap_content"
-					                android:layout_height="match_parent"/>
+    <RelativeLayout
+        android:id="@+id/placesimagesection"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/white"
+        android:baselineAligned="false"
+        android:gravity="left"
+        android:orientation="horizontal" >
 
-            </LinearLayout>
-</RelativeLayout>
-    
-    
-    
-
-    
-       
-    <LinearLayout
-            android:id="@+id/placedetails"
-            android:layout_width="0dip"
+        <ImageView
+            android:id="@+id/placesimage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@color/white"
-			android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:paddingLeft="2dp"
-            android:orientation="vertical" >
-            
-     	   <LinearLayout
-		        android:id="@+id/nameandratings"
-		        android:baselineAligned="false"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:background="@color/white"
-		        android:orientation="horizontal" >
-       
-       		<TextView
-        		android:id="@+id/title"
-        		android:textSize="22sp"
-        		android:textColorLink="@color/main_red"
-                android:textColor="@color/main_red"
-        		android:text=""
-        		android:layout_gravity="left"
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content" />
-       		
-       	
-       		</LinearLayout>
-      
-     	   
-     	   <LinearLayout
-		        android:id="@+id/addresssections"
-		        android:baselineAligned="false"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:background="@color/white"
-		        android:orientation="horizontal" >
+            android:contentDescription="@string/desc"
+            android:gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/no_image" />
 
-     	   
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/card_img_shadow"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:padding="10dp" >
+
+            <RatingBar
+                android:id="@+id/placeratings"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="20sp"
+                android:gravity="left"
+                android:numStars="5"
+                android:scaleX="0.6"
+                android:scaleY="0.6" />
+
+            <TextView
+                android:id="@+id/placereviews"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:text="review"
+                android:textColor="#848484"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/placedetails"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="2dp" >
+
+        <LinearLayout
+            android:id="@+id/nameandratings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:baselineAligned="false"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text=""
+                android:textColor="@color/main_red"
+                android:textColorLink="@color/main_red"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/addresssections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:baselineAligned="false"
+            android:orientation="horizontal" >
+
             <TextView
                 android:id="@+id/placeaddress"
-                android:textColor="#848484"
-                android:textSize="10sp"
-                android:text="@string/Name"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            </LinearLayout>
-           
+                android:layout_height="match_parent"
+                android:text="@string/Name"
+                android:textColor="#848484"
+                android:textSize="10sp" />
+        </LinearLayout>
 
-            
-        
-            <LinearLayout
-		        android:id="@+id/typessections"
-		        android:baselineAligned="false"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:background="@color/white"
-		        android:orientation="horizontal" >
-   
+        <LinearLayout
+            android:id="@+id/typessections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:baselineAligned="false"
+            android:orientation="vertical" >
+
             <TextView
                 android:id="@+id/placetype"
-                android:textColor="#848484"
-                android:textSize="9sp"
-                android:text="@string/Gender"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            </LinearLayout>
+                android:layout_height="match_parent"
+                android:text="@string/Gender"
+                android:textColor="#848484"
+                android:textSize="9sp" />
             
+            <LinearLayout
+                android:id="@+id/list_sec_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:baselineAligned="false"
+                android:gravity="right"
+                android:orientation="horizontal" >
+
+              <Button
+                  android:id="@+id/add_to_map"
+                  android:layout_width="wrap_content"
+                  android:layout_height="30dp"
+                  android:layout_alignParentRight="false"
+                  android:layout_marginTop="2dp"
+                  android:background="@drawable/curvedbuttonhandler"
+                  android:text="+"
+                  android:textColor="#A4A4A4" />
+
+              <Button
+                    android:id="@+id/view_on_yelp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/curvedbuttonhandler"
+                    android:textColor="#A4A4A4"
+                    android:text=">"
+                    android:layout_marginTop="2dp" />
+              </LinearLayout>
         </LinearLayout>
-        
-    
-    
+    </LinearLayout>
+
 </LinearLayout>

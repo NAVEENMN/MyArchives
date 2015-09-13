@@ -64,10 +64,12 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/map_popup_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/arrow_white" />
+        
+     
 
     </LinearLayout>
 

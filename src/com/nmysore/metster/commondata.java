@@ -30,6 +30,14 @@ public class commondata {
 		static Facebook fb;
 		static JSONArray friends;
 	}
+	
+	public static class new_event{
+		static String event_name;
+		static String event_date;
+		static String event_time;
+		static String duration;
+	}
+	
 	public static class keys{
 		static String appkey = "n1a1v2e3e5n8m13y21s34o55r89e";
 	}

@@ -27,14 +27,14 @@
             android:id="@+id/ProfileImagebackground"
             android:layout_height="wrap_content"
             android:background="#1C1C1C"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
             android:orientation="vertical" >
                
         <ImageButton
             android:id="@+id/ProfileImage"
-            android:layout_width="80dp"
-			android:layout_height="80dp"
+            android:layout_width="50dp"
+			android:layout_height="50dp"
 			android:gravity="center"
 			android:background = "@drawable/loginbg"
 			android:scaleType="centerCrop"
@@ -57,19 +57,11 @@
             <TextView
                 android:id="@+id/FirstName"
                 android:textColor="#D8D8D8"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-            <TextView
-                android:id="@+id/LastName"
-                android:textColor="#D8D8D8"
-                android:textSize="20sp"
-                android:text="@string/Name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        
-            
+     
             <TextView
                 android:id="@+id/address_line"
                 android:textColor="#D8D8D8"
