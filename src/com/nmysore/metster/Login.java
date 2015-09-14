@@ -201,6 +201,8 @@ public class Login extends FragmentActivity {
 	private float downXValue;
 	
 	public String current_view = "event_page";
+	ChildEventListener lister;
+	Firebase event_fb_ref;
 
 	String[] yelp_countries = new String[] { "AR", "ARG", "AU", "AUS", "AT",
 			"AUT", "BE", "BEL", "BR", "BRA", "CA", "CAN", "CL", "CHL", "CZ",
@@ -712,7 +714,7 @@ public class Login extends FragmentActivity {
 				"https://met-ster-event.firebaseio.com/");
 		strBuilder.append(host + "/" + host + "-->" + eventref);
 		final String baseref = strBuilder.toString();// https://met-ster-event.firebaseio.com/80897978789/80897978789-->event-->1
-		Firebase event_fb_ref = new Firebase(baseref);
+		event_fb_ref = new Firebase(baseref);
 
 		// these method is invoked if online we need a clean data clean up on
 		// offline mode.
@@ -733,17 +735,6 @@ public class Login extends FragmentActivity {
 								.getName())) { // tells host dropped
 							System.out
 									.println("you are the host and you dropped it");
-
-							// The members of this event could be online of
-							// offline
-
-							/*
-							 * case 1: if online : just delete your refrence and
-							 * in members check if host dropped and trigger
-							 * thier exit. case 2: if offline: send gcm
-							 * notification which cleans up thier cache delete
-							 * firebase base refrence
-							 */
 
 						}
 
@@ -768,7 +759,9 @@ public class Login extends FragmentActivity {
 					public void onChildChanged(DataSnapshot arg0, String arg1) {
 						// TODO Auto-generated method stub
 						System.out.println("child changed");
-						pull_data_from_firebase(commondata.event_information.eventID);
+						//pull_data_from_firebase(commondata.event_information.eventID);
+						set_up_map_view();
+						// just update map
 						
 					}
 
@@ -776,6 +769,7 @@ public class Login extends FragmentActivity {
 					public void onChildAdded(DataSnapshot arg0, String arg1) {
 						// TODO Auto-generated method stub
 						System.out.println("nee child added");
+						set_up_map_view();
 					}
 
 					@Override
@@ -1431,7 +1425,7 @@ public class Login extends FragmentActivity {
 			}
 		});
 
-		ChildEventListener lister = set_firebase_listner(eventid);
+		lister = set_firebase_listner(eventid);
 		System.out.println("exit" + "pull_data_from_firebase");
 	}
 
@@ -3477,7 +3471,7 @@ public class Login extends FragmentActivity {
 				RatingBar placeratings;
 				TextView placetype;
 				Button add_to_map;
-				Button view_on_yelp;
+			    ImageButton view_on_yelp;
 
 			}
 
@@ -3506,7 +3500,7 @@ public class Login extends FragmentActivity {
 							.findViewById(R.id.placetype);
 					holder.add_to_map = (Button) convertView.findViewById(R.id.add_to_map);
 					holder.add_to_map.setTag(position);
-					holder.view_on_yelp = (Button) convertView.findViewById(R.id.view_on_yelp);
+					holder.view_on_yelp = (ImageButton) convertView.findViewById(R.id.view_on_yelp);
 					holder.view_on_yelp.setTag(position);
 					
 					
@@ -3523,7 +3517,16 @@ public class Login extends FragmentActivity {
 											.getTag().toString()));
 							final place_details node = commondata.places_found.ranking_nodes
 									.get(current_place_refrence);
-							add_to_map_from_list(node);
+							
+							Thread thread = new Thread() {
+							    @Override
+							    public void run() {
+							    	new add_to_fb().execute(node);
+							    }
+							};
+
+							thread.start();
+							
 							
 						}		
 					});
@@ -3560,8 +3563,11 @@ public class Login extends FragmentActivity {
 				Drawable drawable = getResources().getDrawable(
 						R.drawable.eventbutton); // this is an image from the
 													// drawables folder
-
+				
 				holder.title.setText(listtitle.get(position));
+				if(listtitle.get(position).length() > 15)
+				holder.title.setTextSize(18);
+				
 				String address = listaddress.get(position);
 				address = address.replaceAll("u", "").replaceAll("'", "");
 				holder.placeaddress.setText(address);
@@ -3621,6 +3627,7 @@ public class Login extends FragmentActivity {
 		flip_view.showNext();
 
 	}
+	
 
 	/*
 	 * name : add_to_map_from_list
@@ -4700,6 +4707,29 @@ public class Login extends FragmentActivity {
 		// if you return false, these actions will not be recorded
 		return true;
 	}
+	
+	public class add_to_fb extends AsyncTask<place_details, Void, String> {
+
+        @Override
+        protected String doInBackground(place_details... params) {
+        	add_to_map_from_list(params[0]);
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+        	event_fb_ref.addChildEventListener(lister);
+        }
+
+        @Override
+        protected void onPreExecute() {
+        	event_fb_ref.removeEventListener(lister);
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
+    
+}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

@@ -118,14 +118,7 @@
                 android:textColor="#848484"
                 android:textSize="9sp" />
             
-            <LinearLayout
-                android:id="@+id/list_sec_buttons"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:baselineAligned="false"
-                android:gravity="right"
-                android:orientation="horizontal" >
+          
 
               <Button
                   android:id="@+id/add_to_map"
@@ -134,20 +127,24 @@
                   android:layout_alignParentRight="false"
                   android:layout_marginTop="2dp"
                   android:background="@drawable/curvedbuttonhandler"
-                  android:text="+"
+                  android:text="Add to map"
                   android:textColor="#A4A4A4" />
 
-              <Button
-                    android:id="@+id/view_on_yelp"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/curvedbuttonhandler"
-                    android:textColor="#A4A4A4"
-                    android:text=">"
-                    android:layout_marginTop="2dp" />
-              </LinearLayout>
+             
         </LinearLayout>
     </LinearLayout>
+    
+        	<ImageButton
+  			    android:id="@+id/view_on_yelp"
+  			    android:layout_width="60dp"
+  			    android:layout_height="60dp"
+  			    android:background="@drawable/right"
+  			    android:contentDescription="@string/desc"
+  			    android:gravity="right"
+  			    android:onClick="on_image_click"
+  			    android:scaleType="centerCrop" />
+            
+ 
+    
 
 </LinearLayout>
