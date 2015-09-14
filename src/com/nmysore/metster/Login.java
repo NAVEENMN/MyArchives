@@ -1715,17 +1715,47 @@ public class Login extends FragmentActivity {
 								}
 								HashSet types_votes = new HashSet(cleaned_votes);
 								System.out.println("votes size "+ types_votes.size());
-								if(types_votes.size() == 0)
-								    image_ref = R.drawable.place_location_pin_1;
-									
-									if(types_votes.size() == 1)
+								
+								switch(types_votes.size()){
+								case 0:
 									image_ref = R.drawable.place_location_pin_1;
-									
-									if(types_votes.size() == 2)
+									break;
+								case 1:
+									image_ref = R.drawable.place_location_pin_1;
+									break;
+								case 2:
 									image_ref = R.drawable.place_location_pin_2;
-									
-									if(types_votes.size() == 3)
-										image_ref = R.drawable.place_location_pin_2;
+									break;
+								case 3:
+									image_ref = R.drawable.place_location_pin_3;
+									break;
+								case 4:
+									image_ref = R.drawable.place_location_pin_4;
+									break;
+								case 5:
+									image_ref = R.drawable.place_location_pin_5;
+									break;
+								case 6:
+									image_ref = R.drawable.place_location_pin_6;
+									break;
+								case 7:
+									image_ref = R.drawable.place_location_pin_7;
+									break;
+								case 8:
+									image_ref = R.drawable.place_location_pin_8;
+									break;
+								case 9:
+									image_ref = R.drawable.place_location_pin_9;
+									break;
+								case 10:
+									image_ref = R.drawable.place_location_pin_10;
+									break;
+								default:
+									image_ref = R.drawable.place_location_pin_10_plus;
+									break;
+								}
+								
+								
 							} catch (Exception e) {
 								System.out.println("error exception : " + e);
 							}
@@ -1754,8 +1784,8 @@ public class Login extends FragmentActivity {
 									System.out.println("marker clicked "
 											+ arg0.getId() + " "
 											+ arg0.getTitle());
-									
-									
+									String[] place_name = arg0.getTitle().split("--");
+									vote_up(place_name[0]);
 								}
 							});
 							
@@ -1799,6 +1829,68 @@ public class Login extends FragmentActivity {
 		_handler.removeCallbacks(getData);
 	}
 
+	/*
+	 * name : vote_up
+	 * @parms : place_reference
+	 * @desp : this function will add votes to that palce.
+	 */
+	public void vote_up(final String place_name) {
+
+		String[] parts = commondata.event_information.eventID
+				.split("-->");
+		System.out.println("to split" + parts[0]); // come here
+
+		StringBuilder strBuilder = new StringBuilder(
+				"https://met-ster-event.firebaseio.com/");
+		strBuilder.append(parts[0]);
+		String frt = strBuilder.toString();
+		final Firebase ft = new Firebase(frt);
+
+		try {
+			ft.child(commondata.event_information.eventID)
+					.child("rest--" + place_name.replace(".", ""))
+					.child("votes")
+					.addListenerForSingleValueEvent(
+							new ValueEventListener() {
+
+								@Override
+								public void onDataChange(
+										DataSnapshot arg0) {
+									// TODO Auto-generated method
+									// stub
+									if (arg0.getValue() != null) {
+										String list = arg0
+												.getValue()
+												.toString();
+
+										list = list
+												+ "--"
+												+ commondata.facebook_details.facebook;
+										ft.child(
+												commondata.event_information.eventID)
+												.child("rest--"
+														+ place_name
+																.replace(
+																		".",
+																		""))
+												.child("votes")
+												.setValue(list);
+
+									}
+								}
+
+								@Override
+								public void onCancelled(
+										FirebaseError arg0) {
+									// TODO Auto-generated method
+									// stub
+
+								}
+							});
+		} catch (Exception e) {
+			System.out.println("no child");
+		}
+	}
 	/*
 	 * name : on_image_click
 	 * 
