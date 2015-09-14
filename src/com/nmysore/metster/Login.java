@@ -770,7 +770,6 @@ public class Login extends FragmentActivity {
 						System.out.println("child changed");
 						pull_data_from_firebase(commondata.event_information.eventID);
 						
-						
 					}
 
 					@Override
@@ -865,15 +864,12 @@ public class Login extends FragmentActivity {
 			listhostref.clear();
 			// all events come here now we need to parse and display.
 
-			System.out.println("host_data" + host_data);
-
 			Iterator<String> events = host_data.keys();
 			while (events.hasNext()) {
 				String eventid = events.next();
 				listeventids.add(eventid);
 				try {
 					JSONObject event_data = (JSONObject) host_data.get(eventid);
-					System.out.println("raw json " + event_data);
 					String hostname = event_data.getString("hostname");
 					if (hostname.length() > 20) {
 						hostname = hostname.substring(0, 7) + "...";
@@ -982,9 +978,6 @@ public class Login extends FragmentActivity {
 								commondata.event_information.host = listhostnames
 										.get(Integer.parseInt(v.getTag()
 												.toString()));
-								System.out.println("setting host name : "
-										+ listhostnames.get(Integer.parseInt(v
-												.getTag().toString())));
 								commondata.event_information.eventname = listeventnames
 										.get(Integer.parseInt(v.getTag()
 												.toString()));
@@ -1080,7 +1073,7 @@ public class Login extends FragmentActivity {
 
 	private void pull_host_info(String eventslisting) {
 
-		System.out.println("entering pull_host_info" + eventslisting);
+		System.out.println("entering pull_host_info");
 		final String[] eventsids = eventslisting.split("<<");
 		final String last_event = eventsids[eventsids.length - 1];
 		final JSONObject all_events = new JSONObject();
@@ -1244,7 +1237,6 @@ public class Login extends FragmentActivity {
 					host_event_node hostnode = new commondata.host_event_node();
 					hostnode.eventid = host + "-->" + eventref;
 					hostnode.number_of_people = eventkey.getChildrenCount();
-					System.out.println("event " + hostnode.eventid);// bug
 					Iterable<DataSnapshot> data = eventkey.getChildren();
 					Iterator<DataSnapshot> dat = data.iterator();
 
@@ -1254,33 +1246,38 @@ public class Login extends FragmentActivity {
 					place_details place_node = new place_details();
 					while (dat.hasNext()) {// this segment pulls users
 						DataSnapshot params = dat.next();
-
-						// data inconsitency needs to be fixed.
-						// we are storing place data in extra hash table.
 						String pinmap = eventkey.getName().toString();
 						if (pinmap.contains("rest")) {
-
+							System.out.println("pin ma" + params.getName().toString());
 							// ---- to put on map
-							if (params.getName().toString() == "nodename")
+							if (params.getName().toString().contains("nodename"))
 								hostnode.nodename = params.getValue()
 										.toString();
-							if (params.getName().toString() == "nodetype")
+							if (params.getName().toString().contains("nodetype"))
 								hostnode.nodetype = params.getValue()
 										.toString();
-							if (params.getName().toString() == "Latitude") {
+							if (params.getName().toString().contains("Latitude")) {
 								hostnode.Latitude = Double.parseDouble(params
 										.getValue().toString());
 							}
-							if (params.getName().toString() == "Longitude") {
+							if (params.getName().toString().contains("Longitude")) {
 								hostnode.Longitude = Double.parseDouble(params
 										.getValue().toString());
-
 							}
+							
+							if (params.getName().toString().contains("votes")) {
+								hostnode.votes_list = params
+										.getValue().toString();
+								System.out.println("reading " + params
+										.getValue().toString());
+							}
+							
 							if (hostnode.Longitude != null
 									|| hostnode.Longitude != null) {
 								flag = true;
 							}
-							if (params.getName().toString() == "nodename")
+							
+							if (params.getName().toString().contains("nodename"))
 								hostnode.nodename = params.getValue()
 										.toString();
 							// ----- for local db
@@ -1293,73 +1290,107 @@ public class Login extends FragmentActivity {
 							 * place_node.snippet; place_node.types;
 							 * place_node.website; place_node.total_ratings;
 							 */
-							if (params.getName().toString() == "nodename")
+							if (params.getName().toString().contains("nodename"))
 								place_node.place_name = params.getValue()
 										.toString();
-							if (params.getName().toString() == "address"
+							if (params.getName().toString().contains("address")
 									&& params.getValue() != null) {
 								place_node.address = params.getValue()
 										.toString();
-								System.out.println("address add "
-										+ place_node.address);
 							}
 
-							if (params.getName().toString() == "price_level"
+							if (params.getName().toString().contains("price_level")
 									&& params.getValue() != null)
 								place_node.price_level = (Double) params
 										.getValue();
-							if (params.getName().toString() == "rating"
+							
+							if (params.getName().toString().contains("rating")
 									&& params.getValue() != null)
-								place_node.rating = (Double) params.getValue();
-							if (params.getName().toString() == "snippet"
+								place_node.rating = Double.parseDouble(params.getValue().toString());
+							
+							if (params.getName().toString().contains("total_ratings")
+									&& params.getValue() != null)
+								place_node.total_ratings = params.getValue().toString();
+							
+							if (params.getName().toString().contains("place_type")
+									&& params.getValue() != null){
+								
+								// we need to clean up the types
+								ArrayList<String> cleaned_types = new ArrayList<String>();
+
+								try {
+									String locadd = params.getValue().toString();
+									String[] parts = locadd.split(",");
+									for (int i = 0; i < parts.length; i++) {
+											cleaned_types.add(parts[i].toLowerCase().replaceAll(
+													" ", ""));
+									}
+								} catch (Exception e) {
+									System.out.println("error exception : " + e);
+								}
+								
+								HashSet types_cleaning = new HashSet(cleaned_types);
+								String ty = "none";
+								Iterator typ = types_cleaning.iterator();
+								while(typ.hasNext()){
+									ty = ty + " "+ typ.next().toString();
+								}
+								
+								place_node.types = ty.replaceAll("none", "");
+							}
+							
+							if (params.getName().toString().contains("votes")
+									&& params.getValue() != null){
+								place_node.votes = params.getValue().toString();
+							}
+							
+							if (params.getName().toString().contains("snippet")
 									&& params.getValue() != null)
 								place_node.snippet = params.getValue()
 										.toString();
-							if (params.getName().toString() == "types"
-									&& params.getValue() != null)
-								place_node.types = params.getValue().toString();
-							if (params.getName().toString() == "website"
+	
+							if (params.getName().toString().contains("website")
 									&& params.getValue() != null)
 								place_node.website = params.getValue()
 										.toString();
-							if (params.getName().toString() == "image_url"
+							if (params.getName().toString().contains("image_url")
 									&& params.getValue() != null)
 								place_node.image_url = params.getValue()
 										.toString();
-							if (params.getName().toString() == "Latitude") {
+							if (params.getName().toString().contains("Latitude")) {
 								place_node.latitude = Double.parseDouble(params
 										.getValue().toString());
 
 							}
-							if (params.getName().toString() == "Longitude") {
+							if (params.getName().toString().contains("Longitude")) {
 								place_node.longitude = Double
 										.parseDouble(params.getValue()
 												.toString());
 							}
 
 						} else {
-							if (params.getName().toString() == "eventname")
+							if (params.getName().toString().contains("eventname"))
 								hostnode.event_name = params.getValue()
 										.toString();
 							commondata.event_information.eventname = hostnode.event_name;
-							if (params.getName().toString() == "nodename")
+							if (params.getName().toString().contains("nodename"))
 								hostnode.nodename = params.getValue()
 										.toString();
-							if (params.getName().toString() == "nodetype")
+							if (params.getName().toString().contains("nodetype"))
 								hostnode.nodetype = params.getValue()
 										.toString();
-							if (params.getName().toString() == "food")
+							if (params.getName().toString().contains("food"))
 								hostnode.food_type = params.getValue()
 										.toString();
-							if (params.getName().toString() == "price")
+							if (params.getName().toString().contains("price"))
 								hostnode.price = params.getValue().toString();
-							if (params.getName().toString() == "travel")
+							if (params.getName().toString().contains("travel"))
 								hostnode.travel = params.getValue().toString();
-							if (params.getName().toString() == "Latitude") {
+							if (params.getName().toString().contains("Latitude")) {
 								hostnode.Latitude = Double.parseDouble(params
 										.getValue().toString());
 							}
-							if (params.getName().toString() == "Longitude") {
+							if (params.getName().toString().contains("Longitude")) {
 								hostnode.Longitude = Double.parseDouble(params
 										.getValue().toString());
 							}
@@ -1447,9 +1478,6 @@ public class Login extends FragmentActivity {
 			Iterator<host_event_node> arriter = nodearry.iterator();
 			while (arriter.hasNext()) {
 				host_event_node node = arriter.next();
-				System.out.println("eventid" + node.eventid);
-				System.out.println("location" + node.Latitude + " "
-						+ node.Longitude);
 			}
 
 		}
@@ -1485,14 +1513,15 @@ public class Login extends FragmentActivity {
 			commondata.places_found.longitudes.clear();
 			commondata.places_found.names.clear();
 			commondata.places_found.tokens.clear();
+			commondata.places_found.votes_list.clear();
 			while (node.hasNext()) {
 				host_event_node data = node.next();
-				System.out.println("location" + data.Latitude + ", "
-						+ data.Longitude);
 				commondata.places_found.latitudes.add(data.Latitude);
 				commondata.places_found.longitudes.add(data.Longitude);
 				commondata.places_found.names.add(data.nodename);
 				commondata.places_found.tokens.add(data.nodetype);
+				commondata.places_found.votes_list.add(data.votes_list);
+				
 			}
 		}
 
@@ -1638,30 +1667,6 @@ public class Login extends FragmentActivity {
 			btnMyLocation.setLayoutParams(params);
 
 			try {
-
-				// setup the votes
-				get_votes();
-
-				/*
-				 * for(Integer rnk = 0; rnk <
-				 * commondata.places_found.ranking_places.size(); rnk = rnk +
-				 * 1){ String current_place_refrence =
-				 * commondata.places_found.ranking_places.get(rnk);
-				 * place_details node =
-				 * commondata.places_found.ranking_nodes.get
-				 * (current_place_refrence);
-				 * 
-				 * }
-				 */
-				// we know that rank starts from zero
-				// when we hit a place update rank counter and pull data for
-				// that node.
-
-				System.out.println("to print on map");
-				for (int i = 0; i < commondata.places_found.latitudes.size(); i++) {
-					System.out.println(commondata.places_found.names);
-				}
-
 				Integer rank = 0;
 
 				TextView text1 = (TextView) findViewById(R.id.map_event_name);
@@ -1673,10 +1678,10 @@ public class Login extends FragmentActivity {
 
 				for (int i = 0; i < commondata.places_found.latitudes.size(); i++) {
 
-					System.out.println("token "
-							+ commondata.places_found.tokens.get(i));
 
 					if (commondata.places_found.tokens.get(i).contains("host")) {
+						System.out.println("token "
+								+ commondata.places_found.tokens.get(i));
 						mMap.addMarker(new MarkerOptions()
 								.position(
 										new LatLng(
@@ -1692,29 +1697,39 @@ public class Login extends FragmentActivity {
 										+ commondata.places_found.latitudes
 												.toString()));
 					} else {
-
+						
 						if (commondata.places_found.tokens.get(i).contains(
 								"place")) {
-							// ***** we need to get vote counts and set icon
-							// based on that
-
-							// String current_place_refrence =
-							// commondata.places_found.ranking_places.get(rank);
-							// place_details node =
-							// commondata.places_found.ranking_nodes.get(current_place_refrence);
-							// System.out.println("this should have listed first "
-							// + node.place_name.toString());
-							System.out.println("rank " + rank.toString());
-							get_votes();
-
-							Integer vote_count = commondata.places_found.place_votes
-									.get(commondata.places_found.names.get(i));
-
-							if (vote_count == null) {
-								vote_count = 0;
-
+							System.out.println("overall " + i + commondata.places_found.votes_list);
+							int image_ref;
+							image_ref = R.drawable.place_location_pin_1;
+							try {
+								String locadd = commondata.places_found.votes_list.get(i);
+								System.out.println( commondata.places_found.names.get(i) +" "+ commondata.places_found.votes_list.get(i));
+								ArrayList<String> cleaned_votes = new ArrayList<String>();
+								String[] parts = locadd.split("--");
+								System.out.println("parts lenf " + parts.length);
+								
+								for (int t = 0; t < parts.length; t++) {
+									cleaned_votes.add(parts[t]);
+								}
+								HashSet types_votes = new HashSet(cleaned_votes);
+								System.out.println("votes size "+ types_votes.size());
+								if(types_votes.size() == 0)
+								    image_ref = R.drawable.place_location_pin_1;
+									
+									if(types_votes.size() == 1)
+									image_ref = R.drawable.place_location_pin_1;
+									
+									if(types_votes.size() == 2)
+									image_ref = R.drawable.place_location_pin_2;
+									
+									if(types_votes.size() == 3)
+										image_ref = R.drawable.place_location_pin_2;
+							} catch (Exception e) {
+								System.out.println("error exception : " + e);
 							}
-
+							
 							mMap.addMarker(new MarkerOptions()
 									.position(
 											new LatLng(
@@ -1723,7 +1738,7 @@ public class Login extends FragmentActivity {
 													commondata.places_found.longitudes
 															.get(i)))
 									.icon(BitmapDescriptorFactory
-											.fromResource(R.drawable.place_location_pin))
+											.fromResource(image_ref))
 
 									.title(commondata.places_found.names.get(i)
 											+ "--"
@@ -1834,6 +1849,7 @@ public class Login extends FragmentActivity {
 			flip_view.setInAnimation(Login.this, R.anim.abc_slide_out_bottom);
 			// flip_view.setOutAnimation(this, R.anim.in_up);
 			flip_view.showNext();
+			current_view = "void";
 			
 		} else {
 		
@@ -2877,13 +2893,13 @@ public class Login extends FragmentActivity {
 						.getProgressDrawable();
 				stars.getDrawable(2).setColorFilter(Color.YELLOW,
 						PorterDuff.Mode.SRC_ATOP);
+				TextView placereviews = (TextView) view.findViewById(R.id.placereviews);
+				placereviews.setText(node.total_ratings + "user reviews");
 			} catch (Exception e) {
 				System.out.println("rating errr" + e);
 			}
 
 			TextView titleUi = (TextView) view.findViewById(R.id.title);
-			
-			
 			
 			if (title != null) {
 				SpannableString titleText = new SpannableString(title);
@@ -2892,6 +2908,14 @@ public class Login extends FragmentActivity {
 				titleUi.setText(node.place_name);
 			} else {
 				titleUi.setText("");
+			}
+			
+			TextView typesUi = (TextView) view.findViewById(R.id.placetypes);
+			
+			if (node.types != null) {
+				typesUi.setText(node.types);
+			} else {
+				typesUi.setText("");
 			}
 
 			TextView addressui = (TextView) view
@@ -3288,20 +3312,7 @@ public class Login extends FragmentActivity {
 			place_details node = commondata.places_found.ranking_nodes
 					.get(current_place_refrence);
 			listtitle.add(node.place_name);
-
-			// we need to clean up the address clean the special chars
-			ArrayList<String> cleaned_location = new ArrayList<String>();
-			try {
-				String locadd = node.address;
-				String[] parts = locadd.split("'");
-				cleaned_location.add(parts[1]);
-				cleaned_location.add(parts[3]);
-				cleaned_location.add(parts[5]);
-			} catch (Exception e) {
-				System.out.println("error exception : " + e);
-			}
-
-			listaddress.add(cleaned_location.toString());
+			listaddress.add(node.address);
 			System.out.println(" node ratings is" + node.rating);
 			listrating.add(node.rating);
 			listtotalratings.add(node.total_ratings);
@@ -3312,18 +3323,21 @@ public class Login extends FragmentActivity {
 
 			try {
 				String locadd = node.types;
-				String[] parts = locadd.split("'");
+				String[] parts = locadd.split(",");
 				for (int i = 0; i < parts.length; i++) {
-					if (!(i % 2 == 0)) { // take only odd values
 						cleaned_types.add(parts[i].toLowerCase().replaceAll(
 								" ", ""));
-					}
 				}
 			} catch (Exception e) {
 				System.out.println("error exception : " + e);
 			}
 			HashSet types_cleaning = new HashSet(cleaned_types);
-			listtypes.add(types_cleaning.toString());
+			String ty = "none";
+			Iterator typ = types_cleaning.iterator();
+			while(typ.hasNext()){
+				ty = ty + " "+ typ.next().toString();
+			}
+			listtypes.add(ty.replaceAll("none", ""));
 			listsnippets.add(node.snippet);
 			listplace_url.add(node.website);
 			listimage_url.add(node.image_url);
@@ -3589,6 +3603,16 @@ public class Login extends FragmentActivity {
 						+ node.place_name.replace(".",
 								"")).child("website")
 				.setValue(node.website);
+		
+		// --- place address, ratings, type, link
+		ft.child(commondata.event_information.eventID)
+				.child("rest--" + node.place_name.replace(".", ""))
+				.child("total_ratings").setValue(node.total_ratings);
+
+		// --- place address, ratings, type, link
+		ft.child(commondata.event_information.eventID)
+				.child("rest--" + node.place_name.replace(".", ""))
+				.child("place_type").setValue(node.types);
 
 		// HashSet<String> voteset = new
 		// HashSet<String>();
@@ -4602,9 +4626,11 @@ public class Login extends FragmentActivity {
 			// next_place();
 
 			view_events(null);
+			if(commondata.event_information.eventID != null){
 			flip_view.setInAnimation(Login.this, R.anim.in_up);
 			// flip_view.setOutAnimation(this, R.anim.in_up);
-			flip_view.showNext();
+			flip_view.showPrevious();
+			}
 
 			/*
 			 * Intent intent = new Intent(getBaseContext(),

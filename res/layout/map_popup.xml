@@ -11,13 +11,58 @@
         android:paddingBottom="15dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
+        
+        
+        <RelativeLayout
+        android:id="@+id/placesimagesection"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/white"
+        android:baselineAligned="false"
+        android:gravity="left"
+        android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/popupimage"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/map_popup_pic" 
-            />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@drawable/map_popup_pic"
+            android:background="@color/white"
+            android:contentDescription="@string/desc"
+            android:gravity="center"
+            android:scaleType="centerCrop"
+             />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/card_img_shadow"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:padding="10dp" >
+
+            <RatingBar
+                android:id="@+id/placeratings"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="20sp"
+                android:gravity="left"
+                android:numStars="5"
+                android:scaleX="0.6"
+                android:scaleY="0.6" />
+
+            <TextView
+                android:id="@+id/placereviews"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:text="review"
+                android:textColor="#848484"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </RelativeLayout>
+        
 
         <LinearLayout
             android:id="@+id/al"
@@ -38,28 +83,27 @@
                 android:textSize="15sp" />
            <TextView
                 android:id="@+id/placeaddress"
-                android:textColor="#848484"
+                android:textColor="#F2F2F2"
                 android:textSize="10sp"
                 android:text="@string/Name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-           <RatingBar
-                android:id="@+id/placeratings"
+
+            <TextView
+                android:id="@+id/placetypes"
                 android:layout_width="wrap_content"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_gravity="left"
-                android:layout_height="20sp"
-                android:numStars="5"
-                android:scaleX="0.8"
-                android:scaleY="0.8" />
+                android:layout_height="wrap_content"
+                android:text="types"
+                android:textColor="#F2F2F2"
+                android:textSize="12sp" />
+            
             <TextView
                 android:id="@+id/snippet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView TextView \nTextView"
-                android:textColor="#0040FF"
+                android:text="snippet"
+                android:textColor="#F2F2F2"
                 android:textSize="12sp" />
-            
 
         </LinearLayout>
 
@@ -69,7 +113,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/arrow_white" />
         
-     
-
+    
     </LinearLayout>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nmetster.metster"
-    android:versionCode="13"
+    android:versionCode="16"
     android:versionName="1.0" >
 
     <uses-sdk
@@ -81,7 +81,7 @@
         <!-- debug AIzaSyDUL5JCD2DCnOROSKAnWhZ-q6Z8gn3PSnI -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDUL5JCD2DCnOROSKAnWhZ-q6Z8gn3PSnI" />
+            android:value="AIzaSyDmkqR_CqB0KKutsRFWr5V1CKrnrXNhawI" />
         <!-- android:value="AIzaSyDmkqR_CqB0KKutsRFWr5V1CKrnrXNhawI" /> -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

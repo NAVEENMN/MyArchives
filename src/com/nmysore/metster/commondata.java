@@ -98,7 +98,7 @@ public class commondata {
 		static ArrayList<Double> ratings = new ArrayList<Double>();
 		static ArrayList<String> names = new ArrayList<String>();
 		static ArrayList<String> tokens = new ArrayList<String>();
-		static String votes_list;
+		static ArrayList<String> votes_list = new ArrayList<String>();
 		static ArrayList<String> rankedplaces = new ArrayList<String>();
 		static ArrayList<Double> rankedlatitudes = new ArrayList<Double>();
 		static ArrayList<Integer> votes_places = new ArrayList<Integer>();
@@ -139,6 +139,7 @@ public class commondata {
 		String event_name;// what user enters
 		String eventid;//fbid-->event-->#
 		Long number_of_people;//
+		String votes_list;
 		String food_type;
 		String price;
 		String travel;
