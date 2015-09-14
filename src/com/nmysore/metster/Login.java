@@ -769,7 +769,7 @@ public class Login extends FragmentActivity {
 					public void onChildAdded(DataSnapshot arg0, String arg1) {
 						// TODO Auto-generated method stub
 						System.out.println("nee child added");
-						set_up_map_view();
+						//set_up_map_view();
 					}
 
 					@Override
@@ -4713,6 +4713,7 @@ public class Login extends FragmentActivity {
         @Override
         protected String doInBackground(place_details... params) {
         	add_to_map_from_list(params[0]);
+        	set_up_map_view();
             return "Executed";
         }
 
@@ -4749,7 +4750,7 @@ public class Login extends FragmentActivity {
 
 			view_events(null);
 			if(commondata.event_information.eventID != null){
-			flip_view.setInAnimation(Login.this, R.anim.in_up);
+			flip_view.setInAnimation(Login.this, R.anim.in_right);
 			// flip_view.setOutAnimation(this, R.anim.in_up);
 			flip_view.showPrevious();
 			}
