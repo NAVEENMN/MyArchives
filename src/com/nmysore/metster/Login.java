@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -232,8 +233,7 @@ public class Login extends FragmentActivity {
 		getActionBar().setIcon(
 				new ColorDrawable(getResources().getColor(
 						android.R.color.transparent)));
-
-		setTitle("View Next");
+		setTitle("Back");
 		Firebase.setAndroidContext(this);
 
 		ActionBar bar = getActionBar();
@@ -999,7 +999,6 @@ public class Login extends FragmentActivity {
 						// view already defined, retrieve view holder
 						holder = (ViewHolder) convertView.getTag();
 					}
-					System.out.println("setting" + listhostnames.get(position));
 					holder.accept.setTag(position);
 					holder.fullname.setText(listhostnames.get(position));
 					holder.eventname.setText(listeventnames.get(position));
@@ -3676,24 +3675,45 @@ public class Login extends FragmentActivity {
 							+ " user reviews   " + " " + dollarsign);
 				}
 				// holder.icon.setImageDrawable(drawable);
-				if (commondata.lazyload.yelp_images.containsKey(listimage_url
-						.get(position))) {
+				commondata.user_information.countrycode = "IN";
+				if (Arrays.asList(yelp_countries).contains(commondata.user_information.countrycode)) {
+				    // true
+					if (commondata.lazyload.yelp_images.containsKey(listimage_url
+							.get(position))) {
 
-					holder.icon.setImageBitmap(commondata.lazyload.yelp_images
-							.get(listimage_url.get(position)));
-				} else {
-					try {
-						new YelpImageDownloaderTask(holder.icon)
-								.execute(listimage_url.get(position))
-								.get();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ExecutionException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						holder.icon.setImageBitmap(commondata.lazyload.yelp_images
+								.get(listimage_url.get(position)));
+					} else {
+						try {
+							new YelpImageDownloaderTask(holder.icon)
+									.execute(listimage_url.get(position))
+									.get();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
+				} else {
+					
+				
+						System.out.println("images ref" + listimage_url.get(position));
+						String image_refrence = listimage_url.get(position);
+						
+							String browser_key = "AIzaSyDfwE0NNbjGZJ0-PN7rQIypBWPQPKngzWY";
+							String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&" +
+									"photoreference="+ listimage_url.get(position)+
+									"&key=" + browser_key;
+							
+							new YelpImageDownloaderTask(holder.icon)
+							.execute(url);
+
+					
 				}
+				
+
 
 				dollar.clear();
 				return convertView;
@@ -3742,13 +3762,13 @@ public class Login extends FragmentActivity {
 					.child("rest--"
 							+ node.place_name.replace(".",
 									"")).child("Latitude")
-					.setValue(node.latitude);
+					.setValue(node.latitude.toString());
 			// --- longitude
 			ft.child(commondata.event_information.eventID)
 					.child("rest--"
 							+ node.place_name.replace(".",
 									"")).child("Longitude")
-					.setValue(node.longitude);
+					.setValue(node.longitude.toString());
 			// --- nodetype
 			ft.child(commondata.event_information.eventID)
 					.child("rest--"
@@ -3797,6 +3817,9 @@ public class Login extends FragmentActivity {
 					.setValue(node.website);
 			
 			// --- place address, ratings, type, link
+			if(node.total_ratings.isEmpty() || node.total_ratings.contains(null)){
+				node.total_ratings = "0.0";
+			}
 			ft.child(commondata.event_information.eventID)
 					.child("rest--" + node.place_name.replace(".", ""))
 					.child("total_ratings").setValue(node.total_ratings);
@@ -4345,7 +4368,7 @@ public class Login extends FragmentActivity {
 			}
 
 			System.out
-					.println("server response on exe yelp: " + responseString);
+					.println("server response on exe: " + responseString);
 
 			return responseString;
 
@@ -4559,7 +4582,8 @@ public class Login extends FragmentActivity {
 
 				String list;
 				System.out.println("posting for" + choice);
-				if (commondata.user_information.countrycode == "IN") {
+				commondata.user_information.countrycode = "IN";
+				if (commondata.user_information.countrycode.contains("IN")) {
 					new post_req().execute(
 							"http://52.8.173.36/metster/exe_google.php",
 							eventid, choice, Integer.toString(keys.size()));
