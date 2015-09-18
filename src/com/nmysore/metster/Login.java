@@ -75,6 +75,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
@@ -82,7 +83,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -114,7 +114,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -203,6 +202,7 @@ public class Login extends FragmentActivity {
 	public String current_view = "event_page";
 	ChildEventListener lister;
 	Firebase event_fb_ref;
+	ArrayAdapter<String> modeAdapter = null;
 
 	String[] yelp_countries = new String[] { "AR", "ARG", "AU", "AUS", "AT",
 			"AUT", "BE", "BEL", "BR", "BRA", "CA", "CAN", "CL", "CHL", "CZ",
@@ -300,6 +300,24 @@ public class Login extends FragmentActivity {
 							+ eventa);
 					editor.commit();
 
+					// ********** retieve events information from localdb
+
+					SharedPreferences eventsjoined = getApplicationContext()
+							.getSharedPreferences("eventjoined", MODE_PRIVATE);
+
+					// ******** and store them in commondata
+					if (eventsjoined != null) {
+						Map<String, ?> joinedkeys = eventsjoined.getAll();
+						for (Map.Entry<String, ?> entry : joinedkeys.entrySet()) {
+							String event_id = entry.getKey();
+							String event_name = entry.getValue().toString();
+							commondata.event_information.event_joined_table.put(event_id,
+									event_name);
+							System.out.println("shared pref eventjoined has " + event_id
+									+ " " + event_name);
+						}
+					}
+					
 					// show events after 2 sec delay
 					final Handler handler = new Handler();
 					handler.postDelayed(new Runnable() {
@@ -346,23 +364,7 @@ public class Login extends FragmentActivity {
 		// to be safe lets pull shared pref on event here.
 		int event_case = 3;
 
-		// ********** retieve events information from localdb
 
-		SharedPreferences eventsjoined = getApplicationContext()
-				.getSharedPreferences("eventjoined", MODE_PRIVATE);
-
-		// ******** and store them in commondata
-		if (eventsjoined != null) {
-			Map<String, ?> joinedkeys = eventsjoined.getAll();
-			for (Map.Entry<String, ?> entry : joinedkeys.entrySet()) {
-				String event_id = entry.getKey();
-				String event_name = entry.getValue().toString();
-				commondata.event_information.event_joined_table.put(event_id,
-						event_name);
-				System.out.println("shared pref eventjoined has " + event_id
-						+ " " + event_name);
-			}
-		}
 
 		// ********* check which case it belongs to
 		if (commondata.event_information.event_joined_table.isEmpty()
@@ -1701,54 +1703,110 @@ public class Login extends FragmentActivity {
 								String locadd = commondata.places_found.votes_list.get(i);
 								System.out.println( commondata.places_found.names.get(i) +" "+ commondata.places_found.votes_list.get(i));
 								ArrayList<String> cleaned_votes = new ArrayList<String>();
+								
 								String[] parts = locadd.split("--");
 								System.out.println("parts lenf " + parts.length);
 								
 								for (int t = 0; t < parts.length; t++) {
 									cleaned_votes.add(parts[t]);
 								}
+								
 								HashSet types_votes = new HashSet(cleaned_votes);
+								
 								System.out.println("votes size "+ types_votes.size());
 								
-								switch(types_votes.size()){
-								case 0:
-									image_ref = R.drawable.place_location_pin_1;
-									break;
-								case 1:
-									image_ref = R.drawable.place_location_pin_1;
-									break;
-								case 2:
-									image_ref = R.drawable.place_location_pin_2;
-									break;
-								case 3:
-									image_ref = R.drawable.place_location_pin_3;
-									break;
-								case 4:
-									image_ref = R.drawable.place_location_pin_4;
-									break;
-								case 5:
-									image_ref = R.drawable.place_location_pin_5;
-									break;
-								case 6:
-									image_ref = R.drawable.place_location_pin_6;
-									break;
-								case 7:
-									image_ref = R.drawable.place_location_pin_7;
-									break;
-								case 8:
-									image_ref = R.drawable.place_location_pin_8;
-									break;
-								case 9:
-									image_ref = R.drawable.place_location_pin_9;
-									break;
-								case 10:
-									image_ref = R.drawable.place_location_pin_10;
-									break;
-								default:
-									image_ref = R.drawable.place_location_pin_10_plus;
-									break;
-								}
 								
+								 if( types_votes.contains(commondata.facebook_details.facebook) ) {
+	                            	   image_ref = R.drawable.chaticon;
+	                            	   
+	                            	   switch(types_votes.size()){
+	   								case 0:
+	   									image_ref = R.drawable.self_place_location_pin_1;
+	   									break;
+	   								case 1:
+	   									image_ref = R.drawable.self_place_location_pin_1;
+	   									break;
+	   								case 2:
+	   									image_ref = R.drawable.self_place_location_pin_2;
+	   									break;
+	   								case 3:
+	   									image_ref = R.drawable.self_place_location_pin_3;
+	   									break;
+	   								case 4:
+	   									image_ref = R.drawable.self_place_location_pin_4;
+	   									break;
+	   								case 5:
+	   									image_ref = R.drawable.self_place_location_pin_5;
+	   									break;
+	   								case 6:
+	   									image_ref = R.drawable.self_place_location_pin_6;
+	   									break;
+	   								case 7:
+	   									image_ref = R.drawable.self_place_location_pin_7;
+	   									break;
+	   								case 8:
+	   									image_ref = R.drawable.self_place_location_pin_8;
+	   									break;
+	   								case 9:
+	   									image_ref = R.drawable.self_place_location_pin_9;
+	   									break;
+	   								case 10:
+	   									image_ref = R.drawable.self_place_location_pin_10;
+	   									break;
+	   								default:
+	   									image_ref = R.drawable.self_place_location_pin_10_plus;
+	   									break;
+	   								}
+	                            	      
+									} else {
+										
+										switch(types_votes.size()){
+										case 0:
+											image_ref = R.drawable.place_location_pin_1;
+											break;
+										case 1:
+											image_ref = R.drawable.place_location_pin_1;
+											break;
+										case 2:
+											image_ref = R.drawable.place_location_pin_2;
+											break;
+										case 3:
+											image_ref = R.drawable.place_location_pin_3;
+											break;
+										case 4:
+											image_ref = R.drawable.place_location_pin_4;
+											break;
+										case 5:
+											image_ref = R.drawable.place_location_pin_5;
+											break;
+										case 6:
+											image_ref = R.drawable.place_location_pin_6;
+											break;
+										case 7:
+											image_ref = R.drawable.place_location_pin_7;
+											break;
+										case 8:
+											image_ref = R.drawable.place_location_pin_8;
+											break;
+										case 9:
+											image_ref = R.drawable.place_location_pin_9;
+											break;
+										case 10:
+											image_ref = R.drawable.place_location_pin_10;
+											break;
+										default:
+											image_ref = R.drawable.place_location_pin_10_plus;
+											break;
+										}
+										
+									}
+									
+								
+								
+								
+								
+								
+                              
 								
 							} catch (Exception e) {
 								System.out.println("error exception : " + e);
@@ -2561,6 +2619,7 @@ public class Login extends FragmentActivity {
 					@Override
 					public void onClick(View view) {
 
+						// get event name 
 						String event_name = inputText.getText().toString();
 						commondata.new_event.event_name = event_name;
 						if (event_name == null) {
@@ -2568,6 +2627,9 @@ public class Login extends FragmentActivity {
 									+ "`s event";
 							commondata.new_event.event_name = event_name;
 						}
+						
+						
+						
 						fb_data.put("nodename",
 								commondata.facebook_details.name);
 						fb_data.put("eventname", event_name);
@@ -2587,12 +2649,32 @@ public class Login extends FragmentActivity {
 						fb_data.put("nodetype", "host");
 						create_firebase_refrence();
 						// ************ pull data from local db
+						
+						//** create a json package
+						
+						 JSONObject hosted_package = new JSONObject();
+						 JSONArray js = null;
+				            try {
+				            	hosted_package.put("event_reference", "3");
+				            	hosted_package.put("event_name", "NAME OF STUDENT");
+				            	hosted_package.put("host_fb_id", "3rd");
+				            	hosted_package.put("host_name", "Arts");
+				                js = new JSONArray(hosted_package.toString());
+				                JSONObject obj2 = new JSONObject();
+					            obj2.put("student", js.toString());
+				            } catch (JSONException e) {
+				                // TODO Auto-generated catch block
+				                e.printStackTrace();
+				            }
+				            
+						
 						SharedPreferences prefs = getSharedPreferences(
 								"myevents", MODE_PRIVATE);
 						String hostedevents = prefs.getString("hostedevents",
 								null);
 						int number_of_hosted_events = 0;
 						String[] events = null;
+						
 						if (hostedevents != null) {
 							String hostedeventlist = prefs.getString(
 									"hostedevents", "None");// "No name defined"
@@ -2601,6 +2683,9 @@ public class Login extends FragmentActivity {
 							events = hostedeventlist.split("<<");
 							number_of_hosted_events = events.length + 1;
 						}
+						
+						
+						
 						final String eventrefrence = commondata.facebook_details.facebook
 								+ "-->"
 								+ "event"
@@ -3417,6 +3502,9 @@ public class Login extends FragmentActivity {
 			} catch (Exception e) {
 				System.out.println("error exception : " + e);
 			}
+			
+			
+			
 			HashSet types_cleaning = new HashSet(cleaned_types);
 			String ty = "none";
 			Iterator typ = types_cleaning.iterator();
@@ -3430,26 +3518,6 @@ public class Login extends FragmentActivity {
 
 		}
 
-		/*
-		 * // display section
-		 * 
-		 * LayoutInflater inflater = (LayoutInflater)
-		 * getSystemService(Context.LAYOUT_INFLATER_SERVICE); final View layout
-		 * = inflater.inflate(R.layout.myevents, (ViewGroup)
-		 * findViewById(R.id.myeventssection));
-		 * 
-		 * 
-		 * // Get ListView object from xml // reference tag
-		 * 
-		 * final ListView listView = (ListView) findViewById(R.id.Eventlist);
-		 * ListView modeList = new ListView(this); ArrayAdapter<String>
-		 * modeAdapter = new ArrayAdapter<String>(this, R.layout.myevents,
-		 * listhostnames){ ViewHolder holder;
-		 * 
-		 * class ViewHolder { ImageView himage; TextView fullname; TextView
-		 * eventname; ImageButton accept; }
-		 */
-
 		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		final View layout = inflater.inflate(R.layout.list_places,
 				(ViewGroup) findViewById(R.id.placesection));
@@ -3457,11 +3525,12 @@ public class Login extends FragmentActivity {
 		final ListView listView = (ListView) findViewById(R.id.Placelist);
 		ListView modeList = new ListView(this);
 
-		ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this,
+		modeAdapter = new ArrayAdapter<String>(this,
 				R.layout.listdisplay, listtitle) {
 			ViewHolder holder;
 
 			// Drawable icon;
+	
 
 			class ViewHolder {
 				ImageView icon;
@@ -3470,12 +3539,10 @@ public class Login extends FragmentActivity {
 				TextView placereviews;
 				RatingBar placeratings;
 				TextView placetype;
-				Button add_to_map;
 			    ImageButton view_on_yelp;
-
 			}
 
-			public View getView(final int position, View convertView,
+			public View getView(int position, View convertView,
 					ViewGroup parent) {
 
 				final LayoutInflater inflater = (LayoutInflater) getApplicationContext()
@@ -3498,25 +3565,35 @@ public class Login extends FragmentActivity {
 							.findViewById(R.id.placeratings);
 					holder.placetype = (TextView) convertView
 							.findViewById(R.id.placetype);
-					holder.add_to_map = (Button) convertView.findViewById(R.id.add_to_map);
-					holder.add_to_map.setTag(position);
 					holder.view_on_yelp = (ImageButton) convertView.findViewById(R.id.view_on_yelp);
-					holder.view_on_yelp.setTag(position);
 					
+					holder.view_on_yelp.setId(convertView.getId());
+			
 					
-                   holder.add_to_map.setOnClickListener(new OnClickListener() {
+                   holder.view_on_yelp.setOnClickListener(new OnClickListener() {
 						
 						@Override
 						public void onClick(View v) {
+							
 							System.out.println("clicked add to map" + Integer.parseInt(v
 									.getTag().toString()));
 							
+							System.out.println("clicked add to map" + v
+									.getId());
+							
 							create_firebase_refrence();
+							
+							
+							modeAdapter.notifyDataSetChanged(); // call after the change is  implented
+						
+							
 							String current_place_refrence = commondata.places_found.ranking_places
 									.get(Integer.parseInt(v
 											.getTag().toString()));
 							final place_details node = commondata.places_found.ranking_nodes
 									.get(current_place_refrence);
+							
+							System.out.println("adding " + node.place_name);
 							
 							Thread thread = new Thread() {
 							    @Override
@@ -3528,36 +3605,47 @@ public class Login extends FragmentActivity {
 							thread.start();
 							
 							
-						}		
-					});
-					
-                   holder.view_on_yelp.setOnClickListener(new OnClickListener() {
-						
-						@Override
-						public void onClick(View v) {
-							System.out.println("clicked view on yelp");
-							
-							String link = listplace_url.get(Integer.parseInt(v
-									.getTag().toString()));
-							if (link != "null") {
-								/*
-								 * webView = (WebView) findViewById(R.id.webView1);
-								 * webView.getSettings().setJavaScriptEnabled(true);
-								 * webView.loadUrl(link);
-								 */
-								Uri url = Uri.parse(link);
-								Intent intent = new Intent(Intent.ACTION_VIEW, url);
-								startActivity(intent);
-							}
 						}						
 					});
+                   
+                   
+                   holder.view_on_yelp.setOnLongClickListener(new OnLongClickListener() {
 					
+					@Override
+					public boolean onLongClick(View v) {
+						// TODO Auto-generated method stub
+						
+						System.out.println("clicked view on yelp");
+						
+						String link = listplace_url.get(Integer.parseInt(v
+								.getTag().toString()));
+						if (link != "null") {
+							/*
+							 * webView = (WebView) findViewById(R.id.webView1);
+							 * webView.getSettings().setJavaScriptEnabled(true);
+							 * webView.loadUrl(link);
+							 */
+							Uri url = Uri.parse(link);
+							Intent intent = new Intent(Intent.ACTION_VIEW, url);
+							startActivity(intent);
+						}
+						
+						
+						return false;
+					}
+				});
 					
 					convertView.setTag(holder);
 				} else {
 					// view already defined, retrieve view holder
 					holder = (ViewHolder) convertView.getTag();
 				}
+				
+				
+				
+				
+				holder.view_on_yelp.setTag(position);
+				
 
 				// load from yelp and set async
 				Drawable drawable = getResources().getDrawable(
@@ -3574,7 +3662,6 @@ public class Login extends FragmentActivity {
 				holder.placeratings.setRating(listrating.get(position)
 						.floatValue());
 				holder.placetype.setText(listtypes.get(position));
-				System.out.println("types " + listtypes.get(position));
 				// set up $
 				for (Double i = 0.0; i < listprice.get(position); i = i + 1.0) {
 					dollar.add("$");
@@ -3595,33 +3682,27 @@ public class Login extends FragmentActivity {
 					holder.icon.setImageBitmap(commondata.lazyload.yelp_images
 							.get(listimage_url.get(position)));
 				} else {
-					new Thread(new Runnable() {
-						public void run() {
-							System.out
-									.println("yelp image retrieve thread issued");
-
-							try {
-								new YelpImageDownloaderTask(holder.icon)
-										.execute(listimage_url.get(position))
-										.get();
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (ExecutionException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					}).start();
+					try {
+						new YelpImageDownloaderTask(holder.icon)
+								.execute(listimage_url.get(position))
+								.get();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
 				dollar.clear();
 				return convertView;
 			}
 		};
+		
+		
 		// modeList.setAdapter(modeAdapter);
 		listView.setAdapter(modeAdapter);
-
 		flip_view.setInAnimation(Login.this, R.anim.in_up);
 		// flip_view.setOutAnimation(this, R.anim.in_up);
 		flip_view.showNext();
@@ -3632,7 +3713,7 @@ public class Login extends FragmentActivity {
 	/*
 	 * name : add_to_map_from_list
 	 */
-	public void add_to_map_from_list(place_details node){
+	public void add_to_map_from_list(final place_details node){
 		String[] parts = commondata.event_information.eventID
 				.split("-->");
 		System.out.println("to split" + parts[0]); // come
@@ -3642,88 +3723,109 @@ public class Login extends FragmentActivity {
 				"https://met-ster-event.firebaseio.com/");
 		strBuilder.append(parts[0]);
 		String frt = strBuilder.toString();
-		Firebase ft = new Firebase(frt);
+		final Firebase ft = new Firebase(frt);
 
-		ft.child(commondata.event_information.eventID)
-				// --- latitude
-				.child("rest--"
-						+ node.place_name.replace(".",
-								"")).child("Latitude")
-				.setValue(node.latitude);
-		// --- longitude
-		ft.child(commondata.event_information.eventID)
-				.child("rest--"
-						+ node.place_name.replace(".",
-								"")).child("Longitude")
-				.setValue(node.longitude);
-		// --- nodetype
-		ft.child(commondata.event_information.eventID)
-				.child("rest--"
-						+ node.place_name.replace(".",
-								"")).child("nodetype")
-				.setValue("place");
-		// --- nodename
-		ft.child(commondata.event_information.eventID)
-				.child("rest--"
-						+ node.place_name.replace(".",
-								"")).child("nodename")
-				.setValue(node.place_name);
-		// --- place address, ratings, type, link
-		ft.child(commondata.event_information.eventID)
-				.child("rest--"
-						+ node.place_name.replace(".",
-								"")).child("address")
-				.setValue(node.address);
+		ft.child(commondata.event_information.eventID).addListenerForSingleValueEvent(new ValueEventListener() {
+			
+			@Override
+			public void onDataChange(DataSnapshot arg0) {
+				// TODO Auto-generated method stub
+				String child = "rest--" + node.place_name.replace(".", "");
+				if(arg0.hasChild(child)){
+					// do nothing 
+					Toast.makeText(getApplicationContext(), "Exists to map", Toast.LENGTH_SHORT).show();
+				} else {
+					
+					Toast.makeText(getApplicationContext(), "Pinned to map", Toast.LENGTH_LONG).show();
+					ft.child(commondata.event_information.eventID)
+					// --- latitude
+					.child("rest--"
+							+ node.place_name.replace(".",
+									"")).child("Latitude")
+					.setValue(node.latitude);
+			// --- longitude
+			ft.child(commondata.event_information.eventID)
+					.child("rest--"
+							+ node.place_name.replace(".",
+									"")).child("Longitude")
+					.setValue(node.longitude);
+			// --- nodetype
+			ft.child(commondata.event_information.eventID)
+					.child("rest--"
+							+ node.place_name.replace(".",
+									"")).child("nodetype")
+					.setValue("place");
+			// --- nodename
+			ft.child(commondata.event_information.eventID)
+					.child("rest--"
+							+ node.place_name.replace(".",
+									"")).child("nodename")
+					.setValue(node.place_name);
+			// --- place address, ratings, type, link
+			ft.child(commondata.event_information.eventID)
+					.child("rest--"
+							+ node.place_name.replace(".",
+									"")).child("address")
+					.setValue(node.address);
 
-		// --- place address, ratings, type, link
-		ft.child(commondata.event_information.eventID)
-				.child("rest--"
-						+ node.place_name.replace(".",
-								"")).child("image_url")
-				.setValue(node.image_url);
+			// --- place address, ratings, type, link
+			ft.child(commondata.event_information.eventID)
+					.child("rest--"
+							+ node.place_name.replace(".",
+									"")).child("image_url")
+					.setValue(node.image_url);
 
-		// --- place address, ratings, type, link
-		ft.child(commondata.event_information.eventID)
-				.child("rest--"
-						+ node.place_name.replace(".",
-								"")).child("rating")
-				.setValue(node.rating);
+			// --- place address, ratings, type, link
+			ft.child(commondata.event_information.eventID)
+					.child("rest--"
+							+ node.place_name.replace(".",
+									"")).child("rating")
+					.setValue(node.rating);
 
-		// --- place address, ratings, type, link
-		ft.child(commondata.event_information.eventID)
-				.child("rest--"
-						+ node.place_name.replace(".",
-								"")).child("snippet")
-				.setValue(node.snippet);
+			// --- place address, ratings, type, link
+			ft.child(commondata.event_information.eventID)
+					.child("rest--"
+							+ node.place_name.replace(".",
+									"")).child("snippet")
+					.setValue(node.snippet);
 
-		// --- place address, ratings, type, link
-		ft.child(commondata.event_information.eventID)
-				.child("rest--"
-						+ node.place_name.replace(".",
-								"")).child("website")
-				.setValue(node.website);
-		
-		// --- place address, ratings, type, link
-		ft.child(commondata.event_information.eventID)
-				.child("rest--" + node.place_name.replace(".", ""))
-				.child("total_ratings").setValue(node.total_ratings);
+			// --- place address, ratings, type, link
+			ft.child(commondata.event_information.eventID)
+					.child("rest--"
+							+ node.place_name.replace(".",
+									"")).child("website")
+					.setValue(node.website);
+			
+			// --- place address, ratings, type, link
+			ft.child(commondata.event_information.eventID)
+					.child("rest--" + node.place_name.replace(".", ""))
+					.child("total_ratings").setValue(node.total_ratings);
 
-		// --- place address, ratings, type, link
-		ft.child(commondata.event_information.eventID)
-				.child("rest--" + node.place_name.replace(".", ""))
-				.child("place_type").setValue(node.types);
+			// --- place address, ratings, type, link
+			ft.child(commondata.event_information.eventID)
+					.child("rest--" + node.place_name.replace(".", ""))
+					.child("place_type").setValue(node.types);
 
-		// HashSet<String> voteset = new
-		// HashSet<String>();
-		// voteset.add(commondata.facebook_details.facebook);
 
-		String fbid = commondata.facebook_details.facebook;
+			String fbid = commondata.facebook_details.facebook;
 
-		ft.child(commondata.event_information.eventID)
-				.child("rest--"
-						+ node.place_name.replace(".",
-								"")).child("votes")
-				.setValue(fbid);
+			ft.child(commondata.event_information.eventID)
+					.child("rest--"
+							+ node.place_name.replace(".",
+									"")).child("votes")
+					.setValue(fbid);
+					
+					
+					
+				}
+			}
+			
+			@Override
+			public void onCancelled(FirebaseError arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 	/*

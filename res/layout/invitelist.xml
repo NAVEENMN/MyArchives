@@ -54,7 +54,7 @@
 		            android:layout_width="50dp"
 					android:layout_height="50dp"
 					android:gravity="center"
-					android:background = "@drawable/accept"
+					android:background = "@drawable/accept_button_handler"
 					android:scaleType="centerCrop"
 		            android:contentDescription="@string/desc"
 		            android:onClick="on_image_click" />
@@ -64,7 +64,7 @@
 		            android:layout_width="50dp"
 					android:layout_height="50dp"
 					android:gravity="center"
-					android:background = "@drawable/decline"
+					android:background = "@drawable/reject_button_handler"
 					android:scaleType="centerCrop"
 		            android:contentDescription="@string/desc"
 		            android:onClick="on_image_click" />

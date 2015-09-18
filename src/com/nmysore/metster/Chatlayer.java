@@ -96,11 +96,7 @@ public class Chatlayer extends ListActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean connected = (Boolean) dataSnapshot.getValue();
-                if (connected) {
-                    Toast.makeText(Chatlayer.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(Chatlayer.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
-                }
+                
             }
 
             @Override

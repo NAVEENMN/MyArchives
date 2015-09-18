@@ -119,19 +119,7 @@
         android:layout_height="50dp"
         android:orientation="horizontal">
       
-  
-           <Button
-		        android:id="@+id/myeventsbutton"
-		        android:layout_width="50dp"
-		        android:layout_height="50dp"
-		        android:padding="3dp"
-			    android:paddingLeft="2dp"
-		        android:onClick="back_to_events"
-		        android:background="@android:color/transparent"
-			    android:drawableTop="@drawable/left"
-		        />
-           
-           
+    
               <AutoCompleteTextView
 		        android:id="@+id/autoComplete"
 		        android:layout_width="0dp"
@@ -145,6 +133,9 @@
 	            android:fontFamily="OpenSansSemiBold"
 	            android:inputType="textShortMessage"
 	            android:background="@drawable/rounder_edit_text_map"
+	            android:hint="e.g. sushi, american"
+	            android:textColorHint="#E6E6E6"
+	            android:drawableLeft="@drawable/ic_search"
 	            android:layout_weight=".75" />
 
    

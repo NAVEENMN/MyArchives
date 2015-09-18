@@ -186,8 +186,7 @@ public class HomescreenActivity extends Activity {
 		protected void onPreExecute(){
 			super.onPreExecute();
 			progress = new ProgressDialog(HomescreenActivity.this);
-			progress.setTitle("Loading your profile");
-			progress.setMessage("please wait...");
+			progress.setMessage("Loading your profile please wait...");
 			progress.show();	
 			progress.setCancelable(false);
 			progress.setCanceledOnTouchOutside(false);
@@ -197,13 +196,11 @@ public class HomescreenActivity extends Activity {
 			// create account
 			super.onPostExecute(result);
 			System.out.println("leaving homescreen.");
-		
 			progress.dismiss();
 			Intent serviceIntent = new Intent(HomescreenActivity.this,
 					LoadHome.class);
 			HomescreenActivity.this.startService(serviceIntent);
 			startActivity(serviceIntent);
-		
 			finish();
 		}
 

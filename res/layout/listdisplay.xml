@@ -21,7 +21,7 @@
             android:id="@+id/placesimage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/desc"
             android:gravity="center"
             android:scaleType="centerCrop"
@@ -62,7 +62,7 @@
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@color/white"
+        android:background="@android:color/transparent"
         android:orientation="vertical"
         android:paddingLeft="2dp" >
 
@@ -70,7 +70,7 @@
             android:id="@+id/nameandratings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@android:color/transparent"
             android:baselineAligned="false"
             android:orientation="horizontal" >
 
@@ -89,7 +89,7 @@
             android:id="@+id/addresssections"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@android:color/transparent"
             android:baselineAligned="false"
             android:orientation="horizontal" >
 
@@ -106,7 +106,7 @@
             android:id="@+id/typessections"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@android:color/transparent"
             android:baselineAligned="false"
             android:orientation="vertical" >
 
@@ -117,18 +117,6 @@
                 android:text="@string/Gender"
                 android:textColor="#848484"
                 android:textSize="9sp" />
-            
-          
-
-              <Button
-                  android:id="@+id/add_to_map"
-                  android:layout_width="match_parent"
-                  android:layout_height="30dp"
-                  android:layout_alignParentRight="false"
-                  android:layout_marginTop="2dp"
-                  android:background="@drawable/curvedbuttonhandler"
-                  android:text="Add to map"
-                  android:textColor="#A4A4A4" />
 
              
         </LinearLayout>
@@ -143,8 +131,5 @@
   			    android:gravity="right"
   			    android:onClick="on_image_click"
   			    android:scaleType="centerCrop" />
-            
- 
-    
 
 </LinearLayout>
