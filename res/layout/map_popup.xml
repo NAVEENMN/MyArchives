@@ -12,7 +12,6 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
         
-        
         <RelativeLayout
         android:id="@+id/placesimagesection"
         android:layout_width="100dp"
@@ -62,7 +61,8 @@
                 android:textSize="10sp" />
         </LinearLayout>
     </RelativeLayout>
-        
+
+
 
         <LinearLayout
             android:id="@+id/al"
@@ -104,6 +104,22 @@
                 android:text="snippet"
                 android:textColor="#F2F2F2"
                 android:textSize="12sp" />
+            
+           <ProgressBar
+	            android:id="@+id/group_convenience_score"
+	            style="?android:attr/progressBarStyleHorizontal"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content" />
+           <ProgressBar
+	            android:id="@+id/your_convenience_score"
+	            style="?android:attr/progressBarStyleHorizontal"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content" />
+           <ProgressBar
+	            android:id="@+id/review_score"
+	            style="?android:attr/progressBarStyleHorizontal"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content" />
 
         </LinearLayout>
 

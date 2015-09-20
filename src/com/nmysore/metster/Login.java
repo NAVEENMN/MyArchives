@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -95,6 +96,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -3082,7 +3084,78 @@ public class Login extends FragmentActivity {
 
 			return null;
 		}
-
+		
+		
+		/*
+		 * name : get_group_score
+		 * @desp : rough logic : how far the place is from centroid is the group conveince 
+		 * 				     how par a place is from you is the individual conveince.
+		 */ 
+		
+		public Double get_group_score(final place_details place_node) {
+			System.out.println("enter : get_group_score");
+			System.out.println("place_node : " + place_node.latitude +", " + place_node.longitude);
+			System.out.println("latitudes : " + commondata.places_found.latitudes);
+			System.out.println("longitude : " + commondata.places_found.longitudes);
+			
+			ArrayList<Double> list_of_latitudes = new ArrayList<Double>();
+			ArrayList<Double> list_of_longitdes = new ArrayList<Double>();
+			
+			Double temp_x = 0.0;
+			Double temp_y = 0.0;
+			
+			// this loop helps to get sum and compute mean 
+			for(int i=0; i<commondata.places_found.latitudes.size(); i++){	
+				System.out.println("token : "+ commondata.places_found.tokens.get(i));
+				if(commondata.places_found.tokens.get(i).contains("place")){ // consider only place
+					Double x2 = commondata.places_found.latitudes.get(i);
+					Double y2 = commondata.places_found.longitudes.get(i);
+					temp_x += x2;
+					temp_y += y2;
+					//Double distance = get_distance(place_node.latitude, place_node.longitude, x2, y2); // signature
+				}
+			}
+			Double mean_lat = temp_x / commondata.places_found.latitudes.size();
+			Double mean_lon = temp_y / commondata.places_found.longitudes.size();
+			
+			// we need to normalizing value, find the distance of all places from this place and find the maximum value
+			
+			ArrayList<Double> list_of_distances_from_mean = new ArrayList<Double>();// a list to hold distances
+			for(int i=0; i<commondata.places_found.latitudes.size(); i++){
+				if(commondata.places_found.tokens.get(i).contains("place")){
+					Double x2 = commondata.places_found.latitudes.get(i);
+					Double y2 = commondata.places_found.longitudes.get(i);
+					Double distance = get_distance(mean_lat, mean_lon, x2, y2);
+					list_of_distances_from_mean.add(distance);
+				}
+			}
+			
+			Collections.sort(list_of_distances_from_mean); // Sort the arraylist	
+			
+			Double current_place_distance_from_mean = get_distance(mean_lat, mean_lon, place_node.latitude, place_node.longitude);// get this place distance from mean
+			
+			int current_place_rank = list_of_distances_from_mean.indexOf(current_place_distance_from_mean) + 1;// we have to check where this place ranks among other places.
+			
+			System.out.println("rank : " + current_place_rank); // rank 1 means its very far from mean
+			
+			Double rank = Double.parseDouble(Integer.toString(current_place_rank + 1) );
+			Double place_size = Double.parseDouble( Integer.toString( list_of_distances_from_mean.size() ) );
+			Double group_score = (rank / place_size ) * 100.00;
+			
+			System.out.println("group score :" + group_score);
+			System.out.println("exit : get_group_score");
+			return group_score;
+			
+		}
+		
+		//euclidean distance (?)
+		double get_distance (Double x1, Double y1, Double x2, Double y2) {
+		    Double y = Math.abs (y2 - y1);
+		    Double x = Math.abs (x2- x1);    
+		    Double result = Math.sqrt((x)*(x) +(y)*(y));
+		    return result; 
+		} 
+		
 		/**
 		 * Render the marker content on Popup view. Customize this as per your
 		 * need.
@@ -3101,6 +3174,8 @@ public class Login extends FragmentActivity {
 
 			final ImageView popimage = (ImageView) view
 					.findViewById(R.id.popupimage);
+			
+			Double group_score = get_group_score(node);
 
 			if (node.image_url != null) {
 
@@ -3164,6 +3239,12 @@ public class Login extends FragmentActivity {
 				typesUi.setText("");
 			}
 
+			
+			final ProgressBar group_bar = (ProgressBar) view.findViewById(R.id.group_convenience_score);
+			final ProgressBar your_bar = (ProgressBar) view.findViewById(R.id.your_convenience_score);
+			your_bar.setProgress(75);
+			group_bar.setProgress(group_score.intValue());
+			
 			TextView addressui = (TextView) view
 					.findViewById(R.id.placeaddress);
 			if (node.address != null) {
@@ -3751,7 +3832,6 @@ public class Login extends FragmentActivity {
 							+ " user reviews   " + " " + dollarsign);
 				}
 				// holder.icon.setImageDrawable(drawable);
-				commondata.user_information.countrycode = "IN";
 				if (Arrays.asList(yelp_countries).contains(commondata.user_information.countrycode)) {
 				    // true
 					if (commondata.lazyload.yelp_images.containsKey(listimage_url
@@ -4676,7 +4756,6 @@ public class Login extends FragmentActivity {
 
 				String list;
 				System.out.println("posting for" + choice);
-				commondata.user_information.countrycode = "IN";
 				if (commondata.user_information.countrycode.contains("IN")) {
 					new post_req().execute(
 							"http://52.8.173.36/metster/exe_google.php",
