@@ -56,6 +56,7 @@ public class commondata {
 		static String zip;
 		static String addressline;
 		static String countrycode;
+		static ArrayList<String> hosted_events_in_fb = new ArrayList<String>();
 	}
 	
 	public static class event_information{

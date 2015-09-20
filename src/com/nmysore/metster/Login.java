@@ -1942,6 +1942,129 @@ public class Login extends FragmentActivity {
 			System.out.println("no child");
 		}
 	}
+	
+	
+	
+	/*
+	 * name : delete_a_event_from_firebase
+	 * @params : event_id
+	 */
+	
+	public void delete_a_event_from_firebase(final String event_to_delete) {
+		System.out.println("enter : delete_a_event_from_firebase");
+		StringBuilder strBuilder = new StringBuilder(
+				"https://met-ster.firebaseio.com/");
+		String frt = strBuilder.toString();
+		final Firebase ft = new Firebase(frt);
+		
+		
+        ft.child(commondata.facebook_details.facebook).child("hosted").addListenerForSingleValueEvent(new ValueEventListener() {
+			
+			@Override
+			public void onDataChange(DataSnapshot arg0) {
+				// TODO Auto-generated method stub
+				Iterator<DataSnapshot> hosted_events = arg0.getChildren().iterator();
+				
+				// cache a copy from firebase to local memory and remove the 
+				commondata.user_information.hosted_events_in_fb.clear();
+				while(hosted_events.hasNext()){
+					String evnt = hosted_events.next().getValue().toString();
+					if(!evnt.contains(event_to_delete)){
+						commondata.user_information.hosted_events_in_fb.add(evnt);
+					}
+				}
+				
+				
+				Iterator<String> eventsin = commondata.user_information.hosted_events_in_fb.iterator();
+				Set<String> to_fb = new HashSet<String>(commondata.user_information.hosted_events_in_fb);
+				ft.child(commondata.facebook_details.facebook).child("hosted").setValue(to_fb);
+			
+			}
+			
+			@Override
+			public void onCancelled(FirebaseError arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+	}
+	
+	
+	/*
+	 * name : add_new_event_to_firebase
+	 * @params : event_id
+	 * @return : null
+	 * @desp : this function will add a new event to firebase
+	 */
+	
+	public void add_new_event_to_firebase(final String event_name, final HashMap<String, String> data) {
+		System.out.println("enter : add_new_event_to_firebase");
+		StringBuilder strBuilder = new StringBuilder(
+				"https://met-ster.firebaseio.com/");
+		String frt = strBuilder.toString();
+		final Firebase ft = new Firebase(frt);
+				
+		ft.child(commondata.facebook_details.facebook).child("hosted").addListenerForSingleValueEvent(new ValueEventListener() {
+			
+			@Override
+			public void onDataChange(DataSnapshot arg0) {
+				// TODO Auto-generated method stub
+				Iterator<DataSnapshot> hosted_events = arg0.getChildren().iterator();
+				
+				// cache a copy from firebase to local memory
+				commondata.user_information.hosted_events_in_fb.clear();
+				while(hosted_events.hasNext()){
+					String evnt = hosted_events.next().getValue().toString();
+					commondata.user_information.hosted_events_in_fb.add(evnt);	
+				}
+				
+				Iterator<String> eventsin = commondata.user_information.hosted_events_in_fb.iterator();
+				
+				// we need to assign the event ids which are open
+				Set<Integer> event_ids = new HashSet<Integer>();
+				while(eventsin.hasNext()){
+					String event = eventsin.next();
+					String[] event_parts = event.split("-->");
+					event_ids.add(Integer.parseInt(event_parts[2]));
+				}
+				
+				int i = 0; 
+				while( event_ids.contains(i) ){
+					i++;
+				}
+				
+				String new_event = commondata.facebook_details.facebook + "-->event-->" + Integer.toString(i);
+				commondata.user_information.hosted_events_in_fb.add(new_event);
+				Set<String> to_fb = new HashSet<String>(commondata.user_information.hosted_events_in_fb);
+				ft.child(commondata.facebook_details.facebook).child("hosted").setValue(to_fb);
+				
+				// add data to metster-evnt
+				fb_event_ref.firebaseobj.child(new_event)
+						.child(commondata.facebook_details.facebook)
+						.setValue(data);
+				
+				// ************** get data from firebase and update
+				// local
+				pull_data_from_firebase(new_event);
+				remove_location_listners();
+				Intent intent = new Intent(Login.this, Login.class);
+				System.out.println("exit :" + "add_new_event_to_firebase");
+				startActivity(intent);
+				finish();
+			}
+			
+			@Override
+			public void onCancelled(FirebaseError arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	
+
+	}
+	
+	
 	/*
 	 * name : on_image_click
 	 * 
@@ -2626,9 +2749,7 @@ public class Login extends FragmentActivity {
 									+ "`s event";
 							commondata.new_event.event_name = event_name;
 						}
-						
-						
-						
+												
 						fb_data.put("nodename",
 								commondata.facebook_details.name);
 						fb_data.put("eventname", event_name);
@@ -2647,63 +2768,13 @@ public class Login extends FragmentActivity {
 						fb_data.put("duration", commondata.new_event.duration);
 						fb_data.put("nodetype", "host");
 						create_firebase_refrence();
-						// ************ pull data from local db
 						
-						//** create a json package
+						add_new_event_to_firebase(commondata.new_event.event_name, fb_data);
 						
-						 JSONObject hosted_package = new JSONObject();
-						 JSONArray js = null;
-				            try {
-				            	hosted_package.put("event_reference", "3");
-				            	hosted_package.put("event_name", "NAME OF STUDENT");
-				            	hosted_package.put("host_fb_id", "3rd");
-				            	hosted_package.put("host_name", "Arts");
-				                js = new JSONArray(hosted_package.toString());
-				                JSONObject obj2 = new JSONObject();
-					            obj2.put("student", js.toString());
-				            } catch (JSONException e) {
-				                // TODO Auto-generated catch block
-				                e.printStackTrace();
-				            }
-				            
-						
-						SharedPreferences prefs = getSharedPreferences(
-								"myevents", MODE_PRIVATE);
-						String hostedevents = prefs.getString("hostedevents",
-								null);
-						int number_of_hosted_events = 0;
-						String[] events = null;
-						
-						if (hostedevents != null) {
-							String hostedeventlist = prefs.getString(
-									"hostedevents", "None");// "No name defined"
-															// is the default
-															// value.
-							events = hostedeventlist.split("<<");
-							number_of_hosted_events = events.length + 1;
-						}
-						
-						
-						
-						final String eventrefrence = commondata.facebook_details.facebook
-								+ "-->"
-								+ "event"
-								+ "-->"
-								+ number_of_hosted_events;
-						fb_event_ref.firebaseobj.child(eventrefrence)
-								.child(commondata.facebook_details.facebook)
-								.setValue(fb_data);
-						// ************** get data from firebase and update
-						// local
-						pull_data_from_firebase(eventrefrence);
 						// ************** store this new event copy to local
 						// data base
 						// on event reset we now do this at top
 						// ************** prepare for launch
-						remove_location_listners();
-						Intent intent = new Intent(Login.this, Login.class);
-						startActivity(intent);
-						finish();
 
 					}
 				});
@@ -3707,9 +3778,18 @@ public class Login extends FragmentActivity {
 									"photoreference="+ listimage_url.get(position)+
 									"&key=" + browser_key;
 							
-							new YelpImageDownloaderTask(holder.icon)
-							.execute(url);
+							if (commondata.lazyload.yelp_images.containsKey(listimage_url
+									.get(position))) {
 
+								holder.icon.setImageBitmap(commondata.lazyload.yelp_images
+										.get(listimage_url.get(position)));
+							} else {
+								
+									new YelpImageDownloaderTask(holder.icon)
+									.execute(url);
+								
+							}
+						
 					
 				}
 				
@@ -3796,11 +3876,28 @@ public class Login extends FragmentActivity {
 					.setValue(node.image_url);
 
 			// --- place address, ratings, type, link
+			try{
+			if(node.rating.toString() != "null" || node.total_ratings != null){
 			ft.child(commondata.event_information.eventID)
 					.child("rest--"
 							+ node.place_name.replace(".",
 									"")).child("rating")
-					.setValue(node.rating);
+					.setValue(node.rating.toString());
+			} else {
+				ft.child(commondata.event_information.eventID)
+				.child("rest--"
+						+ node.place_name.replace(".",
+								"")).child("rating")
+				.setValue("0.0");
+			}
+			} catch (Exception e) {
+				ft.child(commondata.event_information.eventID)
+				.child("rest--"
+						+ node.place_name.replace(".",
+								"")).child("rating")
+				.setValue("0.0");
+				
+			}
 
 			// --- place address, ratings, type, link
 			ft.child(commondata.event_information.eventID)
@@ -3817,12 +3914,22 @@ public class Login extends FragmentActivity {
 					.setValue(node.website);
 			
 			// --- place address, ratings, type, link
-			if(node.total_ratings.isEmpty() || node.total_ratings.contains(null)){
-				node.total_ratings = "0.0";
-			}
+			
+			try{
+	        if(node.total_ratings != "null" || node.total_ratings != null){
 			ft.child(commondata.event_information.eventID)
 					.child("rest--" + node.place_name.replace(".", ""))
-					.child("total_ratings").setValue(node.total_ratings);
+					.child("total_ratings").setValue(node.total_ratings.toString());
+	        } else {
+				ft.child(commondata.event_information.eventID)
+				.child("rest--" + node.place_name.replace(".", ""))
+				.child("total_ratings").setValue("0.0");
+	        }
+			} catch(Exception e) {
+				ft.child(commondata.event_information.eventID)
+				.child("rest--" + node.place_name.replace(".", ""))
+				.child("total_ratings").setValue("0.0");
+			}
 
 			// --- place address, ratings, type, link
 			ft.child(commondata.event_information.eventID)
@@ -4046,25 +4153,7 @@ public class Login extends FragmentActivity {
 
 		} else { // its a hosted event
 			System.out.println("this case is hosted event");
-			Editor eventsstored = getApplicationContext().getSharedPreferences(
-					"myevents", MODE_PRIVATE).edit();
-			// ************ remove from local db
-			SharedPreferences prefs = getSharedPreferences("myevents",
-					MODE_PRIVATE);
-			String hostedevents = prefs.getString("hostedevents", null);
-			String joinedevents = prefs.getString("joinedevents", null);
-			String[] events = null;
-			System.out.println("hosted events contains " + hostedevents);
-			String[] hostedlist = hostedevents.split("<<");
-
-			String stemmed = hostedevents
-					.replaceAll("<<" + eventid + "<<", "<<")
-					.replaceAll("<<" + eventid, "").replaceAll("null", "");
-			System.out.println("hosted events cleaned " + stemmed);
-			// eventsstored.clear();
-			// eventsstored.commit();
-			eventsstored.putString("hostedevents", stemmed);
-			eventsstored.commit();
+			delete_a_event_from_firebase(eventid); // deltes from event table in fb
 
 			String[] ids = eventid.split("-->");
 			StringBuilder strBuilder = new StringBuilder(
