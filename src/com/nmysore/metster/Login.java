@@ -1719,7 +1719,7 @@ public class Login extends FragmentActivity {
 								System.out.println("votes size "+ types_votes.size());
 								
 								
-								 if( types_votes.contains(commondata.facebook_details.facebook) ) {
+								 if( !types_votes.contains(commondata.facebook_details.facebook) ) {
 	                            	   image_ref = R.drawable.chaticon;
 	                            	   
 	                            	   switch(types_votes.size()){
@@ -1803,13 +1803,7 @@ public class Login extends FragmentActivity {
 										}
 										
 									}
-									
-								
-								
-								
-								
-								
-                              
+									                              
 								
 							} catch (Exception e) {
 								System.out.println("error exception : " + e);
@@ -3139,7 +3133,6 @@ public class Login extends FragmentActivity {
 			Double current_place_distance_from_mean = get_distance(mean_lat, mean_lon, place_node.latitude, place_node.longitude);// get this place distance from mean
 			int current_place_rank = list_of_distances_from_mean.indexOf(current_place_distance_from_mean) + 1;// we have to check where this place ranks among other places.
 			// rank 1 means its very far --> least score 
-			
 			Double rank = Double.parseDouble(Integer.toString(current_place_rank) );
 			Double place_size = Double.parseDouble( Integer.toString( list_of_distances_from_mean.size() ) );
 			Double group_score = (rank / place_size ) * 100.00;
@@ -3148,7 +3141,6 @@ public class Login extends FragmentActivity {
 			Double current_place_distance_from_you = get_distance(commondata.user_information.latitude, commondata.user_information.longitude, place_node.latitude, place_node.longitude);// get this place distance from mean
 			int current_place_rank_from_you = list_of_distances_from_you.indexOf(current_place_distance_from_you) + 1;// we have to check where this place ranks among other places.
 			// rank 1 means its very far --> least score 
-			
 			Double rank_from_you = Double.parseDouble(Integer.toString(current_place_rank_from_you) );
 			Double place_size_you = Double.parseDouble( Integer.toString( list_of_distances_from_you.size() ) );
 			Double your_score = (rank_from_you / place_size_you ) * 100.00;
@@ -3229,7 +3221,7 @@ public class Login extends FragmentActivity {
 				stars.getDrawable(2).setColorFilter(Color.YELLOW,
 						PorterDuff.Mode.SRC_ATOP);
 				TextView placereviews = (TextView) view.findViewById(R.id.placereviews);
-				placereviews.setText(node.total_ratings + "user reviews");
+				placereviews.setText(node.total_ratings + " user reviews");
 			} catch (Exception e) {
 				System.out.println("rating errr" + e);
 			}
@@ -3256,25 +3248,24 @@ public class Login extends FragmentActivity {
 			
 			final ProgressBar group_bar = (ProgressBar) view.findViewById(R.id.group_convenience_score);
 			final ProgressBar your_bar = (ProgressBar) view.findViewById(R.id.your_convenience_score);
+			final ProgressBar review_bar = (ProgressBar) view.findViewById(R.id.review_score);
+			int color = 0xFF00FF00;
+			int color2 = Color.parseColor("#81BEF7");
+			
+			group_bar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+			group_bar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+			your_bar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+			your_bar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+			review_bar.getIndeterminateDrawable().setColorFilter(color2, PorterDuff.Mode.SRC_IN);
+			review_bar.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+			
 			your_bar.setProgress(scores[1].intValue());
 			group_bar.setProgress(scores[0].intValue());
+			review_bar.setProgress(73);
 			
-			TextView addressui = (TextView) view
-					.findViewById(R.id.placeaddress);
+			TextView snippetUi = (TextView) view.findViewById(R.id.placeaddress);
 			if (node.address != null) {
-
-				addressui.setText(node.address);
-			} else {
-				addressui.setText("");
-			}
-
-			String snippet = marker.getSnippet();
-			TextView snippetUi = (TextView) view.findViewById(R.id.snippet);
-			if (snippet != null) {
-				SpannableString snippetText = new SpannableString(snippet);
-				snippetText.setSpan(new ForegroundColorSpan(getResources()
-						.getColor(Color.parseColor("#0040FF"))), 0, snippet
-						.length(), 0);
+		
 				snippetUi.setText(node.address);
 			} else {
 				snippetUi.setText("");

@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
@@ -63,7 +61,6 @@
     </RelativeLayout>
 
 
-
         <LinearLayout
             android:id="@+id/al"
             android:layout_width="wrap_content"
@@ -97,29 +94,62 @@
                 android:textColor="#F2F2F2"
                 android:textSize="12sp" />
             
-            <TextView
-                android:id="@+id/snippet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="snippet"
-                android:textColor="#F2F2F2"
-                android:textSize="12sp" />
+  
             
-           <ProgressBar
-	            android:id="@+id/group_convenience_score"
-	            style="?android:attr/progressBarStyleHorizontal"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content" />
+           <LinearLayout
+            android:id="@+id/section_group_convenience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            
+           <ImageView
+            android:id="@+id/person_image_ic"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_action_person" />
+            
+	           <ProgressBar
+		            android:id="@+id/group_convenience_score"
+		            style="?android:attr/progressBarStyleHorizontal"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content" />
+           </LinearLayout>
+           
+            <LinearLayout
+            android:id="@+id/section_your_convenience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+	               <ImageView
+		            android:id="@+id/group_image_ic"
+		            android:layout_width="20dp"
+		            android:layout_height="20dp"
+		            android:src="@drawable/ic_action_group" />
            <ProgressBar
 	            android:id="@+id/your_convenience_score"
 	            style="?android:attr/progressBarStyleHorizontal"
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content" />
+           </LinearLayout>
+           
+          <LinearLayout
+            android:id="@+id/section_review_score"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+           <ImageView
+		            android:id="@+id/lableaction_good"
+		            android:layout_width="18dp"
+		            android:layout_height="18dp"
+		            android:src="@drawable/ic_action_good" />
            <ProgressBar
 	            android:id="@+id/review_score"
 	            style="?android:attr/progressBarStyleHorizontal"
+	             android:layout_weight="1"
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content" />
+        
+           </LinearLayout>
 
         </LinearLayout>
 

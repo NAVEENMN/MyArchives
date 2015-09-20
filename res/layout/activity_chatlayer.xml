@@ -49,8 +49,6 @@
 			    android:background="@android:color/transparent"
 			    android:drawableTop="@drawable/chat_send" />
           	
-          	
-
 
     </LinearLayout>
 
