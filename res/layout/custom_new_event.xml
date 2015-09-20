@@ -5,13 +5,34 @@
     android:layout_height="fill_parent"
     android:background="@color/white"
     android:orientation="vertical" >
+    
+    
+         <ViewFlipper
+        android:id="@+id/new_event_flipper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/Profiledata"
+        android:background="#F2F2F2"
+        android:baselineAligned="false"
+        android:gravity="center" > 
+
+    
+    <!-- View #1 -->
+     <LinearLayout
+        android:id="@+id/new_event_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical" >
 
     <TextView
         android:id="@+id/event_name_lable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="12dp"
         android:layout_marginBottom="2dp"
-        android:gravity="left"
+        android:gravity="center"
         android:text="Event Name"
         android:textColor="@color/red_light"
         android:textSize="20sp" />
@@ -21,15 +42,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="2dp"
-        android:background="@drawable/rounder_edittext"
+        android:layout_marginTop="22dp"
         android:fontFamily="OpenSansSemiBold"
         android:inputType="textShortMessage"
         android:paddingLeft="2dp"
-        android:textColor="#A4A4A4"
-        android:textSize="30sp" />
+        android:gravity="center"
+        android:textColor="#E6E6E6"
+        android:textSize="20sp" />
 
+    <Button
+        android:id="@+id/next_view_time"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/event_next"
+        android:layout_gravity="right"
+        android:layout_marginRight="15dp" />
+
+    </LinearLayout>
+    
+             
+             <!-- View #2 -->
     <LinearLayout
         android:id="@+id/listFooter"
         android:layout_width="match_parent"
@@ -42,14 +75,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
-            android:gravity="left"
-            android:text="pick a date"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="pick a date and time"
             android:textColor="@color/red_light"
             android:textSize="20sp" />
 
         <DatePicker
             android:id="@+id/pickdate"
+            android:layout_marginTop="18dp"
             android:minDate="mm/dd/yyyy"
+            android:calendarViewShown="false"
             android:layout_width="wrap_content"
             android:layout_height="120dp" />
 
@@ -60,21 +96,11 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal" >
 
-            <LinearLayout
+           <LinearLayout
                 android:id="@+id/time_pick1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/timepick_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:gravity="left"
-                    android:text="Starting time"
-                    android:textColor="@color/red_light"
-                    android:textSize="20sp" />
 
                 <TimePicker
                     android:id="@+id/picktime"
@@ -83,7 +109,20 @@
                     android:layout_weight="1" />
             </LinearLayout>
         </LinearLayout>
+        <Button
+        android:id="@+id/next_view_duration"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/event_next"
+        android:layout_gravity="right"
+        android:layout_marginRight="15dp" />
+   </LinearLayout>
 
+
+    <!-- View #3 -->
+    
         <LinearLayout
             android:id="@+id/time_pick2"
             android:layout_width="wrap_content"
@@ -95,16 +134,18 @@
                 android:id="@+id/duration_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:gravity="left"
+                android:layout_marginBottom="2dp"    
+                android:layout_marginTop="4dp"
+                android:gravity="center"
                 android:text="Your Availablity"
                 android:textColor="@color/red_light"
                 android:textSize="20sp" />
 
             <RadioGroup
                 android:id="@+id/pickduration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="14dp"
                 android:orientation="horizontal" >
 
                 <RadioButton
@@ -138,9 +179,8 @@
                     android:layout_height="wrap_content"
                     android:text="3+ hr" />
             </RadioGroup>
-        </LinearLayout>
-
-        <Button
+            
+                    <Button
             android:id="@+id/new_event_set"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -149,6 +189,8 @@
             android:onClick="on_chat_click"
             android:text="Create this event"
             android:textColor="#A4A4A4" />
-    </LinearLayout>
+        </LinearLayout>
+        
+        </ViewFlipper>
 
 </LinearLayout>

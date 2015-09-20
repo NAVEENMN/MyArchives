@@ -198,6 +198,7 @@ public class Login extends FragmentActivity {
 	Integer marker_counter = 0;// this is used to navigate from point to point.
 	Dialog dialog_refrence;
 	private ViewFlipper flip_view;
+	private ViewFlipper flip_view_new_event;
 	private float downXValue;
 	
 	public String current_view = "event_page";
@@ -228,6 +229,7 @@ public class Login extends FragmentActivity {
 																	// important
 		setContentView(R.layout.activity_login);
 		flip_view = (ViewFlipper) findViewById(R.id.view_flipper_panel);
+		flip_view_new_event = (ViewFlipper) findViewById(R.id.new_event_flipper);
 		// Add these two lines
 		setupActionBar();// Show the Up button in the action bar.
 		getActionBar().setIcon(
@@ -2464,17 +2466,7 @@ public class Login extends FragmentActivity {
 
 		// ************ pull data from local db
 		System.out.println("entering on_invite_accepted");
-		SharedPreferences prefs = getSharedPreferences("myevents", MODE_PRIVATE);
-		String joinedevents = prefs.getString("joinedevents", null);
-		String[] events = null;
-		if (joinedevents != null) {
-			String joinedeventlist = prefs.getString("joinedevents", "None");// "No name defined"
-																				// is
-																				// the
-																				// default
-																				// value.
-			events = joinedeventlist.split("<<");
-		}
+
 		final String eventreference = event_reference;
 		String[] dat = event_reference.split("-->");
 		String host = dat[0];
@@ -2505,12 +2497,7 @@ public class Login extends FragmentActivity {
 				.setValue(fb_data);
 		System.out.println("storing " + eventreference);
 		// ************** store this new event copy to local data base
-		SharedPreferences.Editor editor = getSharedPreferences("myevents",
-				MODE_PRIVATE).edit();
-		editor.putString("joinedevents", joinedevents + "<<" + eventreference);
-		// editor.clear();
-		editor.commit();
-
+	
 		// ** once accepted to the invite remove the copy in sever else it will
 		// keep showing
 
@@ -2596,7 +2583,6 @@ public class Login extends FragmentActivity {
 			e.printStackTrace();
 		}
 		System.out.println("in json" + json.toString());
-
 		System.out.println("respoding to " + host + "from"
 				+ commondata.facebook_details.facebook);
 		gcm_send_data(commondata.facebook_details.facebook, host,
@@ -2647,6 +2633,37 @@ public class Login extends FragmentActivity {
 		inputText.setTextColor(Color.parseColor("#819FF7"));
 		inputText.setHint("eg: mike`s birthday.");
 		
+		flip_view_new_event = (ViewFlipper) dialog.findViewById(R.id.new_event_flipper);
+		
+		// next view 
+		
+		Button nextButton = (Button) dialog.findViewById(R.id.next_view_time);
+
+		nextButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+
+				flip_view_new_event.showNext();
+
+			}
+
+		});
+		
+		Button nextButtonduration = (Button) dialog.findViewById(R.id.next_view_duration);
+
+		nextButtonduration.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+
+				flip_view_new_event.showNext();
+
+			}
+
+		});
+		
+		
 		// get date
 		DatePicker pickdate = (DatePicker) dialog.findViewById(R.id.pickdate);
 		commondata.new_event.event_date = Integer.toString(pickdate.getMonth()) + "-" + Integer.toString(pickdate.getDayOfMonth());
@@ -2682,16 +2699,6 @@ public class Login extends FragmentActivity {
 	            System.out.println("hour of the day : " + minute);
 	            
 	            commondata.new_event.event_time = Integer.toString( hourOfDay ) + "-" + Integer.toString( minute );
-				
-				/*
-				if (hourOfDay >= c.get(Calendar.HOUR_OF_DAY) && minute >= c.get(Calendar.MINUTE)) { 
-		            
-		            } else {
-		            	
-		            	//picktime.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
-		            	//picktime.setCurrentMinute(c.get(Calendar.MINUTE));
-		            }
-		            */
 			}
 		});
 	    
@@ -2742,14 +2749,12 @@ public class Login extends FragmentActivity {
 					public void onClick(View view) {
 
 						// get event name 
+						String event_name_t = commondata.facebook_details.name
+								+ "`s event";
+						commondata.new_event.event_name = event_name_t;
 						String event_name = inputText.getText().toString();
 						commondata.new_event.event_name = event_name;
-						if (event_name == null) {
-							event_name = commondata.facebook_details.name
-									+ "`s event";
-							commondata.new_event.event_name = event_name;
-						}
-												
+								
 						fb_data.put("nodename",
 								commondata.facebook_details.name);
 						fb_data.put("eventname", event_name);
