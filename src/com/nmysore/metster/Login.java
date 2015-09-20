@@ -3103,20 +3103,21 @@ public class Login extends FragmentActivity {
 			
 			Double temp_x = 0.0;
 			Double temp_y = 0.0;
-			
+			int people_counter = 0;
 			// this loop helps to get sum and compute mean 
 			for(int i=0; i<commondata.places_found.latitudes.size(); i++){	
 				System.out.println("token : "+ commondata.places_found.tokens.get(i));
-				if(commondata.places_found.tokens.get(i).contains("place")){ // consider only place
+				if(commondata.places_found.tokens.get(i).contains("host") || commondata.places_found.tokens.get(i).contains("member")){ // consider only people
 					Double x2 = commondata.places_found.latitudes.get(i);
 					Double y2 = commondata.places_found.longitudes.get(i);
 					temp_x += x2;
 					temp_y += y2;
+					people_counter += 1;
 					//Double distance = get_distance(place_node.latitude, place_node.longitude, x2, y2); // signature
 				}
 			}
-			Double mean_lat = temp_x / commondata.places_found.latitudes.size();
-			Double mean_lon = temp_y / commondata.places_found.longitudes.size();
+			Double mean_lat = temp_x / people_counter;
+			Double mean_lon = temp_y / people_counter;
 			
 			// we need to normalizing value, find the distance of all places from this place and find the maximum value
 			
@@ -3130,13 +3131,12 @@ public class Login extends FragmentActivity {
 				}
 			}
 			
-			Collections.sort(list_of_distances_from_mean); // Sort the arraylist	
+			Collections.sort(list_of_distances_from_mean); // Sort the arraylist acsending order
+			Collections.reverse(list_of_distances_from_mean);// descending. 0 -> far max -> close
 			
 			Double current_place_distance_from_mean = get_distance(mean_lat, mean_lon, place_node.latitude, place_node.longitude);// get this place distance from mean
-			
 			int current_place_rank = list_of_distances_from_mean.indexOf(current_place_distance_from_mean) + 1;// we have to check where this place ranks among other places.
-			
-			System.out.println("rank : " + current_place_rank); // rank 1 means its very far from mean
+			// rank 1 means its very far --> least score 
 			
 			Double rank = Double.parseDouble(Integer.toString(current_place_rank + 1) );
 			Double place_size = Double.parseDouble( Integer.toString( list_of_distances_from_mean.size() ) );
