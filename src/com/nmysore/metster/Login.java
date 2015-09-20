@@ -3092,15 +3092,9 @@ public class Login extends FragmentActivity {
 		 * 				     how par a place is from you is the individual conveince.
 		 */ 
 		
-		public Double get_group_score(final place_details place_node) {
+		public Double[] get_group_score(final place_details place_node) {
 			System.out.println("enter : get_group_score");
-			System.out.println("place_node : " + place_node.latitude +", " + place_node.longitude);
-			System.out.println("latitudes : " + commondata.places_found.latitudes);
-			System.out.println("longitude : " + commondata.places_found.longitudes);
-			
-			ArrayList<Double> list_of_latitudes = new ArrayList<Double>();
-			ArrayList<Double> list_of_longitdes = new ArrayList<Double>();
-			
+
 			Double temp_x = 0.0;
 			Double temp_y = 0.0;
 			int people_counter = 0;
@@ -3121,30 +3115,50 @@ public class Login extends FragmentActivity {
 			
 			// we need to normalizing value, find the distance of all places from this place and find the maximum value
 			
-			ArrayList<Double> list_of_distances_from_mean = new ArrayList<Double>();// a list to hold distances
+			ArrayList<Double> list_of_distances_from_mean = new ArrayList<Double>();// a list to hold distances from mean
+			ArrayList<Double> list_of_distances_from_you = new ArrayList<Double>();// a list to hold distances from you
+			System.out.println("user location :" + commondata.user_information.latitude + ", " + commondata.user_information.longitude);
 			for(int i=0; i<commondata.places_found.latitudes.size(); i++){
 				if(commondata.places_found.tokens.get(i).contains("place")){
 					Double x2 = commondata.places_found.latitudes.get(i);
 					Double y2 = commondata.places_found.longitudes.get(i);
-					Double distance = get_distance(mean_lat, mean_lon, x2, y2);
-					list_of_distances_from_mean.add(distance);
+					Double distance_from_mean = get_distance(mean_lat, mean_lon, x2, y2);
+					Double distance_from_you = get_distance(commondata.user_information.latitude, commondata.user_information.longitude, x2, y2);
+					list_of_distances_from_mean.add(distance_from_mean);
+					list_of_distances_from_you.add(distance_from_you);
 				}
 			}
 			
 			Collections.sort(list_of_distances_from_mean); // Sort the arraylist acsending order
 			Collections.reverse(list_of_distances_from_mean);// descending. 0 -> far max -> close
 			
+			Collections.sort(list_of_distances_from_you); // Sort the arraylist acsending order
+			Collections.reverse(list_of_distances_from_you);// descending. 0 -> far max -> close
+			
+			
 			Double current_place_distance_from_mean = get_distance(mean_lat, mean_lon, place_node.latitude, place_node.longitude);// get this place distance from mean
 			int current_place_rank = list_of_distances_from_mean.indexOf(current_place_distance_from_mean) + 1;// we have to check where this place ranks among other places.
 			// rank 1 means its very far --> least score 
 			
-			Double rank = Double.parseDouble(Integer.toString(current_place_rank + 1) );
+			Double rank = Double.parseDouble(Integer.toString(current_place_rank) );
 			Double place_size = Double.parseDouble( Integer.toString( list_of_distances_from_mean.size() ) );
 			Double group_score = (rank / place_size ) * 100.00;
 			
+			
+			Double current_place_distance_from_you = get_distance(commondata.user_information.latitude, commondata.user_information.longitude, place_node.latitude, place_node.longitude);// get this place distance from mean
+			int current_place_rank_from_you = list_of_distances_from_you.indexOf(current_place_distance_from_you) + 1;// we have to check where this place ranks among other places.
+			// rank 1 means its very far --> least score 
+			
+			Double rank_from_you = Double.parseDouble(Integer.toString(current_place_rank_from_you) );
+			Double place_size_you = Double.parseDouble( Integer.toString( list_of_distances_from_you.size() ) );
+			Double your_score = (rank_from_you / place_size_you ) * 100.00;
+			
 			System.out.println("group score :" + group_score);
+			System.out.println("ind score :" + your_score);
 			System.out.println("exit : get_group_score");
-			return group_score;
+		
+			Double[] scores = {group_score , your_score};
+			return scores;
 			
 		}
 		
@@ -3175,7 +3189,7 @@ public class Login extends FragmentActivity {
 			final ImageView popimage = (ImageView) view
 					.findViewById(R.id.popupimage);
 			
-			Double group_score = get_group_score(node);
+			Double[] scores = get_group_score(node); // {group, you}
 
 			if (node.image_url != null) {
 
@@ -3242,8 +3256,8 @@ public class Login extends FragmentActivity {
 			
 			final ProgressBar group_bar = (ProgressBar) view.findViewById(R.id.group_convenience_score);
 			final ProgressBar your_bar = (ProgressBar) view.findViewById(R.id.your_convenience_score);
-			your_bar.setProgress(75);
-			group_bar.setProgress(group_score.intValue());
+			your_bar.setProgress(scores[1].intValue());
+			group_bar.setProgress(scores[0].intValue());
 			
 			TextView addressui = (TextView) view
 					.findViewById(R.id.placeaddress);
