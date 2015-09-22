@@ -21,6 +21,7 @@ public class commondata {
 
 	static Boolean pull_host_info; // its a temporary fix
 	static int votes;
+	static String choice;
 	
 	public static class facebook_details{
 		static String facebook;

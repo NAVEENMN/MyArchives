@@ -133,7 +133,7 @@
 	            android:fontFamily="OpenSansSemiBold"
 	            android:inputType="textShortMessage"
 	            android:background="@drawable/rounder_edit_text_map"
-	            android:hint="e.g. sushi, american"
+	            android:hint="e.g. sushi, american, movies"
 	            android:textColorHint="#E6E6E6"
 	            android:drawableLeft="@drawable/ic_search"
 	            android:layout_weight=".75" />

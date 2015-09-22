@@ -1246,7 +1246,7 @@ public class Login extends FragmentActivity {
 					while (dat.hasNext()) {// this segment pulls users
 						DataSnapshot params = dat.next();
 						String pinmap = eventkey.getName().toString();
-						if (pinmap.contains("rest")) {
+						if (pinmap.contains("rest") || pinmap.contains("movies")) {
 							System.out.println("pin ma" + params.getName().toString());
 							// ---- to put on map
 							if (params.getName().toString().contains("nodename"))
@@ -1691,17 +1691,18 @@ public class Login extends FragmentActivity {
 								.icon(BitmapDescriptorFactory
 										.fromResource(R.drawable.host))
 
-								.title(commondata.places_found.names.get(i)
-										+ "--"
-										+ commondata.places_found.latitudes
-												.toString()));
+								.title(commondata.places_found.names.get(i)));
 					} else {
 						
 						if (commondata.places_found.tokens.get(i).contains(
-								"place")) {
+								"place") || commondata.places_found.tokens.get(i).contains(
+										"movies")) {
 							System.out.println("overall " + i + commondata.places_found.votes_list);
 							int image_ref;
 							image_ref = R.drawable.place_location_pin_1;
+							
+							
+							
 							try {
 								String locadd = commondata.places_found.votes_list.get(i);
 								System.out.println( commondata.places_found.names.get(i) +" "+ commondata.places_found.votes_list.get(i));
@@ -1720,7 +1721,6 @@ public class Login extends FragmentActivity {
 								
 								
 								 if( !types_votes.contains(commondata.facebook_details.facebook) ) {
-	                            	   image_ref = R.drawable.chaticon;
 	                            	   
 	                            	   switch(types_votes.size()){
 	   								case 0:
@@ -1809,6 +1809,12 @@ public class Login extends FragmentActivity {
 								System.out.println("error exception : " + e);
 							}
 							
+							
+							if(commondata.places_found.tokens.get(i).contains(
+									"movies")){
+								image_ref = R.drawable.icon_map_film;
+							}
+							
 							mMap.addMarker(new MarkerOptions()
 									.position(
 											new LatLng(
@@ -1842,7 +1848,7 @@ public class Login extends FragmentActivity {
 							rank = rank + 1;
 						} else {
 
-							mMap.addMarker(new MarkerOptions()
+							Marker marker = mMap.addMarker(new MarkerOptions()
 									.position(
 											new LatLng(
 													commondata.places_found.latitudes
@@ -1852,6 +1858,11 @@ public class Login extends FragmentActivity {
 									.icon(BitmapDescriptorFactory
 											.fromResource(R.drawable.pin))
 									.title(commondata.places_found.names.get(i)));
+							if( marker.isInfoWindowShown() ){
+								marker.hideInfoWindow();
+							}
+							
+							
 						}
 					}
 				}
@@ -3061,8 +3072,21 @@ public class Login extends FragmentActivity {
 		 */
 		@Override
 		public View getInfoWindow(Marker marker) {
-
-			render(marker, mContents);
+			
+			String title = marker.getTitle();
+			if(title.contains("--")){
+				System.out.println("pop up");
+				try{
+					render(marker, mContents);
+				} catch (Exception e){
+					System.out.println("error "+ e);
+				}
+			} else {
+				System.out.println("no pop up");
+				marker.hideInfoWindow();
+				return null;
+			}
+			
 			return mContents;
 		}
 
@@ -3113,13 +3137,14 @@ public class Login extends FragmentActivity {
 			ArrayList<Double> list_of_distances_from_you = new ArrayList<Double>();// a list to hold distances from you
 			System.out.println("user location :" + commondata.user_information.latitude + ", " + commondata.user_information.longitude);
 			for(int i=0; i<commondata.places_found.latitudes.size(); i++){
-				if(commondata.places_found.tokens.get(i).contains("place")){
+				if(commondata.places_found.tokens.get(i).contains("place") || commondata.places_found.tokens.get(i).contains("movies")){
 					Double x2 = commondata.places_found.latitudes.get(i);
 					Double y2 = commondata.places_found.longitudes.get(i);
 					Double distance_from_mean = get_distance(mean_lat, mean_lon, x2, y2);
 					Double distance_from_you = get_distance(commondata.user_information.latitude, commondata.user_information.longitude, x2, y2);
 					list_of_distances_from_mean.add(distance_from_mean);
 					list_of_distances_from_you.add(distance_from_you);
+					System.out.println("run for " + i);
 				}
 			}
 			
@@ -3764,8 +3789,6 @@ public class Login extends FragmentActivity {
 							};
 
 							thread.start();
-							
-							
 						}						
 					});
                    
@@ -3921,46 +3944,70 @@ public class Login extends FragmentActivity {
 			public void onDataChange(DataSnapshot arg0) {
 				// TODO Auto-generated method stub
 				String child = "rest--" + node.place_name.replace(".", "");
+				
+				if(commondata.choice.contains("movies")){
+					child = "movies--" + node.place_name.replace(".", "");
+				} else  {
+					child = "rest--" + node.place_name.replace(".", "");
+				}
+				
 				if(arg0.hasChild(child)){
 					// do nothing 
 					Toast.makeText(getApplicationContext(), "Exists to map", Toast.LENGTH_SHORT).show();
 				} else {
 					
 					Toast.makeText(getApplicationContext(), "Pinned to map", Toast.LENGTH_LONG).show();
+					
+					String fbi_ref = "rest--";
+					String node_type = "place";
+					System.out.println("contains "+ commondata.choice);
+					
+					if(commondata.choice.contains("movies")){
+						fbi_ref = "movies--";
+						node_type = "movies";
+					} else  {
+						fbi_ref = "rest--";
+						node_type = "place";
+					}
+					
+					
 					ft.child(commondata.event_information.eventID)
 					// --- latitude
-					.child("rest--"
+					.child(fbi_ref
 							+ node.place_name.replace(".",
 									"")).child("Latitude")
 					.setValue(node.latitude.toString());
 			// --- longitude
 			ft.child(commondata.event_information.eventID)
-					.child("rest--"
+					.child(fbi_ref
 							+ node.place_name.replace(".",
 									"")).child("Longitude")
 					.setValue(node.longitude.toString());
 			// --- nodetype
+			
+			
+			
 			ft.child(commondata.event_information.eventID)
-					.child("rest--"
+					.child(fbi_ref
 							+ node.place_name.replace(".",
 									"")).child("nodetype")
-					.setValue("place");
+					.setValue(node_type);
 			// --- nodename
 			ft.child(commondata.event_information.eventID)
-					.child("rest--"
+					.child(fbi_ref
 							+ node.place_name.replace(".",
 									"")).child("nodename")
 					.setValue(node.place_name);
 			// --- place address, ratings, type, link
 			ft.child(commondata.event_information.eventID)
-					.child("rest--"
+					.child(fbi_ref
 							+ node.place_name.replace(".",
 									"")).child("address")
 					.setValue(node.address);
 
 			// --- place address, ratings, type, link
 			ft.child(commondata.event_information.eventID)
-					.child("rest--"
+					.child(fbi_ref
 							+ node.place_name.replace(".",
 									"")).child("image_url")
 					.setValue(node.image_url);
@@ -3969,20 +4016,20 @@ public class Login extends FragmentActivity {
 			try{
 			if(node.rating.toString() != "null" || node.total_ratings != null){
 			ft.child(commondata.event_information.eventID)
-					.child("rest--"
+					.child(fbi_ref
 							+ node.place_name.replace(".",
 									"")).child("rating")
 					.setValue(node.rating.toString());
 			} else {
 				ft.child(commondata.event_information.eventID)
-				.child("rest--"
+				.child(fbi_ref
 						+ node.place_name.replace(".",
 								"")).child("rating")
 				.setValue("0.0");
 			}
 			} catch (Exception e) {
 				ft.child(commondata.event_information.eventID)
-				.child("rest--"
+				.child(fbi_ref
 						+ node.place_name.replace(".",
 								"")).child("rating")
 				.setValue("0.0");
@@ -3991,14 +4038,14 @@ public class Login extends FragmentActivity {
 
 			// --- place address, ratings, type, link
 			ft.child(commondata.event_information.eventID)
-					.child("rest--"
+					.child(fbi_ref
 							+ node.place_name.replace(".",
 									"")).child("snippet")
 					.setValue(node.snippet);
 
 			// --- place address, ratings, type, link
 			ft.child(commondata.event_information.eventID)
-					.child("rest--"
+					.child(fbi_ref
 							+ node.place_name.replace(".",
 									"")).child("website")
 					.setValue(node.website);
@@ -4008,29 +4055,29 @@ public class Login extends FragmentActivity {
 			try{
 	        if(node.total_ratings != "null" || node.total_ratings != null){
 			ft.child(commondata.event_information.eventID)
-					.child("rest--" + node.place_name.replace(".", ""))
+					.child(fbi_ref + node.place_name.replace(".", ""))
 					.child("total_ratings").setValue(node.total_ratings.toString());
 	        } else {
 				ft.child(commondata.event_information.eventID)
-				.child("rest--" + node.place_name.replace(".", ""))
+				.child(fbi_ref + node.place_name.replace(".", ""))
 				.child("total_ratings").setValue("0.0");
 	        }
 			} catch(Exception e) {
 				ft.child(commondata.event_information.eventID)
-				.child("rest--" + node.place_name.replace(".", ""))
+				.child(fbi_ref + node.place_name.replace(".", ""))
 				.child("total_ratings").setValue("0.0");
 			}
 
 			// --- place address, ratings, type, link
 			ft.child(commondata.event_information.eventID)
-					.child("rest--" + node.place_name.replace(".", ""))
+					.child(fbi_ref + node.place_name.replace(".", ""))
 					.child("place_type").setValue(node.types);
 
 
 			String fbid = commondata.facebook_details.facebook;
 
 			ft.child(commondata.event_information.eventID)
-					.child("rest--"
+					.child(fbi_ref
 							+ node.place_name.replace(".",
 									"")).child("votes")
 					.setValue(fbid);
@@ -4762,13 +4809,17 @@ public class Login extends FragmentActivity {
 				String list;
 				System.out.println("posting for" + choice);
 				if (commondata.user_information.countrycode.contains("IN")) {
+					commondata.choice = choice;
 					new post_req().execute(
 							"http://52.8.173.36/metster/exe_google.php",
 							eventid, choice, Integer.toString(keys.size()));
+					
 				} else {
+					commondata.choice = choice;
 					new post_req().execute(
 							"http://52.8.173.36/metster/exe_yelp.php", eventid,
 							choice, Integer.toString(keys.size()));
+					
 				}
 			}
 

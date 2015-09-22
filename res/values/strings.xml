@@ -179,6 +179,7 @@
         <item>Thai</item>
         <item>Vietnamese</item>
         <item>Yogurt</item>
+        <item>Movies</item>
     </string-array>
 
     <string name="title_activity_panel">Panel</string>
