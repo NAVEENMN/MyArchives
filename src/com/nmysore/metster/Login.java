@@ -206,6 +206,8 @@ public class Login extends FragmentActivity {
 	public String current_view = "event_page";
 	ChildEventListener lister;
 	Firebase event_fb_ref;
+	Firebase invites_fb_ref1;
+	Firebase invites_fb_ref2;
 	ArrayAdapter<String> modeAdapter = null;
 
 	String[] yelp_countries = new String[] { "AR", "ARG", "AU", "AUS", "AT",
@@ -219,6 +221,7 @@ public class Login extends FragmentActivity {
 	private AutoCompleteTextView autoComplete;
 	private MultiAutoCompleteTextView multiAutoComplete;
 	private ArrayAdapter<String> adapter;
+	Dialog invite_dialog;
 
 	// **
 
@@ -342,6 +345,15 @@ public class Login extends FragmentActivity {
 			}
 		});
 
+		
+		/*
+		 * get invites data from firebase
+		 */
+		
+
+
+		set_listner_to_events(commondata.facebook_details.facebook);
+		
 		/*
 		 * //************** store this new event copy to local data base
 		 * SharedPreferences.Editor editor = getSharedPreferences("myevents",
@@ -357,13 +369,6 @@ public class Login extends FragmentActivity {
 		String invite_status = invite_notification.getString("invite_status",
 				"none");
 
-		if (commondata.event_information.invites != null) {
-
-			list_invites();
-			commondata.event_information.invites = null; // this is temporary
-															// string clean it
-															// up
-		}
 
 		// to be safe lets pull shared pref on event here.
 		int event_case = 3;
@@ -701,6 +706,90 @@ public class Login extends FragmentActivity {
 
 	}// on create
 
+	
+	
+	/*
+	 * name : set_listner_to_events
+	 * @params : none
+	 */
+	private void set_listner_to_events(String fbid) { // listener tag
+		// set reference to yourself on the invites
+
+		StringBuilder invite_fb = new StringBuilder(
+				"https://met-ster.firebaseio.com/");
+		invite_fb.append(fbid+"/invited");
+		final String inviteref = invite_fb.toString();// https://met-ster-event.firebaseio.com/80897978789/80897978789-->event-->1
+		invites_fb_ref1 = new Firebase(inviteref);
+		
+
+        invites_fb_ref1.limit(1).addChildEventListener(new ChildEventListener() {
+			
+			@Override
+			public void onChildRemoved(DataSnapshot arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onChildMoved(DataSnapshot arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onChildChanged(DataSnapshot arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onChildAdded(DataSnapshot arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+				/*
+				 * get invites data from firebase
+				 * retrive the data from firebase and display them.
+				 */
+				System.out.println("fetching data from firebase for invites");
+				StringBuilder strBuilderinvites = new StringBuilder(
+						"https://met-ster.firebaseio.com/");
+				strBuilderinvites.append(commondata.facebook_details.facebook);
+				String refginvites = strBuilderinvites.toString();
+				Firebase newevinvites = new Firebase(refginvites);
+				
+				newevinvites.child("invited").addListenerForSingleValueEvent(new ValueEventListener() {
+
+					@Override
+					public void onDataChange(DataSnapshot arg0) { // invites tag
+						// TODO Auto-generated method stub
+						//ArrayList<String> invites = new ArrayList<String>();
+						@SuppressWarnings("unchecked")
+						ArrayList<String> invites_list = (ArrayList<String>) arg0.getValue();
+						if(invites_list != null){
+							list_invites(invites_list);
+						}
+						System.out.println("ivites " + invites_list);
+					}
+
+					@Override
+					public void onCancelled(FirebaseError arg0) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+						
+						
+					}
+					
+					@Override
+					public void onCancelled(FirebaseError arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+				});	
+		
+	}
+	
 	/*
 	 * name : set_firebase_listner
 	 * 
@@ -711,7 +800,7 @@ public class Login extends FragmentActivity {
 	 * 
 	 * @desp : this function stops old listner and sets new listner to new event
 	 */
-	private ChildEventListener set_firebase_listner(String eventid) {
+	private ChildEventListener set_firebase_listner(String eventid) { // listener tag
 
 		String[] data = eventid.split("-->");
 		final String host = data[0];// this give refrence to facebook id
@@ -721,7 +810,9 @@ public class Login extends FragmentActivity {
 		strBuilder.append(host + "/" + host + "-->" + eventref);
 		final String baseref = strBuilder.toString();// https://met-ster-event.firebaseio.com/80897978789/80897978789-->event-->1
 		event_fb_ref = new Firebase(baseref);
+		
 
+		
 		// these method is invoked if online we need a clean data clean up on
 		// offline mode.
 		ChildEventListener listner = event_fb_ref
@@ -785,6 +876,7 @@ public class Login extends FragmentActivity {
 					}
 				});
 
+	
 		return listner;
 
 	}
@@ -2369,72 +2461,51 @@ public class Login extends FragmentActivity {
 
 	private void on_invite_declined(final String event_reference) {
 
-		final JSONObject invites_to_server = new JSONObject();
+
 		String[] id = event_reference.split("-->");
 		String hostid = id[0];
 
-		try {
-
-			invites_to_server.put("id", commondata.facebook_details.facebook);
-
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		Thread thread = new Thread() {
+		System.out.println("to decline " + event_reference);
+		// *** REMOVE FROM INVITES
+		
+		StringBuilder strBuilderinvites = new StringBuilder(
+				"https://met-ster.firebaseio.com/");
+		strBuilderinvites.append(commondata.facebook_details.facebook);
+		String refginvites = strBuilderinvites.toString();
+		final Firebase newevinvites = new Firebase(refginvites);
+		
+		newevinvites.child("invited").addListenerForSingleValueEvent(new ValueEventListener() {
 
 			@Override
-			public void run() {
-
-				String invites_response = postData(
-						"http://52.8.173.36/metster/handel_invites.php",
-						"get_list", invites_to_server.toString(),
-						commondata.facebook_details.email);
-
-				String new_invites_data = null;
-				if (invites_response != null) {
-					String[] lists = invites_response.split("%%");
-					for (int i = 0; i < lists.length; i++) {
-						if (lists[i].contains(event_reference)) {
-							// dont add to this list
-						} else {
-
-							if (new_invites_data == null) {
-								new_invites_data = lists[i];
-							} else {
-								new_invites_data = new_invites_data + "%%"
-										+ lists[i];
-							}
-
-						}
+			public void onDataChange(DataSnapshot arg0) { // invites tag
+				// TODO Auto-generated method stub
+				//ArrayList<String> invites = new ArrayList<String>();
+				
+				Iterator<DataSnapshot> invites = arg0.getChildren().iterator();
+				while(invites.hasNext()){
+					DataSnapshot invite_object = invites.next();
+					String event = invite_object.getValue().toString();
+	                System.out.println("invite " + event);
+	                String[] parts = event.split("//");
+					if(parts[0].contains(event_reference)){
+						System.out.println("remove from list"+ event_reference);
+						Firebase invite_ref = invite_object.getRef();
+						invite_ref.removeValue();
 					}
-				} else {
-					// some error calls
 				}
-
-				try {
-
-					invites_to_server.put("id",
-							commondata.facebook_details.facebook);
-					invites_to_server.put("data", new_invites_data);
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				System.out.println("updating this data" + new_invites_data);
-				invites_response = postData(
-						"http://52.8.173.36/metster/handel_invites.php",
-						"update", invites_to_server.toString(),
-						commondata.facebook_details.email);
-
-				System.out.println("in invites on server " + invites_response);
+				
 			}
-		};
 
-		thread.start();
+			@Override
+			public void onCancelled(FirebaseError arg0) {
+				// TODO Auto-generated method stub
 
+			}
+		});
+
+		
+		//**** GCM SEND DATA
+		/*
 		JSONObject json = new JSONObject();
 		try {
 			json.put("host", commondata.facebook_details.facebook);
@@ -2454,6 +2525,7 @@ public class Login extends FragmentActivity {
 				+ commondata.facebook_details.facebook);
 		gcm_send_data(commondata.facebook_details.facebook, hostid,
 				json.toString());
+		*/
 
 	}
 
@@ -3309,7 +3381,7 @@ public class Login extends FragmentActivity {
 	 * @desp : This function list the invites in a dialog.
 	 */
 
-	public void list_invites() {
+	public void list_invites(ArrayList<String> invites_list) {
 		System.out.println("entering the list_invites");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("New Invites");
@@ -3321,26 +3393,21 @@ public class Login extends FragmentActivity {
 		listhostnames.clear();
 		listeventreferences.clear();
 
-		String invitedata = commondata.event_information.invites;
-		String[] jsoncontents = invitedata.split("%%");
-		for (int i = 0; i < jsoncontents.length; i++) {
-			String jdata = jsoncontents[i];
-			System.out.println("contents from ino" + jdata);
+	
+		for (int i = 0; i < invites_list.size(); i++) {
+			String jdata = invites_list.get(i);
 			try {
-				JSONObject contents = new JSONObject(jdata);
-
-				String host_name = contents.getString("from_name");
-				String from_id = contents.getString("from_id");
-				String status = contents.getString("status");
-				String event_name = contents.getString("event_name");
-				String event_reference = contents.getString("event_reference");
-				if (status.contains("pending")) {
+				String[] parts = jdata.split("//");
+				String host_name = parts[2];
+				String event_name = parts[1];
+				String event_reference = parts[0];
+				if(!host_name.contains("ucchapin")){
 					listhostnames.add(host_name);
 					listeventnames.add(event_name);
 					listeventreferences.add(event_reference);
 				}
 			} catch (Exception e) {
-				System.out.println("json decode exception " + e);
+				System.out.println("array list split exception " + e);
 			}
 		}
 		// listeventsnames insert
@@ -3415,6 +3482,7 @@ public class Login extends FragmentActivity {
 									.setBackgroundColor(Color.RED);
 							on_invite_declined(listeventreferences.get(Integer
 									.parseInt(v.getTag().toString())));
+							//invite_dialog.dismiss();
 							// On a new thread handle this case
 						}
 					});
@@ -3445,8 +3513,11 @@ public class Login extends FragmentActivity {
 						dialog.dismiss();
 					}
 				});
-		final Dialog dialog = builder.create();
-		dialog.show();
+		invite_dialog = builder.create();
+		System.out.println("invites size" + listhostnames.size());
+		if( listhostnames.size() != 0 ) { 
+			invite_dialog.show();
+		}
 		System.out.println("exiting the invites_list");
 	}
 
