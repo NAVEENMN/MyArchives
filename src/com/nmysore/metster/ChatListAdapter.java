@@ -2,10 +2,12 @@ package com.nmysore.metster;
 
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -47,6 +49,10 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
         String author = chat.getAuthor();
         TextView authorText = (TextView) view.findViewById(R.id.author);
         authorText.setText(author);
+        
+        ImageView authorImage = (ImageView) view.findViewById(R.id.ChatImage);
+        Bitmap image = commondata.lazyload.image_ref.get(commondata.facebook_details.facebook);
+        authorImage.setImageBitmap(image);
    
         TextView messageText = (TextView) view.findViewById(R.id.message);
         messageText.setTypeface(tf);
