@@ -2,6 +2,7 @@ package com.nmysore.metster;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONArray;
 
@@ -67,6 +68,7 @@ public class commondata {
 		static String invites;
 		static HashMap<String, String> event_hosted_table = new HashMap<String, String>();
 		static HashMap<String, String> event_joined_table = new HashMap<String, String>();
+		static HashMap<String, String> event_invites_fb_id = new HashMap<String, String>(); // eventreference --> unique id on fb invites
 		static HashMap<String, ArrayList<host_event_node>> given_events_lookup = new HashMap<String, ArrayList<host_event_node>>();
 	}
 	
@@ -78,6 +80,12 @@ public class commondata {
 	public static class lazyload{
 		static HashMap<String, Bitmap> image_ref = new HashMap<String, Bitmap>();
 		static HashMap<String, Bitmap> yelp_images = new HashMap<String, Bitmap>();
+	}
+	
+	public static class event_page{
+		static HashMap<String, Map<String, String>> hosted = new HashMap<String, Map<String, String>>();
+		static HashMap<String, Map<String, String>> joined = new HashMap<String, Map<String, String>>();
+		static HashMap<String, Map<String, String>> invites = new HashMap<String, Map<String, String>>();
 	}
 	
 	public static class prefrences{
