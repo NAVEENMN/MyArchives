@@ -725,10 +725,18 @@ public class Login extends FragmentActivity {
 							commondata.event_information.event_invites_fb_id.put(event_reference, obj.getName());
 						}
 						
-						ArrayList<String> invites_list = new ArrayList<String>(new_set);
+						final ArrayList<String> invites_list = new ArrayList<String>(new_set);
 						
 						if(invites_list != null){
-							list_invites(invites_list);
+							final Handler handler = new Handler();
+							handler.postDelayed(new Runnable() {
+							  @Override
+							  public void run() {
+							    //Do something after 100ms
+								  list_invites(invites_list);
+							  }
+							}, 1000);
+							
 						}
 						
 					}
@@ -1489,6 +1497,7 @@ public class Login extends FragmentActivity {
 
 	public void on_chat_click(View v) {
 		Intent intent = new Intent(this, Chatlayer.class);
+		
 		startActivity(intent);
 
 	}
@@ -3195,7 +3204,7 @@ public class Login extends FragmentActivity {
 		System.out.println("entering the list_invites");
 		AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
 		builder.setTitle("New Invites");
-		ListView inviteslist = new ListView(this);
+		ListView inviteslist = new ListView(Login.this);
 		final ArrayList<String> listeventnames = new ArrayList<String>();
 		final ArrayList<String> listhostnames = new ArrayList<String>();
 		final ArrayList<String> listeventreferences = new ArrayList<String>();
@@ -4062,7 +4071,18 @@ public class Login extends FragmentActivity {
 			Firebase newev = new Firebase(refg);
 			newev.child(eventid).child(commondata.facebook_details.facebook)
 					.removeValue();// REMOVE YOURSELF
-
+			
+			// *********** remove the copy in  event page firebase
+			StringBuilder strBuilderevent = new StringBuilder(
+					"https://met-ster.firebaseio.com/");
+			Map<String, String> event_data = commondata.event_page.joined.get(eventid);
+			String fb_ref = event_data.get("fb_id");
+		    System.out.println(event_data.keySet().toString());
+			strBuilderevent.append(commondata.facebook_details.facebook + "/joined/" + fb_ref + "/");
+			String refgevent = strBuilderevent.toString();
+			Firebase newevevent = new Firebase(refgevent);
+			newevevent.removeValue();
+			commondata.event_page.joined.remove(eventid);
 			// ********************************
 
 			Intent intent = new Intent(Login.this, Login.class);
@@ -4079,6 +4099,16 @@ public class Login extends FragmentActivity {
 			strBuilder.append(ids[0]);
 			String refg = strBuilder.toString();
 			Firebase newev = new Firebase(refg);
+			
+			
+			// DELETE THE CHAT FROM FIREBASE.
+			StringBuilder strBuilderchat = new StringBuilder(
+					"https://metster-chat.firebaseio.com/");
+			strBuilder.append(eventid);
+			String refgchat = strBuilderchat.toString();
+			Firebase newevchat = new Firebase(refgchat);
+			newevchat.removeValue();
+			//*****
 
 			newev.child(eventid).addListenerForSingleValueEvent(
 					new ValueEventListener() {
