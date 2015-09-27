@@ -1,9 +1,12 @@
 package com.nmysore.metster;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,7 +40,8 @@ public class Chatlayer extends ListActivity {
 
         // Make sure we have a mUsername
         setupUsername();
-
+        ActionBar bar = getActionBar();
+		bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#2E9AFE")));
         setTitle("Discuss about this event here!!");
         
         // Check if no view has focus:
