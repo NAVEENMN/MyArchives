@@ -1,6 +1,8 @@
 
 '''
-	
+googleapi.py
+this is called by reco.py and it works
+this shoould be used under reco.py for countries that dont suppeti yelp. 	
 '''
 from numpy import *
 import random
@@ -27,7 +29,13 @@ class node():
     longitude = None
     address = None
     price_level = None
+    photo_reference = None
     types = None
+    coordinate = None
+    url = None # google api doesnot have url but we have to match data format
+    snippet = None #
+    phone = None #
+    review_count = None #
 
 '''
     name : get_distance
@@ -49,21 +57,50 @@ def get_distance(a, b):
     '''
 def req_place_details(lat, long, food_type, radius):
     radius = str( int(round(radius * 10,-1)) )
+    #print "lat ", lat, long, food_type, radius
     ratings = list()
-    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + long + "&radius=400"+"&types=food&keyword="+food_type+"&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE"
+    types = "place"
+
+   # try with metster api key if results 0 then try naveen api key  
+    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + long + "&radius=5000"+"&types=food&keyword="+food_type+"&key=AIzaSyCZQEuWjrNvrvPFzx6SQNxk_2xjtnGWvHE"
+
+    '''
+    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + long + "&radius=5000"+"&types=food&keyword="+food_type+"&key=AIzaSyBsCq-AI-J0xdDK1YFQs_xOMtGayAomRt8"
+   '''
     response = urllib2.urlopen(url).read()
     jason_data = json.loads(response)
+    #print jason_data
     for place in jason_data['results']:
-        
+        coordinate = dict()
         n = node()
         n.name = place['name']
         n.latitude = place['geometry']['location']['lat']
         n.longitude = place['geometry']['location']['lng']
         n.reference = place['reference']
         n.types = place['types']
+        if len(place['types']) > 1 and len(place['types']) <= 3 :
+        	types = place['types'][0]
+        if len(place['types']) > 3 and len(place['types']) <= 5 :
+                types = place['types'][0] +", "+ place['types'][1]
+        if len(place['types']) > 5:
+                types = place['types'][0] + ", "+ place['types'][1] + ", " + place['types'][2]
+        n.types = types
+        n.url = None
+        n.snippet = None
+	n.phone = None
+        if(place.has_key('photos')):
+		j_photo = place['photos'][0]
+		n.photo_reference = j_photo['photo_reference']
+	else:
+		n.photo_reference = None
+	n.photo_reference = place['icon']
         lati = place['geometry']['location']['lat']
         longi = place['geometry']['location']['lng']
         names.append(place['name'])
+        coordinate['latitude'] = lati
+	coordinate['longitude'] = longi
+	coord = str(json.dumps(coordinate))
+	n.coordinate = coord
         location.append([lati, longi])
         id.append(place['reference'])
         
@@ -106,10 +143,17 @@ def get_place_details(id, rank, location):
     data['name'] = node.name
     data['address'] = node.address
     data['rank'] = str(rank)
-    data['location'] = location
-    data['ref'] = id
-    data['rating'] = node.rating
+    data['coordinate'] = node.coordinate
+    data['latitude'] = node.latitude
+    data['longitude'] = node.longitude
+    data['ratings'] = node.rating
     data['price_level'] = node.price_level
+    data['category'] = node.types
+    data['image_url'] = node.photo_reference
+    data['url'] = node.url
+    data['review_count'] = 0
+    data['snippet'] = node.snippet
+    data['phone'] = node.phone
     data['types'] = node.types
     
     return data
@@ -169,6 +213,7 @@ def get_features(eventid,fb_res, ranking, rating_ranking, choice, point, radius)
     # For this version we are considering centroid but we need better approach
     locations, names, ratings, id = req_place_details(str(centroid[0]), str(centroid[1]),food_type, radius)
 
+    #print locations
     # all places are equally preferred
     for x in range(0, len(names)):
         ranking[names[x]] = 0.0
@@ -286,8 +331,6 @@ def main(event_id, choice, point, radius):
         data[id_dict[place]] = get_place_details(id_dict[place], rank, look[place])
         rank = rank + 1
     json_places_data = json.dumps(OrderedDict(data))
-
-    print " "
     return json_places_data
 
 if __name__ == "__main__":

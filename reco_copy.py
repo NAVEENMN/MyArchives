@@ -72,7 +72,6 @@ def print_all(dic_data):
         node  = dic_data[key]
         print node.name
 
-
 '''
     name : main
     params : None
@@ -142,11 +141,8 @@ def main():
         radius = googleapi.get_distance(point, tr)
         radius = radius * 1000 * 10
 
-    # get data from google and yelp
-    yelp_data = yelpapi.pull_data_from_firebase(eventid, choice, point)
     google_data = googleapi.main(eventid, choice, point, radius)
     print google_data
-    yelp_json = json.loads(json.dumps(yelp_data))
     '''
         look though the google json and build data
         if key match update from yelp
@@ -163,27 +159,8 @@ def main():
 	gn.image_url = None
 	google_lookup[gn.name] = gn
 
-    for key in yelp_json:
-        data = dict()
-        place = json.loads(yelp_json[key])
-
-	data['name'] = place['name']
-        data['rank'] = place['rank']
-        data['category'] = place['category'] 
-        data['rating'] = place['ratings']
-        data['review_count'] = place['review_count']
-        data['price_level'] = 0.0
-        data['address'] = place['address']
-        data['location'] = place['coordinate']
-        data['url'] = place['url']
-        data['phone'] = place['phone']
-        data['snippet'] = None
-	data['image_url'] = place['image_url']
-        if(google_lookup.has_key(data['name'])):
-            gn = google_lookup[data['name']]
-            data['price_level'] = gn.price_level
-        payload[key] = json.dumps(data)
-    print payload
+    #print_all(google_lookup)
+    #print google_lookup
 
 if __name__ == "__main__":
     main()

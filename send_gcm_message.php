@@ -38,6 +38,7 @@ switch($type){
 	case "invite_check" :
  				echo "invite_check";
 				$message = $sender_name . "--" . $event_reference;
+				echo $event_reference;
 				invite_check($incoming_data->host,$incoming_data->to_id, $to_gcm, "invite_check", $message
 				, $sender_name, $event_reference);
 				$TO = $incoming_data -> to_id;
@@ -49,13 +50,8 @@ switch($type){
 					     , 'status' => 'pending', 'event_name' => $Event_Name);
 				$new_data =  json_encode($arr);
 				# key and payload ready
-				if($row['INVITES'] != NULL){
-					$payload = $row['INVITES'];
-					$payload = $payload . "%%" . $new_data;
-					mysql_query("UPDATE accounts SET `INVITES`='$payload' WHERE USERID='$TO'") or die(mysql_error());
-				}else{ // no previous data
-					mysql_query("UPDATE accounts SET `INVITES`='$new_data' WHERE USERID='$TO'") or die(mysql_error());
-				}
+				$ra = str_replace("-->","--",$event_reference);
+				#shell_exec('python manage_invites_fb.py '.$TO.' '.$ra. ' '.$Event_Name.' '.$sender_name );
 	
 				break;
 	case "invite_accept" :
@@ -72,6 +68,9 @@ switch($type){
 				$message = "host" . "--" . "drop";
 				host_cancle($incoming_data->host,$incoming_data->to_id, $to_gcm, "host_cancel", $message,
 				$sender_name, $event_reference);
+				$TO = $incoming_data -> to_id;
+				$ra = str_replace("-->","--",$event_reference);
+				shell_exec('python handle_host_drop.py '.$TO.' '.$ra);
 				break;
 	case "invite_drop":	
 				invite_drop();
@@ -160,7 +159,7 @@ send_gcm_notify($togcm, $new_payload);
 
 //-------> getting who sent it
 function send_gcm_notify($reg_id, $message) {
-define("GOOGLE_API_KEY", "AIzaSyAej8YahV9nPJXz-8VtzM-iI80bo2394f0");
+define("GOOGLE_API_KEY", "AIzaSyBsCq-AI-J0xdDK1YFQs_xOMtGayAomRt8");
 define("GOOGLE_GCM_URL", "https://android.googleapis.com/gcm/send");
 	$fields = array(
             'registration_ids'  => array( $reg_id ),

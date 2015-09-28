@@ -158,8 +158,9 @@ def get_features(eventid,fb_res, ranking, rating_ranking):
     cen['Latitude'] = centroid[0]
     cen['Longitude'] = centroid[1]
     Dfb.put(cen)
+    food_type = "asian"
     # For this version we are considering centroid but we need better approach
-    locations, names, ratings, id = req_place_details(str(cen[0]), str(cen[1]),food_type)
+    locations, names, ratings, id = req_place_details(str(centroid[0]), str(centroid[1]),food_type)
     # all places are equally preferred
     for x in range(0, len(names)):
         ranking[names[x]] = 0.0

@@ -134,8 +134,6 @@ def query_api(term, location, type):
     if(type == "b"):
         response = searchb(term, location)
         businesses = response.get('businesses')
- 	types = None
-	address = None
         if not businesses:
             print u'No businesses for {0} in {1} found.'.format(term, location)
             return
@@ -311,6 +309,11 @@ def ranking_base(place_name_list, place_rating_list, place_location, person_loca
 
     # the sorted dict returns a list so we need to clean the data
     RANKED_LIST = reduce_features(sorted_ranked, ranked_ratings)
+    print "** matrix"
+    print Matrix
+    print "** ranked_list"
+    print RANKED_LIST
+    print "****"
     return RANKED_LIST
     # now we need to reduce the features and get a single ranked list
 
@@ -419,6 +422,7 @@ def main():
     data = fb.get()
     choice_list = list()
     choice_dict = dict()
+
     for key in data.keys():
         if(data[key]['nodetype'] == "member" or data[key]['nodetype'] == "host"):
             food = data[key]['food']

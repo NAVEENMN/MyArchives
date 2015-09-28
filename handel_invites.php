@@ -29,6 +29,7 @@ if($operation == "get_list"){
 if($operation == "update"){
 
 	mysql_query("UPDATE accounts SET `INVITES`='$invite_data' WHERE USERID='$user_id'") or die(mysql_error());
+	$output = shell_exec('python manage_invites_fb.py '.$to_fb_id.' '.$invite_data['event_reference']);
 	echo "updated";
 }
 
