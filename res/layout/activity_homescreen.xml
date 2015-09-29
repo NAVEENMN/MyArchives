@@ -50,12 +50,6 @@
             android:contentDescription="@string/desc" />
                 <!-- View #2 -->
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@drawable/homefour"
-            android:contentDescription="@string/desc" />
     </ViewFlipper>
 
     <RelativeLayout

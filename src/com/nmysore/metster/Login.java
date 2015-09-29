@@ -795,13 +795,7 @@ public class Login extends FragmentActivity {
 							System.out
 									.println("you are the host and you dropped it");
 
-						}
-
-						if (commondata.event_information.eventID.contains(arg0
-								.getName())) { // case 1
-							// this is a event you have joined and the host just
-							// dropped it
-							// clear cache and firebase
+						} else { // joined event
 
 							drop_a_event(commondata.event_information.eventID);
 
@@ -2020,35 +2014,18 @@ public class Login extends FragmentActivity {
 				"https://met-ster.firebaseio.com/");
 		String frt = strBuilder.toString();
 		final Firebase ft = new Firebase(frt);
-		
-		
-        ft.child(commondata.facebook_details.facebook).child("hosted").addListenerForSingleValueEvent(new ValueEventListener() {
-			
-			@Override
-			public void onDataChange(DataSnapshot arg0) {
-				// TODO Auto-generated method stub
-				Iterator<DataSnapshot> hosted_events = arg0.getChildren().iterator();
-				
-				// cache a copy from firebase to local memory and remove the 
-				commondata.user_information.hosted_events_in_fb.clear();
-				while(hosted_events.hasNext()){
-					String evnt = hosted_events.next().getValue().toString();
-					if(!evnt.contains(event_to_delete)){
-						commondata.user_information.hosted_events_in_fb.add(evnt);
-					}
-				}
-						
-				Set<String> to_fb = new HashSet<String>(commondata.user_information.hosted_events_in_fb);
-				ft.child(commondata.facebook_details.facebook).child("hosted").setValue(to_fb); // ?
-			
-			}
-			
-			@Override
-			public void onCancelled(FirebaseError arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+	System.out.println("1");
+	Map<String, String> node = commondata.event_page.hosted.get(event_to_delete);
+	System.out.println("2");
+	String id = node.get("fb_id");
+	System.out.println("3");
+	ft.child(commondata.facebook_details.facebook).child("hosted").child(id).removeValue();
+	commondata.event_page.hosted.remove(node.get("event_reference"));
+	display_events();
+	Intent intent = new Intent(Login.this, Login.class);
+	System.out.println("refresh");
+	startActivity(intent);
+	finish();
 		
 	}
 	
@@ -2230,7 +2207,7 @@ public class Login extends FragmentActivity {
 					/*
 					 * while existing remove firebase listners
 					 */
-					// remove_firebase_listners();
+					 remove_firebase_listners();
 				} catch (Exception e) {
 					System.out.println("no fb ref");
 				}
@@ -2302,135 +2279,6 @@ public class Login extends FragmentActivity {
 
 	}
 
-	/*
-	 * name : display_place
-	 * 
-	 * @params : null
-	 * 
-	 * @desp : this function displays the place details in a list view.
-	 */
-	public void display_place(String refdb) {
-		System.out.println("key: " + refdb);
-		final place_details node = commondata.places_found.place_to_map
-				.get(refdb);
-		final Dialog dialog = new Dialog(Login.this);
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		// dialog.setCancelable(false);
-		dialog.getWindow().setBackgroundDrawable(
-				new ColorDrawable(android.graphics.Color.TRANSPARENT));
-		dialog.setContentView(R.layout.custom_view_place);
-		dialog.show();
-
-		TextView title = (TextView) dialog
-				.findViewById(R.id.place_to_map_title);
-		title.setText(node.place_name);
-
-		TextView maptypes = (TextView) dialog.findViewById(R.id.mapplacetype);
-		maptypes.setText(node.types);
-
-		TextView mapaddress = (TextView) dialog
-				.findViewById(R.id.mapplaceaddress);
-		mapaddress.setText(node.address);
-
-		System.out.println("address is" + node.address);
-		RatingBar maprat = (RatingBar) dialog
-				.findViewById(R.id.mapplaceratings);
-		if (node.rating != null) {
-			maprat.setRating(Float.parseFloat(node.rating.toString()));
-		}
-
-		ImageButton button1 = (ImageButton) dialog
-				.findViewById(R.id.viewplace_upvote);
-		ImageButton button2 = (ImageButton) dialog
-				.findViewById(R.id.viewplace_ignore);
-
-		button1.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				System.out.println("upvote");
-
-				try {
-
-					final String place_name = node.place_name;
-
-					String[] parts = commondata.event_information.eventID
-							.split("-->");
-					System.out.println("to split" + parts[0]); // come here
-
-					StringBuilder strBuilder = new StringBuilder(
-							"https://met-ster-event.firebaseio.com/");
-					strBuilder.append(parts[0]);
-					String frt = strBuilder.toString();
-					final Firebase ft = new Firebase(frt);
-
-					try {
-						ft.child(commondata.event_information.eventID)
-								.child("rest--" + place_name.replace(".", ""))
-								.child("votes")
-								.addListenerForSingleValueEvent(
-										new ValueEventListener() {
-
-											@Override
-											public void onDataChange(
-													DataSnapshot arg0) {
-												// TODO Auto-generated method
-												// stub
-												if (arg0.getValue() != null) {
-													String list = arg0
-															.getValue()
-															.toString();
-
-													list = list
-															+ "--"
-															+ commondata.facebook_details.facebook;
-													ft.child(
-															commondata.event_information.eventID)
-															.child("rest--"
-																	+ place_name
-																			.replace(
-																					".",
-																					""))
-															.child("votes")
-															.setValue(list);
-
-													toast_info("voted up");
-												}
-											}
-
-											@Override
-											public void onCancelled(
-													FirebaseError arg0) {
-												// TODO Auto-generated method
-												// stub
-
-											}
-										});
-					} catch (Exception e) {
-						System.out.println("no child");
-					}
-					get_votes(); // update votes
-					next_place();
-
-				} catch (Exception e) {
-					System.out.println("We are aware that people has no vote");
-				}
-
-			}
-
-		});
-
-		button2.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				System.out.println("dismiss");
-				dialog.dismiss();
-			}
-
-		});
-
-	}
 
 	/*
 	 * name : on_invite_declined
