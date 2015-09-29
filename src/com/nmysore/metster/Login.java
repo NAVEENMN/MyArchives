@@ -14,7 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -40,9 +39,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -1653,6 +1651,11 @@ public class Login extends FragmentActivity {
 					0, decodedString.length);
 			ImageButton imageButton = (ImageButton) findViewById(R.id.ProfileImage);
 			imageButton.setImageBitmap(decodedByte);
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			decodedByte.compress(CompressFormat.JPEG, 90, os);
+			byte[] array = os.toByteArray();
+			Bitmap image = BitmapFactory.decodeByteArray(array, 0, array.length);
+			//postData("http://52.8.173.36/metster/save_image.php",commondata.facebook_details.facebook,);//save image on server
 		}
 		// ----------- Section Maps
 		GoogleMap map = ((MapFragment) getFragmentManager().findFragmentById(
@@ -1712,7 +1715,7 @@ public class Login extends FragmentActivity {
 					80, 80); // size of button in dp
 			params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,
 					RelativeLayout.TRUE);
-			params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,
+			params.addRule(RelativeLayout.ALIGN_PARENT_TOP,
 					RelativeLayout.TRUE);
 			params.setMargins(0, 0, 0, 0);
 			btnMyLocation.setLayoutParams(params);
@@ -2158,6 +2161,21 @@ public class Login extends FragmentActivity {
 			ll.setBackgroundColor(Color.parseColor("#2E9AFE"));
 			locationManager.requestLocationUpdates(
 					LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+			String[] parts = commondata.event_information.eventID
+					.split("-->");
+			System.out.println("to split" + parts[0]); // come here
+
+			StringBuilder strBuilder = new StringBuilder(
+					"https://met-ster-event.firebaseio.com/");
+			strBuilder.append(parts[0]);
+			String frt = strBuilder.toString();
+			final Firebase ft = new Firebase(frt);
+			ft.child(commondata.event_information.eventID).child(commondata.facebook_details.facebook)
+			.child("Latitude").setValue(commondata.user_information.latitude);
+			ft.child(commondata.event_information.eventID).child(commondata.facebook_details.facebook)
+			.child("Longitude").setValue(commondata.user_information.longitude);
+			
+			
 		}
 		System.out.println("status: " + listnerflag.toString());
 	}
@@ -3818,7 +3836,7 @@ public class Login extends FragmentActivity {
 							} else {
 								
 									new YelpImageDownloaderTask(holder.icon)
-									.execute(url);
+									.execute(image_refrence);
 								
 							}
 						
@@ -3863,13 +3881,14 @@ public class Login extends FragmentActivity {
 			public void onDataChange(DataSnapshot arg0) {
 				// TODO Auto-generated method stub
 				String child = "rest--" + node.place_name.replace(".", "");
-				
+				System.out.println("might crash here before");
 				if(commondata.choice.contains("movies")){
 					child = "movies--" + node.place_name.replace(".", "");
 				} else  {
 					child = "rest--" + node.place_name.replace(".", "");
 				}
 				
+				System.out.println("might crash here");
 				if(arg0.hasChild(child)){
 					// do nothing 
 					Toast.makeText(getApplicationContext(), "Exists to map", Toast.LENGTH_SHORT).show();
@@ -4428,6 +4447,7 @@ public class Login extends FragmentActivity {
 		protected void onPreExecute() {
 
 			// toast_info("Exploring...");
+			commondata.server_res.server_says.clear();
 		}
 
 		@Override
@@ -4614,18 +4634,17 @@ public class Login extends FragmentActivity {
 
 				String list;
 				System.out.println("posting for" + choice);
-				if (commondata.user_information.countrycode.contains("IN")) {
-					commondata.choice = choice;
-					new post_req().execute(
-							"http://52.8.173.36/metster/exe_google.php",
-							eventid, choice, Integer.toString(keys.size()));
-					
-				} else {
+				//commondata.user_information.countrycode = "IN";
+				if(Arrays.asList(yelp_countries).contains(commondata.user_information.countrycode)){ // yelp
 					commondata.choice = choice;
 					new post_req().execute(
 							"http://52.8.173.36/metster/exe_yelp.php", eventid,
 							choice, Integer.toString(keys.size()));
-					
+				} else { // non yelp
+					commondata.choice = choice;
+					new post_req().execute(
+							"http://52.8.173.36/metster/exe_google.php",
+							eventid, choice, Integer.toString(keys.size()));
 				}
 			}
 

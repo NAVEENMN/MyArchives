@@ -29,6 +29,7 @@ public class Chatlayer extends ListActivity {
     private static final String FIREBASE_URL = "https://metster-chat.firebaseio.com/" +  commondata.event_information.eventID +"/";
 
     private String mUsername;
+    private String mUserid;
     private Firebase mFirebaseRef;
     private ValueEventListener mConnectedListener;
     private ChatListAdapter mChatListAdapter;
@@ -119,6 +120,7 @@ public class Chatlayer extends ListActivity {
 
     private void setupUsername() {
         mUsername = commondata.facebook_details.name;
+        mUserid = commondata.facebook_details.facebook;
     }
 
     private void sendMessage() {
@@ -131,7 +133,7 @@ public class Chatlayer extends ListActivity {
         if (!input.equals("")) {
             // Create our 'model', a Chat object
         	input = "  " + input + "  "; // adding whitespace to fit inside chat cloud
-            Chat chat = new Chat(input, mUsername);
+            Chat chat = new Chat(input, mUsername, mUserid);
             // Create a new, auto-generated child of that chat location, and save our chat data there
             mFirebaseRef.push().setValue(chat);
             inputText.setText("");

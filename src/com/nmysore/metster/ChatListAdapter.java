@@ -47,12 +47,17 @@ public class ChatListAdapter extends FirebaseListAdapter<Chat> {
     protected void populateView(View view, Chat chat) {
         // Map a Chat object to an entry in our listview
         String author = chat.getAuthor();
+        String id = chat.getid();
         TextView authorText = (TextView) view.findViewById(R.id.author);
         authorText.setText(author);
         
         ImageView authorImage = (ImageView) view.findViewById(R.id.ChatImage);
-        Bitmap image = commondata.lazyload.image_ref.get(commondata.facebook_details.facebook);
+        try{
+        Bitmap image = commondata.lazyload.image_ref.get(id);
         authorImage.setImageBitmap(image);
+        } catch (Exception e){
+        	System.out.println("no image error "+ e );
+        }
    
         TextView messageText = (TextView) view.findViewById(R.id.message);
         messageText.setTypeface(tf);
