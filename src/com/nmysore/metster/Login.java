@@ -530,6 +530,7 @@ public class Login extends FragmentActivity {
 		Firebase your_hosted_events = newev.child("hosted");
 		Firebase your_joined_events = newev.child("joined");
 		Firebase your_invites_events = newev.child("invites");
+		Firebase your_invites_notification = newev.child("notifications");
 		
 		
 		your_hosted_events.addChildEventListener(new ChildEventListener() {
@@ -651,7 +652,56 @@ public class Login extends FragmentActivity {
 				
 			}
 		});
+			
+		your_invites_notification.addChildEventListener(new ChildEventListener() {
+			
+			@Override
+			public void onChildRemoved(DataSnapshot arg0) {
+				// TODO Auto-generated method stub
 				
+			}
+			
+			@Override
+			public void onChildMoved(DataSnapshot arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onChildChanged(DataSnapshot arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onChildAdded(DataSnapshot arg0, String arg1) {
+				// TODO Auto-generated method stub
+			System.out.println("messgse" + arg0.getValue().toString());	
+			final Dialog dialog = new Dialog(Login.this);
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			// dialog.setCancelable(false);
+			dialog.getWindow().setBackgroundDrawable(
+					new ColorDrawable(android.graphics.Color.TRANSPARENT));
+			dialog.setContentView(R.layout.noification);
+			dialog.show();
+			
+			
+			final TextView inputText = (TextView) dialog
+					.findViewById(R.id.message_notification);
+			Typeface tf = Typeface.createFromAsset(getAssets(),
+					"fonts/OpenSansLight.ttf");
+			inputText.setTypeface(tf);
+			inputText.setTextColor(Color.parseColor("#819FF7"));
+			inputText.setText(arg0.getValue().toString());
+			
+			}
+			
+			@Override
+			public void onCancelled(FirebaseError arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 	/*
