@@ -539,8 +539,8 @@ public class Login extends FragmentActivity {
 				// TODO Auto-generated method stub
 				Map<String, String> id = (Map<String, String>) arg0.getValue();
 				id.put("fb_id", arg0.getName());
-				System.out.println("hosted event from event page " + id.get("event_name"));
-				commondata.event_page.hosted.put(id.get("event_reference"), id);
+				String event_to_del = arg0.child("event_reference").getValue().toString();
+				commondata.event_page.hosted.remove(event_to_del);
 				display_events();
 			}
 			
