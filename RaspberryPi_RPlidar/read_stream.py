@@ -3,7 +3,7 @@ file_name = "points.txt"
 f = open(file_name, 'w')
 
 def main():
-	ser = serial.Serial('/dev/ttyACM0', 9600)
+	ser = serial.Serial('/dev/ttyACM0', 115200)
 	counter = 0
 	while counter < 1000:
 		dat = ser.readline()
