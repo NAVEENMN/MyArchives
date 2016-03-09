@@ -50,6 +50,7 @@ void loop() {
     Serial.println(data);
     Serial.println("");
     
+    
   } else {
     analogWrite(RPLIDAR_MOTOR, 0); //stop the rplidar motor
     
