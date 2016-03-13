@@ -5,7 +5,7 @@ f = open(file_name, 'w')
 def main():
 	ser = serial.Serial('/dev/ttyACM0', 115200)
 	counter = 0
-	while counter < 1000:
+	while counter < 10000:
 		dat = ser.readline()
 		f.write(dat+'\n')
 		counter = counter + 1
