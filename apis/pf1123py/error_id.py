@@ -1,0 +1,7 @@
+ERRORS = dict()
+#1001 to 10010 accounts
+ERRORS[1] = "M_OK"
+ERRORS[0] = "M_NOT_OK"
+ERRORS[10001] = "USER_EXISTS"
+#100011 to 100020 db query errors
+ERRORS[100011] = "INVALID_INPUTS"
