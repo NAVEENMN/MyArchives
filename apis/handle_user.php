@@ -19,7 +19,7 @@ $operation = $_POST['operation'];
 $key = $_POST['key'];
 $payload = json_encode($_POST['payload']);
 if($operation == "add"){
-    passthru('/usr/bin/python2.7 /var/www/html/metpi/pf1123py/ntp_handle_user.py add ' . $payload);
+    passthru('/usr/bin/python2.7 /var/www/html/metster/apis/pf1123py/ntp_handle_user.py add ' . $payload);
     $output = ob_get_clean();
     echo $output;
 }

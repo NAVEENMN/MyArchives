@@ -9,24 +9,14 @@ def main():
         operation = sys.argv[1]
         payload = sys.argv[2]
         if operation == "add":
-                status, minfo = df.frame_data("ADB", payload)
-		print status, minfo
+                minfo = df.get_data(payload)
+                status = df.check_add_params(minfo) # check if we have correct json
+		print status
                 if ERRORS[status] == "M_OK":
-                        status, minfo = df.frame_data("ADB", payload)
-			if status == 1:
-                        	df.insert_to_db(minfo)
-			else :
-				print "unable to insert"
+                        minfo = df.get_data(payload)
+                        df.insert_to_db(minfo)
                 else:
                         print ERRORS[status]
-			df.m_log(0,"main", "invalid inputs")
-		df.show_db("accounts")
+			df.m_log("main: " + ERRORS[status])
 if __name__ == "__main__":
         main()
-
-
-
-
-
-
-
