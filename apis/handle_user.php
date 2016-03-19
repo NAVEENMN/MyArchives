@@ -18,10 +18,7 @@ include 'keys.php';
 $operation = $_POST['operation'];
 $key = $_POST['key'];
 $payload = json_encode($_POST['payload']);
-if($operation == "add"){
-    passthru('/usr/bin/python2.7 /var/www/html/metster/apis/pf1123py/ntp_handle_user.py add ' . $payload);
-    $output = ob_get_clean();
-    echo $output;
-}
-
+passthru('/usr/bin/python2.7 /var/www/html/metster/apis/pf1123py/ntp_handle_user.py '. $operation.' '. $payload);
+$output = ob_get_clean();
+echo $output;
 ?>
