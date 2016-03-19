@@ -16,8 +16,10 @@ def create_payload(rid):
                 data["language"] = "English"
 		data["genre"] = "action, adventure, sci-fi"
 		data["year"] = "2008"
-	if rid == 111002:
-		data["email"] = "pra1991@gmail.com"
+	if rid == 111002:#find in account
+		data["query"] = raw_input("enter query: ")
+	if rid == 121002:#find in movies
+		data["query"] = raw_input("enter query: ")
 	return data
 
 def main():
@@ -31,7 +33,11 @@ def main():
 			rid = 121000
 		data = create_payload(rid)
 	if oper == "find":
-		rid = 111002
+		rid = 0
+		if tid == "1":
+			rid = 111002
+		if tid == "2":
+			rid = 121002
 		data = create_payload(rid)
 	#-----
 	#rid = 111000 # insert mongo account 

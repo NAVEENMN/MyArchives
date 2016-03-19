@@ -120,22 +120,29 @@ def show_db(db_name):
         	for document in cursor:
                 	print(document)
 
-def find_db(db_name, query):
-	status = 100015
-	if db_name == "ADB":
-		hobj = hashlib.md5(query)
-		mid = hobj.hexdigest()
+def find_db(tb_name, query):
+	tbls = ["ADB", "MOV"]
+	if tb_name not in tbls:
+		status = 100015 # INVALID_TABLE
+		return status, None
+	
+	hobj = hashlib.md5(query)
+	mid = hobj.hexdigest()
+	cursor = None
+	if tb_name == "ADB":
 		cursor = db.accounts.find({"mid": mid})
-		i = 0
-		data = list()
-		for document in cursor:
-			data.append(document)
-			i = i+1
-		if i == 0:
-			status = 100014
-			data = None
-		else:
-			status = 1
+	if tb_name == "MOV":
+		cursor = db.movies.find({"mid": mid})
+	i = 0
+	data = list()
+	for document in cursor:
+		data.append(document)
+		i = i+1
+	if i == 0:
+		status = 100014
+		data = None
+	else:
+		status = 1
 	return status, data 
 
 

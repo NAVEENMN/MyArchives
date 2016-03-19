@@ -22,7 +22,6 @@ def frame_output(rid, status, reqdes, msg, error):
 	out["response"] = msg
 	return out
 	
-
 def mongo_db_operations(did, tid, rid, payload):
 	response = None
 	if did == "mongo": #mongo
@@ -41,8 +40,8 @@ def mongo_db_operations(did, tid, rid, payload):
 		if rid == 1002:
 			response = frame_output(rid, "success", rid, str(payload), "none")
 			data = json.loads(payload)
-			email= data['email']
-			status, data = df.find_db(tid,email)
+			q= data['query']
+			status, data = df.find_db(tid,q)
 			if status == 1:
 				response = frame_output(rid, "success", r_id[rid], data, ERRORS[status])
 			else:
