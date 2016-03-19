@@ -60,14 +60,27 @@ def frame_data(db_name, payload):
 	status = 1
         return status, dat
 
-def insert_to_db(datatodb):
-	key = datatodb.keys()
-	print key[0]
-        try:
-                result = db.accounts.insert_one(datatodb)
-                print result
-        except ValueError as e:
-                print e
+def insert_to_db(db_name, datatodb):
+	status = 1 # M_OK 
+	if db_name == "ADB":
+		mid = datatodb["mid"]
+		#check if duplicate
+		cursor = db.accounts.find({"mid": mid})
+		i = 0
+		for document in cursor:
+    			i = i + 1
+		if i == 0: # ok to insert
+        		try:
+                		result = str(db.accounts.insert_one(datatodb))
+				if "InsertOneResult" in result:
+					status = 1 # M_OK
+				else:
+					status = 100012
+        		except ValueError as e:
+				status = 100012 # INSERT_FAILED
+		else:
+			status =  100013 # DUPLICATE_ENTRY
+	return status
 
 def show_db(collections):
         print "in col: " + collections

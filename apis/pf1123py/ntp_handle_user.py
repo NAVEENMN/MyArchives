@@ -9,18 +9,16 @@ def main():
         operation = sys.argv[1]
         payload = sys.argv[2]
         if operation == "add":
-                status, minfo = df.frame_data("ADB", payload)
-		print status, minfo
-                if ERRORS[status] == "M_OK":
-                        status, minfo = df.frame_data("ADB", payload)
+        	status, minfo = df.frame_data("ADB", payload)
+		if status == 1:
+                	status = df.insert_to_db("ADB", minfo)
 			if status == 1:
-                        	df.insert_to_db(minfo)
+				print "inserted"
 			else :
-				print "unable to insert"
-                else:
-                        print ERRORS[status]
-			df.m_log(0,"main", "invalid inputs")
-		df.show_db("accounts")
+				print ERRORS[status]
+		else :
+			print ERRORS[status]
+		#df.show_db("accounts")
 if __name__ == "__main__":
         main()
 
