@@ -1,102 +1,83 @@
-import datetime
+import sys
+import db_functions as df
+import numpy as np
 import json
-import hashlib
-from  error_id import ERRORS
-from pymongo import MongoClient
-
-client = MongoClient('localhost', 27017)
-db = client.Chishiki
-
-add_params_list = ["mid", "name", "email", "fb_id", "dev_id"]
-
-params = dict()
-params["add_params"] = add_params_list
-
-def m_log(sev, func, msg):
-	st = str(datetime.datetime.now())
-	sev_tp = ["notice: ", "warning: ", "critical: "]
-	to_log = st + " "+ sev_tp[sev] + " "+ func +": " + msg
-	print "log", to_log
-	fh = open("/var/www/html/metster/apis/pf1123py/tests/pylog.txt", "w")
-	print "opened"
-	fh.write("test")
-	fh.close()
-	with open("/var/www/html/metster/apis/pf1123py/tests/pylog.txt", 'rb') as f:
-		f.write("test")
-
-#this checks if data key-val is ok
-def check_payload(db_name, payload):
-        status = 1 
-	if db_name == "ADB":
-        	add_list = params["add_params"]
-		data = json.loads(payload) # decode json
-		for key in data:
-                	if key in add_list:
-                        	status = 1
-                	else :
-                        	return 100011
-        return status
-
-#this converts data to mongo compatible
-def frame_data(db_name, payload):
-	status = 1
-	dat = dict()
-	if db_name == "ADB":
-		status = check_payload(db_name, payload)
-		if ERRORS[status] == "M_OK":
-        		try:
-                		data = json.loads(payload) # decode json
-				hobj = hashlib.md5(data["email"])
-                		dat["mid"] = hobj.hexdigest()
-                		dat["name"] = data["name"]
-               			dat["email"] = data["email"]
-                		dat["fb_id"] = data["fb_id"]
-				dat["dev_id"] = data["dev_id"]
-                		data = dat
-				status = 1
-        		except ValueError as e:
-                		print e
-				status = 100011 # INVALID_INPUT
-                		data = "Error"
-		else :
-			return status, dat #payload check error
-        return status, dat
-
-def insert_to_db(db_name, datatodb):
-	status = 1 # M_OK 
-	if db_name == "ADB":
-		mid = datatodb["mid"]
-		#check if duplicate
-		cursor = db.accounts.find({"mid": mid})
-		i = 0
-		for document in cursor:
-    			i = i + 1
-		if i == 0: # ok to insert
-        		try:
-                		result = str(db.accounts.insert_one(datatodb))
-				if "InsertOneResult" in result:
-					status = 1 # M_OK
-				else:
-					status = 100012
-        		except ValueError as e:
-				status = 100012 # INSERT_FAILED
-		else:
-			status =  100013 # DUPLICATE_ENTRY
-	return status
-
-def show_db(collections):
-        print "in col: " + collections
-	if collections == "accounts":	
-        	cursor = db.accounts.find()
-        	for document in cursor:
-                	print(document)
+from error_id import ERRORS
+from req_id import r_id
+from numpy import matrix
+from numpy import array
 
 
+#lookups
+db_type = ["mongo", "firebase"]
+table_ids = ["ADB", "MOV", "EVNT", "food", "restauraunts"]
+#(databasetype, tablem reqid, data)
 
+def frame_output(rid, status, reqdes, msg, error):
+	out = dict()
+	out["request_id"] = rid
+	out["request_des"] = reqdes #later
+	out["error_des"] = error
+	out["status"] = status
+	out["response"] = msg
+	return out
+	
+def mongo_db_operations(did, tid, rid, payload):
+	response = None
+	if did == "mongo": #mongo
+		#------------- insert
+		if rid == 1000:
+        		status, minfo = df.frame_data(tid, payload)
+			if status == 1:
+                		status, res = df.insert_to_db(tid, minfo)
+				if status == 1:
+					response = frame_output(rid, "success", rid, res, "none")
+				else :
+					response = frame_output(rid, "fail", rid, "none", ERRORS[status])
+			else :  # data framing error
+				response = frame_output(rid, "fail", rid, "none", ERRORS[status])
+		#-------------  find
+		if rid == 1002:
+			response = frame_output(rid, "success", rid, str(payload), "none")
+			data = json.loads(payload)
+			q = data['query']
+			status, data = df.find_db(tid,q)
+			if status == 1:
+				response = frame_output(rid, "success", r_id[rid], data, ERRORS[status])
+			else:
+				response = frame_output(rid, "fail", r_id[rid], data, ERRORS[status])
+		
+	if response == None: # not a valid request
+		response = frame_output(rid, "fail", rid, "none", ERRORS[999999])
+		return response
+	else:
+		return response
+def main(op, pay):
+        operation = str(op)
+        payload = pay
+	if operation is None or payload is None:
+		result = frame_output(int(operation), "fail", r_id[int(operation)], "NULL INPUT", ERRORS[999999])
+		return result
 
-
-
-
+	if int(operation) not in r_id:
+		result = frame_output(int(operation), "fail", r_id[int(operation)], "BAD REQUEST", ERRORS[999999])
+		return result
+		
+	db_id = db_type[int(operation[0])-1]
+	if int(operation[0]) > 5 : #api req
+		result = frame_output(int(operation), "success", "", "Mak", ERRORS[999999])
+	else: # table operation
+		table_id = table_ids[int(operation[1])-1]
+		operation_id = int(operation[2:])
+		if db_id == "mongo": #mongo
+			if operation_id >= 1000 and operation_id < 5000: #db_operation
+				result = mongo_db_operations(db_id, table_id, operation_id, payload)
+		if db_id == "firebase": #firebase
+			if operations > 1000 and operations < 5000: #db_operation
+				result = mongo_db_operations(2, table_id, operation, payload)
+	return result
+if __name__ == "__main__":
+        main()
 
 
 

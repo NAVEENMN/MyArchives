@@ -223,8 +223,8 @@ def pull_data_from_firebase(event_id, choice, point):
     return payload
 
 def main():
-    eventid = sys.argv[1]
-    choice = sys.argv[2]
+    eventid = "10103884620845515--event--0"#sys.argv[1]
+    choice = "asian"#sys.argv[2]
     eventid = eventid.replace("--","-->")
     return pull_data_from_firebase(eventid, choice)
 

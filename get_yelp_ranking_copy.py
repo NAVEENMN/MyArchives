@@ -36,6 +36,14 @@ TOKEN = 'LkX6HbwoiGPlPxzP7d9U8My2Zl8K4iMw'
 TOKEN_SECRET = 'KAhDbHSHgoxEuYK9jwvYRW3awmw'
 
 
+#food_cus = ["American","British", "Chinese", "French", "Greek", "Indian", "Italian", "Japanese", "Mediterranean", "Mexican", "Thai", "Vitnamese"]
+other_food = ["icecream", "coffee", "tea", "yogurt", "Hookah", "bars", "nightlife"]
+#movies_gen = ["Action","Animation","Comdey", "Documentary", "Family", "Horror", "Musical", "Romance", "Sport", "War", "Adventure", "Crime", "Drama", "Mystery", "Sci-fi", "Thriller"]
+
+food_cus = ["American","Chinese","Japanese","Mexican" ,"French","Thai", "Indian", "Italian", "Vitnamese","Mediterranean"]
+movies_gen = ["Action", "Animation", "Comedy","Romance","Sci-fi", "Family", "Horror", "Documentary","Adventure","Thriller","War"]
+
+
 def request(host, path, url_params=None):
     url_params = url_params or {}
     url = 'http://{0}{1}?'.format(host, urllib.quote(path.encode('utf8')))
@@ -134,6 +142,8 @@ def query_api(term, location, type):
     if(type == "b"):
         response = searchb(term, location)
         businesses = response.get('businesses')
+ 	types = None
+	address = None
         if not businesses:
             print u'No businesses for {0} in {1} found.'.format(term, location)
             return
@@ -309,11 +319,6 @@ def ranking_base(place_name_list, place_rating_list, place_location, person_loca
 
     # the sorted dict returns a list so we need to clean the data
     RANKED_LIST = reduce_features(sorted_ranked, ranked_ratings)
-    print "** matrix"
-    print Matrix
-    print "** ranked_list"
-    print RANKED_LIST
-    print "****"
     return RANKED_LIST
     # now we need to reduce the features and get a single ranked list
 
@@ -408,8 +413,8 @@ def ranking_based_on_convience(payload, people):
 
 
 def main():
-    eventid = sys.argv[1]
-    choice = sys.argv[2]
+    eventid = "10103884620845515--event--0"#sys.argv[1]
+    choice = "indian"#sys.argv[2]
     eventid = eventid.replace("--","-->")
  
     '''
@@ -422,7 +427,6 @@ def main():
     data = fb.get()
     choice_list = list()
     choice_dict = dict()
-
     for key in data.keys():
         if(data[key]['nodetype'] == "member" or data[key]['nodetype'] == "host"):
             food = data[key]['food']

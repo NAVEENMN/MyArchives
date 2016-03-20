@@ -11,4 +11,6 @@ r_id[1002] = "find"
 r_id[1003] = "edit"
 r_id[1004] = "show_all"
 #-----------
+r_id[9000] = "find_food"
+r_id[9001] = "find_movies"
 #-----------

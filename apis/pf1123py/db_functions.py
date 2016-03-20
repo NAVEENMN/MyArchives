@@ -7,12 +7,13 @@ from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
 
-add_params_list = ["mid", "name", "email", "fb_id", "dev_id"]
-mov_prams_list = ["mov_id", "mov_name", "release_date", "language", "genre", "year"]
-
+add_params_list = ["mid", "name", "email", "fb_id", "dev_id", "invites", "hosted", "joined","food_pref","moviepref"]
+mov_prams_list = ["mid","mov_id", "mov_name", "release_date", "language", "genre", "year"]
+evnt_prams_list = ["mid","event_name", "event_date", "event_time", "event_notes", "event_host", "event_members","host_email"]
 params = dict()
 params["add_params"] = add_params_list
 params["mov_params"] = mov_prams_list
+params["evnt_params"] = evnt_prams_list
 
 def m_log(sev, func, msg):
 	st = str(datetime.datetime.now())
@@ -33,6 +34,8 @@ def check_payload(tb_name, payload):
         	add_list = params["add_params"]
 	if tb_name == "MOV":
 		add_list = params["mov_params"]
+        if tb_name == "EVNT":
+                add_list = params["evnt_params"]
 		
         data = json.loads(payload) # decode json
         for key in data:
@@ -79,10 +82,52 @@ def frame_data(tb_name, payload):
 				dat = "Error"
 		else:
 			return status, dat
+
+	if tb_name == "EVNT":
+		status = check_payload(tb_name, payload)
+		if ERRORS[status] == "M_OK":
+			data = json.loads(payload) # decode json
+			email = data["host_email"]
+			hobj = hashlib.md5(email)
+			umid = hobj.hexdigest()
+			i = 0
+			cursor = db.accounts.find({"mid": umid})
+			for document in cursor:
+				i = i + 1
+			if i == 0: # user not exist
+				status = 100016
+			else :
+				cursor = db.events.find({"host": umid}) #number of events hosted by host
+				i = 0
+				evid = 0
+				evid_list = list()
+				for document in cursor:
+					eventid = document['mid']
+					eid = eventid.split("--")
+					evid_list.append(int(eid[2]))
+				evid_list.sort()
+				evid = len(evid_list) # number of event gives new event id
+				for x in range (0, len(evid_list)): # any evid missing
+					if x not in evid_list:
+						evid = x
+				#this evid doesnt exist so we can use it
+				cursor = db.accounts.find({"mid": umid})
+				for document in cursor:
+					fb_id =  document["fb_id"]
+					event_mid = str(fb_id)+"--event--"+str(evid)
+					dat["mid"] = event_mid
+				dat["host"] = umid
+				for key in data:
+					dat[key] = data[key]
+				status = 1
+		else:
+			return status, dat
+	
 	return status, dat
 
 def insert_to_db(db_name, datatodb):
-	tbls = ["ADB", "MOV"]
+	tbls = ["ADB", "MOV", "EVNT"]
+	res = None
 	if db_name not in tbls:
 		status = 100015 # INVALID_TABLE 
 		return status
@@ -94,24 +139,41 @@ def insert_to_db(db_name, datatodb):
 		cursor = db.accounts.find({"mid": mid})
 	if db_name == "MOV":
 		cursor = db.movies.find({"mid": mid})
+	if db_name == "EVNT":
+		cursor = db.events.find({"mid": mid})
 	i = 0
 	for document in cursor:
     		i = i + 1
+		print document['mid']
 	if i == 0: # ok to insert
         	try:
 			if db_name == "ADB":
                 		result = str(db.accounts.insert_one(datatodb))
 			if db_name == "MOV":
 				result = str(db.movies.insert_one(datatodb))
+			if db_name == "EVNT":
+				result = str(db.events.insert_one(datatodb))
+				# we also need to update this in accounts table
+				res = mid
 			if "InsertOneResult" in result:
 				status = 1 # M_OK
 			else:
 				status = 100012
+
+			# additonal work for some tables
+			if status == 1 and db_name == "EVNT":
+				#update this event in accounts table
+				events = list()
+				cursor = db.events.find({"host": datatodb['host']})
+				for document in cursor:
+					events.append(document['mid'])
+				db.accounts.update_one({"mid": datatodb['host']},{"$set": {"hosted":events}})
+					
         	except ValueError as e:
 			status = 100012 # INSERT_FAILED
 	else:
 		status =  100013 # DUPLICATE_ENTRY
-	return status
+	return status, res
 
 def show_db(db_name):
         print "in col: " + collections

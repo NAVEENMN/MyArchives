@@ -5,10 +5,15 @@ import sys
 def create_payload(rid):
 	data = dict()
 	if rid == 111000: #insert to account
-		data["dev_id"] = "12er34"
-		data["email"] = "pramn1991@gmail.com"
-		data["fb_id"] = "3445ee"
-		data["name"] = "paveen"
+		data["dev_id"] = "1234"
+		data["email"] = raw_input("email: ")
+		data["fb_id"] = raw_input("fb_id: ")
+		data["name"] =  raw_input("name: ")
+		data["invites"] = ["none"]
+		data["hosted"] = ["none"]
+		data["joined"] = ["none"]
+		data["food_pref"] = "abcdejghij"
+		data["moviepref"] = "abcdefghijk"
 	if rid == 121000:# insert to movies
                 data["mov_id"] = "1234"
                 data["mov_name"] = "Iron Man"
@@ -25,6 +30,7 @@ def create_payload(rid):
 def main():
 	oper = sys.argv[1]
 	tid = sys.argv[2]
+	data = None
 	if oper == "insert":
 		rid = 0
 		if tid == "1":

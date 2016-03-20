@@ -10,7 +10,7 @@ from numpy import array
 
 #lookups
 db_type = ["mongo", "firebase"]
-table_ids = ["ADB", "MOV", "theater", "food", "restauraunts"]
+table_ids = ["ADB", "MOV", "EVNT", "food", "restauraunts"]
 #(databasetype, tablem reqid, data)
 
 def frame_output(rid, status, reqdes, msg, error):
@@ -29,18 +29,18 @@ def mongo_db_operations(did, tid, rid, payload):
 		if rid == 1000:
         		status, minfo = df.frame_data(tid, payload)
 			if status == 1:
-                		status = df.insert_to_db(tid, minfo)
+                		status, res = df.insert_to_db(tid, minfo)
 				if status == 1:
-					response = frame_output(rid, "success", rid, "none", "none")
+					response = frame_output(rid, "success", rid, res, "none")
 				else :
 					response = frame_output(rid, "fail", rid, "none", ERRORS[status])
-			else :
-				print ERRORS[status]
+			else :  # data framing error
+				response = frame_output(rid, "fail", rid, "none", ERRORS[status])
 		#-------------  find
 		if rid == 1002:
 			response = frame_output(rid, "success", rid, str(payload), "none")
 			data = json.loads(payload)
-			q= data['query']
+			q = data['query']
 			status, data = df.find_db(tid,q)
 			if status == 1:
 				response = frame_output(rid, "success", r_id[rid], data, ERRORS[status])
@@ -49,22 +49,43 @@ def mongo_db_operations(did, tid, rid, payload):
 		
 	if response == None: # not a valid request
 		response = frame_output(rid, "fail", rid, "none", ERRORS[999999])
-		print response
+		return response
 	else:
-		print response
-def main():
-        operation = sys.argv[1]
-        payload = sys.argv[2]
-	db_id = db_type[int(operation[0])-1]
-	table_id = table_ids[int(operation[1])-1]
-	operation_id = int(operation[2:])
-	if db_id == "mongo": #mongo
-		if operation_id >= 1000 and operation_id < 5000: #db_operation
-			mongo_db_operations(db_id, table_id, operation_id, payload)
-	if db_id == "firebase": #firebase
-		if operations > 1000 and operations < 5000: #db_operation
-			mongo_db_operations(2, table_id, operation, payload)
+		return response
 
+
+
+def main(op, pay):
+	if op is None or pay is None:
+		result = frame_output(int(op), "fail", "", "NULL INPUT", ERRORS[999999])
+		return result
+	else:
+		if len(str(op)) < 3:
+			result = frame_output(int(op), "fail", "", "BAD REQUEST", ERRORS[999999])
+			return result
+
+		operation = str(op)
+		operid = int(operation[2:])
+		payload = pay
+
+		if operid not in r_id:
+			result = frame_output(int(operation), "fail", r_id[operid], "BAD REQUEST", ERRORS[999999])
+			return result
+
+		if int(operation) > 5000: #api
+			payload = pay
+			result = frame_output(int(operation), "success", payload, "Mak", ERRORS[999999])
+		else: #db request
+			db_id = db_type[int(operation[0])-1]
+			table_id = table_ids[int(operation[1])-1]
+			operation_id = int(operation[2:])
+			if db_id == "mongo": #mongo
+				if operation_id >= 1000 and operation_id < 5000: #db_operation
+					result = mongo_db_operations(db_id, table_id, operation_id, payload)
+			if db_id == "firebase": #firebase
+				if operations > 1000 and operations < 5000: #db_operation
+					result = mongo_db_operations(2, table_id, operation, payload)
+	return result
 if __name__ == "__main__":
         main()
 
