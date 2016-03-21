@@ -3,6 +3,7 @@ import json
 import hashlib
 from  error_id import ERRORS
 from pymongo import MongoClient
+import get_yelp_ranking_copy as yr
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
@@ -207,7 +208,19 @@ def find_db(tb_name, query):
 		status = 1
 	return status, data 
 
-
+def find_food(payload):
+	status = 100014
+	data = None
+	j_data = json.loads(payload)
+	event_id = j_data["event_id"] #check if this event exist
+	query = j_data["query"]
+	if db.events.find({"mid":event_id}).count() > 0:
+		status = 1
+		data = yr.main(db, query, event_id)
+	else :
+		status = 100014
+		data = None
+	return status, data
 
 
 

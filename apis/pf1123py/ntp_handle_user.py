@@ -53,9 +53,19 @@ def mongo_db_operations(did, tid, rid, payload):
 	else:
 		return response
 
-
+def api_req_operations(reqid, payload):
+	res = None
+	if reqid == 9000:
+		status, response = df.find_food(payload)
+		if status == 1:
+			res = frame_output(reqid, "success", "", response, "none")
+		else :
+			res = frame_output(reqid, "fail", "", "none", ERRORS[status])
+	return res
+	
 
 def main(op, pay):
+	result = None
 	if op is None or pay is None:
 		result = frame_output(int(op), "fail", "", "NULL INPUT", ERRORS[999999])
 		return result
@@ -71,14 +81,14 @@ def main(op, pay):
 		if operid not in r_id:
 			result = frame_output(int(operation), "fail", r_id[operid], "BAD REQUEST", ERRORS[999999])
 			return result
-
-		if int(operation) > 5000: #api
+		if int(operid) > 5000: #api
 			payload = pay
-			result = frame_output(int(operation), "success", payload, "Mak", ERRORS[999999])
+			result = api_req_operations(int(operation[2:]), payload)
 		else: #db request
 			db_id = db_type[int(operation[0])-1]
 			table_id = table_ids[int(operation[1])-1]
 			operation_id = int(operation[2:])
+			print "inserting to "
 			if db_id == "mongo": #mongo
 				if operation_id >= 1000 and operation_id < 5000: #db_operation
 					result = mongo_db_operations(db_id, table_id, operation_id, payload)
