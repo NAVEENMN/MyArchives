@@ -92,6 +92,8 @@ def frame_data(tb_name, payload):
 	if tb_name == "THR":
 		data = json.loads(payload)
 		status = 1
+		hobj = hashlib.md5(data['key'])
+		dat["mid"] = hobj.hexdigest()
 		for key in data:
 			dat[key] = data[key]
 
@@ -138,7 +140,7 @@ def frame_data(tb_name, payload):
 	return status, dat
 
 def insert_to_db(db_name, datatodb):
-	tbls = ["ADB", "MOV", "EVNT"]
+	tbls = ["ADB", "MOV", "EVNT", "THR"]
 	res = None
 	if db_name not in tbls:
 		status = 100015 # INVALID_TABLE 
@@ -153,6 +155,8 @@ def insert_to_db(db_name, datatodb):
 		cursor = db.movies.find({"mid": mid})
 	if db_name == "EVNT":
 		cursor = db.events.find({"mid": mid})
+	if db_name == "THR":
+		cursor = db.theater.find({"mid": mid})
 	i = 0
 	for document in cursor:
     		i = i + 1
@@ -165,6 +169,9 @@ def insert_to_db(db_name, datatodb):
 			if db_name == "EVNT":
 				result = str(db.events.insert_one(datatodb))
 				# we also need to update this in accounts table
+				res = mid
+			if db_name == "THR":
+				result = str(db.theater.insert_one(datatodb))
 				res = mid
 			if "InsertOneResult" in result:
 				status = 1 # M_OK

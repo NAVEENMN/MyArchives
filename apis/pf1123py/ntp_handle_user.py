@@ -30,6 +30,7 @@ def mongo_db_operations(did, tid, rid, payload):
 		if rid == 1000:
         		status, minfo = df.frame_data(tid, payload)
 			if status == 1:
+				print minfo
                 		status, res = df.insert_to_db(tid, minfo)
 				if status == 1:
 					response = frame_output(rid, "success", rid, res, "none")
