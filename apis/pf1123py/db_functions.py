@@ -4,7 +4,6 @@ import hashlib
 from  error_id import ERRORS
 from pymongo import MongoClient
 import get_yelp_ranking_copy as yr
-import urllib2
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
@@ -68,19 +67,15 @@ def frame_data(tb_name, payload):
 		else :
 			return status, dat #payload check error
 	if tb_name == "MOV":
-		status = 1#check_payload(tb_name, payload) #new for url
+		status = check_payload(tb_name, payload)
 		if ERRORS[status] == "M_OK":
 			try:
-				keys = ["Title", "Year", "Rated", "Released", "Runtime", "Genre", "Poster", "imdbRating"]
 				data = json.loads(payload) # decode json
-				url = data['url']
-				jdata = urllib2.urlopen(url).read()
-				data = json.loads(jdata)
- 				hobj = hashlib.md5(data["Title"]+data["Year"])
+				uq = str(data["mov_name"])+str(data["year"])
+				hobj = hashlib.md5(uq)
 				dat["mid"] = hobj.hexdigest()
 				for key in data:
-					if key in keys:
-						dat[key] = data[key]
+					dat[key] = data[key]
 				status = 1
 			except ValueError as e:
 				print e
@@ -88,12 +83,6 @@ def frame_data(tb_name, payload):
 				dat = "Error"
 		else:
 			return status, dat
-
-	if tb_name == "THR":
-		data = json.loads(payload)
-		status = 1
-		for key in data:
-			dat[key] = data[key]
 
 	if tb_name == "EVNT":
 		status = check_payload(tb_name, payload)
@@ -156,6 +145,7 @@ def insert_to_db(db_name, datatodb):
 	i = 0
 	for document in cursor:
     		i = i + 1
+		print document['mid']
 	if i == 0: # ok to insert
         	try:
 			if db_name == "ADB":

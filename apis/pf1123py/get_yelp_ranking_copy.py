@@ -56,7 +56,6 @@ food_lookup["h"] = "Italian"
 food_lookup["i"] = "Vietnamese"
 food_lookup["j"] = "Mediterranean"
 food_lookup["k"] = "British"
-food_lookup["l"] = "Fast Food"
 #---------------
 
 def request(host, path, url_params=None):

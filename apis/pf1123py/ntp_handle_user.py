@@ -10,7 +10,7 @@ from numpy import array
 
 #lookups
 db_type = ["mongo", "firebase"]
-table_ids = ["ADB", "MOV", "EVNT", "THR", "restauraunts"]
+table_ids = ["ADB", "MOV", "EVNT", "food", "restauraunts"]
 #(databasetype, tablem reqid, data)
 
 def frame_output(rid, status, reqdes, msg, error):
@@ -20,11 +20,10 @@ def frame_output(rid, status, reqdes, msg, error):
 	out["error_des"] = error
 	out["status"] = status
 	out["response"] = msg
-	return json.dumps(out)
+	return out
 	
 def mongo_db_operations(did, tid, rid, payload):
 	response = None
-	print payload
 	if did == "mongo": #mongo
 		#------------- insert
 		if rid == 1000:
@@ -89,8 +88,8 @@ def main(op, pay):
 			db_id = db_type[int(operation[0])-1]
 			table_id = table_ids[int(operation[1])-1]
 			operation_id = int(operation[2:])
+			print "inserting to "
 			if db_id == "mongo": #mongo
-				print payload
 				if operation_id >= 1000 and operation_id < 5000: #db_operation
 					result = mongo_db_operations(db_id, table_id, operation_id, payload)
 			if db_id == "firebase": #firebase
