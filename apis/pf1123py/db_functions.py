@@ -5,32 +5,13 @@ from  error_id import ERRORS
 from pymongo import MongoClient
 import get_yelp_ranking_copy as yr
 import urllib2
+from lookups import *
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
 
-add_params_list = ["mid", "name", "email", "fb_id", "dev_id", "invites", "hosted", "joined","food_pref","moviepref"]
-mov_prams_list = ["mid","mov_id", "mov_name", "release_date", "language", "genre", "year"]
-evnt_prams_list = ["mid","event_name", "event_date", "event_time", "event_notes", "event_host", "event_members","host_email"]
-params = dict()
-params["add_params"] = add_params_list
-params["mov_params"] = mov_prams_list
-params["evnt_params"] = evnt_prams_list
-
-def m_log(sev, func, msg):
-	st = str(datetime.datetime.now())
-	sev_tp = ["notice: ", "warning: ", "critical: "]
-	to_log = st + " "+ sev_tp[sev] + " "+ func +": " + msg
-	print "log", to_log
-	fh = open("/var/www/html/metster/apis/pf1123py/tests/pylog.txt", "w")
-	print "opened"
-	fh.write("test")
-	fh.close()
-	with open("/var/www/html/metster/apis/pf1123py/tests/pylog.txt", 'rb') as f:
-		f.write("test")
-
 #this checks if data key-val is ok
-def check_payload(tb_name, payload):
+def check_payload(tb_name, jpayload):
         status = 1 
 	if tb_name == "ADB":
         	add_list = params["add_params"]
@@ -39,7 +20,7 @@ def check_payload(tb_name, payload):
         if tb_name == "EVNT":
                 add_list = params["evnt_params"]
 		
-        data = json.loads(payload) # decode json
+        data = jpayload
         for key in data:
         	if key in add_list:
                 	status = 1
@@ -49,24 +30,31 @@ def check_payload(tb_name, payload):
 
 #this converts data to mongo compatible
 def frame_data(tb_name, payload):
-	status = 100015
+	status = 100015 #"INVALID_TABLE"
 	dat = dict()
+	jpayload = json.loads(payload)
+#-------- INSERT TO ADB B
 	if tb_name == "ADB":
-		status = check_payload(tb_name, payload)
-		if ERRORS[status] == "M_OK":
-        		try:
-                		data = json.loads(payload) # decode json
-				hobj = hashlib.md5(data["email"])
-                		dat["mid"] = hobj.hexdigest()
-                		for key in data:
-					dat[key] = data[key]
-				status = 1
-        		except ValueError as e:
-                		print e
-				status = 100011 # INVALID_INPUT
-                		dat = "Error"
-		else :
-			return status, dat #payload check error
+		# check if data exists if yes... dont frame return error.
+		status = check_payload(tb_name, jpayload)
+		if db.accounts.find({"mid": mid}).count >= 1:
+			return 100013, dat
+		else: 
+			if ERRORS[status] == "M_OK":
+        			try:
+                			data = json.loads(payload) # decode json
+					hobj = hashlib.md5(data["email"])
+                			dat["mid"] = hobj.hexdigest()
+                			for key in data:
+						dat[key] = data[key]
+					status = 1
+        			except ValueError as e:
+                			print e
+					status = 100011 # INVALID_INPUT
+                			dat = "Error"
+			else :
+				return status, dat #payload check error
+#----------- INSERT TO ADB E
 	if tb_name == "MOV":
 		status = 1#check_payload(tb_name, payload) #new for url
 		if ERRORS[status] == "M_OK":
