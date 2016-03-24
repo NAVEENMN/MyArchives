@@ -4,7 +4,7 @@ table_ids = ["ADB", "MOV", "EVNT", "THR", "RES"]
 
 
 add_params_list = ["mid", "name", "email", "fb_id", "dev_id", "invites", "hosted", "joined","food_pref","moviepref"]
-mov_prams_list = ["mid","mov_id", "mov_name", "release_date", "language", "genre", "year"
+mov_prams_list = ["mid","mov_id", "mov_name", "release_date", "language", "genre", "year"]
 evnt_prams_list = ["mid","event_name", "event_date", "event_time", "event_notes", "event_host", "event_members","host_email"]
 
 params = dict()

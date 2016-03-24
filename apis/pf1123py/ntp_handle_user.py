@@ -7,97 +7,77 @@ from req_id import r_id
 from numpy import matrix
 from numpy import array
 from lookups import *
-
+import han_aev as ae
+import han_mov as mt
+import han_api as api
 
 # This funtions frames output in json format
 def frame_output(rid, status, reqdes, msg, error):
 	out = dict()
+	if status == 1:
+		res = "success"
+	else :
+		res = "fail"
 	out["request_id"] = rid
 	out["request_des"] = reqdes #later
 	out["error_des"] = error
-	out["status"] = status
+	out["status"] = res
 	out["response"] = msg
 	return json.dumps(out)
 
-# Handle all mongo operations here
-# 1000 insert
-# 1001 delete
-# 1002 find
-# 1003 update	
-def mongo_db_operations(did, tid, rid, payload):
-	response = None
-	#------------- insert
-	if rid == 1000:
-        	status, minfo = df.frame_data(tid, payload)
-		if status == 1:
-			print minfo
-               		status, res = df.insert_to_db(tid, minfo)
-			if status == 1:
-				response = frame_output(rid, "success", rid, res, "none")
+#-------------------------- INPUT TESTS #perform all tests here
+def test_in(op, pay):
+	status = 1
+	if op is None or pay is None:
+		return 999999 # null in
+	if len(str(op)) < 3: 
+		return  999999 # invalid in
+	if int(op[2:]) not in r_id:
+		return  999999 # invalid op
+	
+	try:
+		data = json.loads(pay)
+		tb_name = table_ids[int(op[1])-1]
+		if tb_name == "ADB":
+			add_list = params["add_params"]
+		if tb_name == "MOV":
+                	add_list = params["mov_params"]
+        	if tb_name == "EVNT":
+                	add_list = params["evnt_params"]
+		for key in data:
+			if key in add_list:
+				status = 1
 			else :
-				response = frame_output(rid, "fail", rid, "none", ERRORS[status])
-		else :  # data framing error
-			response = frame_output(rid, "fail", rid, "none", ERRORS[status])
-	#-------------  find
-	if rid == 1002:
-		response = frame_output(rid, "success", rid, str(payload), "none")
-		data = json.loads(payload)
-		q = data['query']
-		status, data = df.find_db(tid,q)
-		if status == 1:
-			response = frame_output(rid, "success", r_id[rid], data, ERRORS[status])
-		else:
-			response = frame_output(rid, "fail", r_id[rid], data, ERRORS[status])
-	
-	if response == None: # not a valid request
-		response = frame_output(rid, "fail", rid, "none", ERRORS[999999])
-		return response
-	else:
-		return response
+				return  999999	
+	except ValueError as e:
+		return 999999
 
-def api_req_operations(reqid, payload):
-	res = None
-	if reqid == 9000:
-		status, response = df.find_food(payload)
-		if status == 1:
-			res = frame_output(reqid, "success", "", response, "none")
-		else :
-			res = frame_output(reqid, "fail", "", "none", ERRORS[status])
-	return res
-	
+	return status
 
+#--------------------------- MAIN
 def main(op, pay):
 	result = None
-	if op is None or pay is None:
-		result = frame_output(int(op), "fail", "", "NULL INPUT", ERRORS[999999])
-		return result
-	else:
-		if len(str(op)) < 3:
-			result = frame_output(int(op), "fail", "", "BAD REQUEST", ERRORS[999999])
-			return result
-
+	status = test_in(op, pay)
+	if status == 1:
 		operation = str(op)
 		operid = int(operation[2:])
 		payload = pay
-
-		if operid not in r_id:
-			result = frame_output(int(operation), "fail", r_id[operid], "BAD REQUEST", ERRORS[999999])
-			return result
-		if int(operid) > 5000: #api
-			payload = pay
-			result = api_req_operations(int(operation[2:]), payload)
-		else: #db request
-			db_id = db_type[int(operation[0])-1]
+		# do ope
+		if operid > 5000: #api
+			status, result = api.main(operid, payload)
+		else : #mongodb operation
+			# check if its movies or not then move to that
 			table_id = table_ids[int(operation[1])-1]
-			operation_id = int(operation[2:])
-			if db_id == "mongo": #mongo
-				print payload
-				if operation_id >= 1000 and operation_id < 5000: #db_operation
-					result = mongo_db_operations(db_id, table_id, operation_id, payload)
-			if db_id == "firebase": #firebase
-				if operations > 1000 and operations < 5000: #db_operation
-					result = mongo_db_operations(2, table_id, operation, payload)
-	return result
+			if table_id == "MOV" or table_id == "THR":
+				# send to han_mov
+				status, result = mt.main(table_id, operid, payload)
+			if table_id == "EVNT" or table_id == "ADB":
+				# send to db_fun
+				status, result = ae.main(table_id, operid, payload)
+	else:
+		result = None
+	output = frame_output(op, status, op[1], result, ERRORS[status])
+	return output
 
 
 if __name__ == "__main__":
