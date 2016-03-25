@@ -9,7 +9,7 @@ from numpy import array
 from lookups import *
 import han_aev as ae
 import han_mov as mt
-import han_api as api
+import api as api
 
 # This funtions frames output in json format
 def frame_output(rid, status, reqdes, msg, error):
@@ -28,6 +28,8 @@ def frame_output(rid, status, reqdes, msg, error):
 #-------------------------- INPUT TESTS #perform all tests here
 def test_in(op, pay):
 	status = 1
+	if int(op) == 999000:
+		return 1
 	if op is None or pay is None:
 		return 999999 # null in
 	if len(str(op)) < 3: 
@@ -58,6 +60,7 @@ def test_in(op, pay):
 def main(op, pay):
 	result = None
 	status = test_in(op, pay)
+	print status
 	if status == 1:
 		operation = str(op)
 		operid = int(operation[2:])

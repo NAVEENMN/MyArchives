@@ -3,6 +3,8 @@ import hashlib
 from pymongo import MongoClient
 import urllib2
 from lookups import *
+from firebase import Firebase
+FIREBASE_URL = "https://metsterios.firebaseio.com/"
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
@@ -64,9 +66,70 @@ def find_account(jpayload):
 
 
 #------------------------  EVENT OPEARTION
-def insert_event(payload):
-        return "OK"
+def insert_event(jpayload):
+        data = json.loads(jpayload) #unpack
+	hobj = hashlib.md5(data["host_email"])
+	mid = hobj.hexdigest()
+	dat = dict()
+	if db.accounts.find({"mid" : mid}).count() >= 1:
+		#host exist
+		out = db.accounts.find({"mid": mid})
+		for records in out:
+			result = records
+		user_info = result
+		facebook_id = result["fb_id"]
+		# find how many events this host 
+		cursor = db.events.find({"host": mid})
+		# creating a event name
+		i = 0
+		evid = 0
+		evid_list = list()
+		for document in cursor:
+			eventid = document['mid'] #event main id
+			eid = eventid.split("--")
+			evid_list.append(int(eid[2])) # event numbers
+		evid_list.sort()
+		evid = len(evid_list)
+		for x in range (0, len(evid_list)):
+			if x not in evid_list:
+				evid = x
+		#this evid doesnt exist so we can use it
+		event_mid = str(facebook_id) + "--event--"+str(evid)
+		dat["mid"] = event_mid
+		dat["host"] = result["mid"]
+		for key in data:
+			dat[key] = data[key]
+		mem = list()
+		mem.append(dat["host"])
+		dat["members"] = mem
+		result = str(db.events.insert_one(dat))
+		if "InsertOneResult" in result:
+			status = 1
+			result = event_mid
+			#update this event in accounts table
+			events = list()
+			cursor = db.events.find({"host": dat['host']})
+			for document in cursor:
+				events.append(document['mid'])
+			db.accounts.update_one({"mid": dat['host']},{"$set": {"hosted":events}})
+			#update this event to firebase
+			fb_base_url = FIREBASE_URL+"/"+event_mid
+			fb_user_url = fb_base_url +"/users/"+dat['host']
+			fb = Firebase(fb_user_url)
+			to_fb = dict()
+			to_fb["node_name"] = user_info["name"]
+			to_fb["node_type"] = "host"
+			to_fb["latitude"] = user_info["latitude"]
+			to_fb["longitude"] = user_info["longitude"]
+			to_fb["node_visible"] = True
+			fb.put(to_fb)
+			
+	else:
+		status = 100016
+		result = "invalid user"
+	return status, result
 def delete_event(payload):
+	# get all event members and remove events from there accounts
         return "OK"
 def find_event(payload):
         return "OK"
