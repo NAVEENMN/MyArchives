@@ -40,12 +40,15 @@ def test_in(op, pay):
 	try:
 		data = json.loads(pay)
 		tb_name = table_ids[int(op[1])-1]
+		print data, tb_name
 		if tb_name == "ADB":
 			add_list = params["add_params"]
 		if tb_name == "MOV":
                 	add_list = params["mov_params"]
         	if tb_name == "EVNT":
                 	add_list = params["evnt_params"]
+		if tb_name == "THR":
+			add_list = params["thr_params"]
 		for key in data:
 			if key in add_list:
 				status = 1
