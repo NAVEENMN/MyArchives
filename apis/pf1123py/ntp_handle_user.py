@@ -28,7 +28,8 @@ def frame_output(rid, status, reqdes, msg, error):
 #-------------------------- INPUT TESTS #perform all tests here
 def test_in(op, pay):
 	status = 1
-	if int(op) == 999000:
+        api_oper = [999000, 998000]
+	if int(op) in api_oper:
 		return 1
 	if op is None or pay is None:
 		return 999999 # null in
@@ -63,7 +64,7 @@ def test_in(op, pay):
 def main(op, pay):
 	result = None
 	status = test_in(op, pay)
-	print status
+	print status, pay
 	if status == 1:
 		operation = str(op)
 		operid = int(operation[2:])

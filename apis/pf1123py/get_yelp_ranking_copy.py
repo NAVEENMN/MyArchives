@@ -20,6 +20,9 @@ from numpy import *
 from scipy.spatial import *
 from firebase import Firebase
 from collections import OrderedDict
+import math
+import numpy as np
+from numpy import linalg as LA
 
 API_HOST = 'api.yelp.com'
 DEFAULT_TERM = 'dinner'
@@ -407,6 +410,15 @@ def ranking_based_on_convience(payload, people):
     RANKED_LIST = ranking_base(place_name_list, place_rating_list, place_location, person_location)
     return RANKED_LIST
 
+def get_pref_vec(pref):
+    vec = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']
+    val = [0.880797077978, 0.869891525637, 0.8581489351, 0.845534734916, 0.832018385134, 0.817574476194, 0.802183888559, 0.785834983043, 0.768524783499, 0.750260105595, 0.73105857863 ]
+    pvec = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    for x in range (0, len(pref)):
+        h = pref[x]
+	ind = vec.index(h)
+	pvec[ind] = val[x]
+    return np.array(pvec)
 
 def main(db, query, eventid):
     #eventid = "10103884620845515--event--0"#sys.argv[1]
@@ -424,6 +436,7 @@ def main(db, query, eventid):
     # we have all memebers
     location = list()
     choices = list()
+    pref_vec = list()
     
     for person in people:
 	cursor = db.accounts.find({"mid":person})
@@ -432,9 +445,11 @@ def main(db, query, eventid):
 		lon = float(document["longitude"])
 		loc = [lat, lon]
 		pref = str(document["food_pref"])
-		first_pref = food_lookup[pref[0]]		
+		first_pref = food_lookup[pref[0]]
+		pref_vec.append(get_pref_vec(pref))		
 	location.append(loc)
 	choices.append(first_pref) #by deafult go with group
+	print pref_vec
     if query != "go_with_group":
 	del choices[:]
     	choices.append(query)
