@@ -62,6 +62,26 @@ def find_account(jpayload):
                 status = 100014
 		result = "couldn`t find"
         return status, result
+def update_account(jpayload):
+	data = json.loads(jpayload) #unpack
+	hobj = hashlib.md5(data["email"])
+	mid = hobj.hexdigest()
+	attribute = data["what"]
+	if db.accounts.find({"mid" : mid}).count() >= 1:
+        	out = db.accounts.find({"mid": mid})
+                for records in out:
+			if attribute == "food_pref":
+				fp = data["food_pref"]
+			        db.accounts.update_one({"mid": mid},{"$set": {"food_pref":fp}})	
+				result = "updated"
+			else:
+				status = 100014
+				result = "update failed"
+                status = 1
+        else:
+                status = 100014
+                result = "couldn`t find"
+        return status, result
 #------------------------------------------
 
 
@@ -152,6 +172,8 @@ def main(table_id, operid, payload):
 			status, res = delete_account(payload)
 		if operid == 1002: # find
 			status, res = find_account(payload)
+		if operid == 1003: # find
+			status, res = update_account(payload)
 	if table_id == "EVNT": #events
 		if operid == 1000: # insert
 			status, res = insert_event(payload)

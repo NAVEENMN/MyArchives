@@ -36,18 +36,15 @@ def delete_movie(payload):
 	return "OK"
 def find_movie(payload):
 	status = 1
-	res = None
+	res = list()
 	data = json.loads(payload) # decode json
-	movie_name = data['movie_name']
-	movie_name = movie_name.lower()
-	movie_name = name = re.sub(r'\s+', '', movie_name)
-	movie_year = str(data["movie_year"])
-	hobj = hashlib.md5(movie_name+movie_year)
-	mid = hobj.hexdigest()
-	if db.movies.find({"mid": mid}).count() >= 1:
-		cursor = db.movies.find({"mid": mid})
+	genre = data['genre']
+        q = genre
+        # db.collectionname.find({'files':{'$regex':'^File'}})
+	if db.movies.find({"Genre" : q}).count() >= 1:
+		cursor = db.movies.find({"Genre" : q})
 		for document in cursor:
-			res = str(document)
+			res.append(str(document))
 			status = 1
 	else:
 		status = 100014

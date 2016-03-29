@@ -20,7 +20,13 @@ def accept_invite(jpayload):
 	event_id = data["event_id"]
    	hobj = hashlib.md5(email)
 	amid = hobj.hexdigest()
-	if (db.accounts.find({"mid" : amid}).count() >= 1) and (db.events.find({"mid" : event_id}).count() >= 1):
+	is_account = False
+	is_event = False
+	if (db.accounts.find({"mid" : amid}).count() >= 1):
+		is_account = True
+	if (db.events.find({"mid" : event_id}).count() >= 1):
+		is_event = True
+	if is_account and is_event:
 		# we need to update in accounts, events, firebase
 		#accounts
 		records = db.accounts.find({"mid" : amid})
@@ -34,6 +40,19 @@ def accept_invite(jpayload):
 			joined.append(event_id)
 		joined = list(set(joined))
 		db.accounts.update_one({"mid": amid},{"$set": {"joined":joined}})
+		#events
+		records = db.events.find({"mid" : event_id})
+		members = list()
+		for doc in records:
+			members = doc["event_members"]
+		if members[0] == "none":
+			del members[:]
+			members.append(amid)
+		else:
+			members.append(amid)
+		members = list(set(members))
+		db.events.update_one({"mid": event_id},{"$set": {"event_members":members}})
+		#firebase
 		res = "joined"
 		status = 1
 	else:

@@ -23,11 +23,15 @@ from collections import OrderedDict
 import math
 import numpy as np
 from numpy import linalg as LA
+import multiprocessing
+from mapbox import Distance
+from mapbox import Geocoder
+from pprint import pprint
 
 API_HOST = 'api.yelp.com'
 DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'San Francisco, CA'
-SEARCH_LIMIT = 15
+SEARCH_LIMIT = 20
 SEARCH_PATH = '/v2/search/'
 BUSINESS_PATH = '/v2/business/'
 FIREBASE_URL = "https://met-ster-event.firebaseio.com/"
@@ -263,6 +267,51 @@ def get_distance(a, b):
     return distance.euclidean(a, b)
 
 
+
+'''
+    name : new_ranking_base
+    @prams: lists
+    @return
+    @desp :This function computes the ranking order for the places. 
+'''
+
+def new_ranking_base(place_name_list, place_rating_list, place_location, person_location):
+    ranked = dict()
+    ranked_ratings = dict()
+    ratings_ranking = dict()
+    token = "pk.eyJ1IjoibXlzb3JuMSIsImEiOiJjaW1jcXZkd2UwMDI1dHNra3kyZzZ6YmZ5In0.XXYOEo0n7n0Kxg8ULBumAg"
+    os.environ["MAPBOX_ACCESS_TOKEN"] = token
+    service = Distance()
+
+    for x in range(0, len(place_name_list)):
+        ranked[place_name_list[x]] = 0.0
+        ratings_ranking[place_name_list[x]] = place_rating_list[x]
+
+    ranked_ratings =  sorted(ratings_ranking.items(), key=lambda x: x[1])
+    all_places = list()
+
+    for x in range(0, len(person_location)):
+        lat = float(person_location[x][0])
+        lon = float(person_location[x][1])
+        member = {'type': 'Feature', 'properties': {'name': 'user'}, 'geometry': {'type': 'Point','coordinates': [lon, lat]}}
+        all_places.append(member)
+
+    for x in range(0, len(place_location)):
+        lat = float(place_location[x][0])
+        lon = float(place_location[x][1])
+        place = {'type': 'Feature', 'properties': {'name': 'place'}, 'geometry': {'type': 'Point','coordinates': [lon, lat]}}
+        all_places.append(place)
+    
+    service = Distance()
+    res = service.distances(all_places, 'driving')
+    distances = res.json()['durations']
+    DM = np.matrix(distances)
+    print len(person_location), len(place_location)
+    CDM = DM[:len(person_location),len(person_location):]
+    print CDM
+    distances = CDM.sum(axis=0)
+    print distances
+
 '''
     name : ranking_base
     @params : lists
@@ -408,6 +457,7 @@ def ranking_based_on_convience(payload, people):
         place_location.append(location)
     
     RANKED_LIST = ranking_base(place_name_list, place_rating_list, place_location, person_location)
+    new_ranking_base(place_name_list, place_rating_list, place_location, person_location)
     return RANKED_LIST
 
 def get_pref_vec(pref):
@@ -424,35 +474,52 @@ def main(db, query, eventid):
     #eventid = "10103884620845515--event--0"#sys.argv[1]
     cursor = db.events.find({"mid":eventid})
     people = list()
+    location = list()
+    choices = list()
+    pref_vec = list()
+    pref_vec = list()
+    prefs = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']
+   
+    # get all members
     for document in cursor:
     	host = document["host"]
 	people.append(host)
 	members = document["event_members"]	
-    	if members[0] == "none":#single
-	    i = 0
-	else: 
+    	if members[0] is not "none":
 	    for x in range(0, len(members)):
 	        people.append(members[x])
-    # we have all memebers
-    location = list()
-    choices = list()
-    pref_vec = list()
-    
+
+    # for all members get locations and preference
     for person in people:
 	cursor = db.accounts.find({"mid":person})
 	for document in cursor:
+                pref = str(document["food_pref"])
 		lat = float(document["latitude"])	
 		lon = float(document["longitude"])
 		loc = [lat, lon]
-		pref = str(document["food_pref"])
-		first_pref = food_lookup[pref[0]]
-		pref_vec.append(get_pref_vec(pref))		
+	nap = get_pref_vec(pref)
+	pref_vec.append(nap)		
 	location.append(loc)
-	choices.append(first_pref) #by deafult go with group
-	print pref_vec
+        #by deafult go with group
+	# we need to make queries based on distrubtion of mean theta
+	# for this version lets just pick top two
     if query != "go_with_group":
 	del choices[:]
     	choices.append(query)
+    
+    mpv = np.zeros(11)
+    for x in range(0, len(pref_vec)):
+	mpv = mpv + pref_vec[x]
+    mpvlist = mpv.tolist()
+    mpvcopy = list(mpvlist)
+    mpvcopy.sort()
+    ftp = mpvcopy[len(mpvcopy) - 1]
+    stp = mpvcopy[len(mpvcopy) - 2]
+    idx_ftp = mpvlist.index(ftp)
+    idx_stp = mpvlist.index(stp)
+    choices.append(food_cus[idx_ftp])
+    choices.append(food_cus[idx_stp]) 
+     
     set_choice = set(choices)
     out_payload = dict()
     RANK = 0
@@ -460,6 +527,7 @@ def main(db, query, eventid):
     print set_choice
 
     # creating a dictonary for choice list 
+    # this dic gives weight based on what numebr of people are looking for.
     choice_dict = dict()
     for x in range(0, len(choices)):
 	if choice_dict.has_key(choices[x]):
@@ -468,6 +536,7 @@ def main(db, query, eventid):
 		choice_dict[choices[x]] = 1
 
     for q_term in set_choice:
+	#response = multiprocessing.Process(target=get_results, args=(location, q_term))
         response = get_results(location, q_term)
         people = location
     	RANKED_LIST = ranking_based_on_convience(response, people) # rank them

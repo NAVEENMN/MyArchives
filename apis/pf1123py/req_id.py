@@ -8,7 +8,7 @@ r_id = dict()
 r_id[1000] = "insert"
 r_id[1001] = "delete"
 r_id[1002] = "find"
-r_id[1003] = "edit"
+r_id[1003] = "update"
 r_id[1004] = "show_all"
 #-----------
 r_id[9000] = "find_food"

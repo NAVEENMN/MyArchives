@@ -54,6 +54,7 @@ def test_in(op, pay):
 			if key in add_list:
 				status = 1
 			else :
+				print "fail at", key
 				return  999999	
 	except ValueError as e:
 		return 999999
