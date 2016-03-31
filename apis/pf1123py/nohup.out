@@ -11,3 +11,819 @@
 91.196.50.33:51329 - - [27/Mar/2016 11:37:52] "HTTP/1.1 GET testproxy.php" - 404 Not Found
 104.236.177.93:46613 - - [27/Mar/2016 18:25:56] "HTTP/1.1 GET /" - 200 OK
 104.236.177.93:46614 - - [27/Mar/2016 18:25:59] "HTTP/1.1 POST /" - 200 OK
+93.174.93.218:47737 - - [29/Mar/2016 08:17:34] "HTTP/1.1 GET " - 404 Not Found
+185.25.151.159:47977 - - [29/Mar/2016 08:33:35] "HTTP/1.1 GET testproxy.php" - 404 Not Found
+123.59.59.52:35925 - - [29/Mar/2016 15:07:04] "HTTP/1.1 GET " - 404 Not Found
+104.236.177.93:46907 - - [29/Mar/2016 16:53:22] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 75, in main
+    status, result = api.main(operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 67, in main
+    res = find_food(payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 11, in find_food
+    data = json.loads(jpayload) #unpack
+  File "/usr/lib/python2.7/json/__init__.py", line 338, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python2.7/json/decoder.py", line 366, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python2.7/json/decoder.py", line 382, in raw_decode
+    obj, end = self.scan_once(s, idx)
+ValueError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+
+104.236.177.93:46908 - - [29/Mar/2016 16:53:22] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:46909 - - [29/Mar/2016 16:54:37] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46910 - - [29/Mar/2016 16:54:40] "HTTP/1.1 POST /" - 200 OK
+185.25.151.159:47948 - - [29/Mar/2016 16:55:55] "HTTP/1.1 GET testproxy.php" - 404 Not Found
+104.236.177.93:46911 - - [29/Mar/2016 20:14:20] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46912 - - [29/Mar/2016 20:14:20] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46913 - - [29/Mar/2016 20:26:09] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46914 - - [29/Mar/2016 20:26:12] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46915 - - [29/Mar/2016 21:26:28] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46916 - - [29/Mar/2016 21:26:28] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46917 - - [29/Mar/2016 22:03:46] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46918 - - [29/Mar/2016 22:03:49] "HTTP/1.1 POST /" - 200 OK
+93.174.93.218:53580 - - [29/Mar/2016 22:05:46] "HTTP/1.1 GET " - 404 Not Found
+93.174.93.218:56391 - - [29/Mar/2016 23:34:29] "HTTP/1.1 GET " - 404 Not Found
+185.25.148.240:50974 - - [30/Mar/2016 00:07:08] "HTTP/1.1 GET testproxy.php" - 404 Not Found
+108.33.22.37:36384 - - [30/Mar/2016 01:17:23] "HTTP/1.1 GET " - 404 Not Found
+104.236.177.93:46919 - - [30/Mar/2016 01:50:57] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46920 - - [30/Mar/2016 01:50:57] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46921 - - [30/Mar/2016 01:51:26] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46922 - - [30/Mar/2016 01:51:26] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46923 - - [30/Mar/2016 01:54:39] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46924 - - [30/Mar/2016 01:54:39] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46925 - - [30/Mar/2016 01:59:57] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 75, in main
+    status, result = api.main(operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 67, in main
+    res = find_food(payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 14, in find_food
+    response = yr.main(db, query, event_id)
+  File "/var/www/html/metster/apis/pf1123py/get_yelp_ranking_copy.py", line 527, in main
+    response = get_results(location, q_term)
+  File "/var/www/html/metster/apis/pf1123py/get_yelp_ranking_copy.py", line 226, in get_results
+    lat = lat / len(people)
+ZeroDivisionError: integer division or modulo by zero
+
+104.236.177.93:46926 - - [30/Mar/2016 01:59:57] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:46927 - - [30/Mar/2016 01:59:59] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46928 - - [30/Mar/2016 01:59:59] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46929 - - [30/Mar/2016 02:00:21] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46930 - - [30/Mar/2016 02:00:24] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46931 - - [30/Mar/2016 02:00:31] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46932 - - [30/Mar/2016 02:00:31] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46933 - - [30/Mar/2016 02:01:53] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 75, in main
+    status, result = api.main(operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 67, in main
+    res = find_food(payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 11, in find_food
+    data = json.loads(jpayload) #unpack
+  File "/usr/lib/python2.7/json/__init__.py", line 338, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python2.7/json/decoder.py", line 366, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python2.7/json/decoder.py", line 382, in raw_decode
+    obj, end = self.scan_once(s, idx)
+ValueError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+
+104.236.177.93:46934 - - [30/Mar/2016 02:01:53] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:46935 - - [30/Mar/2016 02:02:38] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46936 - - [30/Mar/2016 02:02:41] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46937 - - [30/Mar/2016 02:15:41] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46938 - - [30/Mar/2016 02:15:41] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46939 - - [30/Mar/2016 02:16:26] "HTTP/1.1 GET /" - 200 OK
+http://0.0.0.0:8888/
+1 {'event_id': '10103884620845515--event--0', 'query': 'sushi'}
+1 {"event_id": "10103884620845515--event--0", "query": "sushi"}
+[[37.316385, -121.874802], [37.316385, -121.874802]]
+set([u'sushi'])
+sushi 13
+[u'q-sushi-san-jose', u'sushi-kazoo-san-jose', u'sushi-kazoo-san-jose', u'takai-sushi-and-sake-bar-san-jose', u'ozu-sushi-and-grill-san-jose', u'fuji-sushi-san-jose', u'osheyo-san-jose', u'seven-seas-sushi-san-jose-2', u'sushi-infinity-san-jose', u'gombei-japanese-restaurant-san-jose', u'okayama-japanese-restaurant-san-jose', u'minato-japanese-restaurant-san-jose', u'cha-cha-sushi-san-jose']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email": "navimn1991@gmail.com"}
+1 {"event_id": "10103884620845515--event--0", "query": "sushi"}
+[[37.316385, -121.874802], [37.316385, -121.874802]]
+set([u'sushi'])
+sushi 13
+[u'q-sushi-san-jose', u'sushi-kazoo-san-jose', u'sushi-kazoo-san-jose', u'takai-sushi-and-sake-bar-san-jose', u'ozu-sushi-and-grill-san-jose', u'fuji-sushi-san-jose', u'osheyo-san-jose', u'seven-seas-sushi-san-jose-2', u'sushi-infinity-san-jose', u'gombei-japanese-restaurant-san-jose', u'okayama-japanese-restaurant-san-jose', u'minato-japanese-restaurant-san-jose', u'cha-cha-sushi-san-jose']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"event_id": "10103884620845515--event--0", "query": "pizza"}
+[[37.316385, -121.874802], [37.316385, -121.874802]]
+set([u'pizza'])
+pizza 13
+[u'pizza-my-heart-san-jose', u'bibos-ny-pizza-san-jose', u'willow-street-wood-fired-pizza-san-jose-2', u'fast-pizza-delivery-san-jose-5', u'fast-pizza-delivery-san-jose-5', u'pizza-chicago-san-jose', u'pizza-bocca-lupo-san-jose', u'amicis-east-coast-pizzeria-san-jose', u'fast-and-fresh-pizza-san-jose', u'4th-street-pizza-co-san-jose', u'sammy-gs-pizzeria-san-jose', u'pizza-my-heart-san-jose-3', u'fast-pizza-delivery-san-jose-8']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email": "navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"event_id": "\"10103884620845432--event--1\"", "query": "chinese french noodles"}
+[]
+set([u'chinese french noodles'])
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"event_id": "10103884620845432--event--1", "query": "chinese french noodles"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'chinese french noodles'])
+chinese french noodles 10
+[u'paris-baguette-palo-alto', u'tamarine-restaurant-palo-alto', u'three-seasons-palo-alto', u'china-delight-palo-alto', u'yucca-de-lac-palo-alto', u'fey-restaurant-menlo-park', u'maxs-opera-cafe-of-palo-alto-palo-alto', u'espostos-catering-south-san-francisco-2', u'umami-togo-san-mateo-2', u'james-standfield-catering-south-san-francisco']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {'event_id': '10103884620845432--event--1', 'query': 'chinese french noodle chinese'}
+1 {"event_id": "10103884620845432--event--1", "query": "chinese french noodle chinese"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'chinese french noodle chinese'])
+chinese french noodle chinese 10
+[u'tamarine-restaurant-palo-alto', u'three-seasons-palo-alto', u'china-delight-palo-alto', u'yucca-de-lac-palo-alto', u'fey-restaurant-menlo-park', u'maxs-opera-cafe-of-palo-alto-palo-alto', u'da-sichuan-bistro-palo-alto', u'espostos-catering-south-san-francisco-2', u'umami-togo-san-mateo-2', u'james-standfield-catering-south-san-francisco']
+{u'event_notes': u'Lets Enjoy', u'event_time': u'6:00', u'event_name': u'awef', u'host_email': u'awef', u'event_members': [u'none'], u'event_date': u'03/28/2016'} EVNT
+1 {"event_notes": "Lets Enjoy", "event_time": "6:00", "event_name": "awef", "event_members": ["none"], "host_email": "awef", "event_date": "03/28/2016"}
+{u'event_notes': u'Lets Enjoy', u'event_time': u'6:00', u'event_name': u'jessi guis party', u'host_email': u'jessi.gui@gmail.com', u'event_members': [u'none'], u'event_date': u'03/28/2016'} EVNT
+1 {"event_104.236.177.93:46940 - - [30/Mar/2016 02:16:26] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46941 - - [30/Mar/2016 02:24:22] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46942 - - [30/Mar/2016 02:24:22] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46943 - - [30/Mar/2016 02:25:10] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46944 - - [30/Mar/2016 02:25:10] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46945 - - [30/Mar/2016 02:26:27] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46946 - - [30/Mar/2016 02:26:27] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46947 - - [30/Mar/2016 02:27:13] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46948 - - [30/Mar/2016 02:27:13] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46949 - - [30/Mar/2016 02:32:29] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46950 - - [30/Mar/2016 02:32:29] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46951 - - [30/Mar/2016 02:32:47] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46952 - - [30/Mar/2016 02:32:47] "HTTP/1.1 POST /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+108.33.22.37:34415 - - [30/Mar/2016 03:11:08] "HTTP/1.1 GET " - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46953 - - [30/Mar/2016 06:26:30] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46954 - - [30/Mar/2016 06:26:56] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46955 - - [30/Mar/2016 06:30:11] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+108.33.22.37:59106 - - [30/Mar/2016 08:37:14] "HTTP/1.1 GET " - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46956 - - [30/Mar/2016 08:50:52] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46957 - - [30/Mar/2016 08:51:24] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46958 - - [30/Mar/2016 08:54:56] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46959 - - [30/Mar/2016 08:56:09] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46960 - - [30/Mar/2016 08:59:00] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46961 - - [30/Mar/2016 09:06:40] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46962 - - [30/Mar/2016 10:19:15] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46963 - - [30/Mar/2016 10:39:11] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46964 - - [30/Mar/2016 10:39:26] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+91.196.50.33:48205 - - [30/Mar/2016 13:08:19] "HTTP/1.1 GET testproxy.php" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+185.49.14.190:56279 - - [30/Mar/2016 15:07:52] "HTTP/1.1 GET testproxy.php" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+108.33.22.37:55434 - - [30/Mar/2016 18:56:02] "HTTP/1.1 GET " - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46970 - - [30/Mar/2016 19:03:10] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+120.132.50.135:54474 - - [30/Mar/2016 20:33:11] "HTTP/1.1 GET " - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46971 - - [30/Mar/2016 20:43:01] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "handle_re_server.py", line 2, in <module>
+    import ntp_handle_user as ntp
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 2, in <module>
+    import db_functions as df
+  File "/var/www/html/metster/apis/pf1123py/db_functions.py", line 8, in <module>
+    from lookups import *
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46972 - - [30/Mar/2016 20:57:49] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 237, in process
+    return p(lambda: process(processors))
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 565, in processor
+    h()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 661, in __call__
+    self.check(mod)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 680, in check
+    reload(mod)
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+
+104.236.177.93:46973 - - [30/Mar/2016 20:58:33] "HTTP/1.1 GET /" - 500 Internal Server Error
+Traceback (most recent call last):
+  File "handle_re_server.py", line 2, in <module>
+    import ntp_handle_user as ntp
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 2, in <module>
+    import db_functions as df
+  File "/var/www/html/metster/apis/pf1123py/db_functions.py", line 8, in <module>
+    from lookups import *
+  File "/var/www/html/metster/apis/pf1123py/lookups.py", line 17, in <module>
+    params["st_params"] = stst_prams_list_prams_list
+NameError: name 'stst_prams_list_prams_list' is not defined
+104.236.177.93:46977 - - [30/Mar/2016 21:03:06] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46978 - - [30/Mar/2016 21:03:06] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46979 - - [30/Mar/2016 21:04:15] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46980 - - [30/Mar/2016 21:04:15] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46981 - - [30/Mar/2016 21:10:40] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46982 - - [30/Mar/2016 21:10:40] "HTTP/1.1 POST /" - 200 OK
+93.174.93.218:43106 - - [30/Mar/2016 21:43:16] "HTTP/1.1 GET " - 404 Not Found
+104.236.177.93:46983 - - [30/Mar/2016 21:46:15] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 77, in main
+    status, result = api.main(operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 67, in main
+    res = find_food(payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 11, in find_food
+    data = json.loads(jpayload) #unpack
+  File "/usr/lib/python2.7/json/__init__.py", line 338, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python2.7/json/decoder.py", line 366, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python2.7/json/decoder.py", line 384, in raw_decode
+    raise ValueError("No JSON object could be decoded")
+ValueError: No JSON object could be decoded
+
+104.236.177.93:46984 - - [30/Mar/2016 21:46:15] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:46985 - - [30/Mar/2016 21:46:53] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 77, in main
+    status, result = api.main(operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 67, in main
+    res = find_food(payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 11, in find_food
+    data = json.loads(jpayload) #unpack
+  File "/usr/lib/python2.7/json/__init__.py", line 338, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python2.7/json/decoder.py", line 366, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python2.7/json/decoder.py", line 384, in raw_decode
+    raise ValueError("No JSON object could be decoded")
+ValueError: No JSON object could be decoded
+
+104.236.177.93:46986 - - [30/Mar/2016 21:46:53] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:46987 - - [30/Mar/2016 21:47:36] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 77, in main
+    status, result = api.main(operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 67, in main
+    res = find_food(payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 14, in find_food
+    response = yr.main(db, query, event_id)
+  File "/var/www/html/metster/apis/pf1123py/get_yelp_ranking_copy.py", line 527, in main
+    response = get_results(location, q_term)
+  File "/var/www/html/metster/apis/pf1123py/get_yelp_ranking_copy.py", line 226, in get_results
+    lat = lat / len(people)
+ZeroDivisionError: integer division or modulo by zero
+
+104.236.177.93:46988 - - [30/Mar/2016 21:47:36] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:46989 - - [30/Mar/2016 21:47:49] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46990 - - [30/Mar/2016 21:47:53] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46991 - - [30/Mar/2016 21:49:30] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46992 - - [30/Mar/2016 21:49:30] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46993 - - [30/Mar/2016 21:49:51] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46994 - - [30/Mar/2016 21:49:51] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46995 - - [30/Mar/2016 21:54:11] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46996 - - [30/Mar/2016 21:54:11] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46997 - - [30/Mar/2016 21:54:41] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:46998 - - [30/Mar/2016 21:54:41] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:46999 - - [30/Mar/2016 21:55:30] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47000 - - [30/Mar/2016 21:55:30] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47001 - - [30/Mar/2016 21:56:18] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47002 - - [30/Mar/2016 21:56:18] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47003 - - [30/Mar/2016 21:56:45] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47004 - - [30/Mar/2016 21:56:45] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47005 - - [30/Mar/2016 21:59:26] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47006 - - [30/Mar/2016 21:59:26] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47007 - - [30/Mar/2016 21:59:46] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47008 - - [30/Mar/2016 21:59:46] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47009 - - [30/Mar/2016 22:00:33] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47010 - - [30/Mar/2016 22:00:33] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47011 - - [30/Mar/2016 22:00:54] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47012 - - [30/Mar/2016 22:00:54] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47013 - - [30/Mar/2016 22:01:19] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47014 - - [30/Mar/2016 22:01:19] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47015 - - [30/Mar/2016 22:01:45] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47016 - - [30/Mar/2016 22:01:45] "HTTP/1.1 POST /" - 200 OK
+108.33.22.37:39471 - - [30/Mar/2016 22:06:24] "HTTP/1.1 GET " - 404 Not Found
+104.236.177.93:47017 - - [30/Mar/2016 22:14:05] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47018 - - [30/Mar/2016 22:14:05] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47019 - - [30/Mar/2016 22:14:46] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 69, in main
+    status = test_in(op, pay)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 32, in test_in
+    if int(op) in api_oper:
+ValueError: invalid literal for int() with base 10: '(null)'
+
+104.236.177.93:47020 - - [30/Mar/2016 22:14:46] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47021 - - [30/Mar/2016 22:16:19] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 69, in main
+    status = test_in(op, pay)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 32, in test_in
+    if int(op) in api_oper:
+ValueError: invalid literal for int() with base 10: '(null)'
+
+104.236.177.93:47022 - - [30/Mar/2016 22:16:19] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47023 - - [30/Mar/2016 22:17:27] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 69, in main
+    status = test_in(op, pay)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 32, in test_in
+    if int(op) in api_oper:
+ValueError: invalid literal for int() with base 10: '(null)'
+
+104.236.177.93:47024 - - [30/Mar/2016 22:17:27] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47025 - - [30/Mar/2016 22:18:17] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47026 - - [30/Mar/2016 22:18:17] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47027 - - [30/Mar/2016 22:19:06] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47028 - - [30/Mar/2016 22:19:07] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47029 - - [30/Mar/2016 22:19:32] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47030 - - [30/Mar/2016 22:19:32] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47031 - - [30/Mar/2016 22:19:49] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47032 - - [30/Mar/2016 22:19:49] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47033 - - [30/Mar/2016 22:20:59] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47034 - - [30/Mar/2016 22:20:59] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47035 - - [30/Mar/2016 22:21:27] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47036 - - [30/Mar/2016 22:21:27] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47037 - - [30/Mar/2016 22:22:04] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47038 - - [30/Mar/2016 22:22:04] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47039 - - [30/Mar/2016 22:23:36] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47040 - - [30/Mar/2016 22:23:36] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47041 - - [30/Mar/2016 22:24:27] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47042 - - [30/Mar/2016 22:24:27] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47043 - - [30/Mar/2016 22:29:22] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47044 - - [30/Mar/2016 22:29:22] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47045 - - [30/Mar/2016 22:29:38] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47046 - - [30/Mar/2016 22:29:38] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47047 - - [30/Mar/2016 22:29:53] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47048 - - [30/Mar/2016 22:29:53] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47049 - - [30/Mar/2016 22:30:19] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47050 - - [30/Mar/2016 22:30:19] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47051 - - [30/Mar/2016 22:32:08] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47052 - - [30/Mar/2016 22:32:08] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47053 - - [30/Mar/2016 22:33:00] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 69, in main
+    status = test_in(op, pay)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 32, in test_in
+    if int(op) in api_oper:
+ValueError: invalid literal for int() with base 10: '(null)'
+
+104.236.177.93:47054 - - [30/Mar/2016 22:33:00] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47055 - - [30/Mar/2016 22:37:17] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47056 - - [30/Mar/2016 22:37:17] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47057 - - [30/Mar/2016 23:20:05] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 69, in main
+    status = test_in(op, pay)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 32, in test_in
+    if int(op) in api_oper:
+ValueError: invalid literal for int() with base 10: '(null)'
+
+104.236.177.93:47058 - - [30/Mar/2016 23:20:05] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47059 - - [30/Mar/2016 23:35:53] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47060 - - [30/Mar/2016 23:35:53] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47061 - - [30/Mar/2016 23:37:37] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 69, in main
+    status = test_in(op, pay)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 32, in test_in
+    if int(op) in api_oper:
+ValueError: invalid literal for int() with base 10: '(null)'
+
+104.236.177.93:47062 - - [30/Mar/2016 23:37:37] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47063 - - [30/Mar/2016 23:38:30] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47064 - - [30/Mar/2016 23:38:30] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47065 - - [30/Mar/2016 23:39:41] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 69, in main
+    status = test_in(op, pay)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 32, in test_in
+    if int(op) in api_oper:
+ValueError: invalid literal for int() with base 10: '(null)'
+
+104.236.177.93:47066 - - [30/Mar/2016 23:39:41] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47067 - - [30/Mar/2016 23:41:04] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 69, in main
+    status = test_in(op, pay)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 32, in test_in
+    if int(op) in api_oper:
+ValueError: invalid literal for int() with base 10: '(null)'
+
+104.236.177.93:47068 - - [30/Mar/2016 23:41:04] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47069 - - [30/Mar/2016 23:44:05] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47070 - - [30/Mar/2016 23:44:05] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47071 - - [30/Mar/2016 23:46:06] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47072 - - [30/Mar/2016 23:46:06] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47073 - - [30/Mar/2016 23:49:19] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47074 - - [30/Mar/2016 23:49:19] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47075 - - [31/Mar/2016 00:55:00] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47076 - - [31/Mar/2016 00:55:00] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47077 - - [31/Mar/2016 01:08:15] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47078 - - [31/Mar/2016 01:08:15] "HTTP/1.1 POST /" - 200 OK

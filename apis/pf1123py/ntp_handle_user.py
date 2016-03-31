@@ -50,6 +50,8 @@ def test_in(op, pay):
                 	add_list = params["evnt_params"]
 		if tb_name == "THR":
 			add_list = params["thr_params"]
+                if tb_name == "ST":
+			add_list = params["st_params"]
 		for key in data:
 			if key in add_list:
 				status = 1
@@ -76,7 +78,7 @@ def main(op, pay):
 		else : #mongodb operation
 			# check if its movies or not then move to that
 			table_id = table_ids[int(operation[1])-1]
-			if table_id == "MOV" or table_id == "THR":
+			if table_id == "MOV" or table_id == "THR" or table_id == "ST":
 				# send to han_mov
 				status, result = mt.main(table_id, operid, payload)
 			if table_id == "EVNT" or table_id == "ADB":

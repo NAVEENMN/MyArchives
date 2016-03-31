@@ -31,7 +31,7 @@ from pprint import pprint
 API_HOST = 'api.yelp.com'
 DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'San Francisco, CA'
-SEARCH_LIMIT = 20
+SEARCH_LIMIT = 15
 SEARCH_PATH = '/v2/search/'
 BUSINESS_PATH = '/v2/business/'
 FIREBASE_URL = "https://met-ster-event.firebaseio.com/"
@@ -41,6 +41,10 @@ CONSUMER_KEY = 'Z0iY7ApEiif5H7VaWJYCMQ'
 CONSUMER_SECRET = 'Q5akSU6NBRPr1wTjIy9NsB7tPC4'
 TOKEN = 'LkX6HbwoiGPlPxzP7d9U8My2Zl8K4iMw'
 TOKEN_SECRET = 'KAhDbHSHgoxEuYK9jwvYRW3awmw'
+
+token = "pk.eyJ1IjoibXlzb3JuMSIsImEiOiJjaW1jcXZkd2UwMDI1dHNra3kyZzZ6YmZ5In0.XXYOEo0n7n0Kxg8ULBumAg"
+os.environ["MAPBOX_ACCESS_TOKEN"] = token
+service = Distance()
 
 
 #food_cus = ["American","British", "Chinese", "French", "Greek", "Indian", "Italian", "Japanese", "Mediterranean", "Mexican", "Thai", "Vitnamese"]
@@ -275,27 +279,17 @@ def get_distance(a, b):
     @desp :This function computes the ranking order for the places. 
 '''
 
-def new_ranking_base(place_name_list, place_rating_list, place_location, person_location):
-    ranked = dict()
-    ranked_ratings = dict()
-    ratings_ranking = dict()
-    token = "pk.eyJ1IjoibXlzb3JuMSIsImEiOiJjaW1jcXZkd2UwMDI1dHNra3kyZzZ6YmZ5In0.XXYOEo0n7n0Kxg8ULBumAg"
-    os.environ["MAPBOX_ACCESS_TOKEN"] = token
-    service = Distance()
+def new_ranking_base(place_name_list, place_location, person_location):
 
-    for x in range(0, len(place_name_list)):
-        ranked[place_name_list[x]] = 0.0
-        ratings_ranking[place_name_list[x]] = place_rating_list[x]
-
-    ranked_ratings =  sorted(ratings_ranking.items(), key=lambda x: x[1])
     all_places = list()
+    ranked_result = list()
 
+    # merge all locations
     for x in range(0, len(person_location)):
         lat = float(person_location[x][0])
         lon = float(person_location[x][1])
         member = {'type': 'Feature', 'properties': {'name': 'user'}, 'geometry': {'type': 'Point','coordinates': [lon, lat]}}
         all_places.append(member)
-
     for x in range(0, len(place_location)):
         lat = float(place_location[x][0])
         lon = float(place_location[x][1])
@@ -306,12 +300,17 @@ def new_ranking_base(place_name_list, place_rating_list, place_location, person_
     res = service.distances(all_places, 'driving')
     distances = res.json()['durations']
     DM = np.matrix(distances)
-    print len(person_location), len(place_location)
     CDM = DM[:len(person_location),len(person_location):]
-    print CDM
-    distances = CDM.sum(axis=0)
-    print distances
-
+    sumdistances = CDM.sum(axis=0)
+    distances = sumdistances.tolist()
+    dis = distances[0]
+    temp_dis = list(dis)
+    temp_dis.sort()
+    for x in range(0, len(temp_dis)):
+        td = temp_dis[x]
+        idx = dis.index(td)
+        ranked_result.append(place_name_list[idx])
+    return ranked_result
 '''
     name : ranking_base
     @params : lists
@@ -432,20 +431,16 @@ def print_matrix(Matrix):
             data in the previous version
 '''
 
-def ranking_based_on_convience(payload, people):
-    #location section
+def ranking_based_on_convenience(payload, people):
+  
     place_name_list = list()
-    place_rating_list = list()
     place_location = list()
-    #people section
     person_location = people
     
     for key in payload:
         place_name_list.append(key)
         data = json.loads(payload[key])
         location = str(data['coordinate'])
-        ratings = float(data['ratings'])
-        place_rating_list.append(ratings)
         parm = location.split(",")
         raw = parm[0].split(": ")
         latitude = float(raw[1])
@@ -455,10 +450,8 @@ def ranking_based_on_convience(payload, people):
         location.append(latitude)
         location.append(longitude)
         place_location.append(location)
-    
-    RANKED_LIST = ranking_base(place_name_list, place_rating_list, place_location, person_location)
-    new_ranking_base(place_name_list, place_rating_list, place_location, person_location)
-    return RANKED_LIST
+  
+    return new_ranking_base(place_name_list, place_location, person_location)
 
 def get_pref_vec(pref):
     vec = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']
@@ -502,11 +495,7 @@ def main(db, query, eventid):
 	location.append(loc)
         #by deafult go with group
 	# we need to make queries based on distrubtion of mean theta
-	# for this version lets just pick top two
-    if query != "go_with_group":
-	del choices[:]
-    	choices.append(query)
-    
+	# for this version lets just pick top two 
     mpv = np.zeros(11)
     for x in range(0, len(pref_vec)):
 	mpv = mpv + pref_vec[x]
@@ -519,6 +508,11 @@ def main(db, query, eventid):
     idx_stp = mpvlist.index(stp)
     choices.append(food_cus[idx_ftp])
     choices.append(food_cus[idx_stp]) 
+
+
+    if query != "go_with_group":
+        del choices[:]
+        choices.append(query)
      
     set_choice = set(choices)
     out_payload = dict()
@@ -526,39 +520,19 @@ def main(db, query, eventid):
     print location
     print set_choice
 
-    # creating a dictonary for choice list 
-    # this dic gives weight based on what numebr of people are looking for.
-    choice_dict = dict()
-    for x in range(0, len(choices)):
-	if choice_dict.has_key(choices[x]):
-		choice_dict[choices[x]] = choice_dict[choices[x]] + 1
-	else:
-		choice_dict[choices[x]] = 1
-
+    merged_results = dict()
+    final_results = dict()
+   
     for q_term in set_choice:
-	#response = multiprocessing.Process(target=get_results, args=(location, q_term))
         response = get_results(location, q_term)
-        people = location
-    	RANKED_LIST = ranking_based_on_convience(response, people) # rank them
-	#print "query term ", q_term
-	weight = float(choice_dict[q_term]) / float(len(people))
-        #print "weightage", weight
-	number_of_results = int( weight * 20 )
-	#print "# of results for this query", number_of_results
-        clipped_list =  RANKED_LIST[0:number_of_results]
-    	for key in response:#setup rank in json
-        	pay_dict = dict()
-		PAYLOAD = json.loads(response[key])
-                if key in clipped_list:
-			for term in PAYLOAD:
-	 			if term == "rank":
-					rank = RANKED_LIST.index(key)
-					pay_dict["rank"] = RANK
-					RANK = RANK + 1
-				else:
-					pay_dict[term] = PAYLOAD[term]
-			out_payload[key] = json.dumps(pay_dict)
-    return out_payload
+        print q_term, len(response)
+        merged_results = merged_results.copy()
+        merged_results.update(response)
+    CONV_RANKED_LIST = ranking_based_on_convenience(merged_results, location)
+    for term in CONV_RANKED_LIST:
+        final_results[term] = merged_results[term]
+    print CONV_RANKED_LIST
+    return final_results
 
 if __name__ == "__main__":
     main()

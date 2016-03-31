@@ -96,7 +96,30 @@ def delete_theater(payload):
 def find_thater(payload):
         return "OK"
 #------------------------------------------
-
+def insert_show_time(jpayload):
+	data = json.loads(jpayload)
+	movie_mid = data["movie_mid"]
+	theater_mid = data["theater_mid"]
+	show_times = data["show_time"]
+	is_theater = db.theater.find({"mid": theater_mid}).count()
+	is_movie = db.movies.find({"mid": movie_mid}).count()
+	if is_theater and is_movie:
+		movies = list()
+		if db.showtimes.find({"mid": theater_mid}).count() >= 1:
+			print "here.."
+			collection = db.showtimes.find({"mid": theater_mid})
+			for doc in collection:
+				movies_list = list(doc["movies"])
+			movies_list.append(movie_mid)
+			print movies_list
+			db.showtimes.update_one({"mid": theater_mid},{"$set": {"movies":movies_list}})
+		else :
+			movies = list()
+			movies.append(movie_mid)
+			result = str(db.showtimes.insert_one({"mid":theater_mid, "movies":movies}))
+		return 1, "done"
+	else:
+		return 100014, "not"
 
 #----------------------- MAIN
 # 11 insert movie
@@ -124,7 +147,9 @@ def main(table, oper, payload):
 			status, res = delete_theater(payload)
                 if oper == 1002: # find
 			status, res = find_theater(payload)
-
+	if table == "ST":
+		if oper == 1000:
+			status, res = insert_show_time(payload)
 	return status, res
 #---------------------------
 if __name__ == "__main__":
