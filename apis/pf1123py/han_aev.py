@@ -148,6 +148,7 @@ def insert_event(jpayload):
 		status = 100016
 		result = "invalid user"
 	return status, result
+
 def delete_event(jpayload):
 	# get all event members and remove events from there accounts
 	status = 888888
@@ -173,8 +174,39 @@ def delete_event(jpayload):
 		if is_host:
 			#del host
 			k = 0
+			cursor = db.accounts.find({"mid": amid})
+			hosted = list()
+			for doc in cursor:
+				hosted = list(doc["hosted"])
+			if event_id in hosted:
+				#del it
+				hosted.remove(event_id)
+				db.accounts.update_one({"mid": amid},{"$set": {"hosted":hosted}})
+				#db.events.delete_many({"mid": event_id})
+				#find all members and del in thuer accoun
+				cursor = db.events.find({"mid": event_id})
+				members = list()
+				for doc in cursor:
+					members = list(doc["event_members"])
+				for member in members:
+					cursor = db.accounts.find({"mid": member})
+					joined = list()
+					for doc in cursor:
+						joined = list(doc["joined"])
+					if event_id in joined:
+						joined.remove(event_id)
+					db.accounts.update_one({"mid": member},{"$set": {"joined":joined}})
+				fb_base_url = FIREBASE_URL+"/"+event_id
+				fb = Firebase(fb_base_url)
+				fb.delete()
+				status = 1
+				res = "event dropped"
+				
+			else:
+				status = 888888
+				res = "not hosted"
 		else:
-			#del member
+			#del member account, events, firebase
 			cursor = db.accounts.find({"mid": amid})
 			joined = list()
 			for doc in cursor:
@@ -187,6 +219,13 @@ def delete_event(jpayload):
 				fb_user_url = fb_base_url +"/users/"+amid
 				fb = Firebase(fb_user_url)
 				fb.delete()
+				
+				cursor = db.events.find({"mid":event_id})
+				members = list()
+				for doc in cursor:
+					members = list(doc["event_members"])
+				members.remove(amid)
+				db.events.update_one({"mid": event_id},{"$set": {"event_members":members}})
 				status = 1
 				res = "event dropped"
 			else:

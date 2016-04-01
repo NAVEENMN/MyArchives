@@ -13,7 +13,10 @@ def find_food(jpayload):
 	data = json.loads(jpayload) #unpack
 	query = data["query"]
 	event_id = data["event_id"]
-	response = yr.main(db, query, event_id)
+	if (db.events.find({"mid" : event_id}).count() >= 1):
+		response = yr.main(db, query, event_id)
+	else:
+		response = "invalid event"
 	return response
 
 def accept_invite(jpayload):
