@@ -106,17 +106,24 @@ def insert_show_time(jpayload):
 	if is_theater and is_movie:
 		movies = list()
 		if db.showtimes.find({"mid": theater_mid}).count() >= 1:
-			print "here.."
 			collection = db.showtimes.find({"mid": theater_mid})
 			for doc in collection:
 				movies_list = list(doc["movies"])
+				showtimelist = list()
+				if movie_mid in movies_list:
+					showtimelist = list(doc[movie_mid])
+			showtimelist.append(show_times)
 			movies_list.append(movie_mid)
-			print movies_list
+			movies_list= list(set(movies_list))
+			showtimelist = list(set(showtimelist))
 			db.showtimes.update_one({"mid": theater_mid},{"$set": {"movies":movies_list}})
+			db.showtimes.update_one({"mid": theater_mid},{"$set": {str(movie_mid):showtimelist}})
 		else :
 			movies = list()
+			showtimes = list()
 			movies.append(movie_mid)
-			result = str(db.showtimes.insert_one({"mid":theater_mid, "movies":movies}))
+			showtimes.append(show_times)
+			result = str(db.showtimes.insert_one({"mid":theater_mid, "movies":movies, movie_mid : showtimes}))
 		return 1, "done"
 	else:
 		return 100014, "not"

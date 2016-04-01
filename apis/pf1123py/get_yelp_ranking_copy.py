@@ -27,6 +27,11 @@ import multiprocessing
 from mapbox import Distance
 from mapbox import Geocoder
 from pprint import pprint
+import hashlib
+from pymongo import MongoClient
+
+client = MongoClient('localhost', 27017)
+db = client.Chishiki
 
 API_HOST = 'api.yelp.com'
 DEFAULT_TERM = 'dinner'
@@ -423,6 +428,21 @@ def print_matrix(Matrix):
         print Matrix[x]
 
 
+def get_movies(pdic):
+	for key in pdic:
+		hobj = hashlib.md5(key)
+		mid = hobj.hexdigest()
+		if db.theater.find({"mid": mid}).count() > 0:
+			if db.showtimes.find({"mid": mid}).count() > 0:
+				cursor = db.showtimes.find({"mid": mid})
+				for doc in cursor:
+					print doc
+			else:
+				print "not in list"
+		else:
+			print "not in db"
+		
+
 '''
     name : ranking_based_on_convenience
     @params : json data of payload
@@ -529,6 +549,8 @@ def main(db, query, eventid):
         merged_results = merged_results.copy()
         merged_results.update(response)
     CONV_RANKED_LIST = ranking_based_on_convenience(merged_results, location)
+    if query == "movies":
+	movies = get_movies(merged_results)
     for term in CONV_RANKED_LIST:
         final_results[term] = merged_results[term]
     print CONV_RANKED_LIST

@@ -31,8 +31,10 @@ def accept_invite(jpayload):
 		#accounts
 		records = db.accounts.find({"mid" : amid})
 		joined = list()
+		invites = list()
 		for doc in records:
 			joined = doc["joined"]
+			invites = doc["invites"] # remove from invites
 		if joined[0] == "none":
 			del joined[:]
 			joined.append(event_id)
@@ -40,6 +42,8 @@ def accept_invite(jpayload):
 			joined.append(event_id)
 		joined = list(set(joined))
 		db.accounts.update_one({"mid": amid},{"$set": {"joined":joined}})
+		invites.remove(event_id)
+		db.accounts.update_one({"mid": amid},{"$set": {"invites":invites}})
 		#events
 		records = db.events.find({"mid" : event_id})
 		members = list()
@@ -60,6 +64,57 @@ def accept_invite(jpayload):
 		status = 100014
 	return status, res
 
+def reject_invite(jayload):
+	status = 888888
+	res = "ok"
+
+def send_invite(jpayload):
+	status = 999999
+	res = "ok"
+	all_good = False
+	data = json.loads(jpayload) #unpack
+	hobj = hashlib.md5(data["from_email"])
+	from_mid = hobj.hexdigest()
+	hobj = hashlib.md5(data["to_email"])
+	to_mid = hobj.hexdigest()
+	event_id = data["event_id"]
+	is_from_ok = db.accounts.find({"mid":from_mid}).count()
+	is_to_ok = db.accounts.find({"mid":to_mid}).count()
+	is_event_ok = db.events.find({"mid":event_id}).count()
+	if is_from_ok >= 1 and is_to_ok>=1 and is_event_ok:
+		all_good = True
+	if all_good:
+		invites = list()
+		hosted = list()
+		joined = list()
+		cursor = db.accounts.find({"mid":to_mid})
+		for doc in cursor:
+			hosted = list(doc["hosted"])
+			invites = list(doc["invites"])
+			joined = list(doc["joined"])
+		if event_id in hosted:
+			status = 888888
+			res = "cannot self invite"
+			return status, res
+		if event_id in joined:
+			status = 888888
+			res = "already joined"
+			return status, res
+		if event_id not in invites:
+			invites = list(set(invites))
+			invites.remove("none")
+			invites.append(event_id)
+			db.accounts.update_one({"mid": to_mid},{"$set": {"invites":invites}})
+			status = 1
+			res = "invited"
+		else:
+			status = 1
+			res = "already invited"
+	else:
+		status = 999999
+		res = "inputed data not found"
+	return status, res
+
 def main(operid, payload):
 	status = 999999
 	res = None
@@ -68,6 +123,8 @@ def main(operid, payload):
 		status = 1
 	if int(operid) == 8000:#accept_invite
 		status, res = accept_invite(payload)
+	if int(operid) == 8001:#send invite
+		status, res = send_invite(payload)
 	return status, res
 
 if __name__ == "__main__":

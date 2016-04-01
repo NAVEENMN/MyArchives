@@ -827,3 +827,1230 @@ ValueError: invalid literal for int() with base 10: '(null)'
 104.236.177.93:47076 - - [31/Mar/2016 00:55:00] "HTTP/1.1 POST /" - 200 OK
 104.236.177.93:47077 - - [31/Mar/2016 01:08:15] "HTTP/1.1 GET /" - 200 OK
 104.236.177.93:47078 - - [31/Mar/2016 01:08:15] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47170 - - [31/Mar/2016 04:37:00] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47171 - - [31/Mar/2016 04:37:00] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47172 - - [31/Mar/2016 04:37:17] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47173 - - [31/Mar/2016 04:37:17] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47174 - - [31/Mar/2016 04:38:11] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47175 - - [31/Mar/2016 04:38:11] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47176 - - [31/Mar/2016 04:41:51] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47177 - - [31/Mar/2016 04:41:51] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47178 - - [31/Mar/2016 04:42:22] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47179 - - [31/Mar/2016 04:42:22] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47180 - - [31/Mar/2016 04:42:32] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47181 - - [31/Mar/2016 04:42:32] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47182 - - [31/Mar/2016 04:42:56] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47183 - - [31/Mar/2016 04:42:56] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47184 - - [31/Mar/2016 04:44:30] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47185 - - [31/Mar/2016 04:44:30] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47186 - - [31/Mar/2016 04:46:11] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47187 - - [31/Mar/2016 04:46:11] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47188 - - [31/Mar/2016 04:47:12] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47189 - - [31/Mar/2016 04:47:12] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47190 - - [31/Mar/2016 04:49:20] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47191 - - [31/Mar/2016 04:49:20] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47192 - - [31/Mar/2016 04:49:50] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47193 - - [31/Mar/2016 04:49:50] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47194 - - [31/Mar/2016 04:51:28] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47195 - - [31/Mar/2016 04:51:28] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47196 - - [31/Mar/2016 04:52:25] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47197 - - [31/Mar/2016 04:52:25] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47198 - - [31/Mar/2016 04:53:59] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47199 - - [31/Mar/2016 04:53:59] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47200 - - [31/Mar/2016 04:55:03] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47201 - - [31/Mar/2016 04:55:03] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47202 - - [31/Mar/2016 05:32:37] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47203 - - [31/Mar/2016 05:32:37] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47204 - - [31/Mar/2016 05:32:41] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47205 - - [31/Mar/2016 05:32:41] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47206 - - [31/Mar/2016 05:35:20] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47207 - - [31/Mar/2016 05:35:20] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47208 - - [31/Mar/2016 05:37:43] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47209 - - [31/Mar/2016 05:37:43] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47210 - - [31/Mar/2016 05:58:31] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47211 - - [31/Mar/2016 05:58:31] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47212 - - [31/Mar/2016 05:58:42] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47213 - - [31/Mar/2016 05:58:42] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47214 - - [31/Mar/2016 06:05:15] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47215 - - [31/Mar/2016 06:05:15] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47216 - - [31/Mar/2016 06:05:19] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47217 - - [31/Mar/2016 06:05:19] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47218 - - [31/Mar/2016 06:05:27] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47219 - - [31/Mar/2016 06:05:27] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47220 - - [31/Mar/2016 06:05:37] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47221 - - [31/Mar/2016 06:05:37] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47222 - - [31/Mar/2016 06:06:31] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47223 - - [31/Mar/2016 06:06:31] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47224 - - [31/Mar/2016 06:08:04] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47225 - - [31/Mar/2016 06:08:04] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47226 - - [31/Mar/2016 06:09:15] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47227 - - [31/Mar/2016 06:09:15] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47228 - - [31/Mar/2016 06:09:24] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47229 - - [31/Mar/2016 06:09:24] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47230 - - [31/Mar/2016 06:10:51] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47231 - - [31/Mar/2016 06:10:51] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47232 - - [31/Mar/2016 06:10:58] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47233 - - [31/Mar/2016 06:10:58] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47234 - - [31/Mar/2016 06:15:57] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47235 - - [31/Mar/2016 06:15:57] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47236 - - [31/Mar/2016 06:16:07] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47237 - - [31/Mar/2016 06:16:07] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47238 - - [31/Mar/2016 06:16:43] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47239 - - [31/Mar/2016 06:16:43] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47240 - - [31/Mar/2016 06:17:11] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47241 - - [31/Mar/2016 06:17:11] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47242 - - [31/Mar/2016 06:17:32] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47243 - - [31/Mar/2016 06:17:32] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47244 - - [31/Mar/2016 06:25:13] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47245 - - [31/Mar/2016 06:25:13] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47246 - - [31/Mar/2016 06:25:20] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47247 - - [31/Mar/2016 06:25:20] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47248 - - [31/Mar/2016 06:33:16] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47249 - - [31/Mar/2016 06:33:16] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47250 - - [31/Mar/2016 06:33:44] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47251 - - [31/Mar/2016 06:33:44] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47252 - - [31/Mar/2016 06:35:50] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47253 - - [31/Mar/2016 06:35:50] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47254 - - [31/Mar/2016 06:35:58] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47255 - - [31/Mar/2016 06:35:58] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47256 - - [31/Mar/2016 06:39:28] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47257 - - [31/Mar/2016 06:39:28] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47258 - - [31/Mar/2016 06:39:31] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47259 - - [31/Mar/2016 06:39:31] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47260 - - [31/Mar/2016 06:39:41] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47261 - - [31/Mar/2016 06:39:41] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47262 - - [31/Mar/2016 06:40:17] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47263 - - [31/Mar/2016 06:40:17] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47264 - - [31/Mar/2016 06:40:25] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47265 - - [31/Mar/2016 06:40:25] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47266 - - [31/Mar/2016 06:41:33] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47267 - - [31/Mar/2016 06:41:33] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47268 - - [31/Mar/2016 06:41:45] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47269 - - [31/Mar/2016 06:41:45] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47270 - - [31/Mar/2016 06:42:24] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47271 - - [31/Mar/2016 06:42:24] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47272 - - [31/Mar/2016 06:42:37] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47273 - - [31/Mar/2016 06:42:37] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47274 - - [31/Mar/2016 06:52:16] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47275 - - [31/Mar/2016 06:52:16] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47276 - - [31/Mar/2016 06:52:22] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47277 - - [31/Mar/2016 06:52:22] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47278 - - [31/Mar/2016 06:52:52] "HTTP/1.1 GET /" - 200 OK
+http://0.0.0.0:8888/
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email": "navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@104.236.177.93:47279 - - [31/Mar/2016 06:52:52] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47280 - - [31/Mar/2016 06:52:59] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47281 - - [31/Mar/2016 06:52:59] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47282 - - [31/Mar/2016 06:55:43] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47283 - - [31/Mar/2016 06:55:43] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47284 - - [31/Mar/2016 06:56:21] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47285 - - [31/Mar/2016 06:56:21] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47286 - - [31/Mar/2016 06:56:30] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47287 - - [31/Mar/2016 06:56:30] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47288 - - [31/Mar/2016 06:56:50] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47289 - - [31/Mar/2016 06:56:50] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47290 - - [31/Mar/2016 06:57:00] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47291 - - [31/Mar/2016 06:57:00] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47292 - - [31/Mar/2016 06:58:35] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47293 - - [31/Mar/2016 06:58:35] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47294 - - [31/Mar/2016 06:58:44] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47295 - - [31/Mar/2016 06:58:44] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47296 - - [31/Mar/2016 06:58:49] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47297 - - [31/Mar/2016 06:58:49] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47298 - - [31/Mar/2016 07:00:51] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47299 - - [31/Mar/2016 07:00:51] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47300 - - [31/Mar/2016 07:01:04] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47301 - - [31/Mar/2016 07:01:04] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47302 - - [31/Mar/2016 07:03:31] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47303 - - [31/Mar/2016 07:03:31] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47304 - - [31/Mar/2016 07:03:39] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47305 - - [31/Mar/2016 07:03:39] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47306 - - [31/Mar/2016 07:04:21] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47307 - - [31/Mar/2016 07:04:21] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47308 - - [31/Mar/2016 07:06:16] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47309 - - [31/Mar/2016 07:06:16] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47310 - - [31/Mar/2016 07:06:31] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47311 - - [31/Mar/2016 07:06:31] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47312 - - [31/Mar/2016 07:08:15] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47313 - - [31/Mar/2016 07:08:15] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47314 - - [31/Mar/2016 07:08:23] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47315 - - [31/Mar/2016 07:08:23] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47316 - - [31/Mar/2016 07:09:32] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47317 - - [31/Mar/2016 07:09:32] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47318 - - [31/Mar/2016 07:09:41] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47319 - - [31/Mar/2016 07:09:41] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47320 - - [31/Mar/2016 07:14:13] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47321 - - [31/Mar/2016 07:14:13] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47322 - - [31/Mar/2016 07:14:21] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47323 - - [31/Mar/2016 07:14:21] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47324 - - [31/Mar/2016 07:14:31] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47325 - - [31/Mar/2016 07:14:31] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47326 - - [31/Mar/2016 07:16:36] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47327 - - [31/Mar/2016 07:16:36] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47328 - - [31/Mar/2016 07:16:53] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47329 - - [31/Mar/2016 07:16:53] "HTTP/1.1 POST /" - 200 OK
+94.185.83.100:42431 - - [31/Mar/2016 07:23:23] "HTTP/1.1 GET testproxy.php" - 404 Not Found
+104.236.177.93:47330 - - [31/Mar/2016 07:40:47] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47331 - - [31/Mar/2016 07:40:48] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47332 - - [31/Mar/2016 07:40:59] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47333 - - [31/Mar/2016 07:40:59] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47334 - - [31/Mar/2016 07:41:08] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47335 - - [31/Mar/2016 07:41:08] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47336 - - [31/Mar/2016 07:41:59] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47337 - - [31/Mar/2016 07:41:59] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47338 - - [31/Mar/2016 07:42:10] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47339 - - [31/Mar/2016 07:42:10] "HTTP/1.1 POST /" - 200 OK
+123.57.48.91:54343 - - [31/Mar/2016 07:42:22] "HTTP/1.1 GET save_proxy" - 404 Not Found
+91.196.50.33:60151 - - [31/Mar/2016 07:59:10] "HTTP/1.1 GET testproxy.php" - 404 Not Found
+104.236.177.93:47340 - - [31/Mar/2016 08:01:52] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47341 - - [31/Mar/2016 08:01:52] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47342 - - [31/Mar/2016 08:02:01] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47343 - - [31/Mar/2016 08:02:01] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47344 - - [31/Mar/2016 08:02:08] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47345 - - [31/Mar/2016 08:02:08] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47346 - - [31/Mar/2016 08:02:23] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47347 - - [31/Mar/2016 08:02:23] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47348 - - [31/Mar/2016 08:04:26] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47349 - - [31/Mar/2016 08:04:26] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47350 - - [31/Mar/2016 08:04:34] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47351 - - [31/Mar/2016 08:04:34] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47352 - - [31/Mar/2016 08:05:07] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47353 - - [31/Mar/2016 08:05:07] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47354 - - [31/Mar/2016 08:05:15] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47355 - - [31/Mar/2016 08:05:15] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47356 - - [31/Mar/2016 08:05:38] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47357 - - [31/Mar/2016 08:05:38] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47358 - - [31/Mar/2016 08:11:29] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47359 - - [31/Mar/2016 08:11:29] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47360 - - [31/Mar/2016 08:11:37] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47361 - - [31/Mar/2016 08:11:37] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47362 - - [31/Mar/2016 08:11:46] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47363 - - [31/Mar/2016 08:11:46] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47364 - - [31/Mar/2016 08:11:57] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47365 - - [31/Mar/2016 08:11:57] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47366 - - [31/Mar/2016 08:12:24] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47367 - - [31/Mar/2016 08:12:24] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47368 - - [31/Mar/2016 08:12:32] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47369 - - [31/Mar/2016 08:12:32] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47370 - - [31/Mar/2016 08:13:05] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47371 - - [31/Mar/2016 08:13:05] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47372 - - [31/Mar/2016 08:26:13] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47373 - - [31/Mar/2016 08:26:13] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47374 - - [31/Mar/2016 08:26:25] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47375 - - [31/Mar/2016 08:26:25] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47376 - - [31/Mar/2016 08:26:36] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47377 - - [31/Mar/2016 08:26:36] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47378 - - [31/Mar/2016 08:26:44] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47379 - - [31/Mar/2016 08:26:44] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47380 - - [31/Mar/2016 08:26:58] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47381 - - [31/Mar/2016 08:26:58] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47382 - - [31/Mar/2016 08:27:03] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47383 - - [31/Mar/2016 08:27:03] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47384 - - [31/Mar/2016 08:28:22] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47385 - - [31/Mar/2016 08:28:22] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47386 - - [31/Mar/2016 08:28:31] "HTTP/1.1 GET /" - 200 OK
+gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.c104.236.177.93:47387 - - [31/Mar/2016 08:28:31] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47388 - - [31/Mar/2016 08:28:38] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47389 - - [31/Mar/2016 08:28:38] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47390 - - [31/Mar/2016 08:29:26] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47391 - - [31/Mar/2016 08:29:26] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47392 - - [31/Mar/2016 08:30:04] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47393 - - [31/Mar/2016 08:30:04] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47394 - - [31/Mar/2016 08:30:32] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47395 - - [31/Mar/2016 08:30:32] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47396 - - [31/Mar/2016 08:42:38] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47397 - - [31/Mar/2016 08:42:38] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47398 - - [31/Mar/2016 08:53:38] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47399 - - [31/Mar/2016 08:53:38] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47400 - - [31/Mar/2016 08:55:39] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47401 - - [31/Mar/2016 08:55:39] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47402 - - [31/Mar/2016 08:56:08] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47403 - - [31/Mar/2016 08:56:08] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47404 - - [31/Mar/2016 09:22:45] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47405 - - [31/Mar/2016 09:22:45] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47406 - - [31/Mar/2016 09:29:06] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47407 - - [31/Mar/2016 09:29:06] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47408 - - [31/Mar/2016 09:29:15] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 77, in main
+    status, result = api.main(operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 67, in main
+    res = find_food(payload)
+  File "/var/www/html/metster/apis/pf1123py/api.py", line 11, in find_food
+    data = json.loads(jpayload) #unpack
+  File "/usr/lib/python2.7/json/__init__.py", line 338, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python2.7/json/decoder.py", line 366, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python2.7/json/decoder.py", line 384, in raw_decode
+    raise ValueError("No JSON object could be decoded")
+ValueError: No JSON object could be decoded
+
+104.236.177.93:47409 - - [31/Mar/2016 09:29:15] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47410 - - [31/Mar/2016 09:51:41] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 86, in main
+    status, result = ae.main(table_id, operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/han_aev.py", line 174, in main
+    status, res = find_account(payload)
+  File "/var/www/html/metster/apis/pf1123py/han_aev.py", line 54, in find_account
+    hobj = hashlib.md5(data["email"])
+KeyError: 'email'
+
+104.236.177.93:47411 - - [31/Mar/2016 09:51:41] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47412 - - [31/Mar/2016 09:51:58] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 86, in main
+    status, result = ae.main(table_id, operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/han_aev.py", line 174, in main
+    status, res = find_account(payload)
+  File "/var/www/html/metster/apis/pf1123py/han_aev.py", line 54, in find_account
+    hobj = hashlib.md5(data["email"])
+KeyError: 'email'
+
+104.236.177.93:47413 - - [31/Mar/2016 09:51:58] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47414 - - [31/Mar/2016 09:53:30] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 86, in main
+    status, result = ae.main(table_id, operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/han_aev.py", line 174, in main
+    status, res = find_account(payload)
+  File "/var/www/html/metster/apis/pf1123py/han_aev.py", line 54, in find_account
+    hobj = hashlib.md5(data["email"])
+KeyError: 'email'
+
+104.236.177.93:47415 - - [31/Mar/2016 09:53:30] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47416 - - [31/Mar/2016 09:53:40] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 86, in main
+    status, result = ae.main(table_id, operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/han_aev.py", line 174, in main
+    status, res = find_account(payload)
+  File "/var/www/html/metster/apis/pf1123py/han_aev.py", line 54, in find_account
+    hobj = hashlib.md5(data["email"])
+KeyError: 'email'
+
+104.236.177.93:47417 - - [31/Mar/2016 09:53:40] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47418 - - [31/Mar/2016 09:57:27] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47419 - - [31/Mar/2016 09:57:27] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47420 - - [31/Mar/2016 09:58:19] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47421 - - [31/Mar/2016 09:58:19] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47422 - - [31/Mar/2016 10:02:51] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47423 - - [31/Mar/2016 10:02:51] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47424 - - [31/Mar/2016 10:03:00] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47425 - - [31/Mar/2016 10:03:00] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47426 - - [31/Mar/2016 10:03:25] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47427 - - [31/Mar/2016 10:03:25] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47428 - - [31/Mar/2016 10:04:59] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47429 - - [31/Mar/2016 10:04:59] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47430 - - [31/Mar/2016 10:07:27] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47431 - - [31/Mar/2016 10:07:27] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47432 - - [31/Mar/2016 10:10:31] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47433 - - [31/Mar/2016 10:10:31] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47434 - - [31/Mar/2016 10:10:37] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47435 - - [31/Mar/2016 10:10:39] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47436 - - [31/Mar/2016 10:10:49] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47437 - - [31/Mar/2016 10:10:49] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47438 - - [31/Mar/2016 10:10:57] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47439 - - [31/Mar/2016 10:10:57] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47440 - - [31/Mar/2016 10:11:30] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47441 - - [31/Mar/2016 10:11:30] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47442 - - [31/Mar/2016 10:11:43] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47443 - - [31/Mar/2016 10:11:46] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47444 - - [31/Mar/2016 10:14:01] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47445 - - [31/Mar/2016 10:14:01] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47446 - - [31/Mar/2016 10:14:17] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47447 - - [31/Mar/2016 10:14:17] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47448 - - [31/Mar/2016 10:14:25] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47449 - - [31/Mar/2016 10:14:25] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47450 - - [31/Mar/2016 10:14:34] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47451 - - [31/Mar/2016 10:14:37] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47452 - - [31/Mar/2016 10:16:11] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47453 - - [31/Mar/2016 10:16:11] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47454 - - [31/Mar/2016 10:16:33] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47455 - - [31/Mar/2016 10:16:33] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47456 - - [31/Mar/2016 10:17:21] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47457 - - [31/Mar/2016 10:17:21] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47458 - - [31/Mar/2016 10:17:27] "HTTP/1.1 GET /" - 200 OK
+om"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 sushi
+{} ADB
+1 {}
+{} ADB
+1 {}
+{} ADB
+1 {}
+{} ADB
+1 {}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"query":"sushi","event_id":"10103884620845432--event--20"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'sushi'])
+sushi 14
+[u'sushirrito-palo-alto', u'kanpai-sushi-palo-alto', u'shoji-sushi-palo-alto', u'sushi-house-palo-alto', u'koma-sushi-restaurant-menlo-park', u'naomi-sushi-menlo-park', u'gombei-japanese-restaurant-menlo-park', u'akasaka-sushi-menlo-park-2', u'juban-yakiniku-house-menlo-park', u'odori-sushi-and-teppanyaki-palo-alto', u'hommas-brown-rice-sushi-palo-alto', u'jin-sho-palo-alto', u'dashi-japanese-restaurant-menlo-park', u'mitsunobu-menlo-park']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"query":"sushi","event_id":"10103884620845432--event--20"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'sushi'])
+sushi 14
+[u'sushirrito-palo-alto', u'kanpai-sushi-palo-alto', u'shoji-sushi-palo-alto', u'sushi-house-palo-alto', u'koma-sushi-restaurant-menlo-park', u'naomi-sushi-menlo-park', u'gombei-japanese-restaurant-menlo-park', u'akasaka-sushi-menlo-park-2', u'juban-yakiniku-house-menlo-park', u'odori-sushi-and-teppanyaki-palo-alto', u'hommas-brown-rice-sushi-palo-alto', u'jin-sho-palo-alto', u'dashi-japanese-restaurant-menlo-park', u'mitsunobu-menlo-park']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"query":"sushi","event_id":"10103884620845432--event--20"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'sushi'])
+sushi 14
+[u'sushirrito-palo-alto', u'kanpai-sushi-palo-alto', u'shoji-sushi-palo-alto', u'sushi-house-palo-alto', u'koma-sushi-restaurant-menlo-park', u'naomi-sushi-menlo-park', u'gombei-japanese-restaurant-menlo-park', u'akasaka-sushi-menlo-park-2', u'juban-yakiniku-house-menlo-park', u'odori-sushi-and-teppanyaki-palo-alto', u'hommas-brown-rice-sushi-palo-alto', u'jin-sho-palo-alto', u'dashi-japanese-restaurant-menlo-park', u'mitsunobu-menlo-park']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"query":"sushi","event_id":"10103884620845432--event--20"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'sushi'])
+sushi 14
+[u'sushirrito-palo-alto', u'kanpai-sushi-palo-alto', u'shoji-sushi-palo-alto', u'sushi-house-palo-a104.236.177.93:47459 - - [31/Mar/2016 10:17:30] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47464 - - [31/Mar/2016 10:43:57] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47465 - - [31/Mar/2016 10:43:57] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47466 - - [31/Mar/2016 10:44:08] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47467 - - [31/Mar/2016 10:44:08] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47468 - - [31/Mar/2016 10:44:16] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47469 - - [31/Mar/2016 10:44:16] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47470 - - [31/Mar/2016 10:44:24] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47471 - - [31/Mar/2016 10:44:24] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47472 - - [31/Mar/2016 10:44:50] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 86, in main
+    status, result = ae.main(table_id, operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/han_aev.py", line 170, in main
+    status, res = insert_account(payload)
+  File "/var/www/html/metster/apis/pf1123py/han_aev.py", line 36, in insert_account
+    return status, result
+UnboundLocalError: local variable 'result' referenced before assignment
+
+104.236.177.93:47473 - - [31/Mar/2016 10:44:50] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47474 - - [31/Mar/2016 10:48:11] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47475 - - [31/Mar/2016 10:48:11] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47476 - - [31/Mar/2016 10:48:38] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47477 - - [31/Mar/2016 10:48:38] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47478 - - [31/Mar/2016 10:50:57] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47479 - - [31/Mar/2016 10:50:57] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47480 - - [31/Mar/2016 10:51:31] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47481 - - [31/Mar/2016 10:51:31] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47482 - - [31/Mar/2016 10:52:16] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47483 - - [31/Mar/2016 10:52:16] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47484 - - [31/Mar/2016 10:52:22] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47485 - - [31/Mar/2016 10:52:22] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47486 - - [31/Mar/2016 11:11:16] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47487 - - [31/Mar/2016 11:11:16] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47488 - - [31/Mar/2016 11:11:42] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47489 - - [31/Mar/2016 11:11:42] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47490 - - [31/Mar/2016 11:12:02] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47491 - - [31/Mar/2016 11:12:02] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47492 - - [31/Mar/2016 11:32:25] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47493 - - [31/Mar/2016 11:32:25] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47494 - - [31/Mar/2016 11:54:33] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47495 - - [31/Mar/2016 11:54:33] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47496 - - [31/Mar/2016 11:54:37] "HTTP/1.1 GET /" - 200 OK
+lto', u'koma-sushi-restaurant-menlo-park', u'naomi-sushi-menlo-park', u'gombei-japanese-restaurant-menlo-park', u'akasaka-sushi-menlo-park-2', u'juban-yakiniku-house-menlo-park', u'odori-sushi-and-teppanyaki-palo-alto', u'hommas-brown-rice-sushi-palo-alto', u'jin-sho-palo-alto', u'dashi-japanese-restaurant-menlo-park', u'mitsunobu-menlo-park']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'dev_id': u'12er34', u'name': u'Meow MiX', u'fb_id': u'12345678', u'joined': u'none', u'longitude': u'-124', u'food_pref': u'Chinese', u'invites': u'none', u'movie_pref': u'Horror', u'hosted': u'none', u'latitude': u'38', u'email': u'meowx@gmail.com'} ADB
+1 {"dev_id":"12er34","fb_id":"12345678","hosted":"none","joined":"none","longitude":"-124","food_pref":"Chinese","email":"meowx@gmail.com","latitude":"38","movie_pref":"Horror","name":"Meow MiX","invites":"none"}
+inserted to accounts..
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'dev_id': u'12er34', u'name': u'Meow MiX', u'fb_id': u'12345678', u'joined': u'none', u'longitude': u'-124', u'food_pref': u'Chinese', u'invites': u'none', u'movie_pref': u'Horror', u'hosted': u'none', u'latitude': u'38', u'email': u'meowx@gmail.com'} ADB
+1 {"dev_id":"12er34","fb_id":"12345678","hosted":"none","joined":"none","longitude":"-124","food_pref":"Chinese","email":"meowx@gmail.com","latitude":"38","movie_pref":"Horror","name":"Meow MiX","invites":"none"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'dev_id': u'12er34', u'moviepref': u'Horror', u'name': u'Meow MiX', u'fb_id': u'12345678', u'joined': u'none', u'longitude': u'-124', u'food_pref': u'Chinese', u'invites': u'none', u'hosted': u'none', u'latitude': u'38', u'email': u'meowx@gmail.com'} ADB
+fail at moviepref
+999999 {"dev_id":"12er34","fb_id":"12345678","hosted":"none","joined":"none","longitude":"-124","food_pref":"Chinese","moviepref":"Horror","email":"meowx@gmail.com","latitude":"38","name":"Meow MiX","invites":"none"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'dev_id': u'12er34', u'moviepref': u'Horror', u'name': u'Meow MiX', u'fb_id': u'12345678', u'joined': [u'none'], u'longitude': u'-124', u'food_pref': u'Chinese', u'invites': [u'none'], u'hosted': [u'none'], u'latitude': u'38', u'email': u'meowx@gmail.com'} ADB
+fail at moviepref
+999999 {"dev_id":"12er34","fb_id":"12345678","hosted":["none"],"joined":["none"],"longitude":"-124","food_pref":"Chinese","moviepref":"Horror","email":"meowx@gmail.com","latitude":"38","name":"Meow MiX","invites":["none"]}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'dev_id': u'12er34', u'moviepref': u'Horror', u'name': u'Meow MiX', u'fb_id': u'12345678', u'joined': [u'none'], u'longitude': u'-124', u'food_pref': u'Chinese', u'invites': [u'none'], u'hosted': [u'none'], u'latitude': u'38', u'email': u'meowx@gmail.com'} ADB
+fail at moviepref
+999999 {"dev_id":"12er34","fb_id":"12345678","hosted":["none"],"joined":["none"],"longitude":"-124","food_pref":"Chinese","moviepref":"Horror","email":"meowx@gmail.com","latitude":"38","name":"Meow MiX","invites":["none"]}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'event_notes': u'burgers burglars', u'event_time': u'17:00', u'event_name': u'Burgers', u'host_email': u'navimn1991@gmail.com', u'event_members': [u'John Fonds', u'Bob JR'], u'event_date': u'03/30/2016'} EVNT
+1 {"event_time":"17:00","event_date":"03\/30\/2016","event_notes":"burgers burglars","event_members":["John Fonds","Bob JR"],"host_email":"navimn1991@gmail.com","event_name":"Burgers"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"query":"sushi","event_id":"10103884620845432--event--20"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'sushi'])
+sush104.236.177.93:47497 - - [31/Mar/2016 11:54:40] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47498 - - [31/Mar/2016 11:57:05] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47499 - - [31/Mar/2016 11:57:05] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47500 - - [31/Mar/2016 11:57:10] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47501 - - [31/Mar/2016 11:57:13] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47502 - - [31/Mar/2016 11:58:03] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47503 - - [31/Mar/2016 11:58:03] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47504 - - [31/Mar/2016 11:58:11] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47505 - - [31/Mar/2016 11:58:14] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47506 - - [31/Mar/2016 12:01:04] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47507 - - [31/Mar/2016 12:01:04] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47508 - - [31/Mar/2016 12:01:13] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47509 - - [31/Mar/2016 12:01:16] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47510 - - [31/Mar/2016 12:02:19] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47511 - - [31/Mar/2016 12:02:19] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47512 - - [31/Mar/2016 12:02:35] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47513 - - [31/Mar/2016 12:02:38] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47514 - - [31/Mar/2016 12:04:39] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47515 - - [31/Mar/2016 12:04:39] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47516 - - [31/Mar/2016 12:04:50] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47517 - - [31/Mar/2016 12:04:53] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47518 - - [31/Mar/2016 12:08:05] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47519 - - [31/Mar/2016 12:08:05] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47520 - - [31/Mar/2016 12:08:15] "HTTP/1.1 GET /" - 200 OK
+i 14
+[u'sushirrito-palo-alto', u'kanpai-sushi-palo-alto', u'shoji-sushi-palo-alto', u'sushi-house-palo-alto', u'koma-sushi-restaurant-menlo-park', u'naomi-sushi-menlo-park', u'gombei-japanese-restaurant-menlo-park', u'akasaka-sushi-menlo-park-2', u'juban-yakiniku-house-menlo-park', u'odori-sushi-and-teppanyaki-palo-alto', u'hommas-brown-rice-sushi-palo-alto', u'jin-sho-palo-alto', u'dashi-japanese-restaurant-menlo-park', u'mitsunobu-menlo-park']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"query":"sushi","event_id":"10103884620845432--event--20"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'sushi'])
+sushi 14
+[u'sushirrito-palo-alto', u'kanpai-sushi-palo-alto', u'shoji-sushi-palo-alto', u'sushi-house-palo-alto', u'koma-sushi-restaurant-menlo-park', u'naomi-sushi-menlo-park', u'gombei-japanese-restaurant-menlo-park', u'akasaka-sushi-menlo-park-2', u'juban-yakiniku-house-menlo-park', u'odori-sushi-and-teppanyaki-palo-alto', u'hommas-brown-rice-sushi-palo-alto', u'jin-sho-palo-alto', u'dashi-japanese-restaurant-menlo-park', u'mitsunobu-menlo-park']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"query":"sushi","event_id":"10103884620845432--event--20"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'sushi'])
+sushi 14
+[u'sushirrito-palo-alto', u'kanpai-sushi-palo-alto', u'shoji-sushi-palo-alto', u'sushi-house-palo-alto', u'koma-sushi-restaurant-menlo-park', u'naomi-sushi-menlo-park', u'gombei-japanese-restaurant-menlo-park', u'akasaka-sushi-menlo-park-2', u'juban-yakiniku-house-menlo-park', u'odori-sushi-and-teppanyaki-palo-alto', u'hommas-brown-rice-sushi-palo-alto', u'jin-sho-palo-alto', u'dashi-japanese-restaurant-menlo-park', u'mitsunobu-menlo-park']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"query":"sushi","event_id":"10103884620845432--event--20"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'sushi'])
+sushi 14
+[u'sushirrito-palo-alto', u'kanpai-sushi-palo-alto', u'shoji-sushi-palo-alto', u'sushi-house-palo-alto', u'koma-sushi-restaurant-menlo-park', u'naomi-sushi-menlo-park', u'gombei-japanese-restaurant-menlo-park', u'akasaka-sushi-menlo-park-2', u'juban-yakiniku-house-menlo-park', u'odori-sushi-and-teppanyaki-palo-alto', u'hommas-brown-rice-sushi-palo-alto', u'jin-sho-palo-alto', u'dashi-japanese-restaurant-menlo-park', u'mitsunobu-menlo-park']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"query":"sushi","event_id":"10103884620845432--event--20"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'sushi'])
+sushi 14
+[u'sushirrito-palo-alto', u'kanpai-sushi-palo-alto', u'shoji-sushi-palo-alto', u'sushi-house-palo-alto', u'koma-sushi-restaurant-menlo-park', u'naomi-sushi-menlo-park', u'gombei-japanese-restaurant-menlo-park', u'akasaka-sushi-menlo-park-2', u'juban-yakiniku-house-menlo-park', u'odori-sushi-and-teppanyaki-palo-alto', u'hommas-brown-rice-sushi-palo-alto', u'jin-sho-palo-alto', u'dashi-japanese-restaurant-menlo-park', u'mitsunobu-menlo-park']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"query":"sushi","event_id":"10103884620845432--event--20"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'sushi'])
+sushi 14
+[u'sushirrito-palo-alto', u'kanpai-sushi-palo-alto', u'shoji-sushi-palo-alto', u'sushi-house-palo-alto', u'koma-sushi-restaurant-menlo-park', u'naomi-sushi-menlo-park', u'gombei-japanese-restaurant-menlo-park', u'akasaka-sushi-menlo-park-2', u'juban-yakiniku-house-menlo-park', u'odori-sushi-and-teppanyaki-palo-alto', u'hommas-brown-rice-sushi-palo-alto', u'jin-sho-palo-alto', u'dashi-japanese-restaurant-menlo-park', u'mitsunobu-menlo-park']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"query":"sushi","event_id":"10103884620845432--event--20"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'sushi'])
+sushi 14
+[u'sushirrito-palo-alto', u'kanpai-sushi-palo-alto', u'shoji-sushi-palo-alto', u'sushi-house-palo-alto', u'104.236.177.93:47521 - - [31/Mar/2016 12:08:17] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47522 - - [31/Mar/2016 12:10:34] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47523 - - [31/Mar/2016 12:10:34] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47524 - - [31/Mar/2016 12:11:24] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47525 - - [31/Mar/2016 12:11:24] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47526 - - [31/Mar/2016 12:15:05] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47527 - - [31/Mar/2016 12:15:05] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47528 - - [31/Mar/2016 12:15:14] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47529 - - [31/Mar/2016 12:15:17] "HTTP/1.1 POST /" - 200 OK
+123.59.59.52:55165 - - [31/Mar/2016 16:38:34] "HTTP/1.1 GET " - 404 Not Found
+120.132.50.135:51669 - - [31/Mar/2016 18:03:15] "HTTP/1.1 GET " - 404 Not Found
+104.236.177.93:47530 - - [31/Mar/2016 19:09:00] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47531 - - [31/Mar/2016 19:09:00] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47532 - - [31/Mar/2016 19:09:35] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47533 - - [31/Mar/2016 19:09:36] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47534 - - [31/Mar/2016 19:13:04] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47535 - - [31/Mar/2016 19:13:05] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47536 - - [31/Mar/2016 19:13:37] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47537 - - [31/Mar/2016 19:13:37] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47538 - - [31/Mar/2016 19:26:57] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47539 - - [31/Mar/2016 19:26:57] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47540 - - [31/Mar/2016 20:01:03] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 86, in main
+    status, result = ae.main(table_id, operid, payload)
+  File "/var/www/html/metster/apis/pf1123py/han_aev.py", line 172, in main
+    status, res = delete_account(payload)
+  File "/var/www/html/metster/apis/pf1123py/han_aev.py", line 51, in delete_account
+    return status, result
+UnboundLocalError: local variable 'result' referenced before assignment
+
+104.236.177.93:47541 - - [31/Mar/2016 20:01:03] "HTTP/1.1 POST /" - 500 Internal Server Error
+104.236.177.93:47542 - - [31/Mar/2016 20:17:55] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47543 - - [31/Mar/2016 20:17:55] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47544 - - [31/Mar/2016 20:18:16] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47545 - - [31/Mar/2016 20:18:16] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47546 - - [31/Mar/2016 20:20:20] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47547 - - [31/Mar/2016 20:20:20] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47548 - - [31/Mar/2016 20:20:36] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47549 - - [31/Mar/2016 20:20:36] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47550 - - [31/Mar/2016 20:26:22] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47551 - - [31/Mar/2016 20:26:22] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47552 - - [31/Mar/2016 20:26:42] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47553 - - [31/Mar/2016 20:26:42] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47554 - - [31/Mar/2016 20:27:04] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47555 - - [31/Mar/2016 20:27:04] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47556 - - [31/Mar/2016 20:29:07] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47557 - - [31/Mar/2016 20:29:07] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47558 - - [31/Mar/2016 20:29:38] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47559 - - [31/Mar/2016 20:29:38] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47560 - - [31/Mar/2016 20:31:47] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47561 - - [31/Mar/2016 20:31:47] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47562 - - [31/Mar/2016 20:32:33] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47563 - - [31/Mar/2016 20:32:33] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47564 - - [31/Mar/2016 20:34:23] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47565 - - [31/Mar/2016 20:34:23] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47566 - - [31/Mar/2016 20:39:17] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47567 - - [31/Mar/2016 20:39:17] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47568 - - [31/Mar/2016 20:39:33] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47569 - - [31/Mar/2016 20:39:33] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47570 - - [31/Mar/2016 20:40:47] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47571 - - [31/Mar/2016 20:40:47] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47572 - - [31/Mar/2016 20:41:26] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47573 - - [31/Mar/2016 20:41:26] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47574 - - [31/Mar/2016 20:42:38] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47575 - - [31/Mar/2016 20:42:38] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47576 - - [31/Mar/2016 20:43:52] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47577 - - [31/Mar/2016 20:43:52] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47578 - - [31/Mar/2016 20:44:33] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47579 - - [31/Mar/2016 20:44:33] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47580 - - [31/Mar/2016 20:48:31] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47581 - - [31/Mar/2016 20:48:31] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47582 - - [31/Mar/2016 20:48:44] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47583 - - [31/Mar/2016 20:48:44] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47584 - - [31/Mar/2016 20:49:30] "HTTP/1.1 GET /" - 200 OK
+koma-sushi-restaurant-menlo-park', u'naomi-sushi-menlo-park', u'gombei-japanese-restaurant-menlo-park', u'akasaka-sushi-menlo-park-2', u'juban-yakiniku-house-menlo-park', u'odori-sushi-and-teppanyaki-palo-alto', u'hommas-brown-rice-sushi-palo-alto', u'jin-sho-palo-alto', u'dashi-japanese-restaurant-menlo-park', u'mitsunobu-menlo-park']
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+1 {"query":"sushi","event_id":"10103884620845432--event--20"}
+[[37.4470789, -122.1603188], [37.4470789, -122.1603188]]
+set([u'sushi'])
+sushi 14
+[u'sushirrito-palo-alto', u'kanpai-sushi-palo-alto', u'shoji-sushi-palo-alto', u'sushi-house-palo-alto', u'koma-sushi-restaurant-menlo-park', u'naomi-sushi-menlo-park', u'gombei-japanese-restaurant-menlo-park', u'akasaka-sushi-menlo-park-2', u'juban-yakiniku-house-menlo-park', u'odori-sushi-and-teppanyaki-palo-alto', u'hommas-brown-rice-sushi-palo-alto', u'jin-sho-palo-alto', u'dashi-japanese-restaurant-menlo-park', u'mitsunobu-menlo-park']
+{u'event_notes': u'Lets Enjoy', u'event_time': u'6:00', u'event_name': u'"eat today"', u'host_email': u'navimn1991@gmail.com', u'event_members': [u'none'], u'event_date': u'03/28/2016'} EVNT
+1 {"event_notes": "Lets Enjoy", "event_time": "6:00", "event_name": "\"eat today\"", "event_members": ["none"], "host_email": "navimn1991@gmail.com", "event_date": "03/28/2016"}
+{u'event_notes': u'Lets Enjoy', u'event_time': u'6:00', u'event_name': u'eat', u'host_email': u'navimn1991@gmail.com', u'event_members': [u'none'], u'event_date': u'03/28/2016'} EVNT
+1 {"event_notes": "Lets Enjoy", "event_time": "6:00", "event_name": "eat", "event_members": ["none"], "host_email": "navimn1991@gmail.com", "event_date": "03/28/2016"}
+{u'event_notes': u'Lets Enjoy', u'event_time': u'6:00', u'event_name': u'eat', u'host_email': u'navimn1991@gmail.com', u'event_members': u'jessi.gui@gmail.com', u'event_date': u'03/28/2016'} EVNT
+1 {"event_notes": "Lets Enjoy", "event_time": "6:00", "event_name": "eat", "event_members": "jessi.gui@gmail.com", "host_email": "navimn1991@gmail.com", "event_date": "03/28/2016"}
+{u'email': u'jessi.gui@gmail.com'} ADB
+1 {"email": "jessi.gui@gmail.com"}
+{u'email': u'chelsea@gmail.com'} ADB
+1 {"email": "chelsea@gmail.com"}
+{u'email': u'operation code: 111002'} ADB
+1 {"email": "operation code: 111002"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"emai104.236.177.93:47585 - - [31/Mar/2016 20:49:30] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47586 - - [31/Mar/2016 20:51:37] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47587 - - [31/Mar/2016 20:51:37] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47588 - - [31/Mar/2016 20:56:24] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47589 - - [31/Mar/2016 20:56:24] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47590 - - [31/Mar/2016 20:57:48] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47591 - - [31/Mar/2016 20:57:48] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47592 - - [31/Mar/2016 21:04:00] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47593 - - [31/Mar/2016 21:04:00] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47594 - - [31/Mar/2016 21:04:42] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47595 - - [31/Mar/2016 21:04:42] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47596 - - [31/Mar/2016 21:05:42] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47597 - - [31/Mar/2016 21:05:42] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47598 - - [31/Mar/2016 21:06:33] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47599 - - [31/Mar/2016 21:06:33] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47600 - - [31/Mar/2016 21:07:13] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47601 - - [31/Mar/2016 21:07:13] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47602 - - [31/Mar/2016 21:08:14] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47603 - - [31/Mar/2016 21:08:14] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47604 - - [31/Mar/2016 21:09:38] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47605 - - [31/Mar/2016 21:09:38] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47606 - - [31/Mar/2016 21:10:28] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47607 - - [31/Mar/2016 21:10:28] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47608 - - [31/Mar/2016 21:10:39] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47609 - - [31/Mar/2016 21:10:39] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47610 - - [31/Mar/2016 21:13:44] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47611 - - [31/Mar/2016 21:13:44] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47612 - - [31/Mar/2016 21:14:36] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47613 - - [31/Mar/2016 21:14:36] "HTTP/1.1 POST /" - 200 OK
+185.25.151.159:33693 - - [31/Mar/2016 21:34:00] "HTTP/1.1 GET testproxy.php" - 404 Not Found
+104.236.177.93:47614 - - [31/Mar/2016 22:10:29] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47615 - - [31/Mar/2016 22:10:29] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47616 - - [31/Mar/2016 22:16:08] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47617 - - [31/Mar/2016 22:16:08] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47618 - - [31/Mar/2016 22:16:09] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47619 - - [31/Mar/2016 22:16:09] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47620 - - [31/Mar/2016 22:24:27] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47621 - - [31/Mar/2016 22:24:27] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47622 - - [31/Mar/2016 22:24:38] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47623 - - [31/Mar/2016 22:24:38] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47624 - - [31/Mar/2016 22:24:38] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47625 - - [31/Mar/2016 22:24:38] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47626 - - [31/Mar/2016 22:25:14] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47627 - - [31/Mar/2016 22:25:14] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47628 - - [31/Mar/2016 22:26:50] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47629 - - [31/Mar/2016 22:26:50] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47630 - - [31/Mar/2016 22:30:17] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47631 - - [31/Mar/2016 22:30:18] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47632 - - [31/Mar/2016 22:34:51] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47633 - - [31/Mar/2016 22:34:51] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47634 - - [31/Mar/2016 22:39:39] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47635 - - [31/Mar/2016 22:39:39] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47636 - - [31/Mar/2016 22:39:48] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47637 - - [31/Mar/2016 22:39:48] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47638 - - [31/Mar/2016 22:39:48] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47639 - - [31/Mar/2016 22:39:48] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47640 - - [31/Mar/2016 22:40:30] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47641 - - [31/Mar/2016 22:40:30] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47642 - - [31/Mar/2016 22:40:45] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47643 - - [31/Mar/2016 22:40:45] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47644 - - [31/Mar/2016 22:40:45] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47645 - - [31/Mar/2016 22:40:45] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47646 - - [31/Mar/2016 22:51:52] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47647 - - [31/Mar/2016 22:51:52] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47648 - - [31/Mar/2016 22:52:01] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47649 - - [31/Mar/2016 22:52:01] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47650 - - [31/Mar/2016 22:52:43] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47651 - - [31/Mar/2016 22:52:43] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47652 - - [31/Mar/2016 22:52:52] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47653 - - [31/Mar/2016 22:52:52] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47654 - - [31/Mar/2016 22:53:13] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47655 - - [31/Mar/2016 22:53:13] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47656 - - [31/Mar/2016 22:53:30] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47657 - - [31/Mar/2016 22:53:30] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47658 - - [31/Mar/2016 23:14:49] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47659 - - [31/Mar/2016 23:14:49] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47660 - - [31/Mar/2016 23:26:30] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47661 - - [31/Mar/2016 23:26:30] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47662 - - [31/Mar/2016 23:27:12] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47663 - - [31/Mar/2016 23:27:12] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47664 - - [31/Mar/2016 23:31:51] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47665 - - [31/Mar/2016 23:31:51] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47666 - - [31/Mar/2016 23:32:30] "HTTP/1.1 GET /" - 200 OK
+l":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'chelseagreen@live.com'} ADB
+1 {"email":"chelseagreen@live.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'chelseagreen@live.com'} ADB
+1 {"email":"chelseagreen@live.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'chelseagreen@live.com'} ADB
+1 {"email": "chelseagreen@live.com"}
+{u'email': u'jessi.gui@gmail.com'} ADB
+1 {"email": "jessi.gui@gmail.com"}
+{u'dev_id': u'12er34', u'moviepref': u'abcdefghijk', u'name': u'chelsea', u'fb_id': u'123123123', u'longitude': u'-122.1603188', u'joined': [u'none'], u'invites': [u'none'], u'food_pref': u'abcdefghijk', u'hosted': [u'none'], u'latitude': u'37.4470789', u'email': u'green@gmail.com'} ADB
+fail at moviepref
+999999 {"dev_id": "12er34", "moviepref": "abcdefghijk", "name": "chelsea", "fb_id": "123123123", "longitude": "-122.1603188", "email": "green@gmail.com", "joined": ["none"], "food_pref": "abcdefghijk", "hosted": ["none"], "latitude": "37.4470789", "invites": ["none"]}
+{u'dev_id': u'12er34', u'moviepref': u'abcdefghijk', u'name': u'chelsea', u'fb_id': u'123123123', u'longitude': u'-122.1603188', u'joined': [u'none'], u'invites': [u'none'], u'food_pref': u'abcdefghijk', u'hosted': [u'none'], u'latitude': u'37.4470789', u'email': u'green@chelsea.com'} ADB
+fail at moviepref
+999999 {"dev_id": "12er34", "moviepref": "abcdefghijk", "name": "chelsea", "fb_id": "123123123", "longitude": "-122.1603188", "email": "green@chelsea.com", "joined": ["none"], "food_pref": "abcdefghijk", "hosted": ["none"], "latitude": "37.4470789", "invites": ["none"]}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'chelseagreen@live.com'} ADB
+1 {"email":"chelseagreen@live.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'chelseagreen@live.com'} ADB
+1 {"email":"chelseagreen@live.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'chelseagreen@live.com'} ADB
+1 {"email":"chelseagreen@live.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'chelseagreen@live.com'} ADB
+1 {"email":"chelseagreen@live.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'chelseagreen@live.com'} ADB
+1 {"email":"chelseagreen@live.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'chelseagreen@live.com'} ADB
+1 {"email":"chelseagreen@live.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"email":"navimn1991@gmail.com"}
+{u'email': u'navimn1991@gmail.com'} ADB
+1 {"ema104.236.177.93:47667 - - [31/Mar/2016 23:32:30] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47668 - - [31/Mar/2016 23:32:35] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47669 - - [31/Mar/2016 23:32:35] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47670 - - [31/Mar/2016 23:49:33] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47671 - - [31/Mar/2016 23:49:33] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47672 - - [31/Mar/2016 23:49:50] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47673 - - [31/Mar/2016 23:49:50] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47674 - - [31/Mar/2016 23:50:39] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47675 - - [31/Mar/2016 23:50:39] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47676 - - [31/Mar/2016 23:50:43] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47677 - - [31/Mar/2016 23:50:43] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47678 - - [31/Mar/2016 23:54:02] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47679 - - [31/Mar/2016 23:54:02] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47680 - - [31/Mar/2016 23:55:44] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47681 - - [31/Mar/2016 23:55:44] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47682 - - [31/Mar/2016 23:55:53] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47683 - - [31/Mar/2016 23:55:53] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47684 - - [31/Mar/2016 23:57:56] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47685 - - [31/Mar/2016 23:57:56] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47686 - - [31/Mar/2016 23:58:02] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47687 - - [31/Mar/2016 23:58:02] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47688 - - [31/Mar/2016 23:58:24] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47689 - - [31/Mar/2016 23:58:24] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47690 - - [31/Mar/2016 23:58:49] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47691 - - [31/Mar/2016 23:58:49] "HTTP/1.1 POST /" - 200 OK
+185.25.151.159:53398 - - [01/Apr/2016 00:02:46] "HTTP/1.1 GET testproxy.php" - 404 Not Found
+104.236.177.93:47692 - - [01/Apr/2016 00:55:36] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47693 - - [01/Apr/2016 00:55:36] "HTTP/1.1 POST /" - 200 OK
+120.132.50.135:36116 - - [01/Apr/2016 01:04:09] "HTTP/1.1 GET " - 404 Not Found
+104.236.177.93:47694 - - [01/Apr/2016 01:08:00] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47695 - - [01/Apr/2016 01:08:00] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47696 - - [01/Apr/2016 01:16:11] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47697 - - [01/Apr/2016 01:16:11] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47698 - - [01/Apr/2016 01:17:34] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47699 - - [01/Apr/2016 01:17:34] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47700 - - [01/Apr/2016 01:19:19] "HTTP/1.1 GET /" - 200 OK
+104.236.177.93:47701 - - [01/Apr/2016 01:19:19] "HTTP/1.1 POST /" - 200 OK
+104.236.177.93:47702 - - [01/Apr/2016 01:20:20] "HTTP/1.1 GET /" - 200 OK
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 239, in process
+    return self.handle()
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 230, in handle
+    return self._delegate(fn, self.fvars, args)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 420, in _delegate
+    return handle_class(cls)
+  File "/usr/local/lib/python2.7/dist-packages/web.py-0.37-py2.7.egg/web/application.py", line 396, in handle_class
+    return tocall(*args)
+  File "/var/www/html/metster/apis/pf1123py/handle_re_server.py", line 13, in POST
+    result = ntp.main(data.operation, data.payload)
+  File "/var/www/html/metster/apis/pf1123py/ntp_handle_user.py", line 89, in main
+    output = frame_output(op, status, op[1], result, ERRORS[status])
+KeyError: 888888
+
+104.236.177.93:47703 - - [01/Apr/2016 01:20:20] "HTTP/1.1 POST /" - 500 Internal Server Error
