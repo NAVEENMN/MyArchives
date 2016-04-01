@@ -28,7 +28,7 @@ def frame_output(rid, status, reqdes, msg, error):
 #-------------------------- INPUT TESTS #perform all tests here
 def test_in(op, pay):
 	status = 1
-        api_oper = [999000, 998000, 998001]
+        api_oper = [999000, 998000, 998001, 998002]
 	if int(op) in api_oper:
 		return 1
 	if op is None or pay is None:
@@ -52,6 +52,7 @@ def test_in(op, pay):
 			add_list = params["thr_params"]
                 if tb_name == "ST":
 			add_list = params["st_params"]
+	
 		for key in data:
 			if key in add_list:
 				status = 1

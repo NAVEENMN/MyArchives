@@ -2,10 +2,12 @@ import get_yelp_ranking_copy as yr
 from pymongo import MongoClient
 import json
 import hashlib
+from firebase import Firebase
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
 
+FIREBASE_URL = "https://metsterios.firebaseio.com/"
 
 def find_food(jpayload):
 	data = json.loads(jpayload) #unpack
@@ -29,17 +31,19 @@ def accept_invite(jpayload):
 	if is_account and is_event:
 		# we need to update in accounts, events, firebase
 		#accounts
+		name = None
+		lat = None
+		lon = None
 		records = db.accounts.find({"mid" : amid})
 		joined = list()
 		invites = list()
 		for doc in records:
+			name = doc["name"]
+			lat = doc["latitude"]
+			lon = doc["longitude"]
 			joined = doc["joined"]
-			invites = doc["invites"] # remove from invites
-		if joined[0] == "none":
-			del joined[:]
-			joined.append(event_id)
-		else:
-			joined.append(event_id)
+			invites = list(doc["invites"]) # remove from invites
+		joined.append(event_id)
 		joined = list(set(joined))
 		db.accounts.update_one({"mid": amid},{"$set": {"joined":joined}})
 		invites.remove(event_id)
@@ -57,6 +61,16 @@ def accept_invite(jpayload):
 		members = list(set(members))
 		db.events.update_one({"mid": event_id},{"$set": {"event_members":members}})
 		#firebase
+		fb_base_url = FIREBASE_URL+"/"+event_id
+		fb_user_url = fb_base_url +"/users/"+amid
+		fb = Firebase(fb_user_url)
+		to_fb = dict()
+		to_fb["node_name"] = name
+		to_fb["node_type"] = "member"
+		to_fb["latitude"] = lat
+		to_fb["longitude"] = lon
+		to_fb["node_visible"] = True
+		fb.put(to_fb)
 		res = "joined"
 		status = 1
 	else:
@@ -64,9 +78,33 @@ def accept_invite(jpayload):
 		status = 100014
 	return status, res
 
-def reject_invite(jayload):
+def reject_invite(jpayload):
 	status = 888888
 	res = "ok"
+	data = json.loads(jpayload) #unpack
+	hobj = hashlib.md5(data["email"])
+	mid = hobj.hexdigest()
+	event_id = data["event_id"]
+	is_user = False
+	is_event = False
+	if db.accounts.find({"mid":mid}).count() >= 1:
+		is_user = True
+	if db.events.find({"mid":event_id}).count() >= 1:
+		is_event = True
+	if is_user and is_event:
+		invites = list()
+		cursor = db.accounts.find({"mid":mid})
+		for doc in cursor:
+			invites = list(doc["invites"])
+		if event_id in invites:
+			invites.remove(event_id)
+		db.accounts.update_one({"mid": mid},{"$set": {"invites":invites}})
+		status = 1
+		res = "invite rejected"
+	else:
+		status = 888888
+		res = "invalid input data"
+	return status, res
 
 def send_invite(jpayload):
 	status = 999999
@@ -102,7 +140,6 @@ def send_invite(jpayload):
 			return status, res
 		if event_id not in invites:
 			invites = list(set(invites))
-			invites.remove("none")
 			invites.append(event_id)
 			db.accounts.update_one({"mid": to_mid},{"$set": {"invites":invites}})
 			status = 1
@@ -125,6 +162,8 @@ def main(operid, payload):
 		status, res = accept_invite(payload)
 	if int(operid) == 8001:#send invite
 		status, res = send_invite(payload)
+	if int(operid) == 8002:#reject invite
+		status, res = reject_invite(payload)
 	return status, res
 
 if __name__ == "__main__":

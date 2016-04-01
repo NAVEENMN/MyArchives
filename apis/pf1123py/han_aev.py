@@ -148,9 +148,55 @@ def insert_event(jpayload):
 		status = 100016
 		result = "invalid user"
 	return status, result
-def delete_event(payload):
+def delete_event(jpayload):
 	# get all event members and remove events from there accounts
-        return "OK"
+	status = 888888
+	res = "oper failed"
+	data = json.loads(jpayload) #unpack
+	email = data["email"]
+	event_id = data["event_id"]
+	is_user = False
+	is_event = False
+	is_host = False
+	hobj = hashlib.md5(email)
+	amid = hobj.hexdigest()
+	if (db.accounts.find({"mid" : amid}).count() >= 1):
+		is_user = True
+	if (db.events.find({"mid" : event_id}).count() >= 1):
+		is_event = True
+	if is_user and is_event:
+		cursor = db.events.find({"mid": event_id})
+		for doc in cursor:
+			event_host = doc["host"]
+		if event_host == amid:
+			is_host = True
+		if is_host:
+			#del host
+			k = 0
+		else:
+			#del member
+			cursor = db.accounts.find({"mid": amid})
+			joined = list()
+			for doc in cursor:
+				joined = list(doc["joined"])
+			if event_id in joined:
+				#del it
+				joined.remove(event_id)
+				db.accounts.update_one({"mid": amid},{"$set": {"joined":joined}})
+				fb_base_url = FIREBASE_URL+"/"+event_id
+				fb_user_url = fb_base_url +"/users/"+amid
+				fb = Firebase(fb_user_url)
+				fb.delete()
+				status = 1
+				res = "event dropped"
+			else:
+				status = 888888
+				res = "not joined"
+	else:
+		status = 888888
+		res = "invalid data in"
+	
+        return status, res
 def find_event(payload):
         return "OK"
 #------------------------------------------
