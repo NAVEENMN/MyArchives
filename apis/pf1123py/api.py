@@ -49,34 +49,41 @@ def accept_invite(jpayload):
 		joined.append(event_id)
 		joined = list(set(joined))
 		db.accounts.update_one({"mid": amid},{"$set": {"joined":joined}})
-		invites.remove(event_id)
-		db.accounts.update_one({"mid": amid},{"$set": {"invites":invites}})
-		#events
-		records = db.events.find({"mid" : event_id})
-		members = list()
-		for doc in records:
-			members = doc["event_members"]
-		if members[0] == "none":
-			del members[:]
+		if event_id in invites:
+			invites.remove(event_id)
+			db.accounts.update_one({"mid": amid},{"$set": {"invites":invites}})
+			#events
+			records = db.events.find({"mid" : event_id})
+			members = list()
+			for doc in records:
+				members = list(doc["event_members"])
 			members.append(amid)
+			members = list(set(members))
+			db.events.update_one({"mid": event_id},{"$set": {"event_members":members}})
+			#firebase
+			fb_base_url = FIREBASE_URL+"/"+event_id
+			fb_user_url = fb_base_url +"/users/"+amid
+			fb = Firebase(fb_user_url)
+			to_fb = dict()
+			to_fb["node_name"] = name
+			to_fb["node_type"] = "member"
+			to_fb["latitude"] = lat
+			to_fb["longitude"] = lon
+			to_fb["node_visible"] = True
+			fb.put(to_fb)
+			res = "joined"
+			status = 1
 		else:
-			members.append(amid)
-		members = list(set(members))
-		db.events.update_one({"mid": event_id},{"$set": {"event_members":members}})
-		#firebase
-		fb_base_url = FIREBASE_URL+"/"+event_id
-		fb_user_url = fb_base_url +"/users/"+amid
-		fb = Firebase(fb_user_url)
-		to_fb = dict()
-		to_fb["node_name"] = name
-		to_fb["node_type"] = "member"
-		to_fb["latitude"] = lat
-		to_fb["longitude"] = lon
-		to_fb["node_visible"] = True
-		fb.put(to_fb)
-		res = "joined"
-		status = 1
+			res = "not invited"
+			status = 888888
 	else:
+		if is_account:
+			invites = list()
+			cursor = db.accounts.find({"mid":amid})
+			for doc in cursor:
+				invites = list(doc["invites"])
+			invites.remove(event_id)
+			db.accounts.update_one({"mid":amid},{"$set": {"invites":invites}})
 		res = "join fail"
 		status = 100014
 	return status, res
@@ -108,6 +115,32 @@ def reject_invite(jpayload):
 		status = 888888
 		res = "invalid input data"
 	return status, res
+
+def add_place(jpayload):
+	status = 888888
+	res = "ok"
+	all_good = False
+	data = json.loads(jpayload) #unpack
+	event_id = data["event_id"]
+        place_id = data["place_id"]
+	print data["place_info"]
+	place_info = json.loads(data["place_info"])
+	is_event_ok = db.events.find({"mid":event_id}).count()
+	if is_event_ok:
+	    #update this place to firebase
+		fb_base_url = FIREBASE_URL+"/"+event_id
+		fb_user_url = fb_base_url +"/places/"+place_id
+                fb = Firebase(fb_user_url)
+		to_fb = dict()
+		for keys in place_info:
+			to_fb[keys] = place_info[keys]
+		fb.put(to_fb)
+		status = 1
+		res = "inserted"	
+	else:
+		status = 888888
+		res = "invalid input"
+	return 1, "ok"
 
 def send_invite(jpayload):
 	status = 999999
@@ -167,6 +200,8 @@ def main(operid, payload):
 		status, res = send_invite(payload)
 	if int(operid) == 8002:#reject invite
 		status, res = reject_invite(payload)
+	if int(operid) == 7000:#add place
+		status, res = add_place(payload)
 	return status, res
 
 if __name__ == "__main__":

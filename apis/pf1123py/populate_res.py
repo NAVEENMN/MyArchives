@@ -29,7 +29,6 @@ from mapbox import Geocoder
 from pprint import pprint
 import hashlib
 from pymongo import MongoClient
-import string
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
@@ -475,88 +474,21 @@ def ranking_based_on_convenience(payload, people):
     return new_ranking_base(place_name_list, place_location, person_location)
 
 def get_pref_vec(pref):
-    vec = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']
-    val = [0.880797077978, 0.869891525637, 0.8581489351, 0.845534734916, 0.832018385134, 0.817574476194, 0.802183888559, 0.785834983043, 0.768524783499, 0.750260105595, 0.73105857863, 0.72, 0.71 ]
-    pvec = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    vec = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']
+    val = [0.880797077978, 0.869891525637, 0.8581489351, 0.845534734916, 0.832018385134, 0.817574476194, 0.802183888559, 0.785834983043, 0.768524783499, 0.750260105595, 0.73105857863 ]
+    pvec = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     for x in range (0, len(pref)):
         h = pref[x]
 	ind = vec.index(h)
 	pvec[ind] = val[x]
     return np.array(pvec)
 
-def main(db, query, eventid):
-    #eventid = "10103884620845515--event--0"#sys.argv[1]
-    cursor = db.events.find({"mid":eventid})
-    people = list()
-    location = list()
-    choices = list()
-    pref_vec = list()
-    pref_vec = list()
-    prefs = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']
-   
-    # get all members
-    for document in cursor:
-    	host = document["host"]
-	people.append(host)
-	members = document["event_members"]	
-    	if members[0] is not "none":
-	    for x in range(0, len(members)):
-	        people.append(members[x])
-
-    # for all members get locations and preference
-    for person in people:
-	cursor = db.accounts.find({"mid":person})
-	for document in cursor:
-                pref = str(document["food_pref"])
-		lat = float(document["latitude"])	
-		lon = float(document["longitude"])
-		loc = [lat, lon]
-	pref = pref.lower()
-	nap = get_pref_vec(pref)
-	pref_vec.append(nap)		
-	location.append(loc)
-        #by deafult go with group
-	# we need to make queries based on distrubtion of mean theta
-	# for this version lets just pick top two 
-    mpv = np.zeros(13)
-    for x in range(0, len(pref_vec)):
-	mpv = mpv + pref_vec[x]
-    mpvlist = mpv.tolist()
-    mpvcopy = list(mpvlist)
-    mpvcopy.sort()
-    ftp = mpvcopy[len(mpvcopy) - 1]
-    stp = mpvcopy[len(mpvcopy) - 2]
-    idx_ftp = mpvlist.index(ftp)
-    idx_stp = mpvlist.index(stp)
-    choices.append(food_cus[idx_ftp])
-    choices.append(food_cus[idx_stp]) 
-
-
-    if query != "go_with_group":
-        del choices[:]
-        choices.append(query)
-     
-    set_choice = set(choices)
-    out_payload = dict()
-    RANK = 0
-    print location
-    print set_choice
-
-    merged_results = dict()
-    final_results = dict()
-   
-    for q_term in set_choice:
-        response = get_results(location, q_term)
-        print q_term, len(response)
-        merged_results = merged_results.copy()
-        merged_results.update(response)
-    CONV_RANKED_LIST = ranking_based_on_convenience(merged_results, location)
-    if query == "movies":
-	movies = get_movies(merged_results)
-    for term in CONV_RANKED_LIST:
-        final_results[term] = merged_results[term]
-    print CONV_RANKED_LIST
-    return final_results
-
+def main():
+    q_term = raw_input("query: ")
+    lat = float(raw_input("latitude: "))
+    lon = float(raw_input("longitude: "))
+    location = [[lat, lon]]
+    response = get_results(location, q_term)
+    print response
 if __name__ == "__main__":
     main()

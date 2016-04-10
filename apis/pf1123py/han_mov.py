@@ -41,8 +41,8 @@ def find_movie(payload):
 	genre = data['genre']
         q = genre
         # db.collectionname.find({'files':{'$regex':'^File'}})
-	if db.movies.find({"Genre" : q}).count() >= 1:
-		cursor = db.movies.find({"Genre" : q})
+	if db.movies.find({"mid" : q}).count() >= 1:
+		cursor = db.movies.find({"mid" : q})
 		for document in cursor:
 			res.append(str(document))
 			status = 1

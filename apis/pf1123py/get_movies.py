@@ -29,7 +29,6 @@ from mapbox import Geocoder
 from pprint import pprint
 import hashlib
 from pymongo import MongoClient
-import string
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
@@ -475,16 +474,30 @@ def ranking_based_on_convenience(payload, people):
     return new_ranking_base(place_name_list, place_location, person_location)
 
 def get_pref_vec(pref):
-    vec = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']
-    val = [0.880797077978, 0.869891525637, 0.8581489351, 0.845534734916, 0.832018385134, 0.817574476194, 0.802183888559, 0.785834983043, 0.768524783499, 0.750260105595, 0.73105857863, 0.72, 0.71 ]
-    pvec = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    vec = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']
+    val = [0.880797077978, 0.869891525637, 0.8581489351, 0.845534734916, 0.832018385134, 0.817574476194, 0.802183888559, 0.785834983043, 0.768524783499, 0.750260105595, 0.73105857863 ]
+    pvec = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     for x in range (0, len(pref)):
         h = pref[x]
 	ind = vec.index(h)
 	pvec[ind] = val[x]
     return np.array(pvec)
 
-def main(db, query, eventid):
+def find_movies(jdata):
+    theater_near_me = list()
+    for key in jdata:
+        print key
+        if db.theater.find({"key": key}).count() >= 1:
+		theater_near_me.append(key)
+    if len(theater_near_me) > 1:
+	for place in theater_near_me:
+		cursor = db.theater.find({"key": place}) 
+		for doc in cursor:
+			print doc["address"]
+
+def main():
+    query = "movies"
+    eventid = "10103884620845432--event--15"
     #eventid = "10103884620845515--event--0"#sys.argv[1]
     cursor = db.events.find({"mid":eventid})
     people = list()
@@ -492,7 +505,7 @@ def main(db, query, eventid):
     choices = list()
     pref_vec = list()
     pref_vec = list()
-    prefs = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']
+    prefs = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']
    
     # get all members
     for document in cursor:
@@ -511,14 +524,13 @@ def main(db, query, eventid):
 		lat = float(document["latitude"])	
 		lon = float(document["longitude"])
 		loc = [lat, lon]
-	pref = pref.lower()
 	nap = get_pref_vec(pref)
 	pref_vec.append(nap)		
 	location.append(loc)
         #by deafult go with group
 	# we need to make queries based on distrubtion of mean theta
 	# for this version lets just pick top two 
-    mpv = np.zeros(13)
+    mpv = np.zeros(11)
     for x in range(0, len(pref_vec)):
 	mpv = mpv + pref_vec[x]
     mpvlist = mpv.tolist()
@@ -530,7 +542,6 @@ def main(db, query, eventid):
     idx_stp = mpvlist.index(stp)
     choices.append(food_cus[idx_ftp])
     choices.append(food_cus[idx_stp]) 
-
 
     if query != "go_with_group":
         del choices[:]
@@ -556,7 +567,7 @@ def main(db, query, eventid):
     for term in CONV_RANKED_LIST:
         final_results[term] = merged_results[term]
     print CONV_RANKED_LIST
-    return final_results
+    find_movies(final_results)
 
 if __name__ == "__main__":
     main()

@@ -8,6 +8,67 @@ FIREBASE_URL = "https://metsterios.firebaseio.com/"
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
+#----------------------- functions
+def host_event_delete(amid, event_id):
+	k = 0
+	cursor = db.accounts.find({"mid": amid})
+	hosted = list()
+	status = 888888
+	res = None
+	for doc in cursor:
+		hosted = list(doc["hosted"])
+	if event_id in hosted:
+		hosted.remove(event_id)
+		db.accounts.update_one({"mid": amid},{"$set": {"hosted":hosted}})
+		#db.events.delete_many({"mid": event_id})
+		#find all members and del in thuer accoun
+		cursor = db.events.find({"mid": event_id})
+		members = list()
+		for doc in cursor:
+			members = list(doc["event_members"])
+		for member in members:
+			cursor = db.accounts.find({"mid": member})
+			joined = list()
+			for doc in cursor:
+				joined = list(doc["joined"])
+			if event_id in joined:
+				joined.remove(event_id)
+			db.accounts.update_one({"mid": member},{"$set": {"joined":joined}})
+		fb_base_url = FIREBASE_URL+"/"+event_id
+		fb = Firebase(fb_base_url)
+		fb.delete()
+		#delete the event
+		db.events.remove({"mid": event_id})
+		status = 1
+		res = "event dropped"
+	return status, res
+	
+def member_event_delete(amid, event_id):
+	#del member account, events, firebase
+	cursor = db.accounts.find({"mid": amid})
+	joined = list()
+	status = 888888
+	res = None
+	for doc in cursor:
+		joined = list(doc["joined"])
+	if event_id in joined:
+		#del it
+		joined.remove(event_id)
+		db.accounts.update_one({"mid": amid},{"$set": {"joined":joined}})
+		fb_base_url = FIREBASE_URL+"/"+event_id
+		fb_user_url = fb_base_url +"/users/"+amid
+		fb = Firebase(fb_user_url)
+		fb.delete()
+		cursor = db.events.find({"mid":event_id})
+		members = list()
+		for doc in cursor:
+			members = list(doc["event_members"])
+		members.remove(amid)
+		db.events.update_one({"mid": event_id},{"$set": {"event_members":members}})
+		status = 1
+		res = "event dropped"
+
+	return status, res
 
 #------------------------  ACCOUNT OPEARTION
 def insert_account(jpayload):
@@ -19,11 +80,20 @@ def insert_account(jpayload):
 	mid = hobj.hexdigest()
 	if db.accounts.find({"mid" : mid}).count() >= 1:
 		status = 100013
-		dat = None
+		result = "Duplicate"
 	else :	
 		dat["mid"] = mid
+		emp = list()
+		n = ["invites", "hosted", "joined"]
 		for key in data:
-			dat[key] = data[key]
+			if key in n:
+				dat[key] = emp
+			else:
+				if key == "food_pref" or key == "movie_pref":
+					pref = data[key]
+					dat[key] = pref.lower()
+				else:
+					dat[key] = data[key]
 		result = str(db.accounts.insert_one(dat))
 		print "inserted to accounts.."
 		if "InsertOneResult" in result:
@@ -32,13 +102,27 @@ def insert_account(jpayload):
 		else:
 			status = 100012
 			result = "insert failed"
-		
 	return status, result
+
 def delete_account(jpayload):
 	data = json.loads(jpayload) #unpack
 	hobj = hashlib.md5(data["email"])
 	mid = hobj.hexdigest()
+	status = 100014
+	result = "not"
 	if db.accounts.find({"mid" : mid}).count() >= 1:
+		#del all events for this user
+		cursor = db.accounts.find({"mid": mid})
+		hosted = list()
+		joined = list()
+		for doc in cursor:
+			hosted = list(doc["hosted"])
+			joined = list(doc["joined"])
+		for event_id in hosted:
+			status, res = host_event_delete(mid, event_id)
+		for event_id in joined:
+			status, res = member_event_delete(mid, event_id)
+
 		result = str(db.accounts.delete_many({"mid": mid}))
 		if "DeleteResult" in result:
 			status = 1
@@ -48,6 +132,7 @@ def delete_account(jpayload):
 			result = "delete failed"
 	else:
 		status = 100014
+		result = "not found"
 	return status, result
 def find_account(jpayload):
 	data = json.loads(jpayload) #unpack
@@ -66,17 +151,14 @@ def update_account(jpayload):
 	data = json.loads(jpayload) #unpack
 	hobj = hashlib.md5(data["email"])
 	mid = hobj.hexdigest()
-	attribute = data["what"]
 	if db.accounts.find({"mid" : mid}).count() >= 1:
         	out = db.accounts.find({"mid": mid})
                 for records in out:
-			if attribute == "food_pref":
-				fp = data["food_pref"]
-			        db.accounts.update_one({"mid": mid},{"$set": {"food_pref":fp}})	
-				result = "updated"
-			else:
-				status = 100014
-				result = "update failed"
+			fp = data["food_pref"]
+			mp = data["movie_pref"]
+			db.accounts.update_one({"mid": mid},{"$set": {"food_pref":fp}})	
+			db.accounts.update_one({"mid": mid},{"$set": {"movie_pref":mp}})
+			result = "updated"
                 status = 1
         else:
                 status = 100014
@@ -121,7 +203,7 @@ def insert_event(jpayload):
 			dat[key] = data[key]
 		mem = list()
 		mem.append(dat["host"])
-		dat["members"] = mem
+		dat["event_members"] = mem
 		result = str(db.events.insert_one(dat))
 		if "InsertOneResult" in result:
 			status = 1
@@ -173,71 +255,30 @@ def delete_event(jpayload):
 			is_host = True
 		if is_host:
 			#del host
-			k = 0
-			cursor = db.accounts.find({"mid": amid})
-			hosted = list()
-			for doc in cursor:
-				hosted = list(doc["hosted"])
-			if event_id in hosted:
-				#del it
-				hosted.remove(event_id)
-				db.accounts.update_one({"mid": amid},{"$set": {"hosted":hosted}})
-				#db.events.delete_many({"mid": event_id})
-				#find all members and del in thuer accoun
-				cursor = db.events.find({"mid": event_id})
-				members = list()
-				for doc in cursor:
-					members = list(doc["event_members"])
-				for member in members:
-					cursor = db.accounts.find({"mid": member})
-					joined = list()
-					for doc in cursor:
-						joined = list(doc["joined"])
-					if event_id in joined:
-						joined.remove(event_id)
-					db.accounts.update_one({"mid": member},{"$set": {"joined":joined}})
-				fb_base_url = FIREBASE_URL+"/"+event_id
-				fb = Firebase(fb_base_url)
-				fb.delete()
-				status = 1
-				res = "event dropped"
-				
-			else:
-				status = 888888
-				res = "not hosted"
+			status, res = host_event_delete(amid, event_id)
 		else:
 			#del member account, events, firebase
-			cursor = db.accounts.find({"mid": amid})
-			joined = list()
-			for doc in cursor:
-				joined = list(doc["joined"])
-			if event_id in joined:
-				#del it
-				joined.remove(event_id)
-				db.accounts.update_one({"mid": amid},{"$set": {"joined":joined}})
-				fb_base_url = FIREBASE_URL+"/"+event_id
-				fb_user_url = fb_base_url +"/users/"+amid
-				fb = Firebase(fb_user_url)
-				fb.delete()
-				
-				cursor = db.events.find({"mid":event_id})
-				members = list()
-				for doc in cursor:
-					members = list(doc["event_members"])
-				members.remove(amid)
-				db.events.update_one({"mid": event_id},{"$set": {"event_members":members}})
-				status = 1
-				res = "event dropped"
-			else:
-				status = 888888
-				res = "not joined"
+			status, res = member_event_delete(amid, event_id)
 	else:
 		status = 888888
 		res = "invalid data in"
 	
         return status, res
-def find_event(payload):
-        return "OK"
+
+def find_event(jpayload):
+	data = json.loads(jpayload) # decode json
+	event_id = data["event_id"]
+	res = "None"
+	if db.events.find({"mid":event_id}).count() >= 1:
+		cursor  = db.events.find({"mid":event_id})
+		for doc in cursor:
+			res = str(doc)
+		status = 1
+	else:
+		status = 888888
+		res = "event not found"
+	print status, res
+        return status, res
 #------------------------------------------
 
 #----------------------- MAIN
