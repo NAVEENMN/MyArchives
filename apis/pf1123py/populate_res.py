@@ -14,6 +14,7 @@ import oauth2
 import random
 import scipy
 import time
+import subprocess
 import os, sys
 import operator
 from numpy import *
@@ -483,12 +484,66 @@ def get_pref_vec(pref):
 	pvec[ind] = val[x]
     return np.array(pvec)
 
-def main():
-    q_term = raw_input("query: ")
-    lat = float(raw_input("latitude: "))
-    lon = float(raw_input("longitude: "))
+def insert_res_db(payload):
+    for key in payload:
+	dat = dict()
+	data = json.loads(payload[key])
+	hobj = hashlib.md5(key)
+	dat["mid"] = hobj.hexdigest()
+	dat["key"] = key
+	dat["type"] = "food"
+	dat["ratings"] = float(data["ratings"])
+	dat["review_count"] = int(data["review_count"])
+	dat["category"] = data["category"]
+	dat["name"] = data["name"]
+	dat["phone"] = data["phone"]
+	dat["image_url"] = data["image_url"]
+	dat["latitude"] = float(data["latitude"])
+	dat["longitude"] = float(data["longitude"])
+	dat["address"] = data["address"]
+	if db.res.find({"mid":dat["mid"]}).count() >= 1:
+		i = 0
+	else:
+		db.res.insert_one(dat)
+    return 1, "ok"
+
+def insert_theater_db(payload):
+    for key in payload:
+        dat = dict()
+        data = json.loads(payload[key])
+        hobj = hashlib.md5(key)
+        dat["mid"] = hobj.hexdigest()
+        dat["key"] = key
+	dat["type"] = "visual"
+        dat["ratings"] = float(data["ratings"])
+        dat["review_count"] = int(data["review_count"])
+        dat["category"] = data["category"]
+        dat["name"] = data["name"]
+        dat["phone"] = data["phone"]
+        dat["image_url"] = data["image_url"]
+        dat["latitude"] = float(data["latitude"])
+        dat["longitude"] = float(data["longitude"])
+        dat["address"] = data["address"]
+	if db.res.find({"mid":dat["mid"]}).count() >= 1:
+		i = 0
+	else:
+        	db.theater.insert_one(dat)
+    return 1, "ok"
+
+def main(query, lat, lon):
+    q_term = query
+    lat = float(lat)
+    lon = float(lon)
     location = [[lat, lon]]
     response = get_results(location, q_term)
-    print response
+    if query == "movies" or query == "movie":
+	status, res = insert_theater_db(response)
+    else:
+        status, res = insert_res_db(response)
+    #build data source
+    os.system("python /var/www/html/mapbx/make_points.py");
+    #retcode = subprocess.call(["/var/www/html/mapbx/ma.sh"], shell=True)
+    #pid = subprocess.Popen([sys.executable, "/var/www/html/mapbx/make_points.py"]) # call subprocess
+    return status, res
 if __name__ == "__main__":
     main()

@@ -3,6 +3,7 @@ from pymongo import MongoClient
 import json
 import hashlib
 from firebase import Firebase
+import populate_res as pp
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
@@ -188,9 +189,17 @@ def send_invite(jpayload):
 		res = "inputed data not found"
 	return status, res
 
+def populate(jpayload):
+	data = json.loads(jpayload)
+	query = data["query"]
+	latitude = data["latitude"]
+	longitude = data["longitude"]
+	pp.main(query, latitude, longitude) 
+	return 1, "ok"
 def main(operid, payload):
 	status = 999999
 	res = None
+	print int(operid)
 	if int(operid) == 9000:#find_food
 		res = find_food(payload)
 		status = 1
@@ -202,6 +211,9 @@ def main(operid, payload):
 		status, res = reject_invite(payload)
 	if int(operid) == 7000:#add place
 		status, res = add_place(payload)
+	if int(operid) == 7555:#populate
+		print "here.."
+		status, res = populate(payload)
 	return status, res
 
 if __name__ == "__main__":

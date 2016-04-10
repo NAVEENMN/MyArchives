@@ -23,19 +23,19 @@ def main():
 	theaters = list()
 	place = dict()
 	print "setting up theaters..."
-	cursor = db.theater.find({"zone":1})
+	cursor = db.theater.find()
 	for doc in cursor:
 		theaters.append(doc["key"])
 	print theaters
 	mov = list()
-	with open('movies.txt') as f:
-    		mov.append(f.readlines())
+	for line in open('movies.txt'):
+		movie = line.rstrip('\n')
+		mov.append(movie)
 	for loc in theaters:
 		place[loc] = mov
 	fb_base_url = FIREBASE_URL+"/"+"movies"
 	fb = Firebase(fb_base_url)
 	fb.put(place)
-	print place
 	#get_data()
 
 if __name__ == "__main__":
