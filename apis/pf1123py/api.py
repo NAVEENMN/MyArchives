@@ -5,6 +5,7 @@ import json
 import hashlib
 from firebase import Firebase
 import populate_res as pp
+import datetime
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
@@ -13,17 +14,23 @@ FIREBASE_URL = "https://metsterios.firebaseio.com/"
 
 def find_food(jpayload):
 	data = json.loads(jpayload) #unpack
-	query = data["query"]
-	event_id = data["event_id"]
-	print event_id
-        if "email" in event_id:
-            eid = event_id.split("-")
-            response = yp.main(query, eid[1])
-        else:
-	    if (db.events.find({"mid" : event_id}).count() >= 1):
-                response = yr.main(db, query, event_id)
-	    else:
-		response = "invalid event"
+        mode = data["search_mode"]
+	print "search mode", mode
+        if mode == "private":
+		query = data["query"]
+		email = data["email"]
+		response = yp.main(query, email)
+        if mode == "public":
+		query = data["query"]
+		email = data["email"]
+		response = yp.main(query, email)
+	if mode == "group":
+		query = data["query"]
+		event_id = data["event_id"]
+		if (db.events.find({"mid" : event_id}).count() >= 1):
+			response = yr.main(db, query, event_id)
+		else:
+			response = "invalid event"
 	return response
 
 def accept_invite(jpayload):
@@ -200,6 +207,65 @@ def send_invite(jpayload):
 		res = "inputed data not found"
 	return status, res
 
+def get_peeps_try_place(jpayload):
+	dat = dict()
+	res = None
+	status = 999999
+	data = json.loads(jpayload)
+	email = str(data["email"])
+	place_id = str(data["place_id"])
+	cursor  = db.tryout.find({"place_id": place_id})
+	people = dict()
+	for doc in cursor:
+		person = dict()
+		person["name"] = doc["name"]
+		person["fb_id"] = doc["fb_id"]
+		person["message"] = doc["message"]
+		person = dict([(str(k), str(v)) for k, v in person.items()])
+		jdat = json.dumps(person)
+		people[person["fb_id"]] = jdat
+	people = dict([(str(k), str(v)) for k, v in people.items()])
+	res = people
+	status = 1
+	return status, res
+
+def try_place(jpayload):
+	dat = dict()
+	res = None
+	status = 999999
+	data = json.loads(jpayload)
+	email = str(data["email"])
+	place_id = str(data["place_id"])
+	message = data["place_id"]
+	hobj = hashlib.md5(email+place_id)
+        pmid = hobj.hexdigest()
+	clk = datetime.datetime.now() #current date
+	tdate = clk + datetime.timedelta(2,30) #after two days
+	cursor = db.accounts.find({"email" : email})
+	name = None
+	fb_id = None
+	for doc in cursor:
+		name = doc["name"]
+		fb_id = doc["fb_id"]
+	dat["mid"] = pmid
+	dat["name"] = name
+	dat["fb_id"] = fb_id
+	dat["email"] = email
+	dat["message"] = message
+	dat["pdate"] = clk
+	dat["tdate"] = tdate
+	dat["place_id"] = place_id
+	if (db.tryout.find({"mid": pmid}).count > 0):
+		db.tryout.delete_many({"mid": pmid})
+		db.tryout.insert_one(dat)
+		res = "del and insert"
+		status = 1
+	else:
+		db.tryout.insert_one(dat)	
+		res = "insert new"
+		status = 1
+	return status, res
+
 def populate(jpayload):
 	data = json.loads(jpayload)
 	query = data["query"]
@@ -225,6 +291,10 @@ def main(operid, payload):
 	if int(operid) == 7555:#populate
 		print "here.."
 		status, res = populate(payload)
+  	if int(operid) == 7666:#try place
+		status, res = try_place(payload)
+	if int(operid) == 7667:#get people for place
+		status, res = get_peeps_try_place(payload)
 	return status, res
 
 if __name__ == "__main__":

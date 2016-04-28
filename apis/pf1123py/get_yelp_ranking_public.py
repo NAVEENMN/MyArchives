@@ -142,7 +142,6 @@ def query_api(term, location, type):
 	    address = None
 	    types = None
             try:
-		info['key'] = data
                 info['rank'] = str(x);
                 info['ratings'] = str(r['rating'])
                 info['name'] = str(r['name'])
@@ -485,9 +484,9 @@ def get_pref_vec(pref):
 	pvec[ind] = val[x]
     return np.array(pvec)
 
-def main(query, email):
-    query = query
-    email = email
+def main():
+    query = "sushi"
+    email = "navimn1991@gmail.com"
     people = list()
     location = list()
     choices = list()
@@ -516,8 +515,8 @@ def main(query, email):
     for term in CONV_RANKED_LIST:
         final_results[term] = merged_results[term]
 
-    #print final_results
-    return final_results
+    print final_results
+    #return final_results
 
 if __name__ == "__main__":
     main()
