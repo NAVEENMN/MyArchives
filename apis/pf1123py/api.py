@@ -1,4 +1,5 @@
 import get_yelp_ranking_copy as yr
+import get_yelp_ranking_private as yp
 from pymongo import MongoClient
 import json
 import hashlib
@@ -14,9 +15,14 @@ def find_food(jpayload):
 	data = json.loads(jpayload) #unpack
 	query = data["query"]
 	event_id = data["event_id"]
-	if (db.events.find({"mid" : event_id}).count() >= 1):
-		response = yr.main(db, query, event_id)
-	else:
+	print event_id
+        if "email" in event_id:
+            eid = event_id.split("-")
+            response = yp.main(query, eid[1])
+        else:
+	    if (db.events.find({"mid" : event_id}).count() >= 1):
+                response = yr.main(db, query, event_id)
+	    else:
 		response = "invalid event"
 	return response
 
@@ -124,7 +130,7 @@ def add_place(jpayload):
 	data = json.loads(jpayload) #unpack
 	event_id = data["event_id"]
         place_id = data["place_id"]
-	print data["place_info"]
+    	email = data["email"]
 	place_info = json.loads(data["place_info"])
 	is_event_ok = db.events.find({"mid":event_id}).count()
 	if is_event_ok:
@@ -135,6 +141,10 @@ def add_place(jpayload):
 		to_fb = dict()
 		for keys in place_info:
 			to_fb[keys] = place_info[keys]
+ 		usr = list()
+		usr.append(email)
+		usr = set(usr)
+		to_fb["votes"] = usr
 		fb.put(to_fb)
 		status = 1
 		res = "inserted"	
@@ -150,11 +160,12 @@ def send_invite(jpayload):
 	data = json.loads(jpayload) #unpack
 	hobj = hashlib.md5(data["from_email"])
 	from_mid = hobj.hexdigest()
-	hobj = hashlib.md5(data["to_email"])
-	to_mid = hobj.hexdigest()
+	to_mid = data["to_email"] #its facebook id
 	event_id = data["event_id"]
+        print("send invite to : ")
+        print(to_mid)
 	is_from_ok = db.accounts.find({"mid":from_mid}).count()
-	is_to_ok = db.accounts.find({"mid":to_mid}).count()
+	is_to_ok = db.accounts.find({"fb_id":to_mid}).count()
 	is_event_ok = db.events.find({"mid":event_id}).count()
 	if is_from_ok >= 1 and is_to_ok>=1 and is_event_ok:
 		all_good = True
@@ -162,7 +173,7 @@ def send_invite(jpayload):
 		invites = list()
 		hosted = list()
 		joined = list()
-		cursor = db.accounts.find({"mid":to_mid})
+		cursor = db.accounts.find({"fb_id":to_mid})
 		for doc in cursor:
 			hosted = list(doc["hosted"])
 			invites = list(doc["invites"])
@@ -178,7 +189,7 @@ def send_invite(jpayload):
 		if event_id not in invites:
 			invites = list(set(invites))
 			invites.append(event_id)
-			db.accounts.update_one({"mid": to_mid},{"$set": {"invites":invites}})
+			db.accounts.update_one({"fb_id": to_mid},{"$set": {"invites":invites}})
 			status = 1
 			res = "invited"
 		else:

@@ -25,7 +25,9 @@ def main():
 	print "setting up theaters..."
 	cursor = db.theater.find()
 	for doc in cursor:
-		theaters.append(doc["key"])
+		cate = str(doc["category"])
+		if "Cinema" in cate:
+			theaters.append(doc["key"])
 	print theaters
 	mov = list()
 	for line in open('movies.txt'):

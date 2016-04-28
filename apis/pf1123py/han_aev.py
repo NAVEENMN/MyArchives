@@ -156,8 +156,13 @@ def update_account(jpayload):
                 for records in out:
 			fp = data["food_pref"]
 			mp = data["movie_pref"]
-			db.accounts.update_one({"mid": mid},{"$set": {"food_pref":fp}})	
-			db.accounts.update_one({"mid": mid},{"$set": {"movie_pref":mp}})
+			lat = data["latitude"]
+			lon = data["longitude"]
+			if fp != 0 and mp != 0:
+				db.accounts.update_one({"mid": mid},{"$set": {"food_pref":fp}})	
+				db.accounts.update_one({"mid": mid},{"$set": {"movie_pref":mp}})
+			db.accounts.update_one({"mid": mid},{"$set": {"latitude":lat}})
+			db.accounts.update_one({"mid": mid},{"$set": {"longitude":lon}})
 			result = "updated"
                 status = 1
         else:
@@ -269,10 +274,19 @@ def find_event(jpayload):
 	data = json.loads(jpayload) # decode json
 	event_id = data["event_id"]
 	res = "None"
+	name = None
 	if db.events.find({"mid":event_id}).count() >= 1:
 		cursor  = db.events.find({"mid":event_id})
 		for doc in cursor:
-			res = str(doc)
+			host_email = doc["host_email"]
+			acc = db.accounts.find({"email":host_email})
+			for cur in acc:
+				name = cur["name"]
+			print name
+			temp = dict(doc)
+			temp["host_name"] = name
+			STRING_DATA = dict([(str(k), str(v)) for k, v in temp.items()])
+			res = STRING_DATA
 		status = 1
 	else:
 		status = 888888
