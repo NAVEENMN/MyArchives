@@ -139,7 +139,7 @@ def query_api(term, location, type):
             data = businesses[x]['id']
             r = get_business(data)
             info = dict()
-	    address = None
+	    address = ""
 	    types = None
             try:
 		info['key'] = data
@@ -149,30 +149,24 @@ def query_api(term, location, type):
                 info['review_count'] = str(r['review_count'])
                 info['phone'] = str(r['display_phone'])
                 info['snippet']  = str(r['snippet_text'])
-		if len(r['location']['display_address']) == 1 :
-			address = r['location']['display_address'][0]
-                if len(r['location']['display_address']) == 2 :
-                        address = r['location']['display_address'][0] +", "+ r['location']['display_address'][1]
-                if len(r['location']['display_address']) == 3 :
-                        address = r['location']['display_address'][0] + ", "+ r['location']['display_address'][1] + ", " + r['location']['display_address'][2]
-                info['address'] = address
+		for x in range(0, len(r['location']['display_address'])):
+			address = address +" "+r['location']['display_address'][x]
+                info['address'] = str(address)
                 info['coordinate'] = str(r['location']['coordinate'])
                 info['latitude'] = str(r['location']['coordinate']['latitude'])
                 info['longitude'] = str(r['location']['coordinate']['longitude'])
                 info['snippet']  = str(r['snippet_text'])
                 info['image_url'] = str(r['image_url'])
                 info['url'] = str(r['mobile_url'])
- 		if len(r['categories']) == 1 :
-                        types = r['categories'][0][0]
-                if len(r['categories']) == 2 :
-                        types = r['categories'][0][0] +", "+ r['categories'][0][1]
-                if len(r['categories']) == 3 :
-                        types = r['categories'][0][0] + ", "+ r['categories'][0][1] + ", " + r['categories'][0][2]
-		if len(r['categories']) == 4 :
-                        types = r['categories'][0][0] + ", "+ r['categories'][0][1] + ", " + r['categories'][0][2] + ", " + r['categories'][0][3]
-
-                info['category'] = types
-
+                cat = list()
+                for x in range(len(r['categories'])):
+                        typ = str(r['categories'][0][x]).lower()
+                        cat.append(typ)
+		cat = list(set(cat))
+		cate = ""
+		for tp in cat:
+			cate = cate + " " + tp
+                info['category'] = str(cate)
                 place_locations.append([info['latitude'], info['longitude']])
                 place_details[data] = json.dumps(info)
             except:
@@ -495,6 +489,7 @@ def main(query, email):
     prefs = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']
     pref = None
     nap = None
+    print query
     # get this users location and preference
     cur  = db.accounts.find({"email":email})
     print "email", email

@@ -6,28 +6,11 @@ import hashlib
 from firebase import Firebase
 import populate_res as pp
 import datetime
-from scipy.spatial import *
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
 
 FIREBASE_URL = "https://metsterios.firebaseio.com/"
-
-def add_public_search(query, email):
-	data = dict()
-	data["email"] = email
-	data["query"] = query
-	cursor = db.accounts.find({"email":email})
-	lat = 0.0
-	lon = 0.0
-	for cur in cursor:
-		lat = cur["latitude"]
-		lon = cur["longitude"]
-	data["latitude"] = lat
-	data["longitude"] = lon
-	payload = json.dumps(data)
-	post_seach_public(payload)
-	print "add public"
 
 def find_food(jpayload):
 	data = json.loads(jpayload) #unpack
@@ -40,7 +23,6 @@ def find_food(jpayload):
         if mode == "public":
 		query = data["query"]
 		email = data["email"]
-		add_public_search(query, email)
 		response = yp.main(query, email)
 	if mode == "group":
 		query = data["query"]
@@ -166,7 +148,10 @@ def add_place(jpayload):
 		to_fb = dict()
 		for keys in place_info:
 			to_fb[keys] = place_info[keys]
-		to_fb["votes"] = str(email) + "-"
+ 		usr = list()
+		usr.append(email)
+		usr = set(usr)
+		to_fb["votes"] = usr
 		fb.put(to_fb)
 		status = 1
 		res = "inserted"	
@@ -282,76 +267,6 @@ def post_seach_public(jpayload):
                 status = 1
 	return status, res
 
-def get_distance(a, b):
-    return distance.euclidean(a, b)
-
-def get_people_public_search(jpayload):
-	print "get people"
-	ther = 0.5
-	res = None
-	status = 999999
-	data = json.loads(jpayload)
-	# user details
-	query = str(data["query"])
-	email = data["email"]
-	# get fid of the user
-	cur = db.accounts.find({"email":email})
-	usr_latitude = 37.40979875856781
-	usr_longitude = -122.0975197813783
-	usr_fid = None
-	for doc in cur:
-		usr_latitude = float(doc["latitude"])
-		usr_longitude = float(doc["longitude"])
-		usr_fid = str(doc["fb_id"])
-	a = [usr_latitude, usr_longitude]
-	#find all col for query q
-	cur = db.querylookup.find({"query":query})
-	print "here.."
-	print query
-	people = list()
-	for doc in cur:
-		s_latitude = float(doc["latitude"])
-		s_longitude = float(doc["longitude"])
-		print doc["name"]
-		pdate = doc["pdate"]
-		print pdate
-		clk = datetime.datetime.now() #current date
-		post = "somtime this week"
-		print pdate.date
-		if clk.day - pdate.day == 0 :#posted today
-			diffhour = clk.hour - pdate.hour
-			post = str(diffhour) + " hours ago"
-			if diffhour == 0:#posted within same hour
-				diffmin = clk.minute - pdate.minute
-				post = str(diffmin) + " minutes ago"
-		b = [s_latitude, s_longitude]
-		distance = get_distance(a, b)
-		#if distance < ther:
-		if True:
-			print "add user"
-			s_fbid = doc["fb_id"]
-			cur = db.accounts.find({"fb_id": s_fbid})
-			usr = dict()
-			for doc in cur:
-				usr["p_name"] = doc["name"]
-				usr["p_gender"] = doc["gender"]
-				usr["p_aboutme"] = doc["ame"]
-				usr["p_fbid"] = doc["fb_id"]
-				usr["p_gid"] = doc["gid"]
-				p_foodpref = doc["food_pref"]
-				p_movpref = doc["movie_pref"]
-				usr["p_fmatch"] = "0.0"
-				usr["p_mmatch"] = "0.0"
-				usr["poston"] = post
-			if s_fbid == usr_fid:
-				k = 0
-			else:
-				people.append(usr)
-	print people
-	status = 1
-	res = people
-	return status, res
-
 def vote_up(jpayload):
 	res = None
 	status = 999999
@@ -366,8 +281,9 @@ def vote_up(jpayload):
                 fb_base_url = FIREBASE_URL+"/"+event_id
                 fb_user_url = fb_base_url +"/places/"+place_id+"/votes"
                 fb = Firebase(fb_user_url)
-                dat = str(fb.get())
-		dat = dat +str(email)+ "-"
+                dat = dict(fb.get())
+		keys = len(dat.keys())
+		dat[keys] = str(email)
 		fb.put(dat)
                 status = 1
                 res = "voted"
@@ -377,98 +293,6 @@ def vote_up(jpayload):
 	status = 1
 	res = "ok"
         return status, res
-
-def insert_chat_id(jpayload):
-	print "insert chat id"
-	dat = dict()
-	res = None
-	status = 999999
-	data = json.loads(jpayload)
-	email = str(data["email"])
-	chat_id = str(data["chat_id"])
-	operate = str(data["operate"])
-	if (db.chatlist.find({"email": email}).count() >= 1):
-		if operate == "add":
-			cur = db.chatlist.find({"email": email})
-			chatids = list()
-			for doc in cur:
-				chatids = list(doc["clist"])
-			chatids.append(chat_id)
-			chatids = list(set(chatids))
-			db.chatlist.update_one({"email": email},{"$set": {"clist":chatids}})
-			status = 1
-			res = "updated"
-		else:
-			cur = db.chatlist.find({"email": email})
-			chatids = list()
-			for doc in cur:
-				chatids = list(doc["clist"])
-			chatids.remove(chat_id)
-			chatids = list(set(chatids))
-			db.chatlist.update_one({"email": email},{"$set": {"clist":chatids}})
-			status = 1
-			res = "removed"
-	else:
-		dat = dict()
-		dat["email"] = email
-		cids = list()
-		cids.append(chat_id)
-		dat["clist"] = cids
-		db.chatlist.insert_one(dat)
-		res = "inserted"
-		status = 1
-		
-	print data
-	return status, res
-
-def get_chat_history(jpayload):
-	print "get chat history"
-	dat = dict()
-	res = None
-	status = 999999
-	data = json.loads(jpayload)
-	email = str(data["email"])
-	chatids = list()
-	if (db.chatlist.find({"email": email}).count() >= 1):
-		cur = db.chatlist.find({"email": email})
-		for doc in cur:
-			chatids = list(doc["clist"])
-		res = chatids
-		status = 1
-	else:
-		status = 1
-		res = chatids
-	print chatids
-	return status, res
-
-def get_people_for_event(jpayload):
-	print "get people for event"
-	dat = dict()
-	res = None
-	status = 999999
-	data = json.loads(jpayload)
-	email = str(data["email"])
-	event_id = str(data["event_id"])
-	cur = db.events.find({"mid":event_id})
-	members = list()
-	people = list()
-	for doc in cur:
-		members = doc["event_members"]
-	for person in members:
-		print person
-		cur = db.accounts.find({"mid": person})
-		usr = dict()
-		for doc in cur:
-			usr["name"] = doc["name"]
-			usr["gid"] = doc["gid"]
-			usr["ame"] = doc["ame"]
-			usr["fb_id"] = doc["fb_id"]
-		people.append(usr)
-			
-	print people
-	res = people
-	status = 1
-	return status, res
 
 def try_place(jpayload):
 	dat = dict()
@@ -534,20 +358,12 @@ def main(operid, payload):
 		status, res = populate(payload)
   	if int(operid) == 7666:#try place
 		status, res = try_place(payload)
-	if int(operid) == 7667:#get people for place
+	if int(operid) == 7669:#get people for place
 		status, res = get_peeps_try_place(payload)
 	if int(operid) == 7668:#post public
 		status, res = post_seach_public(payload)
 	if int(operid) == 7670:#vote up
 		status, res = vote_up(payload)
-	if int(operid) == 8100:#public search
-		status, res = get_people_public_search(payload)
-	if int(operid) == 8101:#find people for event
-		status, res = get_people_for_event(payload)
-	if int(operid) == 6000:# add chat id
-		status, res = insert_chat_id(payload)
-	if int(operid) == 6001:# get chat history
-		status, res = get_chat_history(payload)
 	return status, res
 
 if __name__ == "__main__":

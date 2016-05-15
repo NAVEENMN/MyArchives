@@ -144,29 +144,25 @@ def query_api(term, location, type):
                 info['review_count'] = str(r['review_count'])
                 info['phone'] = str(r['display_phone'])
                 info['snippet']  = str(r['snippet_text'])
-		if len(r['location']['display_address']) == 1 :
-			address = r['location']['display_address'][0]
-                if len(r['location']['display_address']) == 2 :
-                        address = r['location']['display_address'][0] +", "+ r['location']['display_address'][1]
-                if len(r['location']['display_address']) == 3 :
-                        address = r['location']['display_address'][0] + ", "+ r['location']['display_address'][1] + ", " + r['location']['display_address'][2]
-                info['address'] = address
+		for x in range(0, len(r['location']['display_address'])):
+                	address = address +" "+r['location']['display_address'][x]
+                info['address'] = str(address)
                 info['coordinate'] = str(r['location']['coordinate'])
                 info['latitude'] = str(r['location']['coordinate']['latitude'])
                 info['longitude'] = str(r['location']['coordinate']['longitude'])
                 info['snippet']  = str(r['snippet_text'])
                 info['image_url'] = str(r['image_url'])
                 info['url'] = str(r['mobile_url'])
- 		if len(r['categories']) == 1 :
-                        types = r['categories'][0][0]
-                if len(r['categories']) == 2 :
-                        types = r['categories'][0][0] +", "+ r['categories'][0][1]
-                if len(r['categories']) == 3 :
-                        types = r['categories'][0][0] + ", "+ r['categories'][0][1] + ", " + r['categories'][0][2]
-		if len(r['categories']) == 4 :
-                        types = r['categories'][0][0] + ", "+ r['categories'][0][1] + ", " + r['categories'][0][2] + ", " + r['categories'][0][3]
+		cat = list()
+                for x in range(len(r['categories'])):
+			typ = str(r['categories'][0][x]).lower()
+                        cat.append(typ)
+                cat = list(set(cat))
+                cate = ""
+                for tp in cat:
+                        cate = cate + " " + tp
+                info['category'] = str(cate)
 
-                info['category'] = types
                 place_details[data] = json.dumps(info)
             except:
                 v = 0
@@ -485,6 +481,8 @@ def get_pref_vec(pref):
     return np.array(pvec)
 
 def main(db, query, eventid):
+    print ("enter the search")
+    print query
     #eventid = "10103884620845515--event--0"#sys.argv[1]
     cursor = db.events.find({"mid":eventid})
     people = list()
@@ -496,8 +494,6 @@ def main(db, query, eventid):
    
     # get all members
     for document in cursor:
-    	host = document["host"]
-	people.append(host)
 	members = document["event_members"]	
     	if members[0] is not "none":
 	    for x in range(0, len(members)):
@@ -531,31 +527,17 @@ def main(db, query, eventid):
     choices.append(food_cus[idx_ftp])
     choices.append(food_cus[idx_stp]) 
 
-
-    if query != "go_with_group":
-        del choices[:]
-        choices.append(query)
-     
-    set_choice = set(choices)
-    out_payload = dict()
-    RANK = 0
-    print location
-    print set_choice
-
     merged_results = dict()
     final_results = dict()
-   
-    for q_term in set_choice:
-        response = get_results(location, q_term)
-        print q_term, len(response)
-        merged_results = merged_results.copy()
+    print location
+    if query != "movies":
+        response = get_results(location, query)
         merged_results.update(response)
-    CONV_RANKED_LIST = ranking_based_on_convenience(merged_results, location)
-    if query == "movies":
-	movies = get_movies(merged_results)
+        CONV_RANKED_LIST = ranking_based_on_convenience(merged_results, location)
     for term in CONV_RANKED_LIST:
         final_results[term] = merged_results[term]
-    print CONV_RANKED_LIST
+
+    print final_results
     return final_results
 
 if __name__ == "__main__":

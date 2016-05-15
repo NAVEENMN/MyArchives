@@ -94,6 +94,11 @@ def insert_account(jpayload):
 					dat[key] = pref.lower()
 				else:
 					dat[key] = data[key]
+		name = str(dat["name"].lower())
+		nam = name.split(" ")
+		gid = str( "@" + nam[0][0]) + str(nam[1])
+		dat["gid"] = gid
+		dat["ame"] = "hello there!! I am " + dat["name"]
 		result = str(db.accounts.insert_one(dat))
 		print "inserted to accounts.."
 		if "InsertOneResult" in result:
@@ -138,6 +143,10 @@ def find_account(jpayload):
 	data = json.loads(jpayload) #unpack
         hobj = hashlib.md5(data["email"])
         mid = hobj.hexdigest()
+	#fid = data["fid"]
+
+	#print "fid"
+
         if db.accounts.find({"mid" : mid}).count() >= 1:
                 out = db.accounts.find({"mid": mid})
 		for records in out:
@@ -158,11 +167,13 @@ def update_account(jpayload):
 			mp = data["movie_pref"]
 			lat = data["latitude"]
 			lon = data["longitude"]
+			ame = data["ame"]
 			if fp != 0 and mp != 0:
 				db.accounts.update_one({"mid": mid},{"$set": {"food_pref":fp}})	
 				db.accounts.update_one({"mid": mid},{"$set": {"movie_pref":mp}})
 			db.accounts.update_one({"mid": mid},{"$set": {"latitude":lat}})
 			db.accounts.update_one({"mid": mid},{"$set": {"longitude":lon}})
+			db.accounts.update_one({"mid": mid},{"$set": {"ame":ame}})
 			result = "updated"
                 status = 1
         else:

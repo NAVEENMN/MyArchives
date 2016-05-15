@@ -161,17 +161,11 @@ def query_api(term, location, type):
                 info['snippet']  = str(r['snippet_text'])
                 info['image_url'] = str(r['image_url'])
                 info['url'] = str(r['mobile_url'])
- 		if len(r['categories']) == 1 :
-                        types = r['categories'][0][0]
-                if len(r['categories']) == 2 :
-                        types = r['categories'][0][0] +", "+ r['categories'][0][1]
-                if len(r['categories']) == 3 :
-                        types = r['categories'][0][0] + ", "+ r['categories'][0][1] + ", " + r['categories'][0][2]
-		if len(r['categories']) == 4 :
-                        types = r['categories'][0][0] + ", "+ r['categories'][0][1] + ", " + r['categories'][0][2] + ", " + r['categories'][0][3]
-
-                info['category'] = types
-
+		cat = list()
+		for x in range(len(r['categories'])):
+			typ = str(r['categories'][0][x]).lower()
+			cat.append(typ)
+		info['category'] = str(list(set(cat)))
                 place_locations.append([info['latitude'], info['longitude']])
                 place_details[data] = json.dumps(info)
             except:
