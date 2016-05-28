@@ -150,7 +150,7 @@ def query_api(term, location, type, peopleloc):
             info['key'] = data
             info['rank'] = str(x);
             info['ratings'] = str(r['rating'])
-            info['name'] = str(r['name'])
+            info['name'] = str(r['name']).replace("&", "and")
             info['review_count'] = str(r['review_count'])
             info['phone'] = str(r['display_phone'])
             info['snippet']  = str(r['snippet_text'])
@@ -160,9 +160,9 @@ def query_api(term, location, type, peopleloc):
             info['coordinate'] = str(r['location']['coordinate'])
             info['latitude'] = str(r['location']['coordinate']['latitude'])
             info['longitude'] = str(r['location']['coordinate']['longitude'])
-            info['snippet']  = str(r['snippet_text'])
+            info['snippet']  = str(r['snippet_text']).replace("&", "and")
             info['image_url'] = str(r['image_url'])
-            info['url'] = str(r['mobile_url'])
+            info['url'] = "no"#str(r['mobile_url'])
             cat = list()
             for x in range(len(r['categories'])):
 	        typ = str(r['categories'][0][x]).lower()
@@ -174,7 +174,8 @@ def query_api(term, location, type, peopleloc):
             info['category'] = str(cate)
             info['drivedistance'] = "5"
 	    place_locations.append([info['latitude'], info['longitude']])
-            place_details[data] = json.dumps(info)
+	    STRING_DATA = dict([(str(k), str(v)) for k, v in info.items()])
+            place_details[data] = json.dumps(STRING_DATA)
         except Exception as e:
 	    print "frame error"
             print(e)

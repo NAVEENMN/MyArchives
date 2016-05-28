@@ -151,14 +151,18 @@ def reject_invite(jpayload):
 	return status, res
 
 def add_place(jpayload):
+	print ("pin this place")
 	status = 888888
 	res = "ok"
 	all_good = False
+        #print jpayload
 	data = json.loads(jpayload) #unpack
 	event_id = data["event_id"]
         place_id = data["place_id"]
     	email = data["email"]
-	place_info = json.loads(data["place_info"])
+        print ("here")
+	place_info = data["place_info"]
+	print place_info
 	is_event_ok = db.events.find({"mid":event_id}).count()
 	if is_event_ok:
 	    #update this place to firebase
@@ -559,8 +563,9 @@ def get_people_for_event(jpayload):
 		usr = dict()
 		for doc in cur:
 			usr["name"] = doc["name"]
+			usr["email"] = doc["email"]
 			usr["gid"] = doc["gid"]
-			usr["ame"] = doc["ame"]
+			usr["ame"] = doc["work"]
 			usr["fb_id"] = doc["fb_id"]
 		people.append(usr)
 			
