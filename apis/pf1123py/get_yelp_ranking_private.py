@@ -131,6 +131,7 @@ def query_api(term, location, type):
     if(type == "a"):
         response = search(term, location)
         businesses = response.get('businesses')
+	print businesses
         if not businesses:
             print u'No businesses for {0} in {1} found.'.format(term, location)
             return
@@ -279,6 +280,8 @@ def get_driving_distance(place_location, person_location):
         all_places.append(place)
     
     service = Distance()
+    print "test"
+    print all_places
     res = service.distances(all_places, 'driving')
     distances = res.json()['durations']
     DM = np.matrix(distances)

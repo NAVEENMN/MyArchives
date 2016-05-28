@@ -6,7 +6,9 @@ import hashlib
 from firebase import Firebase
 import populate_res as pp
 import datetime
+import numpy as np
 from scipy.spatial import *
+from scipy import spatial
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
@@ -285,6 +287,31 @@ def post_seach_public(jpayload):
 def get_distance(a, b):
     return distance.euclidean(a, b)
 
+def get_pref_vec(pref):
+    #print("get_pref_vec")
+    print (pref)
+    if (len(pref) != 13):
+	print "some error"
+    vec = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']
+    val = [0.880797077978, 0.869891525637, 0.8581489351, 0.845534734916, 0.832018385134, 0.817574476194, 0.802183888559, 0.785834983043, 0.768524783499, 0.750260105595, 0.73105857863, 0.72, 0.71]
+    pvec = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    for x in range (0, len(pref)):
+        h = pref[x]
+        ind = vec.index(h)
+        pvec[ind] = val[x]
+    return np.array(pvec)
+
+def get_matchscore(upref, spref):
+	uvec = get_pref_vec(upref)
+	svec = get_pref_vec(spref)
+	result = (1 - spatial.distance.cosine(uvec, svec)) * 5.0
+	result = "{0:.1f}".format(result)
+	print "match"
+	print uvec
+	print svec
+	print result
+	return result
+
 def get_people_public_search(jpayload):
 	print "get people"
 	ther = 0.5
@@ -296,13 +323,15 @@ def get_people_public_search(jpayload):
 	email = data["email"]
 	# get fid of the user
 	cur = db.accounts.find({"email":email})
-	usr_latitude = 37.40979875856781
-	usr_longitude = -122.0975197813783
 	usr_fid = None
+	usr_fpref = None
+	usr_mpref = None
 	for doc in cur:
 		usr_latitude = float(doc["latitude"])
 		usr_longitude = float(doc["longitude"])
 		usr_fid = str(doc["fb_id"])
+		usr_fpref = str(doc["food_pref"])
+		usr_mpref = str(doc["movie_pref"])
 	a = [usr_latitude, usr_longitude]
 	#find all col for query q
 	cur = db.querylookup.find({"query":query})
@@ -325,23 +354,33 @@ def get_people_public_search(jpayload):
 				diffmin = clk.minute - pdate.minute
 				post = str(diffmin) + " minutes ago"
 		b = [s_latitude, s_longitude]
-		distance = get_distance(a, b)
-		#if distance < ther:
+		distancer = get_distance(a, b)
+		#map
+		distance =int( (43.0 * distancer) / (0.5))
+		print distance, "miles"
+		#if distancer < ther:
 		if True:
-			print "add user"
+			print "found a person"
 			s_fbid = doc["fb_id"]
 			cur = db.accounts.find({"fb_id": s_fbid})
 			usr = dict()
 			for doc in cur:
+				print doc["name"]
 				usr["p_name"] = doc["name"]
 				usr["p_gender"] = doc["gender"]
-				usr["p_aboutme"] = doc["ame"]
+				usr["p_aboutme"] = doc["work"]
 				usr["p_fbid"] = doc["fb_id"]
 				usr["p_gid"] = doc["gid"]
 				p_foodpref = doc["food_pref"]
 				p_movpref = doc["movie_pref"]
-				usr["p_fmatch"] = "0.0"
-				usr["p_mmatch"] = "0.0"
+				print ("getting score for food")
+				fscore = get_matchscore(usr_fpref, p_foodpref)
+				print("getting score for movies")
+				mscore = get_matchscore(usr_mpref, p_movpref)
+				usr["p_fmatch"] = str(fscore)
+				usr["p_mmatch"] = str(mscore)
+				usr["p_email"] = doc["email"]
+				usr["p_distance"] = str(distance)
 				usr["poston"] = post
 			if s_fbid == usr_fid:
 				k = 0
@@ -439,6 +478,66 @@ def get_chat_history(jpayload):
 		status = 1
 		res = chatids
 	print chatids
+	return status, res
+
+def get_next_event(jpayload):
+	dat = dict()
+	print "get next event"
+	print jpayload
+	res = None
+	status = 999999
+	data = json.loads(jpayload)
+	email = str(data["email"])
+	cur  = db.accounts.find({"email": email})
+	joined = list()
+	hosted = list()
+	invites = list()
+	for doc in cur:
+		joined = list(doc["joined"])
+		hosted = list(doc["hosted"])
+		invites = list(doc["invites"])
+	# get next joined event
+	if len(joined) > 0 :
+		for event in joined:
+			evnt = db.events.find({"mid": event})
+			for doc in evnt:
+				print doc["event_date"]
+		for event in hosted:
+			evnt = db.events.find({"mid": event})
+			for doc in evnt:
+				print doc["event_date"]
+		for event in invites:
+			evnt = db.events.find({"mid": event})
+			for doc in evnt:
+				print doc["event_date"]
+	res = "ok"
+	status = 1
+	return status, res
+
+
+def upload_image(jpayload):	
+	print "upload image"
+	dat = dict()
+	res = None
+	status = 999999
+	data = json.loads(jpayload)
+	email = str(data["email"])
+	url = str(data["url"])
+	pos = int(str(data["position"]))
+	print pos
+	cur = db.accounts.find({"email":email})
+	images = list()
+	for doc in cur:
+		images = list(doc["images"])
+	if len(images) > 5:
+		#put image to last location
+		images[5] = url
+	else:
+		images[pos] = url
+	print images
+	db.accounts.update_one({"email": email},{"$set": {"images":images}})
+	res = "ok"
+	status = 1
 	return status, res
 
 def get_people_for_event(jpayload):
@@ -548,6 +647,10 @@ def main(operid, payload):
 		status, res = insert_chat_id(payload)
 	if int(operid) == 6001:# get chat history
 		status, res = get_chat_history(payload)
+	if int(operid) == 7006:# get next event
+		status, res = get_next_event(payload)
+	if int(operid) == 7008:# upload image
+		status, res = upload_image(payload)
 	return status, res
 
 if __name__ == "__main__":

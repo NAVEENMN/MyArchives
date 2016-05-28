@@ -75,6 +75,7 @@ def insert_account(jpayload):
 	data = json.loads(jpayload) #unpack
 	keys = data.keys()
 	status = 100013
+	def_img = "http://d3uqben18grrms.cloudfront.net/B5592C29-5D69-4FFE-BFB2-EBE48DC9E7E5-84756-000479361AA2CAA9_full.jpg"
 	dat = dict()
 	hobj = hashlib.md5(data["email"])
 	mid = hobj.hexdigest()
@@ -99,6 +100,14 @@ def insert_account(jpayload):
 		gid = str( "@" + nam[0][0]) + str(nam[1])
 		dat["gid"] = gid
 		dat["ame"] = "hello there!! I am " + dat["name"]
+		dat["work"] = "I am new to grep."
+		img = list()
+		img.append(def_img)
+		img.append(def_img)
+		img.append(def_img)
+		img.append(def_img)
+		img.append(def_img)
+		dat["images"] = img
 		result = str(db.accounts.insert_one(dat))
 		print "inserted to accounts.."
 		if "InsertOneResult" in result:
@@ -139,26 +148,70 @@ def delete_account(jpayload):
 		status = 100014
 		result = "not found"
 	return status, result
+
+def get_score(upref, spref):
+	value = 0.0
+	return value
+
 def find_account(jpayload):
 	data = json.loads(jpayload) #unpack
         hobj = hashlib.md5(data["email"])
+	host_email = data["email"]
+	from_email = data["from_email"]
         mid = hobj.hexdigest()
-	#fid = data["fid"]
-
-	#print "fid"
-
-        if db.accounts.find({"mid" : mid}).count() >= 1:
-                out = db.accounts.find({"mid": mid})
-		for records in out:
-			result = str(records)
-		status = 1
-        else:
-                status = 100014
-		result = "couldn`t find"
+	type = data["type"]
+	out = db.accounts.find({"mid": mid})
+	fpref = None
+	mpref = None
+	for records in out:
+		fpref = records["food_pref"]
+		mpref = records["movie_pref"]
+	if type == "active":
+        	if db.accounts.find({"mid" : mid}).count() >= 1:
+			dat = dict()
+                	out = db.accounts.find({"mid": mid})
+			for records in out:
+				keys = records.keys()
+				keys.remove("_id")
+				for key in keys:
+					dat[str(key)] = records[key]
+			status = 1
+			result = dat
+        	else:
+                	status = 100014
+			result = "couldn`t find"
+	else:
+		if db.accounts.find({"mid" : mid}).count() >= 1:
+			dat = dict()
+			out = db.accounts.find({"mid": mid})
+			for records in out:
+				fname = str(records["name"])
+				fn = fname.split(" ")
+				dat["name"] = str(fn[0])
+				dat["gid"] = str(records["gid"])
+				dat["fb_id"] = str(records["fb_id"])
+				dat["gender"] = str(records["gender"])
+				dat["ame"] = str(records["ame"])
+				dat["images"] = list(records["images"])
+				dat["work"] = str(records["work"])
+				sfpref = records["food_pref"]
+				smpref = records["movie_pref"]
+				fpref = "abcdefghijkl"
+				mpref = "abcdefghijkl"
+				cur = db.accounts.find({"email": from_email})
+				for doc in cur:
+					fpref = doc["food_pref"]
+					mpref  = doc["movie_pref"]
+				dat["food_match"] = get_score(fpref, sfpref)
+				dat["movie_match"] = get_score(mpref, smpref)
+			result = dat
+			status = 1
         return status, result
 def update_account(jpayload):
+	print "update user account"
 	data = json.loads(jpayload) #unpack
 	hobj = hashlib.md5(data["email"])
+	print data
 	mid = hobj.hexdigest()
 	if db.accounts.find({"mid" : mid}).count() >= 1:
         	out = db.accounts.find({"mid": mid})
@@ -168,12 +221,15 @@ def update_account(jpayload):
 			lat = data["latitude"]
 			lon = data["longitude"]
 			ame = data["ame"]
+			work = data["work"]
+			images = data["images"]
 			if fp != 0 and mp != 0:
 				db.accounts.update_one({"mid": mid},{"$set": {"food_pref":fp}})	
 				db.accounts.update_one({"mid": mid},{"$set": {"movie_pref":mp}})
 			db.accounts.update_one({"mid": mid},{"$set": {"latitude":lat}})
 			db.accounts.update_one({"mid": mid},{"$set": {"longitude":lon}})
 			db.accounts.update_one({"mid": mid},{"$set": {"ame":ame}})
+			db.accounts.update_one({"mid": mid},{"$set": {"work":work}})
 			result = "updated"
                 status = 1
         else:

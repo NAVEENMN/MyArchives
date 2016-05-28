@@ -51,7 +51,7 @@ TOKEN_SECRET = 'KAhDbHSHgoxEuYK9jwvYRW3awmw'
 token = "pk.eyJ1IjoibXlzb3JuMSIsImEiOiJjaW1jcXZkd2UwMDI1dHNra3kyZzZ6YmZ5In0.XXYOEo0n7n0Kxg8ULBumAg"
 os.environ["MAPBOX_ACCESS_TOKEN"] = token
 service = Distance()
-
+DisMat = None
 
 #food_cus = ["American","British", "Chinese", "French", "Greek", "Indian", "Italian", "Japanese", "Mediterranean", "Mexican", "Thai", "Vitnamese"]
 other_food = ["icecream", "coffee", "tea", "yogurt", "Hookah", "bars", "nightlife"]
@@ -121,85 +121,80 @@ def get_business(business_id):
     business_path = BUSINESS_PATH + business_id
     return request(API_HOST, business_path)
 
-def query_api(term, location, type):
+def query_api(term, location, type, peopleloc):
     place_details = dict()
-
+    place_locations = list()
     if(type == "a"):
-        response = search(term, location)
-        businesses = response.get('businesses')
-        if not businesses:
-            print u'No businesses for {0} in {1} found.'.format(term, location)
-            return
-    
-        for x in range(0, len(businesses)):
-            data = businesses[x]['id']
-            r = get_business(data)
-            info = dict()
-	    address = None
-	    types = None
-            try:
-                info['rank'] = str(x);
-                info['ratings'] = str(r['rating'])
-                info['name'] = str(r['name'])
-                info['review_count'] = str(r['review_count'])
-                info['phone'] = str(r['display_phone'])
-                info['snippet']  = str(r['snippet_text'])
-		for x in range(0, len(r['location']['display_address'])):
-                	address = address +" "+r['location']['display_address'][x]
-                info['address'] = str(address)
-                info['coordinate'] = str(r['location']['coordinate'])
-                info['latitude'] = str(r['location']['coordinate']['latitude'])
-                info['longitude'] = str(r['location']['coordinate']['longitude'])
-                info['snippet']  = str(r['snippet_text'])
-                info['image_url'] = str(r['image_url'])
-                info['url'] = str(r['mobile_url'])
-		cat = list()
-                for x in range(len(r['categories'])):
-			typ = str(r['categories'][0][x]).lower()
-                        cat.append(typ)
-                cat = list(set(cat))
-                cate = ""
-                for tp in cat:
-                        cate = cate + " " + tp
-                info['category'] = str(cate)
+	print ("search type a")
+	response = search(term, location)
+	businesses = response.get('businesses')
+    else:
+	print ("search type b")
+	response = searchb(term, location)
+	businesses = response.get('businesses')
 
-                place_details[data] = json.dumps(info)
-            except:
-                v = 0
+    print ("search type a")
+    response = search(term, location)
+    businesses = response.get('businesses')
+    if not businesses:
+        print u'No businesses for {0} in {1} found.'.format(term, location)
+        return
     
-    if(type == "b"):
-        response = searchb(term, location)
-        businesses = response.get('businesses')
- 	types = None
-	address = None
-        if not businesses:
-            print u'No businesses for {0} in {1} found.'.format(term, location)
-            return
-    
-        for x in range(0, len(businesses)):
-            data = businesses[x]['id']
-            r = get_business(data)
-            info = dict()
-            try:
-                if(r['name']):
-                    info['rank'] =str(x)
-                    info['ratings'] = str(r['rating'])
-                    info['name'] = str(r['name'])
-                    info['review_count'] = str(r['review_count'])
-                    info['phone'] = str(r['display_phone'])
-                    info['address'] = str(r['location']['display_address'])
-                    info['coordinate'] = str(r['location']['coordinate'])
-                    info['latitude'] = str(r['location']['coordinate']['latitude'])
-                    info['longitude'] = str(r['location']['coordinate']['longitude'])
-                    info['snippet']  = "no"#str(r['snippet_text'])
-                    info['url'] = str(r['mobile_url'])
-                    info['image_url'] = str(r['image_url'])
-                    info['category'] = str(r['categories'])
-                    info['id'] = data.replace("-","")
-                    place_details[data.replace("-","")] = json.dumps(info)
-            except:
-                v = 0
-
+    for x in range(0, len(businesses)):
+        data = businesses[x]['id']
+        r = get_business(data)
+        info = dict()
+	address = ""
+	types = ""
+        try:
+            info['key'] = data
+            info['rank'] = str(x);
+            info['ratings'] = str(r['rating'])
+            info['name'] = str(r['name'])
+            info['review_count'] = str(r['review_count'])
+            info['phone'] = str(r['display_phone'])
+            info['snippet']  = str(r['snippet_text'])
+            for x in range(0, len(r['location']['display_address'])):
+                address = address +" "+r['location']['display_address'][x]
+            info['address'] = str(address)
+            info['coordinate'] = str(r['location']['coordinate'])
+            info['latitude'] = str(r['location']['coordinate']['latitude'])
+            info['longitude'] = str(r['location']['coordinate']['longitude'])
+            info['snippet']  = str(r['snippet_text'])
+            info['image_url'] = str(r['image_url'])
+            info['url'] = str(r['mobile_url'])
+            cat = list()
+            for x in range(len(r['categories'])):
+	        typ = str(r['categories'][0][x]).lower()
+                cat.append(typ)
+            cat = list(set(cat))
+            cate = ""
+            for tp in cat:
+                cate = cate + " " + tp
+            info['category'] = str(cate)
+            info['drivedistance'] = "5"
+	    place_locations.append([info['latitude'], info['longitude']])
+            place_details[data] = json.dumps(info)
+        except Exception as e:
+	    print "frame error"
+            print(e)
+    #we need to add distance info to it
+    mat = get_driving_distance(place_locations, peopleloc)
+    mp = np.array(mat)
+    m = mp[0]
+    print ("DrIVE")
+    print (len(mp))
+    count = 0
+    for key in place_details:
+        place_data = dict(json.loads(place_details[key]))
+	maxtime = 0
+        for t in range(0, len(mp)): # this loop will give max time for all members
+        	tempmaxtime = round(float(m[count])/float(60.00), 2)
+		if tempmaxtime > maxtime:
+			maxtime = tempmaxtime
+	place_data["drivedistance"] = str(maxtime)
+        count = count + 1
+        place_details[key] = json.dumps(place_data)
     return place_details
 
 '''
@@ -216,19 +211,17 @@ def get_region(people):
     return top_right, left_bottom
 
 
-def get_results(people, item):
-    
+def get_results(people, item):   
     payload = None
-    
-    lat = 0
-    lon = 0
+    lat = 0.0
+    lon = 0.0
     for person in people:
         lat = lat + person[0]
         lon = lon + person[1]
     lat = lat / len(people)
     lon = lon / len(people)
     centroid_location = str(lat) + "," + str(lon)
-
+    print people
     if(len(people) > 2):
         top_right, left_bottom = get_region(people)
         parta = str(top_right[0]) + "," + str(top_right[1])
@@ -237,8 +230,9 @@ def get_results(people, item):
     
     if(len(people) == 1):
         # use location and make query
+	print people[0]
         try:
-            data = query_api(item, str(people[0]).replace("[","").replace("]",""), "a")
+            data = query_api(item,str(people[0][0])+","+str(people[0][1]), "a", people)
             payload = data
         except urllib2.HTTPError as error:
             sys.exit('Encountered HTTP error {0}. Abort program.'.format(error.code))
@@ -247,7 +241,7 @@ def get_results(people, item):
         # compute centroid and make query
         try:
             point = centroid_location
-            data = query_api(item, point, "a")
+            data = query_api(item, point, "a", people)
             payload = data
         except urllib2.HTTPError as error:
             sys.exit('Encountered HTTP error {0}. Abort program.'.format(error.code))
@@ -255,12 +249,11 @@ def get_results(people, item):
     if(len(people) > 2):
         #bounds=sw_latitude,sw_longitude|ne_latitude,ne_longitude
         try:
-            data = query_api(item, group_location, "b")
+            data = query_api(item, group_location, "b", people)
             payload = data
         except urllib2.HTTPError as error:
             sys.exit('Encountered HTTP error {0}. Abort program.'.format(error.code))
     return payload
-
 
 '''
     name : get_distance
@@ -272,7 +265,41 @@ def get_results(people, item):
 def get_distance(a, b):
     return distance.euclidean(a, b)
 
+'''
+    name : new_ranking_base
+    @prams: lists
+    @return
+    @desp :This function computes the ranking order for the places.
+'''
 
+def get_driving_distance(place_location, person_location):
+
+    all_places = list()
+    ranked_result = list()
+
+    # merge all locations
+    for x in range(0, len(person_location)):
+        lat = float(person_location[x][0])
+        lon = float(person_location[x][1])
+        member = {'type': 'Feature', 'properties': {'name': 'user'}, 'geometry': {'type': 'Point','coordinates': [lon, lat]}}
+        all_places.append(member)
+    for x in range(0, len(place_location)):
+        lat = float(place_location[x][0])
+        lon = float(place_location[x][1])
+        place = {'type': 'Feature', 'properties': {'name': 'place'}, 'geometry': {'type': 'Point','coordinates': [lon, lat]}}
+        all_places.append(place)
+
+    service = Distance()
+    print "test"
+    print all_places
+    res = service.distances(all_places, 'driving')
+    distances = res.json()['durations']
+    DM = np.matrix(distances)
+    CDM = DM[:len(person_location),len(person_location):]
+    global DisMat
+    DisMat = CDM
+    print DisMat
+    return CDM
 
 '''
     name : new_ranking_base
@@ -481,9 +508,7 @@ def get_pref_vec(pref):
     return np.array(pvec)
 
 def main(db, query, eventid):
-    print ("enter the search")
-    print query
-    #eventid = "10103884620845515--event--0"#sys.argv[1]
+    print ("group search")
     cursor = db.events.find({"mid":eventid})
     people = list()
     location = list()
@@ -511,27 +536,14 @@ def main(db, query, eventid):
 	nap = get_pref_vec(pref)
 	pref_vec.append(nap)		
 	location.append(loc)
-        #by deafult go with group
-	# we need to make queries based on distrubtion of mean theta
-	# for this version lets just pick top two 
-    mpv = np.zeros(13)
-    for x in range(0, len(pref_vec)):
-	mpv = mpv + pref_vec[x]
-    mpvlist = mpv.tolist()
-    mpvcopy = list(mpvlist)
-    mpvcopy.sort()
-    ftp = mpvcopy[len(mpvcopy) - 1]
-    stp = mpvcopy[len(mpvcopy) - 2]
-    idx_ftp = mpvlist.index(ftp)
-    idx_stp = mpvlist.index(stp)
-    choices.append(food_cus[idx_ftp])
-    choices.append(food_cus[idx_stp]) 
+   
+    choices.append(query) 
 
     merged_results = dict()
     final_results = dict()
-    print location
     if query != "movies":
         response = get_results(location, query)
+	print response
         merged_results.update(response)
         CONV_RANKED_LIST = ranking_based_on_convenience(merged_results, location)
     for term in CONV_RANKED_LIST:
