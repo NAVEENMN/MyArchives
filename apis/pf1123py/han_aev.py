@@ -75,7 +75,7 @@ def insert_account(jpayload):
 	data = json.loads(jpayload) #unpack
 	keys = data.keys()
 	status = 100013
-	def_img = "http://d3uqben18grrms.cloudfront.net/B5592C29-5D69-4FFE-BFB2-EBE48DC9E7E5-84756-000479361AA2CAA9_full.jpg"
+	def_img = "http://d3uqben18grrms.cloudfront.net/CECF4C59-056E-4831-AB5A-81173A7811FF-2331-000003CC0068CF1F_full.jpg"
 	dat = dict()
 	hobj = hashlib.md5(data["email"])
 	mid = hobj.hexdigest()
@@ -194,6 +194,7 @@ def find_account(jpayload):
 				dat["ame"] = str(records["ame"])
 				dat["images"] = list(records["images"])
 				dat["work"] = str(records["work"])
+				dat["distance"] = str("1.0")
 				sfpref = records["food_pref"]
 				smpref = records["movie_pref"]
 				fpref = "abcdefghijkl"
@@ -219,7 +220,11 @@ def update_account(jpayload):
 			fp = data["food_pref"]
 			mp = data["movie_pref"]
 			lat = data["latitude"]
+			if lat == None or lat == "":
+				lat = 37.4099387834197
 			lon = data["longitude"]
+			if lon == None or lat == "":
+				lon = -122.0973246452604
 			ame = data["ame"]
 			work = data["work"]
 			images = data["images"]

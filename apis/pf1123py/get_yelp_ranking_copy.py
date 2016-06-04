@@ -45,8 +45,8 @@ FIREBASE_URL = "https://met-ster-event.firebaseio.com/"
 # OAuth credential placeholders that must be filled in by users.
 CONSUMER_KEY = 'Z0iY7ApEiif5H7VaWJYCMQ'
 CONSUMER_SECRET = 'Q5akSU6NBRPr1wTjIy9NsB7tPC4'
-TOKEN = 'LkX6HbwoiGPlPxzP7d9U8My2Zl8K4iMw'
-TOKEN_SECRET = 'KAhDbHSHgoxEuYK9jwvYRW3awmw'
+TOKEN = 'wtDa0ww9dTdCDPPmjyNvkQjA6QZhnESI'
+TOKEN_SECRET = 'gBMm5j3BQkbh5-b7ztfkqUc9y4A'
 
 token = "pk.eyJ1IjoibXlzb3JuMSIsImEiOiJjaW1jcXZkd2UwMDI1dHNra3kyZzZ6YmZ5In0.XXYOEo0n7n0Kxg8ULBumAg"
 os.environ["MAPBOX_ACCESS_TOKEN"] = token
@@ -121,25 +121,33 @@ def get_business(business_id):
     business_path = BUSINESS_PATH + business_id
     return request(API_HOST, business_path)
 
+def get_item(key, r):
+	pay = "0"
+	if key in r:
+		pay = str(r[key])
+	return pay
+
 def query_api(term, location, type, peopleloc):
     place_details = dict()
     place_locations = list()
+    response = None
     if(type == "a"):
-	print ("search type a")
-	response = search(term, location)
+  	try:
+		response = search(term, location)
+	except urllib2.HTTPError, error: # catch *all* exceptions
+		e = sys.exc_info()[0]
+		contents = error.read()
+		print e
+		print contents
 	businesses = response.get('businesses')
     else:
-	print ("search type b")
 	response = searchb(term, location)
 	businesses = response.get('businesses')
 
-    print ("search type a")
-    response = search(term, location)
-    businesses = response.get('businesses')
     if not businesses:
         print u'No businesses for {0} in {1} found.'.format(term, location)
         return
-    
+   
     for x in range(0, len(businesses)):
         data = businesses[x]['id']
         r = get_business(data)
@@ -148,43 +156,45 @@ def query_api(term, location, type, peopleloc):
 	types = ""
         try:
             info['key'] = data
-            info['rank'] = str(x);
-            info['ratings'] = str(r['rating'])
-            info['name'] = str(r['name']).replace("&", "and")
-            info['review_count'] = str(r['review_count'])
-            info['phone'] = str(r['display_phone'])
-            info['snippet']  = str(r['snippet_text'])
+            info['rank'] = str(x)
+	    info["ratings"] = get_item("rating", r)
+            info['name'] = get_item("name", r).replace("&", "and")
+            info['review_count'] = get_item("review_count", r)
+            info['phone'] = "no"#str(r['display_phone'])
+            #info['snippet']  = get_item("snippet_text", r)
             for x in range(0, len(r['location']['display_address'])):
                 address = address +" "+r['location']['display_address'][x]
             info['address'] = str(address)
             info['coordinate'] = str(r['location']['coordinate'])
             info['latitude'] = str(r['location']['coordinate']['latitude'])
             info['longitude'] = str(r['location']['coordinate']['longitude'])
-            info['snippet']  = str(r['snippet_text']).replace("&", "and")
+            info['snippet']  = str(get_item("snippet_text", r)).replace("&", "and")
             info['image_url'] = str(r['image_url'])
             info['url'] = "no"#str(r['mobile_url'])
             cat = list()
             for x in range(len(r['categories'])):
-	        typ = str(r['categories'][0][x]).lower()
-                cat.append(typ)
+		catlist = list(r['categories'])
+		for y in range(0, len(catlist)):
+			indcat = list(catlist[y])
+	        	typ = str(indcat[0]).lower()
+                	cat.append(typ)
             cat = list(set(cat))
             cate = ""
             for tp in cat:
                 cate = cate + " " + tp
-            info['category'] = str(cate)
+            info['category'] = str(cate).replace("&", "and")
             info['drivedistance'] = "5"
 	    place_locations.append([info['latitude'], info['longitude']])
-	    STRING_DATA = dict([(str(k), str(v)) for k, v in info.items()])
-            place_details[data] = json.dumps(STRING_DATA)
+	    #STRING_DATA = dict([(str(k), str(v)) for k, v in info.items()])
+            place_details[data] = json.dumps(info)
         except Exception as e:
 	    print "frame error"
+	    print r['categories']
             print(e)
     #we need to add distance info to it
     mat = get_driving_distance(place_locations, peopleloc)
     mp = np.array(mat)
     m = mp[0]
-    print ("DrIVE")
-    print (len(mp))
     count = 0
     for key in place_details:
         place_data = dict(json.loads(place_details[key]))
@@ -212,7 +222,9 @@ def get_region(people):
     return top_right, left_bottom
 
 
-def get_results(people, item):   
+def get_results(people, item):
+    print ("get_results")
+    print people   
     payload = None
     lat = 0.0
     lon = 0.0
@@ -222,8 +234,9 @@ def get_results(people, item):
     lat = lat / len(people)
     lon = lon / len(people)
     centroid_location = str(lat) + "," + str(lon)
-    print people
+   
     if(len(people) > 2):
+	print ("case people more than 2")
         top_right, left_bottom = get_region(people)
         parta = str(top_right[0]) + "," + str(top_right[1])
         partb = str(left_bottom[0]) + "," + str(left_bottom[1])
@@ -231,14 +244,15 @@ def get_results(people, item):
     
     if(len(people) == 1):
         # use location and make query
-	print people[0]
+	print ("case one person")
         try:
-            data = query_api(item,str(people[0][0])+","+str(people[0][1]), "a", people)
+            data = query_api(item,str(people[0]).replace("[","").replace("]",""), "a", people)
             payload = data
         except urllib2.HTTPError as error:
             sys.exit('Encountered HTTP error {0}. Abort program.'.format(error.code))
 
     if(len(people) == 2):
+	print ("case 2 people")
         # compute centroid and make query
         try:
             point = centroid_location

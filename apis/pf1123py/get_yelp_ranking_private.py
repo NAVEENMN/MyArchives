@@ -37,7 +37,7 @@ db = client.Chishiki
 API_HOST = 'api.yelp.com'
 DEFAULT_TERM = 'dinner'
 DEFAULT_LOCATION = 'San Francisco, CA'
-SEARCH_LIMIT = 15
+SEARCH_LIMIT = 10
 SEARCH_PATH = '/v2/search/'
 BUSINESS_PATH = '/v2/business/'
 FIREBASE_URL = "https://met-ster-event.firebaseio.com/"
@@ -45,8 +45,8 @@ FIREBASE_URL = "https://met-ster-event.firebaseio.com/"
 # OAuth credential placeholders that must be filled in by users.
 CONSUMER_KEY = 'Z0iY7ApEiif5H7VaWJYCMQ'
 CONSUMER_SECRET = 'Q5akSU6NBRPr1wTjIy9NsB7tPC4'
-TOKEN = 'LkX6HbwoiGPlPxzP7d9U8My2Zl8K4iMw'
-TOKEN_SECRET = 'KAhDbHSHgoxEuYK9jwvYRW3awmw'
+TOKEN = 'wtDa0ww9dTdCDPPmjyNvkQjA6QZhnESI'
+TOKEN_SECRET = 'gBMm5j3BQkbh5-b7ztfkqUc9y4A'
 
 token = "pk.eyJ1IjoibXlzb3JuMSIsImEiOiJjaW1jcXZkd2UwMDI1dHNra3kyZzZ6YmZ5In0.XXYOEo0n7n0Kxg8ULBumAg"
 os.environ["MAPBOX_ACCESS_TOKEN"] = token
@@ -123,22 +123,28 @@ def get_business(business_id):
     return request(API_HOST, business_path)
 
 def query_api(term, location, type):
+    print ("enter query_api")
     place_details = dict()
+    print location
     lo = location.split(", ")
+    print lo, type, term
     person_location = list()
     place_locations = list()
     person_location.append([lo[0], lo[1]])
     if(type == "a"):
         response = search(term, location)
         businesses = response.get('businesses')
-	print businesses
         if not businesses:
             print u'No businesses for {0} in {1} found.'.format(term, location)
             return
     
         for x in range(0, len(businesses)):
-            data = businesses[x]['id']
-            r = get_business(data)
+	    r = None
+	    try:
+            	data = businesses[x]['id']
+		r = get_business(data)
+	    except Exception as e:
+		print e
             info = dict()
 	    address = ""
 	    types = None
@@ -148,7 +154,7 @@ def query_api(term, location, type):
                 info['ratings'] = str(r['rating'])
                 info['name'] = str(r['name'])
                 info['review_count'] = str(r['review_count'])
-                info['phone'] = str(r['display_phone'])
+                info['phone'] = "no"#str(r['display_phone'])
                 info['snippet']  = str(r['snippet_text'])
 		for x in range(0, len(r['location']['display_address'])):
 			address = address +" "+r['location']['display_address'][x]
@@ -161,17 +167,20 @@ def query_api(term, location, type):
                 info['url'] = str(r['mobile_url'])
                 cat = list()
                 for x in range(len(r['categories'])):
-                        typ = str(r['categories'][0][x]).lower()
-                        cat.append(typ)
+                	catlist = list(r['categories'])
+                	for y in range(0, len(catlist)):
+                        	indcat = list(catlist[y])
+                        	typ = str(indcat[0]).lower()
+                       		cat.append(typ)
 		cat = list(set(cat))
 		cate = ""
 		for tp in cat:
 			cate = cate + " " + tp
-                info['category'] = str(cate)
+                info['category'] = str(cate).replace("&", "and")
                 place_locations.append([info['latitude'], info['longitude']])
                 place_details[data] = json.dumps(info)
-            except:
-                v = 0
+            except Exception as e:
+                print(e)
     #we need to add distance info to it
     mat = get_driving_distance(place_locations, person_location)
     mp = np.array(mat)
@@ -199,7 +208,8 @@ def get_region(people):
 
 
 def get_results(people, item):
-    
+    print ("get results")
+    print people
     payload = None
     
     lat = 0
@@ -280,8 +290,6 @@ def get_driving_distance(place_location, person_location):
         all_places.append(place)
     
     service = Distance()
-    print "test"
-    print all_places
     res = service.distances(all_places, 'driving')
     distances = res.json()['durations']
     DM = np.matrix(distances)

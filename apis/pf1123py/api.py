@@ -15,6 +15,24 @@ db = client.Chishiki
 
 FIREBASE_URL = "https://metsterios.firebaseio.com/"
 
+
+#--------- sigmoid values
+sigdic = dict()
+sigdic["loc0"] = 0.73105857863
+sigdic["loc1"] = 0.710949502625
+sigdic["loc2"] = 0.689974481128
+sigdic["loc3"] = 0.668187772168
+sigdic["loc4"] = 0.645656306226
+sigdic["loc5"] = 0.622459331202
+sigdic["loc6"] = 0.598687660112
+sigdic["loc7"] = 0.574442516812
+sigdic["loc8"] = 0.549833997312
+sigdic["loc9"] = 0.524979187479
+sigdic["loc10"] = 0.5
+sigdic["loc11"] = 0.475020812521
+sigdic["loc12"] = 0.450166002688
+#----------
+
 def add_public_search(query, email):
 	data = dict()
 	data["email"] = email
@@ -294,15 +312,22 @@ def get_distance(a, b):
 def get_pref_vec(pref):
     #print("get_pref_vec")
     print (pref)
-    if (len(pref) != 13):
-	print "some error"
-    vec = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']
-    val = [0.880797077978, 0.869891525637, 0.8581489351, 0.845534734916, 0.832018385134, 0.817574476194, 0.802183888559, 0.785834983043, 0.768524783499, 0.750260105595, 0.73105857863, 0.72, 0.71]
+    features = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']
     pvec = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    for x in range (0, len(pref)):
-        h = pref[x]
-        ind = vec.index(h)
-        pvec[ind] = val[x]
+
+    if (len(pref) != 13):
+	for x in range(0, len(pvec)):
+		key =  "loc"+str(x)
+		val = sigdic[key]
+		pvec[x] = val
+    else:
+	for x in range (0, len(pref)):
+		key =  "loc"+str(x)
+		val = sigdic[key]
+		feature = pref[x]
+		idx = features.index(feature)
+		pvec[idx] = val
+
     return np.array(pvec)
 
 def get_matchscore(upref, spref):
@@ -421,46 +446,144 @@ def vote_up(jpayload):
 	res = "ok"
         return status, res
 
-def insert_chat_id(jpayload):
-	print "insert chat id"
+
+def group_chat(jpayload):
+	print ("group chat")
 	dat = dict()
 	res = None
 	status = 999999
 	data = json.loads(jpayload)
-	email = str(data["email"])
+	event_id = str(data["chat_id"])
+	operate = str(data["operate"])
+	if (db.events.find({"mid": event_id}).count >= 1):
+		event_members = list()
+		cur = db.events.find({"mid": event_id})
+		for doc in cur:
+			event_members = list(doc["event_members"])
+		if operate == "add":
+			print("add")
+			for member in event_members:
+				print member
+				fid = None
+				tcur = db.accounts.find({"mid": member})
+				for doc in tcur:
+					fid = doc["fb_id"]
+				cur = db.chatlist.find({"fbid": fid})
+                                chatids = list()
+                                for doc in cur:
+                                        chatids = list(doc["clist"])
+                                chatids.append(event_id)
+                                chatids = list(set(chatids))
+                                db.chatlist.update_one({"fbid": fid},{"$set": {"clist":chatids}})
+				status = 1
+				res = "updated"
+		if operate == "delete":
+			print("delete")
+	return status, res	
+
+
+def insert_chat_id(jpayload):
+	print "insert chat id"
+	dat = dict()
+	res = None
+	update_from = 0
+	update_to = 0
+	status = 999999
+	data = json.loads(jpayload)
+	fromid = str(data["from_id"])
+	toid = str(data["to_id"])
 	chat_id = str(data["chat_id"])
 	operate = str(data["operate"])
-	if (db.chatlist.find({"email": email}).count() >= 1):
+	chat_type = str(data["chat_type"])
+	if chat_type == "group":
+		return group_chat(jpayload)
+	#-------> to id
+	if (db.chatlist.find({"fbid": toid}).count() >= 1):
 		if operate == "add":
-			cur = db.chatlist.find({"email": email})
-			chatids = list()
-			for doc in cur:
-				chatids = list(doc["clist"])
-			chatids.append(chat_id)
-			chatids = list(set(chatids))
-			db.chatlist.update_one({"email": email},{"$set": {"clist":chatids}})
+			if chat_type == "private":
+				#update for to
+				cur = db.chatlist.find({"fbid": toid})
+				chatids = list()
+				for doc in cur:
+					chatids = list(doc["clist"])
+				chatids.append(chat_id)
+				chatids = list(set(chatids))
+				db.chatlist.update_one({"fbid": toid},{"$set": {"clist":chatids}})
+				#update for from
+				cur = db.chatlist.find({"fbid": fromid})
+				chatids = list()
+				for doc in cur:
+					chatids = list(doc["clist"])
+				chatids.append(chat_id)
+				chatids = list(set(chatids))
+				db.chatlist.update_one({"fbid": fromid},{"$set": {"clist":chatids}})
 			status = 1
 			res = "updated"
 		else:
-			cur = db.chatlist.find({"email": email})
+			print ("del chat")
+			cur = db.chatlist.find({"fbid": toid})
 			chatids = list()
 			for doc in cur:
 				chatids = list(doc["clist"])
 			chatids.remove(chat_id)
 			chatids = list(set(chatids))
-			db.chatlist.update_one({"email": email},{"$set": {"clist":chatids}})
+			db.chatlist.update_one({"fbid": toid},{"$set": {"clist":chatids}})
+			status = 1
+			res = "removed"
+	else:
+		print ("possible eventid")
+		dat = dict()
+		dat["fbid"] = toid
+		cids = list()
+		cids.append(chat_id)
+		dat["clist"] = cids
+		db.chatlist.insert_one(dat)
+		res = "inserted"
+		status = 999999
+	
+
+	#-------> from id
+	if (db.chatlist.find({"fbid": fromid}).count() >= 1):
+		if operate == "add":
+			if chat_type == "private":
+				#update for to
+				cur = db.chatlist.find({"fbid": fromid})
+				chatids = list()
+				for doc in cur:
+					chatids = list(doc["clist"])
+				chatids.append(chat_id)
+				chatids = list(set(chatids))
+				db.chatlist.update_one({"fbid": fromid},{"$set": {"clist":chatids}})
+				#update for from
+				cur = db.chatlist.find({"fbid": toid})
+				chatids = list()
+				for doc in cur:
+					chatids = list(doc["clist"])
+				chatids.append(chat_id)
+				chatids = list(set(chatids))
+				db.chatlist.update_one({"fbid": toid},{"$set": {"clist":chatids}})
+			status = 1
+			res = "updated"
+		else:
+			cur = db.chatlist.find({"fbid": fromid})
+			chatids = list()
+			for doc in cur:
+				chatids = list(doc["clist"])
+			chatids.remove(chat_id)
+			chatids = list(set(chatids))
+			db.chatlist.update_one({"fbid": fromid},{"$set": {"clist":chatids}})
 			status = 1
 			res = "removed"
 	else:
 		dat = dict()
-		dat["email"] = email
+		dat["fbid"] = fromid
 		cids = list()
 		cids.append(chat_id)
 		dat["clist"] = cids
 		db.chatlist.insert_one(dat)
 		res = "inserted"
 		status = 1
-		
+
 	print data
 	return status, res
 
@@ -472,8 +595,12 @@ def get_chat_history(jpayload):
 	data = json.loads(jpayload)
 	email = str(data["email"])
 	chatids = list()
-	if (db.chatlist.find({"email": email}).count() >= 1):
-		cur = db.chatlist.find({"email": email})
+	if (db.accounts.find({"email": email}).count() >= 1):
+		cur = db.accounts.find({"email": email})
+		fid = None
+		for doc in cur:
+			fid = doc["fb_id"]
+		cur = db.chatlist.find({"fbid": fid})
 		for doc in cur:
 			chatids = list(doc["clist"])
 		res = chatids
@@ -568,7 +695,6 @@ def get_people_for_event(jpayload):
 			usr["ame"] = doc["work"]
 			usr["fb_id"] = doc["fb_id"]
 		people.append(usr)
-			
 	print people
 	res = people
 	status = 1
