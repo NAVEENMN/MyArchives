@@ -28,7 +28,7 @@ def frame_output(rid, status, reqdes, msg, error):
 #-------------------------- INPUT TESTS #perform all tests here
 def test_in(op, pay):
 	status = 1
-        api_oper = [999000, 997008, 998000, 996000, 996001, 997006, 998001, 998002, 997000, 777555, 997666, 997667, 997668, 997670, 998100, 998101]
+        api_oper = [999000, 997008, 998000, 996000, 996001, 996002, 997006, 998001, 998002, 997000, 777555, 997666, 997667, 997668, 997670, 998100, 998101]
 	if int(op) in api_oper:
 		return 1
 	if op is None or pay is None:

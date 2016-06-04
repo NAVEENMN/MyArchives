@@ -478,12 +478,36 @@ def group_chat(jpayload):
 				status = 1
 				res = "updated"
 		if operate == "delete":
-			print("delete")
+			# step 1: delet cids in clist for all memebers
+			for member in event_members:
+				print member
+				fid = None
+				tcur = db.accounts.find({"mid": member})
+				for doc in tcur:
+					fid = doc["fb_id"]
+				cur = db.chatlist.find({"fbid": fid})
+				chatids = list()
+				for doc in cur:
+					chatids = list(doc["clist"])
+				if event_id in chatids:
+					chatids.remove(event_id)
+				chatids = list(set(chatids))
+				db.chatlist.update_one({"fbid": fid},{"$set": {"clist":chatids}})
+				status = 1
+				res = "removed"
+			# setp 2: delete firebase ref
+			fb_ref = "https://metster-chat.firebaseio.com/"
+			fbase = Firebase(fb_ref+"/Recent/"+event_id)
+                        fbase.remove()
+                        fbase = Firebase(fb_ref+"/messages/"+event_id)
+                        fbase.remove()
+			
 	return status, res	
 
 
 def insert_chat_id(jpayload):
 	print "insert chat id"
+	fb_ref = "https://metster-chat.firebaseio.com/"
 	dat = dict()
 	res = None
 	update_from = 0
@@ -521,13 +545,19 @@ def insert_chat_id(jpayload):
 			res = "updated"
 		else:
 			print ("del chat")
+			fbase = Firebase(fb_ref)
 			cur = db.chatlist.find({"fbid": toid})
 			chatids = list()
 			for doc in cur:
 				chatids = list(doc["clist"])
-			chatids.remove(chat_id)
+			if chat_id in chatids:
+				chatids.remove(chat_id)
 			chatids = list(set(chatids))
 			db.chatlist.update_one({"fbid": toid},{"$set": {"clist":chatids}})
+			fbase = Firebase(fb_ref+"/Recent/"+toid+"/"+chat_id)
+			fbase.remove()
+			fbase = Firebase(fb_ref+"/messages/"+chat_id)
+			fbase.remove()
 			status = 1
 			res = "removed"
 	else:
@@ -569,9 +599,14 @@ def insert_chat_id(jpayload):
 			chatids = list()
 			for doc in cur:
 				chatids = list(doc["clist"])
-			chatids.remove(chat_id)
+			if chat_id in chatids:
+				chatids.remove(chat_id)
 			chatids = list(set(chatids))
 			db.chatlist.update_one({"fbid": fromid},{"$set": {"clist":chatids}})
+			fbase = Firebase(fb_ref+"/Recent/"+fromid+"/"+chat_id)
+                        fbase.remove()
+			fbase = Firebase(fb_ref+"/messages/"+chat_id)
+			fbase.remove()
 			status = 1
 			res = "removed"
 	else:
