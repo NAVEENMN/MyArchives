@@ -30,6 +30,7 @@ from pprint import pprint
 import hashlib
 from pymongo import MongoClient
 import string
+import re
 
 client = MongoClient('localhost', 27017)
 db = client.Chishiki
@@ -133,6 +134,7 @@ def query_api(term, location, type):
     person_location.append([lo[0], lo[1]])
     if(type == "a"):
         response = search(term, location)
+	print response, person_location
         businesses = response.get('businesses')
         if not businesses:
             print u'No businesses for {0} in {1} found.'.format(term, location)
@@ -148,6 +150,7 @@ def query_api(term, location, type):
             info = dict()
 	    address = ""
 	    types = None
+	    print r
             try:
 		info['key'] = data
                 info['rank'] = str(x);
@@ -155,14 +158,18 @@ def query_api(term, location, type):
                 info['name'] = str(r['name'])
                 info['review_count'] = str(r['review_count'])
                 info['phone'] = "no"#str(r['display_phone'])
-                info['snippet']  = str(r['snippet_text'])
+		if "snippet_text" in r:
+                	info['snippet'] = str(r['snippet_text']).replace("&", "and")
+			info['snippet'] = re.sub( '\s+', ' ', info['snippet'] ).strip()
+		else:
+			info['snippet']  = "no info"
 		for x in range(0, len(r['location']['display_address'])):
 			address = address +" "+r['location']['display_address'][x]
                 info['address'] = str(address)
                 info['coordinate'] = str(r['location']['coordinate'])
                 info['latitude'] = str(r['location']['coordinate']['latitude'])
                 info['longitude'] = str(r['location']['coordinate']['longitude'])
-                info['snippet']  = str(r['snippet_text'])
+                #info['snippet']  = str(r['snippet_text'])
                 info['image_url'] = str(r['image_url'])
                 info['url'] = str(r['mobile_url'])
                 cat = list()
@@ -482,7 +489,8 @@ def ranking_based_on_convenience(payload, people):
 
 def get_pref_vec(pref):
     vec = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']
-    val = [0.880797077978, 0.869891525637, 0.8581489351, 0.845534734916, 0.832018385134, 0.817574476194, 0.802183888559, 0.785834983043, 0.768524783499, 0.750260105595, 0.73105857863, 0.72, 0.71 ]
+    #val = [0.880797077978, 0.869891525637, 0.8581489351, 0.845534734916, 0.832018385134, 0.817574476194, 0.802183888559, 0.785834983043, 0.768524783499, 0.750260105595, 0.73105857863, 0.72, 0.71 ]
+    val = [6.0, 5.0, 4.0, 3.0, 2.0, 1.0, 0.0, -1.0, -2.0, -3.0, -4.0, -5.0, -6.0]
     pvec = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     for x in range (0, len(pref)):
         h = pref[x]
@@ -507,6 +515,9 @@ def main(query, email):
     for doc in cur:
         lat = float(doc["latitude"])
         lon = float(doc["longitude"])
+	if lat == None or lat == "":
+        	lat = 37.7873589
+        	lon = -122.408227
         pref = str(doc["food_pref"])
         loc = [lat, lon]
     nap = get_pref_vec(pref)

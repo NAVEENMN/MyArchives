@@ -210,6 +210,10 @@ def send_invite(jpayload):
 	event_id = data["event_id"]
         print("send invite to : ")
         print(to_mid)
+	if "@" in to_mid:
+		cur = db.accounts.find({"gid": to_mid})
+		for doc in cur:
+			to_mid = doc["fb_id"]
 	is_from_ok = db.accounts.find({"mid":from_mid}).count()
 	is_to_ok = db.accounts.find({"fb_id":to_mid}).count()
 	is_event_ok = db.events.find({"mid":event_id}).count()
@@ -400,6 +404,7 @@ def get_people_public_search(jpayload):
 				usr["p_aboutme"] = doc["work"]
 				usr["p_fbid"] = doc["fb_id"]
 				usr["p_gid"] = doc["gid"]
+				usr["p_dev_id"] = doc["dev_id"]
 				p_foodpref = doc["food_pref"]
 				p_movpref = doc["movie_pref"]
 				print ("getting score for food")
@@ -414,7 +419,16 @@ def get_people_public_search(jpayload):
 			if s_fbid == usr_fid:
 				k = 0
 			else:
-				people.append(usr)
+				blocks = list()
+				cur = db.blocks.find({"mid": usr_fid})
+				for doc in cur:
+					blocks = list(doc["block"])
+				if s_fbid in blocks:
+					l = 0
+					print "block"	
+					print s_fbid
+				else:
+					people.append(usr)
 	print people
 	status = 1
 	res = people
@@ -519,6 +533,12 @@ def insert_chat_id(jpayload):
 	chat_id = str(data["chat_id"])
 	operate = str(data["operate"])
 	chat_type = str(data["chat_type"])
+
+	if "event" in chat_id:
+		chat_type = "group"
+	else:
+		chat_type = "private"
+
 	if chat_type == "group":
 		return group_chat(jpayload)
 	#-------> to id
@@ -706,6 +726,135 @@ def upload_image(jpayload):
 	status = 1
 	return status, res
 
+def fav_a_place(jpayload):
+	print "fav a place"
+	dat = dict()
+	res = None
+	status = 999999
+	data = json.loads(jpayload)
+	from_id = str(data["from_id"])
+	place_id = str(data["place_id"])
+	return status, res
+
+def block_user(jpayload):
+	print "block user"
+	dat = dict()
+	res = None
+	status = 999999
+	data = json.loads(jpayload)
+	print data
+	from_id = str(data["from_id"]) #face id
+	to_id = str(data["block_id"]) # gid
+	cur = db.accounts.find({"gid":to_id})
+	# update on from
+	for doc in cur:
+		to_id = doc["fb_id"]
+	print to_id
+	if (db.blocks.find({"mid": to_id}).count() > 0):
+		cur = db.blocks.find({"mid": to_id})
+		blocklist = list()
+		for doc in cur:
+			blocklist = list(set(list(doc["block"])))
+		blocklist.append(str(from_id))
+		blocklist = list(set(list(blocklist)))
+		db.blocks.update_one({"mid": to_id},{"$set": {"block":blocklist}})
+	else:
+		print "her"
+		blocklist = [str(from_id)]
+		dat["mid"] = to_id
+		dat["block"] = blocklist
+		db.blocks.insert_one(dat)
+	#update on to
+        if (db.blocks.find({"mid": from_id}).count() > 0):
+                cur = db.blocks.find({"mid": from_id})	
+		blocklist = list()
+		for doc in cur:
+                	blocklist = list(set(list(doc["block"])))
+                blocklist.append(str(to_id))
+		blocklist = list(set(list(blocklist)))
+                db.blocks.update_one({"mid": from_id},{"$set": {"block":blocklist}})
+        else:
+                blocklist = [str(to_id)]
+                dat["mid"] = from_id
+		dat["block"] = blocklist
+		db.blocks.insert_one(dat)
+
+	status = 1
+	return  status, res
+
+def report_user(jpayload):
+	print "report user"
+	dat = dict()
+	res = None
+	status = 999999
+	data = json.loads(jpayload)
+	from_id = str(data["from_id"])
+	to_id = str(data["report_id"])
+	print data
+	print db.reports.find({"mid": to_id}).count()
+	if (db.reports.find({"mid": to_id}).count() > 0):
+		print("update")
+		cur = db.reports.find({"mid": to_id})
+		count = 0
+		ncount = 0
+		for doc in cur:
+			ncount = doc["reports"]
+		count = ncount + 1
+		db.reports.update_one({"mid": to_id},{"$set": {"reports":count}})
+	else:
+		dat["mid"] = to_id
+		dat["reports"] = 1
+		db.reports.insert_one(dat)
+		res = "reported"
+		print ("rep")
+	status = 1
+	return status, res
+
+def clear_search_history(jpayload):
+	print "clear search history"
+	dat = dict()
+	res = None
+	status = 999999
+	data = json.loads(jpayload)
+	fid = str(data["fbid"])
+	db.querylookup.delete_many({"fb_id":fid})
+	status = 1
+	res = "removed"
+	return status, res
+
+def get_dev_id_for_gid(jpayload):
+	print "get dev id for gid"
+	dat = dict()
+	res = None
+	status = 999999
+	data = json.loads(jpayload)
+	gid = str(data["gid"])
+	cur = db.accounts.find({"gid": gid})
+	did = None
+	for doc in cur:
+		did = doc["dev_id"]
+	status = 1
+	res = did
+	return status, res
+
+def get_dev_id_for_people(jpayload):
+	print "get dev id for people"
+	dat = dict()
+	res = None
+	status = 999999
+	data = json.loads(jpayload)
+	fids = list(data["fbids"])
+	for fid in fids:
+		cur = db.accounts.find({"fb_id": fid})
+		did = None
+		for doc in cur:
+			did = doc["dev_id"]
+		dat[str(fid)] = str(did)
+	print dat
+	status = 1
+	res = dat
+	return status, res
+
 def get_people_for_event(jpayload):
 	print "get people for event"
 	dat = dict()
@@ -728,6 +877,7 @@ def get_people_for_event(jpayload):
 			usr["email"] = doc["email"]
 			usr["gid"] = doc["gid"]
 			usr["ame"] = doc["work"]
+			usr["dev_id"] = doc["dev_id"]
 			usr["fb_id"] = doc["fb_id"]
 		people.append(usr)
 	print people
@@ -807,8 +957,14 @@ def main(operid, payload):
 		status, res = vote_up(payload)
 	if int(operid) == 8100:#public search
 		status, res = get_people_public_search(payload)
+	if int(operid) == 8103:#clear search history
+		status, res = clear_search_history(payload)
 	if int(operid) == 8101:#find people for event
 		status, res = get_people_for_event(payload)
+	if int(operid) == 8104:#get dev_id for people
+		status, res = get_dev_id_for_people(payload)
+	if int(operid) == 8105:#get dev_id for gid
+		status, res = get_dev_id_for_gid(payload)
 	if int(operid) == 6000:# add chat id
 		status, res = insert_chat_id(payload)
 	if int(operid) == 6001:# get chat history
@@ -817,6 +973,12 @@ def main(operid, payload):
 		status, res = get_next_event(payload)
 	if int(operid) == 7008:# upload image
 		status, res = upload_image(payload)
+	if int(operid) == 5001:# report user
+		status, res = report_user(payload)
+	if int(operid) == 5002:# report user
+		status, res = block_user(payload)
+	if int(operid) == 5003:# fav a place
+		status, res = fav_a_place(payload)
 	return status, res
 
 if __name__ == "__main__":

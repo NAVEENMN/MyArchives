@@ -225,9 +225,18 @@ def update_account(jpayload):
 			lon = data["longitude"]
 			if lon == None or lat == "":
 				lon = -122.0973246452604
+                        if lat == lon:
+				return 1, "ignored"
+				lat = data["latitude"]
+				lon = data["longitude"]
+				if lat is not None:
+					lat = 37.4099387834197
+				if lon is not None:
+                            		lon = -122.0973246452604
 			ame = data["ame"]
 			work = data["work"]
 			images = data["images"]
+			qid = data["dev_id"]
 			if fp != 0 and mp != 0:
 				db.accounts.update_one({"mid": mid},{"$set": {"food_pref":fp}})	
 				db.accounts.update_one({"mid": mid},{"$set": {"movie_pref":mp}})
@@ -235,6 +244,7 @@ def update_account(jpayload):
 			db.accounts.update_one({"mid": mid},{"$set": {"longitude":lon}})
 			db.accounts.update_one({"mid": mid},{"$set": {"ame":ame}})
 			db.accounts.update_one({"mid": mid},{"$set": {"work":work}})
+			db.accounts.update_one({"mid": mid},{"$set": {"dev_id":qid}})
 			result = "updated"
                 status = 1
         else:
