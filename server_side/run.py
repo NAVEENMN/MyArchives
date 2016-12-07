@@ -1,27 +1,24 @@
 import web
- 
-def make_text(string):
-    return string
- 
-urls = ('/', 'tutorial')
-render = web.template.render('templates/')
- 
-app = web.application(urls, globals())
- 
-my_form = web.form.Form(
-                web.form.Textbox('', class_='textfield', id='textfield'),
-                )
- 
-class tutorial:
-    def GET(self):
-        form = my_form()
-        return render.tutorial(form, "Your text goes here.")
-         
-    def POST(self):
-        form = my_form()
-        form.validates()
-        s = form.value['textfield']
-        return make_text(s)
- 
-if __name__ == '__main__':
-    app.run()
+import json
+#import ntp_handle_user as ntp
+
+urls = (
+        '/', 'index'
+)
+
+class index:
+        def GET(self):
+                i = 0
+		return "hello"
+        def POST(self):
+                data = web.input()
+		#result = ntp.main(data.operation, data.payload)
+		print data["qdata"]
+		dat = dict()
+		dat["test"] = "test"
+		payload = json.dumps(dat)
+        	return payload
+
+if __name__ == "__main__":
+        app = web.application(urls, globals())
+        web.httpserver.runsimple(app.wsgifunc(), ("0.0.0.0", 8888))
