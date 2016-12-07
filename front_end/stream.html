@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DDR - DOC</title>
+<title>Streams</title>
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/datepicker3.css" rel="stylesheet">
@@ -37,7 +37,7 @@ window.onload = function() {
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#"><span>DDR</span>DOC</a>
+				<a class="navbar-brand" href="#"><span>DD</span>Analyzer</a>
 				<ul class="user-menu">
 					<li class="dropdown pull-right">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> User <span class="caret"></span></a>
@@ -95,7 +95,7 @@ window.onload = function() {
         <div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">Troubleshooting: </div>
+					<div class="panel-heading">Streams: </div>
 					</div>
 				</div>
 			</div><!-- /.col-->
@@ -109,20 +109,34 @@ window.onload = function() {
 		<div class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">IOP</div>
+					<div class="panel-heading">Streams</div>
 					<div class="panel-body">
                         <div class="row">
 			                 <div class="col-lg-12">
 				                <div class="panel panel-default">
-					               <div class="panel-heading">Line Chart</div>
+					               <div class="panel-heading">Read Stream</div>
 					                   <div class="panel-body">
 						                  <div class="canvas-wrapper">
-							                 <canvas class="main-chart" id="line-chart" style="display:none;" height="200" width="600px"></canvas>
+							                 <canvas class="main-chart" id="read-stream-chart" style="display:none;" height="200" width="600px"></canvas>
 						                  </div>
 					               </div>
 				                </div>
 			                 </div>
 		                  </div><!--/.row-->
+			<div class="row">
+			                 <div class="col-lg-12">
+				                <div class="panel panel-default">
+					               <div class="panel-heading">Write Stream</div>
+					                   <div class="panel-body">
+						                  <div class="canvas-wrapper">
+							                 <canvas class="main-chart" id="write-stream-chart" style="display:none;" height="200" width="600px"></canvas>
+						                  </div>
+					               </div>
+				                </div>
+			                 </div>
+		                  </div><!--/.row-->
+
+
 					</div>
 				</div>
 			</div>
@@ -185,40 +199,63 @@ window.onload = function() {
                   
                   var length = dat.iterm_count;
                   var label = [];
-                  var data_points = [];
+                  var read_points = [];
+		  var write_points = [];
                   var points = JSON.parse(dat.points);
                   console.log(dat);
                   
-                  for (var i=0; i< length; i++){
+                  for (var i=0; i < length; i++){
                       label.push("");
                       var real_point = JSON.parse(points[i]);
-                      data_points.push(real_point["y1_point"]);
+                      read_points.push(real_point["y1_point"]);
+		      write_points.push(real_point["y2_point"]);
                   }
                   console.log("----");
-                  console.log(data_points);
-                  var dataset = 
+                  console.log(read_points);
+		  console.log(write_points);
+                  var readdataset = 
 				{
-					label: "My First dataset",
+					label: "My Read Dataset",
 					fillColor : "rgba(220,220,220,0.2)",
 					strokeColor : "rgba(220,220,220,1)",
 					pointColor : "rgba(220,220,220,1)",
 					pointStrokeColor : "#fff",
 					pointHighlightFill : "#fff",
 					pointHighlightStroke : "rgba(220,220,220,1)",
-					data : data_points
+					data : read_points
 				};
-                  var lineChartData1  = {
+
+                  var readChartData1  = {
                       labels: label,
-                      datasets: [dataset]
+                      datasets: [readdataset]
+                  };
+
+		  var writedataset = 
+                                {
+                                        label: "My Write Dataset",
+                                        fillColor : "rgba(220,220,220,0.2)",
+                                        strokeColor : "rgba(220,220,220,1)",
+                                        pointColor : "rgba(220,220,220,1)",
+                                        pointStrokeColor : "#fff",
+                                        pointHighlightFill : "#fff",
+                                        pointHighlightStroke : "rgba(220,220,220,1)",
+                                        data : write_points
+                                };
+                  var writeChartData1  = {
+                      labels: label,
+                      datasets: [writedataset]
                   };
                   
                   if(window.myLine !== undefined){
                       window.myLine.destroy();
                   }
-                  document.getElementById('line-chart').style.display='block';
-                  var update_chart = document.getElementById("line-chart").getContext("2d");
-                  window.myLine = new Chart(update_chart).Line(lineChartData1, {responsive: true});
-                  
+                  document.getElementById('read-stream-chart').style.display='block';
+                  var read_chart = document.getElementById("read-stream-chart").getContext("2d");
+                  window.myLine = new Chart(read_chart).Line(readChartData1, {responsive: true});
+                 
+		  document.getElementById('write-stream-chart').style.display='block';
+                  var write_chart = document.getElementById("write-stream-chart").getContext("2d");
+                  window.myLine = new Chart(write_chart).Line(writeChartData1, {responsive: true}); 
                 }
               };
             xhr.DONE
