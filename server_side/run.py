@@ -8,16 +8,18 @@ urls = (
 
 class index:
         def GET(self):
+		print "get"
                 i = 0
-		return "hello"
-        def POST(self):
-                data = web.input()
-		#result = ntp.main(data.operation, data.payload)
-		print data["qdata"]
 		dat = dict()
 		dat["test"] = "test"
 		payload = json.dumps(dat)
-        	return payload
+		return payload
+        def POST(self):
+		print "post"
+                data = json.dumps(web.input())
+		print data
+		#result = ntp.main(data.operation, data.payload)
+        	return data
 
 if __name__ == "__main__":
         app = web.application(urls, globals())

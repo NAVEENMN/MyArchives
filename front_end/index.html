@@ -195,20 +195,69 @@
             //url = $form.attr( "action" );
             url = "http://0.0.0.0:8888/";
             // Send the data using post
-            var posting = $.post( url, { "q": term } );
+            var posting = $.post( url, { "qdata": term } );
             // Put the results in a div
             posting.done(function( data ) {
                 alert( "Data Loaded: " + data );
-            //var content = $( data ).find( "#content" );
-            //    $( "#result" ).empty().append( content );
-            //});
+            var content = $( data ).find( "#content" );
+                $( "#result" ).empty().append( content );
+            });
             success: function(res){
                     //$("#results").html(data);
                     alert( "Data success: " + res );
                 },
+            });
+            */
+        /*
+        $("#target").submit( function () { 
+            //alert( "Data Loaded: ");
+            
+            alert( "Data Loaded: " + data );
+            event.preventDefault();// Stop form from submitting normally
+            // Get some values from elements on the page:
+            var $form = $( this ),
+            term = $form.find( "input[name='qdata']" ).val(),
+            //url = $form.attr( "action" );
+            url = "http://0.0.0.0:8888/";
+            // Send the data using post
+            var posting = $.post( url, { "qdata": term } );
+            // Put the results in a div
+            posting.done(function( data ) {
+                alert( "Data Loaded: " + data );
+            });
+            
         });
         */
+
+        $("#target").submit( function () {
+           alert( "Data Loaded: ");
+           
+           var xhr = new XMLHttpRequest();
+           var method = "POST";
+           var url= "http://0.0.0.0:8888/";
+           xhr.open(method,url,true);
+           //xhr.setRequestHeader("Content-type", 'application/json');
+           var form = new FormData(document.getElementById("target"));
+           xhr.send(form);
+           //delay(2000);
+           console.log(form);
+           xhr.onload = function() {//Call a function when the state changes.
+               console.log(xhr.status);
+              if(xhr.readyState == 4 && xhr.status == 200) {
+                  //response is json you need to parse it
+                  var json = xhr.response,
+                  obj = JSON.parse(json);
+                  console.log('got here');
+                  alert(obj['qdata']);
+                }
+              };
+          xhr.onerror = function (e) {
+              alert( "Data failed: " + status.responseText );
+          };
+ });
+          
         
+        /*
         $("#target").submit( function () { 
             //alert( "Data Loaded: ");
             
@@ -216,10 +265,9 @@
                 type: "POST",
                 data : $(this).serialize(),
                 cache: false,
-                crossDomain: true,
-                async: true,
+                crossDomain: false,
+                async: false,
                 global: false,
-                dataType: 'json',
                 timeout: 20000,
                 url: "http://0.0.0.0:8888/",
                 success: function(response) {
@@ -234,12 +282,12 @@
                     //console.log("error", err.Message);
                     alert( "Data failed: " + status.responseText );
                 }
-        }).always(function(data) {
-                alert( "Data success: " + JSON.stringify(data) );
+            }).always(function(data) {
+                alert( "Data always: " + JSON.stringify(data) );
             });   
-    return false;   
-});
-            
+        return false;   
+        });
+       */     
             
 	</script>	
 </body>
