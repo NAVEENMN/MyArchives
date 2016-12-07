@@ -240,12 +240,24 @@
                   var json = xhr.response,
                   obj = JSON.parse(json);
                   console.log('got here');
-                  console.log(obj['qdata']);
-                  document.getElementById("myTextarea").value = obj['qdata'];
+                  var dat = JSON.parse(obj['qdata']);
+                  console.log(dat);
+                  for (var i = 0; i < dat.length; i++){
+                    var d = dat[i];
+                    console.log(d);
+                    for (var key in d){
+                        var attrName = key;
+                        var attrValue = d[key];
+                        //console.log(attrName);
+                        //console.log(attrValue);
+                    }
+                  }
+                  //console.log(obj['qdata']);
+                  //document.getElementById("myTextarea").value = obj['qdata'];
                   
-                    $('#mtable tbody').append($("#mtable tbody tr:last").clone());
-                    $('#mtable tbody tr:last :checkbox').attr('checked',false);
-                    $('#mtable tbody tr:last td:first').html(obj['qdata']);
+                    //$('#mtable tbody').append($("#mtable tbody tr:last").clone());
+                    //$('#mtable tbody tr:last :checkbox').attr('checked',false);
+                    //$('#mtable tbody tr:last td:first').html(obj['qdata']);
                 }
               };
             xhr.DONE

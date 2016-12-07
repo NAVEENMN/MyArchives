@@ -19,7 +19,9 @@ class index:
 		web.header('Access-Control-Allow-Origin',      '*')
 		web.header('Access-Control-Allow-Credentials', 'true')
                 data = json.dumps(web.input())
+		print data
 		dat = dict()
+		payload = dict()
 		i = 2
 		if data == "DD_HD_PERF_NODE_SFS_RD_STREAM":
 			i = 4	
@@ -38,10 +40,10 @@ class index:
 		if data == "DD_HD_PERF_NODE_REPL_OUT_STREAMS":
 			i = 2
 		for x in range(0, i):
-			name = "ddr"+str(i)
+			name = "ddr"+str(x)
 			dat[name] = "98"
-		payload = json.dumps(dat)
-		print payload
+		payload["qdata"] = json.dumps(dat)
+		payload = json.dumps(payload)
 		#result = ntp.main(data.operation, data.payload)
         	return payload
 
