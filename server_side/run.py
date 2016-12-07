@@ -17,10 +17,12 @@ class index:
         def POST(self):
 		print "post"
                 data = json.dumps(web.input())
+		web.header('Access-Control-Allow-Origin', '*')
+		web.header('Access-Control-Allow-Credentials', 'true')
 		print data
 		#result = ntp.main(data.operation, data.payload)
         	return data
 
 if __name__ == "__main__":
         app = web.application(urls, globals())
-        web.httpserver.runsimple(app.wsgifunc(), ("0.0.0.0", 8888))
+        web.httpserver.runsimple(app.wsgifunc(), ("10.25.195.125", 8888))
