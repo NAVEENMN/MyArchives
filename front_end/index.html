@@ -121,15 +121,23 @@
 				</div>
 			</div><!-- /.col-->
 		</div><!-- /.row -->
-    
-    
-    <table border="1" id="mtable">
-    <thead><tr><td>Item</td><td>Red</td><td>Green</td></tr></thead>
-    <tbody><tr><td>Some Item</td><td><input type="checkbox"/></td><td><input type="checkbox"/></td></tr></tbody>
-</table><br/><br/>
-<input id="row" placeholder="Enter Item Name"/><button id="irow">Insert Row</button><br/><br/>
-<input id="col" placeholder="Enter Heading"/><button id="icol">Insert Column</button>
-    
+        <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+		<div class="row">
+			<div class="col-lg-12">
+			</div>
+		</div><!--/.row-->	
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">Basic Table</div>
+					<div class="panel-body">
+                    <textarea id="myTextarea" rows="4" cols="50">
+                        Info here. 
+                    </textarea>
+                    </div>
+				</div>
+			</div>
+		</div><!--/.row-->	
         
     <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
 		<div class="row">
@@ -141,15 +149,14 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">Basic Table</div>
 					<div class="panel-body">
-						<table data-toggle="table" data-url="/Users/mysorn1/Documents/hackattack/front_end/tables/data2.json" >
-						    <thead>
-						    <tr>
-						        <th data-field="id" data-align="right">Item ID</th>
-						        <th data-field="name">Item Name</th>
-						        <th data-field="price">Item Price</th>
-						    </tr>
-						    </thead>
-						</table>
+						<table border="1" id="mtable">
+                        <thead><tr><td>DDR</td><td>Info1</td><td>Info2</td></tr></thead>
+                        <tbody><tr><td>n1.emc.com</td><td><text id="myTextarea">
+98</text></td><td><text id="myTextarea">
+97</text></td></tr></tbody>
+                        </table><br/><br/>
+                        <input id="row" placeholder="Enter Item Name"/><button id="irow">Insert Row</button><br/><br/>
+                        <input id="col" placeholder="Enter Heading"/><button id="icol">Insert Column</button>
 					</div>
 				</div>
 			</div>
@@ -253,6 +260,17 @@ $('#icol').click(function(){
     }else{alert('Enter Text');}
 });
         
+        function addrow() {
+            var table = document.getElementById("mtable");
+                var row = table.insertRow(0);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                cell1.innerHTML = "NEW CELL1";
+                cell2.innerHTML = "NEW CELL2";
+                cell3.innerHTML = "NEW CELL3";
+        }
+        
         $("#target").submit( function () {
            alert( "Data Loaded: ");
            var xhr = new XMLHttpRequest();
@@ -273,6 +291,13 @@ $('#icol').click(function(){
                   console.log('got here');
                   console.log(obj['qdata']);
                   alert(obj['qdata']);
+                  document.getElementById("myTextarea").value = obj['qdata'];
+                  addrow();
+        //$('#mtable tbody').append($("#mtable tbody tr:last").clone());
+        //$('#mtable tbody tr:last :checkbox').attr('checked',false);
+        //$('#mtable tbody tr:last td:first').html(obj['qdata']);
+    
+                  
                 }
               };
           xhr.onerror = function (e) {
