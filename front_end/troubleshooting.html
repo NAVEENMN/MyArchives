@@ -57,7 +57,7 @@ window.onload = function() {
 		<ul class="nav menu">
 			<li><a href="index.html"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
 			<li class="active"><a href="troubleshooting.html"><svg class="glyph stroked calendar"><use xlink:href="#stroked-calendar"></use></svg> Troubleshooting</a></li>
-			<li><a href="charts.html"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Charts</a></li>
+			<li><a href="stream.html"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Stream</a></li>
 			<li><a href="tables.html"><svg class="glyph stroked table"><use xlink:href="#stroked-table"></use></svg> Tables</a></li>
 			<li><a href="forms.html"><svg class="glyph stroked pencil"><use xlink:href="#stroked-pencil"></use></svg> Forms</a></li>
 			<li><a href="panels.html"><svg class="glyph stroked app-window"><use xlink:href="#stroked-app-window"></use></svg> Alerts &amp; Panels</a></li>
@@ -225,6 +225,11 @@ window.onload = function() {
           xhr.onerror = function (e) {
               alert( "Data failed: " + status.responseText );
           };
+            function myClick() {
+                setTimeout(
+                function() {
+                }, 5000);
+            }
             
             //-- STREAM
             /*
