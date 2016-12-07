@@ -121,6 +121,15 @@
 				</div>
 			</div><!-- /.col-->
 		</div><!-- /.row -->
+    
+    
+    <table border="1" id="mtable">
+    <thead><tr><td>Item</td><td>Red</td><td>Green</td></tr></thead>
+    <tbody><tr><td>Some Item</td><td><input type="checkbox"/></td><td><input type="checkbox"/></td></tr></tbody>
+</table><br/><br/>
+<input id="row" placeholder="Enter Item Name"/><button id="irow">Insert Row</button><br/><br/>
+<input id="col" placeholder="Enter Heading"/><button id="icol">Insert Column</button>
+    
         
     <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
 		<div class="row">
@@ -132,7 +141,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">Basic Table</div>
 					<div class="panel-body">
-						<table data-toggle="table" data-url="tables/data2.json" >
+						<table data-toggle="table" data-url="/Users/mysorn1/Documents/hackattack/front_end/tables/data2.json" >
 						    <thead>
 						    <tr>
 						        <th data-field="id" data-align="right">Item ID</th>
@@ -229,9 +238,23 @@
         });
         */
 
+        $('#irow').click(function(){
+    if($('#row').val()){
+        $('#mtable tbody').append($("#mtable tbody tr:last").clone());
+        $('#mtable tbody tr:last :checkbox').attr('checked',false);
+        $('#mtable tbody tr:last td:first').html($('#row').val());
+    }else{alert('Enter Text');}
+});
+$('#icol').click(function(){
+    if($('#col').val()){
+        $('#mtable tr').append($("<td>"));
+        $('#mtable thead tr>td:last').html($('#col').val());
+        $('#mtable tbody tr').each(function(){$(this).children('td:last').append($('<input type="checkbox">'))});
+    }else{alert('Enter Text');}
+});
+        
         $("#target").submit( function () {
            alert( "Data Loaded: ");
-           
            var xhr = new XMLHttpRequest();
            var method = "POST";
            var url= "http://0.0.0.0:8888/";
@@ -248,6 +271,7 @@
                   var json = xhr.response,
                   obj = JSON.parse(json);
                   console.log('got here');
+                  console.log(obj['qdata']);
                   alert(obj['qdata']);
                 }
               };
