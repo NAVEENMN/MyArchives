@@ -99,33 +99,20 @@
 
 	</div><!--/.sidebar-->
 		
-	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
-		<div class="row">
-			<ol class="breadcrumb">
-				<li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
-				<li class="active">Icons</li>
-			</ol>
-		</div><!--/.row-->
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">					
 		
-		<div class="row">
-			<div class="col-lg-12">
-				<h1 class="page-header">Dashboard</h1>
-			</div>
-		</div><!--/.row-->
-        
         <div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">Query: </div>
+					<div class="panel-heading">Enter a query: </div>
 					<div class="panel-body">
 						<div class="col-md-6">
 							<form role="form" id="target">
 								<div class="form-group">
-									<label>Enter the query: </label>
-									<input list="browsers" class="form-control" type="text" name="qdata" placeholder="Query: ">
+									<input list="browsers" style="font-size:18pt;height:60px;width:1000px;" class="form-control" type="text" name="qdata">
 								</div>
-                                <button type="submit" class="btn btn-primary" value="Search">Submit Button</button>
-								<button type="reset" class="btn btn-default">Reset Button</button>
+                                <button type="submit" class="btn btn-primary" value="Search">Submit</button>
+								<button type="reset" class="btn btn-default">Reset</button>
                                 </form>
 				            </div>
                     </div>
@@ -133,59 +120,42 @@
 				</div>
 			</div><!-- /.col-->
 		</div><!-- /.row -->
-        <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+    
+       <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
 		<div class="row">
 			<div class="col-lg-12">
 			</div>
 		</div><!--/.row-->	
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">Basic Table</div>
+					<div class="panel-heading">Information</div>
 					<div class="panel-body">
-                    <textarea id="myTextarea" rows="4" cols="50">
-                        Info here. 
-                    </textarea>
-                    </div>
-				</div>
-			</div>
-		</div><!--/.row-->	
-        
-    <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
-		<div class="row">
-			<div class="col-lg-12">
-			</div>
-		</div><!--/.row-->	
-		<div class="row">
-			<div class="col-md-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">Basic Table</div>
-					<div class="panel-body">
+                        <div class="row">
+			                 <div class="col-lg-12">
+				                <div class="panel panel-default">
+					               <div class="panel-heading">Line Chart</div>
+					                   <div class="panel-body">
+						                  <div class="canvas-wrapper">
+							                 <canvas class="main-chart" id="line-chart" height="200" width="600px"></canvas>
+						                  </div>
+					               </div>
+				                </div>
+			                 </div>
+		                  </div><!--/.row-->
+                        <!--
 						<table border="1" id="mtable">
                         <thead><tr><td>DDR</td><td>Info1</td><td>Info2</td></tr></thead>
                         <tbody><tr><td>n1.emc.com</td><td><text id="myTextarea">
                             98</text></td><td><text id="myTextarea">
                             97</text></td></tr></tbody>
                         </table><br/><br/>
+                        -->
 					</div>
 				</div>
 			</div>
 		</div><!--/.row-->	
-    
-    
-    
-        <div class="row">
-			<div class="col-lg-12">
-				<div class="panel panel-default">
-					<div class="panel-heading">Site Traffic Overview</div>
-					<div class="panel-body">
-						<div class="canvas-wrapper">
-							<canvas class="main-chart" id="line-chart" height="200" width="600"></canvas>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div><!--/.row-->
+  
 								
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
