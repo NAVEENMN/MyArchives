@@ -183,31 +183,59 @@ window.onload = function() {
                   
                   var length = dat.iterm_count;
                   var label = [];
-                  var data_points = [];
+                  var data_points1 = [];
+		  var data_points2 = [];
+		  var data_points3 = [];
                   var points = JSON.parse(dat.points);
                   console.log(dat);
                   
                   for (var i=0; i< length; i++){
                       label.push("");
                       var real_point = JSON.parse(points[i]);
-                      data_points.push(real_point["y1_point"]);
+                      data_points1.push(real_point["y1_point"]);
+		      data_points2.push(real_point["y2_point"]);
+		      data_points3.push(real_point["y3_point"]);
                   }
                   console.log("----");
-                  console.log(data_points);
-                  var dataset = 
-				{
-					label: "My First dataset",
-					fillColor : "rgba(220,220,220,0.2)",
-					strokeColor : "rgba(220,220,220,1)",
-					pointColor : "rgba(220,220,220,1)",
-					pointStrokeColor : "#fff",
-					pointHighlightFill : "#fff",
-					pointHighlightStroke : "rgba(220,220,220,1)",
-					data : data_points
-				};
+                  console.log(data_points1);
+		  console.log(data_points2);
+		  console.log(data_points3);
+                  var dataset = [
+			{
+				label: "My First dataset",
+				fillColor : "rgba(0,102,0,0.2)",
+				strokeColor : "rgba(0,102,0,1)",
+				pointColor : "rgba(0,102,0,1)",
+				pointStrokeColor : "#fff",
+				pointHighlightFill : "#fff",
+				pointHighlightStroke : "rgba(0,102,0,1)",
+				data : data_points1
+			},
+			{
+				label: "My Second dataset",
+				fillColor : "rgba(0,0,255,0.2)",
+				strokeColor : "rgba(0,0,255,1)",
+				pointColor : "rgba(0,0,255,1)",
+				pointStrokeColor : "#fff",
+				pointHighlightFill : "#fff",
+				pointHighlightStroke : "rgba(0,0,255,1)",
+				data : data_points2
+			},
+			{
+                                label: "My Second dataset",
+                                fillColor : "rgba(204,0,0,0.2)",
+                                strokeColor : "rgba(204,0,0,1)",
+                                pointColor : "rgba(204,0,0,1)",
+                                pointStrokeColor : "#fff",
+                                pointHighlightFill : "#fff",
+                                pointHighlightStroke : "rgba(204,0,0,1)",
+                                data : data_points3
+                        },
+
+		  ];
                   var lineChartData1  = {
                       labels: label,
-                      datasets: [dataset]
+                      datasets: dataset
                   };
                   
                   if(window.myLine !== undefined){
