@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lumino - Dashboard</title>
+<title>DDR - DOC</title>
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/datepicker3.css" rel="stylesheet">
@@ -20,14 +20,6 @@
 </head>
 
 <datalist id="browsers">
-  <option value="DD_HD_PERF_NODE_SFS_RD_STREAM">
-  <option value="DD_HD_PERF3_NODE_SFS_RD_RAND_STREAM">
-  <option value="DD_HD_PERF_NODE_SFS_WR_STREAM">
-  <option value="DD_HD_PERF_NODE_SFS_WR_RAND_STREAM">
-  <option value="DD_HD_PERF_NODE_SFS_RD_REOPENED_STREAM">
-  <option value="DD_HD_PERF_NODE_SFS_WR_REOPENED_STREAM">
-  <option value="DD_HD_PERF_NODE_REPL_IN_STREAMS">
-  <option value="DD_HD_PERF_NODE_REPL_OUT_STREAMS">
 </datalist>
     
     
@@ -41,7 +33,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#"><span>Lumino</span>Admin</a>
+				<a class="navbar-brand" href="#"><span>DDR</span>DOC</a>
 				<ul class="user-menu">
 					<li class="dropdown pull-right">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> User <span class="caret"></span></a>
@@ -60,7 +52,7 @@
 	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 		<ul class="nav menu">
 			<li class="active"><a href="index.html"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
-			<li><a href="widgets.html"><svg class="glyph stroked calendar"><use xlink:href="#stroked-calendar"></use></svg> Widgets</a></li>
+			<li><a href="troubleshooting.html"><svg class="glyph stroked calendar"><use xlink:href="#stroked-calendar"></use></svg> Troubleshooting</a></li>
 			<li><a href="charts.html"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg> Charts</a></li>
 			<li><a href="tables.html"><svg class="glyph stroked table"><use xlink:href="#stroked-table"></use></svg> Tables</a></li>
 			<li><a href="forms.html"><svg class="glyph stroked pencil"><use xlink:href="#stroked-pencil"></use></svg> Forms</a></li>
@@ -205,7 +197,7 @@ var lineChartData = {
         
         document.getElementById("line-chart").style.display = "hidden";
         $("#target").submit( function () {
-           alert( "Data Loaded: ");
+           //alert( "Data is Loading... ");
            var xhr = new XMLHttpRequest();
            var method = "POST";
            var url= "http://10.25.195.125:8888/";
@@ -269,40 +261,6 @@ var lineChartData = {
             return false;
  });
         
-          
-        
-        /*
-        $("#target").submit( function () { 
-            //alert( "Data Loaded: ");
-            
-            var jqxhr = $.ajax({   
-                type: "POST",
-                data : $(this).serialize(),
-                cache: false,
-                crossDomain: false,
-                async: false,
-                global: false,
-                timeout: 20000,
-                url: "http://0.0.0.0:8888/",
-                success: function(response) {
-                    //response is json you need to parse it
-                    var json = response,
-                    obj = JSON.parse(json);
-                    alert(obj.test);
-                },
-                error: function (result, status, err) {
-                    //console.log("error", result.responseText);
-                    //console.log("error", status.responseText);
-                    //console.log("error", err.Message);
-                    alert( "Data failed: " + status.responseText );
-                }
-            }).always(function(data) {
-                alert( "Data always: " + JSON.stringify(data) );
-            });   
-        return false;   
-        });
-       */     
-            
 	</script>	
 </body>
 
