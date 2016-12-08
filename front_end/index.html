@@ -132,7 +132,7 @@
 					               <div class="panel-heading">Line Chart</div>
 					                   <div class="panel-body">
 						                  <div class="canvas-wrapper">
-							                 <canvas class="main-chart" style="display:none;" id="line-chart" height="200" width="600px"></canvas>
+							                 <canvas class="main-chart" id="line-chart" style="display:none;" height="200" width="600px"></canvas>
 						                  </div>
 					               </div>
 				                </div>
@@ -160,9 +160,6 @@
 	<script src="js/easypiechart-data.js"></script>
 	<script src="js/bootstrap-datepicker.js"></script>
 	<script>
-		$('#calendar').datepicker({
-		});
-
 		!function ($) {
 		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
 		        $(this).find('em:first').toggleClass("glyphicon-minus");      
@@ -177,15 +174,35 @@
 		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
 		})
     
-        /*
-        $('#icol').click(function(){
-            if($('#col').val()){
-                $('#mtable tr').append($("<td>"));
-                $('#mtable thead tr>td:last').html($('#col').val());
-                $('#mtable tbody tr').each(function(){$(this).children('td:last').append($('<input type="checkbox">'))});
-            }else{  alert('Enter Text');}
-        });
-        */
+var lineChartData = {
+			labels : ["January","February","March","April","May","June","July"],
+			datasets : [
+				{
+					label: "My First dataset",
+					fillColor : "rgba(220,220,220,0.2)",
+					strokeColor : "rgba(220,220,220,1)",
+					pointColor : "rgba(220,220,220,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(220,220,220,1)",
+					data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+				},
+				{
+					label: "My Second dataset",
+					fillColor : "rgba(48, 164, 255, 0.2)",
+					strokeColor : "rgba(48, 164, 255, 1)",
+					pointColor : "rgba(48, 164, 255, 1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(48, 164, 255, 1)",
+					data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+				}
+			]
+
+		}
+        
+        
+        
         document.getElementById("line-chart").style.display = "hidden";
         $("#target").submit( function () {
            alert( "Data Loaded: ");
@@ -206,26 +223,43 @@
                   obj = JSON.parse(json);
                   console.log('got here');
                   var dat = JSON.parse(obj['qdata']);
+                  
+                  var length = dat.iterm_count;
+                  var label = [];
+                  var data_points = [];
+                  var points = JSON.parse(dat.points);
                   console.log(dat);
-                  for (var i = 0; i < dat.length; i++){
-                    var d = dat[i];
-                    console.log(d);
-                    for (var key in d){
-                        var attrName = key;
-                        var attrValue = d[key];
-                        //console.log(attrName);
-                        //console.log(attrValue);
-                    }
+                  
+                  for (var i=0; i< length; i++){
+                      label.push("");
+                      var real_point = JSON.parse(points[i]);
+                      data_points.push(real_point["ypoint"]);
+                  }
+                  console.log("----");
+                  console.log(data_points);
+                  var dataset = 
+				{
+					label: "My First dataset",
+					fillColor : "rgba(220,220,220,0.2)",
+					strokeColor : "rgba(220,220,220,1)",
+					pointColor : "rgba(220,220,220,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(220,220,220,1)",
+					data : data_points
+				};
+                  var lineChartData1  = {
+                      labels: label,
+                      datasets: [dataset]
+                  };
+                  
+                  if(window.myLine !== undefined){
+                      window.myLine.destroy();
                   }
                   document.getElementById('line-chart').style.display='block';
-                  var ctx = document.getElementById("line-chart").getContext("2d");
-                  new Chart(ctx).Line(data, options);
-                  //console.log(obj['qdata']);
-                  //document.getElementById("myTextarea").value = obj['qdata'];
+                  var update_chart = document.getElementById("line-chart").getContext("2d");
+                  window.myLine = new Chart(update_chart).Line(lineChartData1, {responsive: true});
                   
-                    //$('#mtable tbody').append($("#mtable tbody tr:last").clone());
-                    //$('#mtable tbody tr:last :checkbox').attr('checked',false);
-                    //$('#mtable tbody tr:last td:first').html(obj['qdata']);
                 }
               };
             xhr.DONE
