@@ -162,7 +162,7 @@ window.onload = function() {
             console.log("hello");
             //-- IOPS
             var form = new FormData();
-            form.append("qdata", "stream");
+            form.append("qdata", "cpu");
            var xhr = new XMLHttpRequest();
            var method = "POST";
            var url= "http://10.25.195.125:8888/";
@@ -190,7 +190,7 @@ window.onload = function() {
                   for (var i=0; i< length; i++){
                       label.push("");
                       var real_point = JSON.parse(points[i]);
-                      data_points.push(real_point["y1_point"]);
+                      data_points.push(real_point["y_point"]);
                   }
                   console.log("----");
                   console.log(data_points);
