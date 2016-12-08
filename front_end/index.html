@@ -58,11 +58,6 @@
 	</nav>
 		
 	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
-		<form role="search">
-			<div class="form-group">
-				<input type="text" class="form-control" placeholder="Search">
-			</div>
-		</form>
 		<ul class="nav menu">
 			<li class="active"><a href="index.html"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
 			<li><a href="widgets.html"><svg class="glyph stroked calendar"><use xlink:href="#stroked-calendar"></use></svg> Widgets</a></li>
@@ -137,7 +132,7 @@
 					               <div class="panel-heading">Line Chart</div>
 					                   <div class="panel-body">
 						                  <div class="canvas-wrapper">
-							                 <canvas class="main-chart" id="line-chart" height="200" width="600px"></canvas>
+							                 <canvas class="main-chart" style="display:none;" id="line-chart" height="200" width="600px"></canvas>
 						                  </div>
 					               </div>
 				                </div>
@@ -191,7 +186,7 @@
             }else{  alert('Enter Text');}
         });
         */
-        
+        document.getElementById("line-chart").style.display = "hidden";
         $("#target").submit( function () {
            alert( "Data Loaded: ");
            var xhr = new XMLHttpRequest();
@@ -222,6 +217,7 @@
                         //console.log(attrValue);
                     }
                   }
+                  document.getElementById('line-chart').style.display='block';
                   //console.log(obj['qdata']);
                   //document.getElementById("myTextarea").value = obj['qdata'];
                   
