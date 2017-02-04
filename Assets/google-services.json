@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "849122350325",
+    "firebase_url": "https://mathvr-73393.firebaseio.com",
+    "project_id": "mathvr-73393",
+    "storage_bucket": "mathvr-73393.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849122350325:android:6a8d7a9543cb5cd3",
+        "android_client_info": {
+          "package_name": "com.mysorn1.MathVR"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "849122350325-86g8e1go8756ke6bgajg5f6jb9gip62o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAesm5agWtPUOPruUCIUFozGFGUjOb5nb8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
