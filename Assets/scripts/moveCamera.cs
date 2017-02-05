@@ -13,6 +13,7 @@ public class moveCamera : MonoBehaviour {
 	private string logText = "";
 	const int kMaxLogSize = 16382;
 	public float cam_start_x, cam_start_y, cam_start_z;
+	public static float cam_current_x, cam_current_y, cam_current_z;
 	Transform target;
 	public float moveTime = 0.1f;           //Time it will take object to move, in seconds.
 	public LayerMask blockingLayer;         //Layer on which collision will be checked.
@@ -157,7 +158,11 @@ public class moveCamera : MonoBehaviour {
 	}
 
 	IEnumerator Rotatex(float rotationAmount){
-		Quaternion finalRotation = Quaternion.Euler( rotationAmount, 0, 0 ) * startingRotation;
+		cam_current_x = float.Parse(this.transform.rotation.x.ToString());
+		cam_current_y = float.Parse(this.transform.rotation.y.ToString());
+		cam_current_z = float.Parse(this.transform.rotation.z.ToString());
+
+		Quaternion finalRotation = Quaternion.Euler( rotationAmount, this.transform.rotation.y, this.transform.rotation.z ) * startingRotation;
 
 		while(this.transform.rotation != finalRotation){
 			this.transform.rotation = Quaternion.Lerp(this.transform.rotation, finalRotation, Time.deltaTime*speed);
@@ -165,7 +170,14 @@ public class moveCamera : MonoBehaviour {
 		}
 	}
 	IEnumerator Rotatey(float rotationAmount){
-		Quaternion finalRotation = Quaternion.Euler( 0, rotationAmount, 0 ) * startingRotation;
+		cam_current_x = float.Parse(this.transform.rotation.x.ToString());
+		cam_current_y = float.Parse(this.transform.rotation.y.ToString());
+		cam_current_z = float.Parse(this.transform.rotation.z.ToString());
+
+		DebugLog(this.transform.rotation.x.ToString());
+		DebugLog(this.transform.rotation.y.ToString());
+		DebugLog(this.transform.rotation.z.ToString());
+		Quaternion finalRotation = Quaternion.Euler( this.transform.rotation.x, rotationAmount, this.transform.rotation.z ) * startingRotation;
 
 		while(this.transform.rotation != finalRotation){
 			this.transform.rotation = Quaternion.Lerp(this.transform.rotation, finalRotation, Time.deltaTime*speed);
@@ -173,7 +185,11 @@ public class moveCamera : MonoBehaviour {
 		}
 	}
 	IEnumerator Rotatez(float rotationAmount){
-		Quaternion finalRotation = Quaternion.Euler( 0, 0, rotationAmount ) * startingRotation;
+		cam_current_x = float.Parse(this.transform.rotation.x.ToString());
+		cam_current_y = float.Parse(this.transform.rotation.y.ToString());
+		cam_current_z = float.Parse(this.transform.rotation.z.ToString());
+
+		Quaternion finalRotation = Quaternion.Euler( this.transform.rotation.x, this.transform.rotation.y, rotationAmount ) * startingRotation;
 
 		while(this.transform.rotation != finalRotation){
 			this.transform.rotation = Quaternion.Lerp(this.transform.rotation, finalRotation, Time.deltaTime*speed);
