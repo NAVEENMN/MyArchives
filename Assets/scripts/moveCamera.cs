@@ -12,14 +12,16 @@ public class moveCamera : MonoBehaviour {
 
 	private string logText = "";
 	const int kMaxLogSize = 16382;
-	public float cam_start_x, cam_start_y, cam_start_z;
-	public static float cam_current_x, cam_current_y, cam_current_z;
 	Transform target;
 	public float moveTime = 0.1f;           //Time it will take object to move, in seconds.
 	public LayerMask blockingLayer;         //Layer on which collision will be checked.
 	private Quaternion startingRotation;
 	public float speed = 10;
+	public TextMesh orientationtextref;
 
+	public int object_x_orientation, object_x_orientation_start;
+	public int object_y_orientation, object_y_orientation_start;
+	public int object_z_orientation, object_z_orientation_start;
 
 	//private BoxCollider2D boxCollider;      //The BoxCollider2D component attached to this object.
 	//private Rigidbody2D rb2D;               //The Rigidbody2D component attached to this object.
@@ -28,20 +30,8 @@ public class moveCamera : MonoBehaviour {
 	private DependencyStatus dependencyStatus = DependencyStatus.UnavailableOther;
 	// Use this for initialization
 	void Start () {
-
-		try
-		{
-			Network.TestConnection();
-			DebugLog("No network");
-		}
-		catch (System.Exception)
-		{
-			//do something if code does not work
-			DebugLog("check network.");
-		}
-	
+		
 		startingRotation = this.transform.rotation;
-
 		dependencyStatus = FirebaseApp.CheckDependencies();
 		if (dependencyStatus != DependencyStatus.Available) {
 			FirebaseApp.FixDependenciesAsync().ContinueWith(task => {
@@ -59,17 +49,18 @@ public class moveCamera : MonoBehaviour {
 			InitializeFirebase();
 		}
 
-		cam_start_x = float.Parse(transform.eulerAngles.x.ToString ());
-		cam_start_y = float.Parse(transform.eulerAngles.y.ToString ());
-		cam_start_z = float.Parse(transform.eulerAngles.z.ToString ());
+		object_x_orientation_start = int.Parse(transform.eulerAngles.x.ToString());
+		object_y_orientation_start = int.Parse(transform.eulerAngles.y.ToString());
+		object_z_orientation_start = int.Parse(transform.eulerAngles.z.ToString());
+		object_x_orientation = object_x_orientation_start;
+		object_y_orientation = object_y_orientation_start;
+		object_z_orientation = object_z_orientation_start;
 
-		//Get a component reference to this object's BoxCollider2D
-		//boxCollider = GetComponent <BoxCollider2D> ();
+		string defaulttext = "orientation\nx:" + object_x_orientation.ToString () + "y:" + object_y_orientation.ToString() + " z:" + object_z_orientation.ToString();
+		 
+		orientationtextref = GameObject.Find("Orientation").GetComponent<TextMesh>();
+		orientationtextref.text = defaulttext;
 
-		//Get a component reference to this object's Rigidbody2D
-		//rb2D = GetComponent <Rigidbody2D> ();
-
-		//By storing the reciprocal of the move time we can use it by multiplying instead of dividing, this is more efficient.
 		inverseMoveTime = 1f / moveTime;
 	}
 
@@ -77,7 +68,6 @@ public class moveCamera : MonoBehaviour {
 	public void DebugLog(string s) {
 		Debug.Log(s);
 		logText += s + "\n";
-
 		while (logText.Length > kMaxLogSize) {
 			int index = logText.IndexOf("\n");
 			logText = logText.Substring(index + 1);
@@ -108,11 +98,7 @@ public class moveCamera : MonoBehaviour {
 				return;
 			}
 			if (e2.Snapshot != null) {
-				float xloc = float.Parse(e2.Snapshot.Value.ToString());
-				//float yloc = float.Parse(e2.Snapshot.Child("yloc").Value.ToString());
-				//float zloc = float.Parse(e2.Snapshot.Child("zloc").Value.ToString());
-				//hanMoveCam(xloc, yloc, zloc);
-				DebugLog("xaxis");
+				int xloc = (int)float.Parse(e2.Snapshot.Value.ToString());
 				hanRotateobject(xloc, "xaxis");
 			}
 		};
@@ -124,9 +110,7 @@ public class moveCamera : MonoBehaviour {
 				return;
 			}
 			if (e2.Snapshot != null) {
-				//float xloc = float.Parse(e2.Snapshot.Child("xloc").Value.ToString());
-				float yloc = float.Parse(e2.Snapshot.Value.ToString());
-				//float zloc = float.Parse(e2.Snapshot.Child("zloc").Value.ToString());
+				int yloc = (int)float.Parse(e2.Snapshot.Value.ToString());
 				DebugLog("yaxis");
 				hanRotateobject(yloc, "yaxis");
 			}
@@ -139,7 +123,7 @@ public class moveCamera : MonoBehaviour {
 				return;
 			}
 			if (e2.Snapshot != null) {
-				float zloc = float.Parse(e2.Snapshot.Value.ToString());
+				int zloc = (int)float.Parse(e2.Snapshot.Value.ToString());
 				//hanMoveCam(xloc, yloc, zloc);
 				DebugLog("zaxis");
 				hanRotateobject(zloc, "zaxis");
@@ -147,50 +131,29 @@ public class moveCamera : MonoBehaviour {
 		};
 	}
 
-	void hanRotateobject(float degree, string axis){
+	void update_orientation(){
+		object_x_orientation = (int)this.transform.rotation.eulerAngles.x;
+		object_y_orientation = (int)this.transform.rotation.eulerAngles.y;
+		object_z_orientation = (int)this.transform.rotation.eulerAngles.z;
+	}
+
+	void hanRotateobject(int rotationAmount, string axis){
+		update_orientation ();
+		Quaternion finalRotation;
+		finalRotation = Quaternion.Euler (0, 0, 0) * startingRotation;
 		if (axis == "xaxis") {
-			StartCoroutine (Rotatex (degree));
-		} else if (axis == "yaxis") {
-			StartCoroutine (Rotatey (degree));
-		} else {
-			StartCoroutine (Rotatez (degree));
+			finalRotation = Quaternion.Euler(rotationAmount, object_y_orientation, object_z_orientation ) * startingRotation;
 		}
+		if (axis == "yaxis") {
+			finalRotation = Quaternion.Euler(object_x_orientation, rotationAmount, object_z_orientation ) * startingRotation;
+		} 
+		if (axis == "zaxis") {
+			finalRotation = Quaternion.Euler(object_x_orientation, object_y_orientation, rotationAmount) * startingRotation;
+		}
+		StartCoroutine (Rotate(finalRotation));
 	}
 
-	IEnumerator Rotatex(float rotationAmount){
-		cam_current_x = float.Parse(this.transform.rotation.x.ToString());
-		cam_current_y = float.Parse(this.transform.rotation.y.ToString());
-		cam_current_z = float.Parse(this.transform.rotation.z.ToString());
-
-		Quaternion finalRotation = Quaternion.Euler( rotationAmount, this.transform.rotation.y, this.transform.rotation.z ) * startingRotation;
-
-		while(this.transform.rotation != finalRotation){
-			this.transform.rotation = Quaternion.Lerp(this.transform.rotation, finalRotation, Time.deltaTime*speed);
-			yield return 0;
-		}
-	}
-	IEnumerator Rotatey(float rotationAmount){
-		cam_current_x = float.Parse(this.transform.rotation.x.ToString());
-		cam_current_y = float.Parse(this.transform.rotation.y.ToString());
-		cam_current_z = float.Parse(this.transform.rotation.z.ToString());
-
-		DebugLog(this.transform.rotation.x.ToString());
-		DebugLog(this.transform.rotation.y.ToString());
-		DebugLog(this.transform.rotation.z.ToString());
-		Quaternion finalRotation = Quaternion.Euler( this.transform.rotation.x, rotationAmount, this.transform.rotation.z ) * startingRotation;
-
-		while(this.transform.rotation != finalRotation){
-			this.transform.rotation = Quaternion.Lerp(this.transform.rotation, finalRotation, Time.deltaTime*speed);
-			yield return 0;
-		}
-	}
-	IEnumerator Rotatez(float rotationAmount){
-		cam_current_x = float.Parse(this.transform.rotation.x.ToString());
-		cam_current_y = float.Parse(this.transform.rotation.y.ToString());
-		cam_current_z = float.Parse(this.transform.rotation.z.ToString());
-
-		Quaternion finalRotation = Quaternion.Euler( this.transform.rotation.x, this.transform.rotation.y, rotationAmount ) * startingRotation;
-
+	IEnumerator Rotate(Quaternion finalRotation){
 		while(this.transform.rotation != finalRotation){
 			this.transform.rotation = Quaternion.Lerp(this.transform.rotation, finalRotation, Time.deltaTime*speed);
 			yield return 0;
@@ -268,9 +231,9 @@ public class moveCamera : MonoBehaviour {
 	TransactionResult InitlocationonFB(MutableData mutableData) {
 		// Now we add the new score as a new entry that contains the email address and score.
 		Dictionary<string, object> location = new Dictionary<string, object>();
-		location["xloc"] = 0.0f;
-		location["yloc"] = 0.0f;
-		location["zloc"] = 0.0f;
+		location["xloc"] = 0;
+		location["yloc"] = 0;
+		location["zloc"] = 0;
 		// You must set the Value to indicate data at that location has changed.
 		mutableData.Value = location;
 		return TransactionResult.Success(mutableData);
@@ -291,5 +254,8 @@ public class moveCamera : MonoBehaviour {
 		if(Input.GetKey(KeyCode.D)){
 			transform.Translate (0.0f, 0f, -0.05f);
 		}
+		update_orientation();
+		string updatetext = "orientation\nx:" + object_x_orientation.ToString () + "y:" + object_y_orientation.ToString() + " z:" + object_z_orientation.ToString();
+		orientationtextref.text = updatetext;
 	}
 }

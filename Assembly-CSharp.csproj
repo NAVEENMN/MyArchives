@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\scripts\moveCamera.cs" />
-     <Compile Include="Assets\scripts\objectaxistext.cs" />
      <None Include="Assets\Firebase\m2repository\com\google\firebase\firebase-auth-unity\maven-metadata.xml" />
      <None Include="Assets\Firebase\Plugins\link.xml" />
      <None Include="Assets\PlayServicesResolver\Editor\play-services-resolver.txt" />
