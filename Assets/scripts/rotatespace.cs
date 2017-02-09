@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Text;
 using UnityEngine.UI;
 
-public class moveCamera : MonoBehaviour {
+public class rotatespace : MonoBehaviour {
 
 	private string logText = "";
 	const int kMaxLogSize = 16382;
@@ -30,7 +30,7 @@ public class moveCamera : MonoBehaviour {
 	private DependencyStatus dependencyStatus = DependencyStatus.UnavailableOther;
 	// Use this for initialization
 	void Start () {
-		
+
 		startingRotation = this.transform.rotation;
 		dependencyStatus = FirebaseApp.CheckDependencies();
 		if (dependencyStatus != DependencyStatus.Available) {
@@ -57,7 +57,7 @@ public class moveCamera : MonoBehaviour {
 		object_z_orientation = object_z_orientation_start;
 
 		string defaulttext = "orientation\nx:" + object_x_orientation.ToString () + "y:" + object_y_orientation.ToString() + " z:" + object_z_orientation.ToString();
-		 
+
 		orientationtextref = GameObject.Find("Orientation").GetComponent<TextMesh>();
 		orientationtextref.text = defaulttext;
 
@@ -80,7 +80,7 @@ public class moveCamera : MonoBehaviour {
 		app.SetEditorDatabaseUrl("https://mathvr-73393.firebaseio.com/");
 
 		// Initilize data to FB
-		DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference("RightHand");
+		DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference("Space");
 		DebugLog("Running Transaction...");
 		reference.RunTransaction(InitlocationonFB)
 			.ContinueWith(task => {
@@ -91,7 +91,7 @@ public class moveCamera : MonoBehaviour {
 				}
 			});
 		//set up listeners
-		FirebaseDatabase.DefaultInstance.GetReference("RightHand").Child("xloc")
+		FirebaseDatabase.DefaultInstance.GetReference("Space").Child("xloc")
 			.ValueChanged += (object sender2, ValueChangedEventArgs e2) => {
 			if (e2.DatabaseError != null) {
 				Debug.LogError(e2.DatabaseError.Message);
@@ -103,7 +103,7 @@ public class moveCamera : MonoBehaviour {
 			}
 		};
 		//set up listeners
-		FirebaseDatabase.DefaultInstance.GetReference("RightHand").Child("yloc")
+		FirebaseDatabase.DefaultInstance.GetReference("Space").Child("yloc")
 			.ValueChanged += (object sender2, ValueChangedEventArgs e2) => {
 			if (e2.DatabaseError != null) {
 				Debug.LogError(e2.DatabaseError.Message);
@@ -116,7 +116,7 @@ public class moveCamera : MonoBehaviour {
 			}
 		};
 		//set up listeners
-		FirebaseDatabase.DefaultInstance.GetReference("RightHand").Child("zloc")
+		FirebaseDatabase.DefaultInstance.GetReference("Space").Child("zloc")
 			.ValueChanged += (object sender2, ValueChangedEventArgs e2) => {
 			if (e2.DatabaseError != null) {
 				Debug.LogError(e2.DatabaseError.Message);
@@ -242,17 +242,17 @@ public class moveCamera : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetKey(KeyCode.W)){
-			transform.Translate (0.5f, 0f, 0f);
+			transform.Translate (0.05f, 0f, 0f);
 			DebugLog (transform.position.x.ToString());
 		}
 		if(Input.GetKey(KeyCode.S)){
-			transform.Translate (-0.5f, 0f, 0f);
+			transform.Translate (-0.05f, 0f, 0f);
 		}
 		if(Input.GetKey(KeyCode.A)){
-			transform.Translate (0.0f, 0f, 0.5f);
+			transform.Translate (0.0f, 0f, 0.05f);
 		}
 		if(Input.GetKey(KeyCode.D)){
-			transform.Translate (0.0f, 0f, -0.5f);
+			transform.Translate (0.0f, 0f, -0.05f);
 		}
 		update_orientation();
 		string updatetext = "orientation\nx:" + object_x_orientation.ToString () + "y:" + object_y_orientation.ToString() + " z:" + object_z_orientation.ToString();
