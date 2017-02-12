@@ -26,7 +26,7 @@ def usage():
     print "Examples: "
     print "bhpnet.py -t 192.168.0.1 -p 5555 -l -c"
     print "bhpnet.py -t 192.168.0.1 -p 5555 -l -u=c:target.exe"
-    print "bhpnet.py 0t 192.168.0.1 -p 5555 -l -e=\'cat /etc/passwd\'"
+    print "bhpnet.py -t 192.168.0.1 -p 5555 -l -e=\'cat /etc/passwd\'"
     print "echo 'ABC' | ./bhpnet.py -t 192.168.11.12 -p 135"
     sys.exit(0)
 
@@ -42,11 +42,13 @@ def command_line():
     if not len(sys.argv[1:]):
         usage()
     try:
-        opts, args = getopts.getopt(sys.argv[1:], "hle:t:p:cu:", ["help", "listen", "execute", "target", "port", "command", "upload"])
+        opts, args = getopt.getopt(sys.argv[1:], "hle:t:p:cu:", ["help", "listen", "execute", "target", "port", "command", "upload"])
         for o, a in opts:
             if o in ("-h", "--help"):
                 usage()
             elif o in ("-l", "--listen"):
+                listen = True
+            elif o in ("-e", "--execute"):
                 execute = a
             elif o in ("-c", "--commandshell"):
                 command = True
@@ -64,9 +66,15 @@ def command_line():
     return opts, args
 
 def client_sender(buffer):
+    global target
+    global port
+    if not len(target):
+        target = "0.0.0.0"
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
+        print target, port
         client.connect((target, port))
+        print "here"
         if len(buffer):
             client.send(buffer)
         while True:
@@ -126,15 +134,15 @@ def client_handler(client_socket):
                 client_socket.send("Sucessfully saved file tp %s\r\n"%upload_destination)
             except:
                 client_socket.send("Failed to save file to %s\r\n"%upload_destination)
-        if len(execute):
-            output = run_command(execute)
-            client_socket.send(output)
-        if command:
-            while True:
-                client_socket.send("<BHP:#> ")
-                cmd_buffer = ""
-                while "\n" not in cmd_buffer:
-                    cmd_buffer += client_socket.recv(1024)
+    if len(execute):
+        output = run_command(execute)
+        client_socket.send(output)
+    if command:
+        while True:
+            client_socket.send("<BHP:#> ")
+            cmd_buffer = ""
+            while "\n" not in cmd_buffer:
+                cmd_buffer += client_socket.recv(1024)
                 response = run_command(cmd_buffer)
                 client_socket.send(response)
 
@@ -146,8 +154,9 @@ def main():
     global upload_destination
     global port
     opts, args = command_line()
-    buffer = sys.stdin.read()
-    client_sender(buffer)
+    if not listen and len(target) and port > 0:
+        buffer = sys.stdin.read()
+        client_sender(buffer)
     if listen:
         server_loop()
 
