@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Naveen M N - Discentes</title>
+<link href="styles.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="css/prettyPhoto.css" type="text/css" media="screen" charset="utf-8" />
+<link href='http://fonts.googleapis.com/css?family=Bree+Serif' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+<script type='text/javascript' src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js?ver=3.3"></script>	
+<script type="text/javascript" src="js/jquery.prettyPhoto.js"></script>
+<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
+
+</head>
+
+<body>
+<div id="header">
+	<div id="logo"><a href="http://www.naveenmn.com"><img src="images/logo.png"></a></div>
+</div>
+
+<div id="container">
+
+<!--Begin About Section-->
+    <div id="about">
+    	<h1>Discentes...</h1>
+        <div class="top-divider"></div>
+        <div class="content">
+        	<iframe width="560" height="315" src="http://www.youtube.com/embed/pbMDPTfDf9M?rel=0" frameborder="0" allowfullscreen></iframe>
+            <h2>Discentes - An Interactive Learning Frame Work</h2>
+            <p> </br>Having issues with video? <a href="http://www.youtube.com/watch?v=pbMDPTfDf9M" class="facebook">Click here to watch it on youtube.</a></br>Targeting a revolution in the ways of learning in developing and developed countries; Discentes was developed with an effort to make it affordable and cost effective so as to be available to all. Its main aim is to improve educational experiences so as to encourage students to learn and thus help in the development of their countries. The work basically focuses on providing quality education in the developing and underdeveloped countries with minimal cost. Discentes is an attempt to provide a solution to all students having a problem visualizing concepts and is an approach to a tangible learning experience. The main idea here is to provide a framework onto which a vast range of modules can be created, targeting any area of interest, and combined together to make a powerful learning and teaching tool. Since everything is developed on open source platform the end user or developer can add any extra features as and when required by them.Thinking in the perspective of developing and underdeveloped nations where internet connections are not yet reached and places where many schools and colleges which lack basic infrastructure in these countries cannot afford expensive large displays Discentes has been designed. The external multimedia can be incorporated in our project as an add-on. Distance education via tele-teaching methods are explained inculcated today suffers from explaining concepts like circuit analysis which needs live signal measurement using oscilloscope, thus On Board Oscilloscope designed here in Discentes would be helpful.The board is a conventional white lecture board mounted with a projector, camera, ultrasound sensor and a Wii-mote (belonging to Nintendo). The projector displays the UI and the infrared camera of the Wii-mote recognizes movements of Light Emitting Diodes (LED) mounted on the hand of the user to trace movements. The camera is mounted so as to focus on an area where the user writes coefficients of standard equations which will be read and plotted automatically. For a better user experience the board has an ultrasound sensor which uses a tracking algorithm to detect the users distance from the board. This is used to zoom in and out in the user interface of the lecture board.Additionally the board can be connected to any circuits to act as an oscilloscope in the class room. Hence lecturers can improve the teaching experience.Totally the board contains five features-
+</br>1. Vector mathematics.</br>
+2. Geometrical Interactions.</br>
+3. On Board Oscilloscope</br>
+4. On Board Internet Access</br>
+5. Entertainment</br></br>This Project will be made open source soon.</br>Team:</br>Myself</br>Nikhil Sunil Pai (PESIT EEE)</br>Bharath V (PESIT EEE)</p>
+            
+        </div>
+    <div class="bottom-divider"></div> 
+    </div>
+<!--End About Section-->
+
+
+
+<!--Begin Work Section-->  
+    <div id="work">
+    	<h1>Work</h1>
+        <div class="top-divider"></div>
+        	<div class="content">
+            	<ul id="work-thumbs">
+                	<li><a href="Discentes.htm" rel="prettyPhoto[1]" title="Project: Discentes..."><img src="images/work/work-thumb1.jpg"></a></li>
+                    <li><a href="PairUP.htm" rel="prettyPhoto[1]" title="Project:Nokia PairUP"><img src="images/work/work-thumb2.jpg"></a></li>
+                    <li><a href="Manzil.htm" rel="prettyPhoto[1]" title="Hack:Manzil"><img src="images/work/work-thumb3.jpg"></a></li>
+                    <li class="last"><a href="Gesturerobo.htm" rel="prettyPhoto[1]" title="Hack:Gesture Robo"><img src="images/work/work-thumb4.jpg"></a></li>
+                    <li><a href="ankur.htm" rel="prettyPhoto[1]" title="Project:Intel Ankur"><img src="images/work/work-thumb5.jpg"></a></li>
+                    <li><a href="swasikshak.htm" rel="prettyPhoto[1]" title="Project:Swasikshak"><img src="images/work/work-thumb6.jpg"></a></li>
+                    <li><a href="gna.htm" rel="prettyPhoto[1]" title="Project:Grid Network Assembly"><img src="images/work/work-thumb7.jpg"></a></li> 
+                    <li class = "last"><a href="ComRemote.htm" rel="prettyPhoto[1]" title="Hack: Com Remote"><img src="images/work/work-thumb8.jpg"></a></li>
+                    <li><a href="publications.htm" rel="prettyPhoto[1]" title="My Publications"><img src="images/work/work-thumb9.jpg"></a></li>
+             
+                    <li><a href="VideosPictures.htm" rel="prettyPhoto[1]" title="My Videos and Pictures"><img src="images/work/work-thumb11.png"></a></li>
+                    <li class="last"><a href="Naveen-Resume.pdf" rel="prettyPhoto[1]" title="My Resume"><img src="images/work/work-thumb12.png"></a></li>
+                </ul>
+            </div>
+        <div class="bottom-divider"></div>
+    </div>
+<!--End Work Section-->
+
+<!--Begin Connect Section-->  
+    <div id="connect">
+    	<h1>Connect</h1>
+        <div class="top-divider"></div>
+        	<div class="content">
+            	<div id="form">
+                	<form action="#">
+                    	<span>Name</span>
+                        <input type="text" name="name" class="name" />
+                        <span>Email</span>
+                        <input type="text" name="email" class="email"/>
+                        <span>Message</span>
+                        <textarea class="message"></textarea>
+                        <input type="submit" name="submite" value="Submit" class="submit">
+                    </form>
+                </div>
+                <div id="social-footer">
+                	<h2>Follow Me:</h2>
+                    <p>Intrested in my works?. </br> Then let`s catch up for a coffee and discuss :) </br> You can reach me @ navimn1991@gmail.com or follow me on social networking sites for more updates</p>
+                    <ul id="sm-links">
+                    	<li><a href="https://www.facebook.com/naveen.mn.9" class="facebook">Facebook</a></li>
+           				<li><a href="https://twitter.com/NAVEENMN2" class="twitter">Twitter</a></li>
+            			
+                        
+                        <li><a href="http://www.youtube.com/user/MrNaveenmn?feature=watch" class="youtube">YouTube</a></li>
+                        <li><a href="http://in.linkedin.com/pub/naveen-m-n/3a/a92/760" class="linkedin">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+    </div>
+<!--End Connect Section-->  
+
+</div>
+
+ <!-- The JavaScript -->  
+        <script type="text/javascript">
+    		$(function() {
+                $('#main-menu li a').bind('click',function(event){
+                    var $anchor = $(this);
+                    
+                    $('html, body').stop().animate({
+                        scrollTop: $($anchor.attr('href')).offset().top
+                    }, 1500,'easeInOutExpo');
+
+                    event.preventDefault();
+                });
+            });
+			
+ 			 $(document).ready(function(){
+    		$("a[rel^='prettyPhoto']").prettyPhoto({social_tools:false, deeplinking: false});
+  			});
+
+        </script>
+</body>
+</html>
+
