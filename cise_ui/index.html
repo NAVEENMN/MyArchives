@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>UNCC CISE Dashboard</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+   <link href="dashboard.css" rel="stylesheet">
+   <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+   <script src="https://cdn.firebase.com/js/client/2.2.3/firebase.js"></script>
+   <script src='Chart.min.js'></script>
+   <script src="myfunctions.js"></script>
+   <script src="loaddata.js"></script>
+   <script src="load_combined.js"></script>
+</head>
+<body>
+
+<div class="navbar navbar-inverse" >
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">CISE Analytics Tool</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" onclick="overall_display('2010');" >Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+        </div>
+      </div>
+</div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li><a href="#" onclick="select_view('year');">Year Reports</a></li>
+            <li><a href="#" onclick="select_view('combined');">Combined Report</a></li>
+            <li><a href="#" onclick="select_view('analytics');">Analytics</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-7 col-md-10  main">
+          <!-- Year View  -->
+            <h1 class="page-header" id = "dash" >Welcome</h1>
+            <canvas id="headline1" width="600" height="70"></canvas><br>
+            <canvas id="headline2" width="600" height="70"></canvas><br>
+            <!-- line chart canvas element -->
+            <div id="sec1legend"></div>
+            <canvas id="sec1" width="400" height="200"></canvas>
+            <!-- pie chart canvas element -->
+            <div id="sec2legend"></div>
+            <canvas id="sec2" width="400" height="200"></canvas>
+            <!-- bar chart canvas element -->
+            <div id="sec3legend"></div>
+            <canvas id="sec3" width="400" height="200"></canvas>
+            <div id="sec4legend"></div>
+            <canvas id="sec4" width="600" height="400"></canvas>
+            <div id="sec5legend"></div>
+            <canvas id="sec5" width="600" height="400"></canvas>
+            
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="../../assets/js/vendor/holder.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

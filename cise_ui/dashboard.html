@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>UNCC CISE Dashboard</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+   <link href="dashboard.css" rel="stylesheet">
+   <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+   <script src="https://cdn.firebase.com/js/client/2.2.3/firebase.js"></script>
+   <script src='Chart.min.js'></script>
+</head>
+<body>
+
+<script type='text/javascript'>
+	function select_view(type) {
+		switch(type){
+			case 'year':
+				document.getElementById("dash").innerHTML = "";
+    				//Create an input type dynamically. 
+				var button = new Array(4);
+				var base_year = 2010;
+				for(i=0; i< 6; i++){
+					button[i] = document.createElement("input");
+					button[i].type = 'button';
+					button[i].value = base_year.toString();
+					base_year += 1;
+					button[i].name = 'year';
+					button[i].onclick = function(){
+						overall_display(document.getElementById('year'));
+					}
+					var attach_button = document.getElementById("dash");
+					attach_button.appendChild(button[i]);
+				}//for
+				break;
+			case 'combined':
+				document.getElementById("dash").innerHTML = "";
+				clear_canvas('gender');
+				clear_canvas('race');
+				clear_canvas('level');
+				clear_canvas('ugender');
+				break;
+			default:
+				document.getElementById("dash").innerHTML = "";
+				break;
+		}//switch
+	}//select view
+	
+	function clear_canvas(canvas_id){
+		var canvas = document.getElementById(canvas_id);
+		var context = canvas.getContext('2d');
+		context.clearRect(0,0,canvas.width,canvas.height);
+		return true;
+	}
+	
+	function load_canvas_data(type){
+		var myFirebaseRef = new Firebase("https://cise.firebaseio.com/");
+		var universities;
+		var umales;
+		var ufemales; 
+		var uunspecified;
+		// gender variables
+		var male;
+		var female;
+		var unspecified;
+		// racial variables
+		var causian;
+		var africanamerican;
+		var asian;
+		var hispanic;
+		var multi;
+		// level variables
+		var freshman;
+		var sopohomore;
+		var junior;
+		var senior;
+		// applicants
+		var totalapplicants;
+		var uniqueapplicants;
+		// level variables
+		var graphs = new Array(10);
+		// Data from Firebase ------------------------------------
+		//------ GENDER
+		myFirebaseRef.child("Totals/2014/gender/Male").on("value", function(snapshot) {
+  			male = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/gender/Female").on("value", function(snapshot) {
+  			female = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/gender/unspecified").on("value", function(snapshot) {
+  			unspecified = snapshot.val();
+		});
+		//------ RACIAL
+		myFirebaseRef.child("Totals/2014/race/White").on("value", function(snapshot) {
+  			causian = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/race/Afro American").on("value", function(snapshot) {
+  			africanamerican = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/race/Asian").on("value", function(snapshot) {
+  			asian = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/race/Hispanic").on("value", function(snapshot) {
+  			hispanic = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/race/others").on("value", function(snapshot) {
+  			multi = snapshot.val();
+		});
+		//------- LEVEL
+		myFirebaseRef.child("Totals/2014/level/freshman").on("value", function(snapshot) {
+  			freshman = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/level/sopohomore").on("value", function(snapshot) {
+  			sopohomore = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/level/junior").on("value", function(snapshot) {
+  			junior = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/level/senior").on("value", function(snapshot) {
+  			senior = snapshot.val();
+		});
+		//--------- applicants
+		myFirebaseRef.child("Totals/2014/total/Total Unique applicants").on("value", function(snapshot) {
+  			uniqueapplicants = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/total/total applicants").on("value", function(snapshot) {
+  			totalapplicants = snapshot.val();
+		});
+		//-------- university ugender
+		myFirebaseRef.child("Totals/2014/universities/list").on("value", function(snapshot) {
+  			universities = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/MALES/listmales").on("value", function(snapshot) {
+  			umales = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/FEMALES/listfemales").on("value", function(snapshot) {
+  			ufemales = snapshot.val();
+		});
+		myFirebaseRef.child("Totals/2014/UNSPECIFIED/listunspecified").on("value", function(snapshot) {
+  			uunspecified = snapshot.val();
+		});
+
+		//---------------------------------------------------------
+		// gender pie graph data
+ 		var genderData = [
+                	{
+                    		value: male,
+                    		color:"#F7464A",
+        			highlight: "#FF5A5E",
+        			label: "Male"
+                	},
+			{
+				value: female,
+				color: "#46BFBD",
+        			highlight: "#5AD3D1",
+        			label: "Female"
+			},
+                	{
+                    		value : unspecified,
+                    		color: "#FDB45C",
+        			highlight: "#FFC870",
+       				label: "Unspecified"
+               		 }
+            	];
+            	var genderOptions = {
+                	 segmentShowStroke : false,
+                 	 animateScale : true
+            	}
+		// race doughnut graph data
+ 		var raceData = [
+                	{
+                    		value: causian,
+                    		color:"#F7464A",
+				highlight: "#FF5A5E",
+				label: "Caucasian"
+                	},
+                	{
+                    		value : africanamerican,
+                    		color : "#46BFBD",
+				highlight: "#5AD3D1",
+				label: "African American"
+               		 },
+			 {
+                    		value: asian,
+                    		color:"#FDB45C",
+				highlight: "#FFC870",
+				label: "Asian"
+                	 },
+                	 {
+                    		value : hispanic,
+                    		color : "#878BB6",
+				highlight: "#8E91B3",
+				label: "Hispanic/Latino"
+               		 },
+			 { 
+                    		value : multi,
+                    		color : "#2ff560",
+				highlight: "#4cfa78",
+				label: "Multiracial"
+               		 }
+
+            	];
+
+            	var raceOptions = {
+                	 segmentShowStroke : false,
+                 	 animateScale : true
+            	}
+		
+ 		var levelData = [
+                	{
+                    		value: freshman,
+                    		color:"#F7464A",
+				highlight: "#FF5A5E",
+				label: "Freshman"
+                	},
+                	{
+                    		value : sopohomore,
+                    		color : "#46BFBD",
+				highlight: "#5AD3D1",
+				label: "Sophomore"
+               		 },
+			 {
+                    		value: junior,
+                    		color:"#FDB45C",
+				highlight: "#FFC870",
+				label: "Junior"
+                	 },
+                	 {
+                    		value : senior,
+                    		color : "#878BB6",
+				highlight: "#8E91B3",
+				label: "Senior"
+               		 }
+
+            	];
+            	var levelOptions = {
+                	 segmentShowStroke : false,
+                 	 animateScale : true
+            	}
+
+
+		var ugenderchart = {
+    			labels: universities,
+    			datasets: [
+        		{
+				label: "Males",
+            			fillColor: "#48A497",
+            			strokeColor: "#48A4D1",
+            			data: umales
+        		},
+       	 		{
+				label: "Females",
+            			fillColor: "rgba(73,188,170,0.4)",
+            			strokeColor: "rgba(151,187,205,0.8)",
+            			data: ufemales
+        		}
+    			]
+		}
+            	
+		graphs[0] = genderData;
+		graphs[1] = genderOptions;
+		graphs[2] = raceData;
+		graphs[3] = raceOptions;
+		graphs[4] = levelData;
+		graphs[5] = levelOptions;
+		graphs[6] = totalapplicants;
+		graphs[7] = ugenderchart;
+		graphs[8] = uniqueapplicants;
+		return graphs;
+	}
+
+	function overall_display(elem){
+			graphs = load_canvas_data("overall");
+			if(graphs[8] != null){
+				var applicants = document.getElementById('applicants').getContext('2d');
+				applicants.font = "25px Georgia";
+				applicants.fillText("Total Applicants: " + graphs[6], 10, 30);
+				var uniqueapplicants = document.getElementById('uniqueapplicants').getContext('2d');
+				uniqueapplicants.font = "25px Georgia";
+				uniqueapplicants.fillText("Total Unique Applicants: " + graphs[8], 10, 30);
+            			var gender = document.getElementById('gender').getContext('2d');
+				new Chart(gender).Pie(graphs[0], graphs[1]);
+            			var race= document.getElementById('race').getContext("2d");
+            			new Chart(race).Doughnut(graphs[2], graphs[3]);
+           			var level = document.getElementById('level').getContext("2d");
+            			new Chart(level).Doughnut(graphs[4], graphs[5]);
+				var ugender = document.getElementById('ugender').getContext("2d");
+				new Chart(ugender).Bar(graphs[7]);
+				elem.focus();
+			}
+			return true;
+	}
+</script>
+
+<div class="navbar navbar-inverse" >
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">CISE Analytics Tool</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" onclick="overall_display('2010');" >Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+        </div>
+      </div>
+</div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li><a href="#" onclick="select_view('year');">Year Reports</a></li>
+            <li><a href="#" onclick="select_view('combined');">Combined Report</a></li>
+            <li><a href="#" onclick="select_view('analytics');">Analytics</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-7 col-md-10  main">
+          <h1 class="page-header" id = "dash" >Year</h1>
+	<canvas id="applicants" width="400" height="70"></canvas>
+	<br>
+	<canvas id="uniqueapplicants" width="400" height="70"></canvas>
+	<br>
+	<!-- line chart canvas element -->
+        <canvas id="gender" width="300" height="150"></canvas>
+        <!-- pie chart canvas element -->
+        <canvas id="race" width="300" height="150"></canvas>
+        <!-- bar chart canvas element -->
+        <canvas id="level" width="300" height="150"></canvas>
+	<br>
+	<canvas id="ugender" width="800" height="600"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script src="../../assets/js/vendor/holder.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
