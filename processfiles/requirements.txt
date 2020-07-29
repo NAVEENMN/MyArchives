@@ -1,2 +1,2 @@
 auth2==1.0
-httplib2==0.9
+httplib2==0.18.0
