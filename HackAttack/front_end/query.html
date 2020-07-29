@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DD - Analyzer</title>
+
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/datepicker3.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+
+<!--Icons-->
+<script src="js/lumino.glyphs.js"></script>
+
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
+
+</head>
+
+<datalist id="browsers">
+</datalist>
+    
+    
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"><span>DD</span>Analyzer</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> User <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Profile</a></li>
+							<li><a href="#"><svg class="glyph stroked gear"><use xlink:href="#stroked-gear"></use></svg> Settings</a></li>
+							<li><a href="#"><svg class="glyph stroked cancel"><use xlink:href="#stroked-cancel"></use></svg> Logout</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+							
+		</div><!-- /.container-fluid -->
+	</nav>
+		
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<ul class="nav menu">
+			<li><a href="index.html"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+			<li><a href="troubleshooting.html"><svg class="glyph stroked calendar"><use xlink:href="#stroked-calendar"></use></svg> Troubleshooting</a></li>
+			<li><a href="stream.html"><svg class="glyph stroked line-graph"><use xlink:href="#stroked-line-graph"></use></svg>Stream</a></li>
+			<li class="active"><a href="query.html"><svg class="glyph stroked table"><use xlink:href="#stroked-table"></use></svg>Query</a></li>
+			<li><a href="storage.html"><svg class="glyph stroked pencil"><use xlink:href="#stroked-pencil"></use></svg>Storage</a></li>
+			<li class="parent ">
+				<a href="#">
+					<span data-toggle="collapse" href="#sub-item-1"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Dropdown 
+				</a>
+				<ul class="children collapse" id="sub-item-1">
+					<li>
+						<a class="" href="#">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Sub Item 1
+						</a>
+					</li>
+					<li>
+						<a class="" href="#">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Sub Item 2
+						</a>
+					</li>
+					<li>
+						<a class="" href="#">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Sub Item 3
+						</a>
+					</li>
+				</ul>
+			</li>
+			<li role="presentation" class="divider"></li>
+			<li><a href="login.html"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Login Page</a></li>
+		</ul>
+
+	</div><!--/.sidebar-->
+		
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">					
+		
+        <div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Enter a query: </div>
+					<div class="panel-body">
+						<div class="col-md-6">
+							<form role="form" id="target">
+								<div class="form-group">
+									<input list="browsers" style="font-size:18pt;height:60px;width:1000px;" class="form-control" type="text" name="qdata">
+								</div>
+                                <button type="submit" class="btn btn-primary" value="Search">Submit</button>
+								<button type="reset" class="btn btn-default">Reset</button>
+                                </form>
+				            </div>
+                    </div>
+					</div>
+				</div>
+			</div><!-- /.col-->
+		</div><!-- /.row -->
+    
+       <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+		<div class="row">
+			<div class="col-lg-12">
+			</div>
+		</div><!--/.row-->	
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Information</div>
+					<div class="panel-body">
+                        <div class="row">
+			                 <div class="col-lg-12">
+				                <div class="panel panel-default">
+					               <div class="panel-heading">Line Chart</div>
+					                   <div class="panel-body">
+						                  <div class="canvas-wrapper">
+							                 <canvas class="main-chart" id="line-chart" style="display:none;" height="200" width="600px"></canvas>
+						                  </div>
+					               </div>
+				                </div>
+			                 </div>
+		                  </div><!--/.row-->
+                        <!--
+						<table border="1" id="mtable">
+                        <thead><tr><td>DDR</td><td>Info1</td><td>Info2</td></tr></thead>
+                        <tbody><tr><td>n1.emc.com</td><td><text id="myTextarea">
+                            98</text></td><td><text id="myTextarea">
+                            97</text></td></tr></tbody>
+                        </table><br/><br/>
+                        -->
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->	
+  
+								
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/chart.min.js"></script>
+	<script src="js/chart-data.js"></script>
+	<script src="js/easypiechart.js"></script>
+	<script src="js/easypiechart-data.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script>
+		!function ($) {
+		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
+		        $(this).find('em:first').toggleClass("glyphicon-minus");      
+		    }); 
+		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		}(window.jQuery);
+
+		$(window).on('resize', function () {
+		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+		})
+		$(window).on('resize', function () {
+		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+		})
+    
+var lineChartData = {
+			labels : ["January","February","March","April","May","June","July"],
+			datasets : [
+				{
+					label: "My First dataset",
+					fillColor : "rgba(220,220,220,0.2)",
+					strokeColor : "rgba(220,220,220,1)",
+					pointColor : "rgba(220,220,220,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(220,220,220,1)",
+					data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+				},
+				{
+					label: "My Second dataset",
+					fillColor : "rgba(48, 164, 255, 0.2)",
+					strokeColor : "rgba(48, 164, 255, 1)",
+					pointColor : "rgba(48, 164, 255, 1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(48, 164, 255, 1)",
+					data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+				}
+			]
+
+		}
+        
+        
+        
+        document.getElementById("line-chart").style.display = "hidden";
+        $("#target").submit( function () {
+           //alert( "Data is Loading... ");
+           var xhr = new XMLHttpRequest();
+           var method = "POST";
+           var url= "http://10.25.195.125:8888/";
+           xhr.open(method,url,true);
+           //xhr.setRequestHeader("Content-type", 'application/json');
+           var form = new FormData(document.getElementById("target"));
+           xhr.send(form);
+            
+           //delay(2000);
+           console.log(form);
+           xhr.onload = function() {//Call a function when the state changes.
+               console.log(xhr.status);
+              if(xhr.readyState == 4 && xhr.status == 200) {
+                  //response is json you need to parse it
+                  var json = xhr.response,
+                  obj = JSON.parse(json);
+                  console.log('got here');
+                  var dat = JSON.parse(obj['qdata']);
+                  
+                  var length = dat.iterm_count;
+                  var label = [];
+                  var data_points = [];
+                  var points = JSON.parse(dat.points);
+                  console.log(dat);
+                  
+                  for (var i=0; i< length; i++){
+                      label.push("");
+                      var real_point = JSON.parse(points[i]);
+                      data_points.push(real_point["ypoint"]);
+                  }
+                  console.log("----");
+                  console.log(data_points);
+                  var dataset = 
+				{
+					label: "My First dataset",
+					fillColor : "rgba(220,220,220,0.2)",
+					strokeColor : "rgba(220,220,220,1)",
+					pointColor : "rgba(220,220,220,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(220,220,220,1)",
+					data : data_points
+				};
+                  var lineChartData1  = {
+                      labels: label,
+                      datasets: [dataset]
+                  };
+                  
+                  if(window.myLine !== undefined){
+                      window.myLine.destroy();
+                  }
+                  document.getElementById('line-chart').style.display='block';
+                  var update_chart = document.getElementById("line-chart").getContext("2d");
+                  window.myLine = new Chart(update_chart).Line(lineChartData1, {responsive: true});
+                  
+                }
+              };
+            xhr.DONE
+          xhr.onerror = function (e) {
+              alert( "Data failed: " + status.responseText );
+          };
+            return false;
+ });
+        
+	</script>	
+</body>
+
+</html>
