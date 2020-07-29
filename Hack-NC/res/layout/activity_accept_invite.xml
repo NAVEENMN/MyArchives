@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+      android:background="#E6E6E6"
+    tools:context="${relativePackage}.${activityClass}" >
+
+   <TextView
+        android:id="@+id/New_Event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/setup_preferences"
+        android:paddingBottom="10dp"
+        android:textColor="#2E2E2E"
+        android:textSize="28sp" />
+
+    <View
+        android:id="@+id/Dividerevent"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:paddingTop="20dp"
+        android:layout_below="@+id/New_Event"
+        android:background="#819FF7"
+        android:gravity="bottom" />
+
+	<EditText android:id="@+id/event_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/event_name" />
+    
+    
+    <TextView
+        android:id="@+id/Time_to_meet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Dividerevent"
+        android:gravity="top"
+        android:paddingTop="20dp"
+        android:text="@string/setup_preferences"
+        android:textColor="#424242"
+        android:textSize="16sp" />
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Time_to_meet">
+        <requestFocus />
+        </TimePicker>
+        
+     <Button
+		        android:id="@+id/button3"
+		        style="?android:attr/buttonStyleSmall"
+		        android:layout_below="@+id/timePicker"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:background = "@drawable/settingsbuttonhandler"
+		        android:textColor="#4E4E4E"
+		        android:textSize="12sp"
+		        android:textStyle="bold"
+		        android:text="@string/Update" 
+		        android:onClick="fetch_prefrence"/>
+
+</RelativeLayout>

@@ -1,0 +1,52 @@
+  <FrameLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_panel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F2F2F2"
+    tools:context="${relativePackage}.${activityClass}" >
+    
+        
+      
+    <ViewFlipper
+        android:id="@+id/view_flipper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#F2F2F2"
+        android:baselineAligned="false"
+        android:gravity="center" >
+        
+        
+        <!-- View #0 -->
+        
+       <fragment 
+          android:id="@+id/visitormap"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:name="com.google.android.gms.maps.MapFragment"/> 
+
+
+        <!-- View #1 -->
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/homeone"
+            android:contentDescription="@string/desc" />
+
+        <!-- View #2 -->
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/hometwo"
+            android:contentDescription="@string/desc" />
+                <!-- View #2 -->
+
+    </ViewFlipper>
+      
+      
+    </FrameLayout>

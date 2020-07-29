@@ -1,0 +1,235 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/layout_main"
+    android:background="#F2F2F2"
+    tools:context=".Login" >
+    <!--  ******************************************************************  User Basic Profile data --> 
+    
+       <View
+           android:layout_width="fill_parent"
+           android:layout_height="3dip"
+           android:layout_alignParentTop="true"
+           android:background="#FE642E" />
+
+    <LinearLayout
+        android:id="@+id/Profiledata"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#2E9AFE"
+        android:gravity="top"
+        android:orientation="horizontal" >
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/ProfileImagebackground"
+            android:layout_height="wrap_content"
+            android:background="#1C1C1C"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:orientation="vertical" >
+               
+        <ImageButton
+            android:id="@+id/ProfileImage"
+            android:layout_width="50dp"
+			android:layout_height="50dp"
+			android:gravity="center"
+			android:background = "@drawable/loginbg"
+			android:scaleType="centerCrop"
+            android:contentDescription="@string/desc"
+            android:onClick="on_image_click" />
+            
+        </LinearLayout>
+                
+
+        <LinearLayout
+            android:id="@+id/profileinfo"
+            android:layout_width="0dip"
+			android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingLeft="2dp"
+			android:paddingTop="5dp"
+            android:orientation="vertical" >
+       
+      
+            <TextView
+                android:id="@+id/FirstName"
+                android:textColor="#D8D8D8"
+                android:textSize="15sp"
+                android:text="@string/Name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+     
+            <TextView
+                android:id="@+id/address_line"
+                android:textColor="#D8D8D8"
+                android:textSize="12sp"
+                android:text="@string/StudentType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            
+        </LinearLayout>
+        
+    </LinearLayout>
+    
+    
+
+    
+    <!--  ******************************************************************  User Basic Profile data -->
+
+     <!--  ****************************************************************** Information area        -->
+     <ViewFlipper
+        android:id="@+id/view_flipper_panel"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/Profiledata"
+        android:background="#F2F2F2"
+        android:baselineAligned="false"
+        android:gravity="center" >   
+        
+                    <!-- View #1 -->
+     <include  
+        layout="@layout/listevents" 
+        android:id="@+id/id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="2sp"
+        android:layout_marginRight="2sp"
+      />
+        
+    <RelativeLayout
+        android:id="@+id/Information"
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E6E6E6"
+        android:gravity="top"
+        android:orientation="vertical" >
+            
+      <!--  ****************************************************************** search section -->
+    
+       <LinearLayout
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:background="#2E9AFE"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+      
+    
+              <AutoCompleteTextView
+		        android:id="@+id/autoComplete"
+		        android:layout_width="0dp"
+                android:layout_height="match_parent"
+		        android:paddingLeft="10dp"
+	            android:layout_marginBottom="5dp"
+	            android:layout_marginLeft="5dp"
+	            android:layout_marginTop="5dp"
+	            android:layout_marginRight="5dp"
+	            android:textSize="20sp"
+	            android:fontFamily="OpenSansSemiBold"
+	            android:inputType="textShortMessage"
+	            android:background="@drawable/rounder_edit_text_map"
+	            android:hint="e.g. sushi, american, movies"
+	            android:textColorHint="#E6E6E6"
+	            android:drawableLeft="@drawable/ic_search"
+	            android:layout_weight=".75" />
+
+   
+    </LinearLayout>
+    <!-- ******************************************************************* Map region               -->   
+     
+    <fragment 
+          android:id="@+id/visitormap"
+           android:layout_below="@+id/search"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:name="com.google.android.gms.maps.MapFragment"/> 
+          
+    <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:id="@+id/map_event_details"
+                android:orientation="vertical"
+                android:layout_alignParentBottom="true"
+                android:padding="10dp"
+                android:gravity="bottom"
+                android:background="@drawable/gradient_back" >
+
+                <TextView
+                    android:id="@+id/map_event_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:text="Event : dinner" />
+                <TextView
+                    android:id="@+id/map_event_host"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:text="Host : Naveen Mysore" 
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="3dp"/>
+     
+            </LinearLayout>
+
+
+	<!-- ******************************************************************* Map region               -->
+
+	<Button
+	    android:id="@+id/chaticon"
+	    android:layout_width="60dp"
+	    android:layout_height="60dp"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="false"
+	    android:layout_alignParentBottom="true"
+	    android:onClick="on_chat_click"
+	    android:padding="10dp"
+	    android:paddingRight="40dp"
+	    android:background="@android:color/transparent"
+	    android:drawableTop="@drawable/chaticon"
+	    android:text="@string/event_chat" />
+
+	<Button
+	    android:id="@+id/add_friends"
+	    android:layout_width="60dp"
+	    android:layout_height="60dp"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="false"
+	    android:layout_alignParentBottom="true"
+	    android:layout_marginRight="42dp"
+	    android:background="@android:color/transparent"
+	    android:drawableTop="@drawable/addfriends"
+	    android:onClick="Add_Friends"
+	    android:padding="10dp"
+	    android:paddingRight="40dp"
+	    android:text="@string/event_chat" />
+
+
+    </RelativeLayout>
+    
+
+        <!-- View #2 -->
+
+                  <!-- View #1 -->
+     <include  
+        layout="@layout/list_places" 
+        android:id="@+id/id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="2sp"
+        android:layout_marginRight="2sp"
+      />
+   
+  </ViewFlipper>             
+   
+    
+
+</RelativeLayout>

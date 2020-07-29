@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FAFAFA"
+    tools:context="${relativePackage}.${activityClass}">
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topLine"
+        android:layout_above="@+id/listFooter"
+        android:layout_marginTop="10dp"
+        android:listSelector="@android:color/transparent"
+        android:transcriptMode="alwaysScroll"
+        android:divider="@null"/>
+
+    <LinearLayout
+        android:id="@+id/listFooter"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        
+          <EditText
+            android:id="@+id/messageInput"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:textSize="20sp"
+            android:fontFamily="OpenSansSemiBold"
+            android:inputType="textShortMessage"
+            android:background="@drawable/rounder_edittext"
+            android:layout_weight=".75" />
+          
+          	<Button
+			    android:id="@+id/sendButton"
+			    android:layout_width="40dp"
+			    android:layout_height="40dp"
+			    android:layout_marginTop="4dp"
+			    android:layout_alignParentRight="true"
+			    android:onClick="on_chat_click"
+			    android:background="@android:color/transparent"
+			    android:drawableTop="@drawable/chat_send" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

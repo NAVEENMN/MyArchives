@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/placesection"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:baselineAligned="false"
+    android:gravity="top"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/placesimagesection"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@color/white"
+        android:baselineAligned="false"
+        android:gravity="left"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/placesimage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/desc"
+            android:gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/no_image" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/card_img_shadow"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:padding="10dp" >
+
+            <RatingBar
+                android:id="@+id/placeratings"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="20sp"
+                android:gravity="left"
+                android:numStars="5"
+                android:scaleX="0.6"
+                android:scaleY="0.6" />
+
+            <TextView
+                android:id="@+id/placereviews"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:text="review"
+                android:textColor="#848484"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/placedetails"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        android:paddingLeft="2dp" >
+
+        <LinearLayout
+            android:id="@+id/nameandratings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:baselineAligned="false"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text=""
+                android:textColor="@color/main_red"
+                android:textColorLink="@color/main_red"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/addresssections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:baselineAligned="false"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/placeaddress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/Name"
+                android:textColor="#848484"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/typessections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:baselineAligned="false"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/placetype"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/Gender"
+                android:textColor="#848484"
+                android:textSize="9sp" />
+
+             
+        </LinearLayout>
+    </LinearLayout>
+    
+        	<ImageButton
+  			    android:id="@+id/view_on_yelp"
+  			    android:layout_width="60dp"
+  			    android:layout_height="60dp"
+  			    android:background="@drawable/right"
+  			    android:contentDescription="@string/desc"
+  			    android:gravity="right"
+  			    android:onClick="on_image_click"
+  			    android:scaleType="centerCrop" />
+
+</LinearLayout>

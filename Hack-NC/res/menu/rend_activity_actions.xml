@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+      xmlns:metster="http://schemas.android.com/apk/res-auto">
+    <item  
+    android:id="@+id/delete_icon"
+    android:icon="@drawable/ic_action_discard"
+    android:title="@string/title_activity_discard"
+    android:showAsAction="always"/>
+    <item  
+    android:id="@+id/refresh_icon1"
+    android:icon="@drawable/ic_action_refresh"
+    android:title="@string/title_activity_refresh"
+    android:showAsAction="always"/>
+
+</menu>
