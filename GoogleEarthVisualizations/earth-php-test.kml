@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Folder>
+    <name>KML Circle Generator Output</name>
+    <visibility>1</visibility>
+    <Placemark>
+      <name>circle</name>
+      <visibility>1</visibility>
+      <Style>
+        <geomColor>ff0000ff</geomColor>
+        <geomScale>1</geomScale>
+      </Style>
+	    <Style id="exampleBalloonStyle">
+			<BalloonStyle>
+			  <!-- a background color for the balloon -->
+			  <bgColor>ffffffbb</bgColor>
+			  <!-- styling of the balloon text -->
+			  <text><![CDATA[
+			  <b><font color="#CC0000" size="+3">$[name]</font></b>
+			  <br/><br/>
+			  <font face="Courier">$[description]</font>
+			  <br/><br/>
+			  Extra text that will appear in the description balloon
+			  <br/><br/>
+			  <!-- insert the to/from hyperlinks -->
+			  $[geDirections]
+			  ]]></text>
+			</BalloonStyle>
+			 <geomColor>ff0000ff</geomColor>
+        <geomScale>1</geomScale>
+		  </Style>
+	<Polygon id="ID">
+	  <!-- specific to Polygon -->
+	  <name>BalloonStyle</name>
+	  <extrude>1</extrude>                       <!-- boolean -->
+	  <tessellate>0</tessellate>                 <!-- boolean -->
+	  <altitudeMode>relativeToGround</altitudeMode>
+	  <styleUrl>#exampleBalloonStyle</styleUrl>
+			<!-- kml:altitudeModeEnum: clampToGround, relativeToGround, or absolute -->
+			<!-- or, substitute gx:altitudeMode: clampToSeaFloor, relativeToSeaFloor -->
+	  <outerBoundaryIs>
+		<LinearRing>
+		          <coordinates> 
+
+
+-122.083873,37.430983152841,400
+-122.08387603538,37.431017865049,400
+-122.08388504937,37.431051523611,400
+-122.08389976838,37.431083106862,400
+-122.08391974562,37.431111656131,400
+-122.08394437471,37.43113630484,400
+-122.08397290806,37.431156304809,400
+-122.08400447958,37.431171048962,400
+-122.08403813095,37.431180089759,400
+-122.08407284073,37.431183152778,400
+-122.08410755535,37.431180145044,400
+-122.08414122108,37.431171157853,400
+-122.08417281604,37.431156464001,400
+-122.08420138121,37.431136509502,400
+-122.08422604952,37.431111900049,400
+-122.08424607221,37.431083382633,400
+-122.0842608415,37.431051822864,400
+-122.08426990909,37.431018178701,400
+-122.08427299975,37.430983471372,400
+-122.08427001966,37.430948754373,400
+-122.08426105928,37.430915081498,400
+-122.08424639059,37.430883474845,400
+-122.08422645885,37.430854893795,400
+-122.08420186904,37.430830205891,400
+-122.08417336758,37.430810160504,400
+-122.08414181958,37.430795366088,400
+-122.08410818265,37.430786271707,400
+-122.0840734778,37.430783153412,400
+-122.08403875844,37.430786105854,400
+-122.08400507844,37.430795039415,400
+-122.08397346011,37.430809682928,400
+-122.0839448632,37.430829591908,400
+-122.08392015572,37.430854162042,400
+-122.08390008764,37.430882647533,400
+-122.08388526811,37.430914183739,400
+-122.08387614695,37.430947813417,400
+-122.08387300101,37.430982515781,400
+-122.083873,37.430983152841,400
+</coordinates>
+		</LinearRing>
+	  </outerBoundaryIs>
+	</Polygon>
+    </Placemark>
+  </Folder>
+</kml>
