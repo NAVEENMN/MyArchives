@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Titles -->
+    <string name="title_activity_profilelist">ProfilelistActivity</string>
+    <string name="title_activity_update_profile">UpdateProfile</string>
+    <string name="title_activity_visitor_profile">VisitorProfile</string>
+    <string name="title_activity_sign_up">SignUp</string>
+    <string name="title_activity_user_sign_up">UserSignUpActivity</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_log_out">Logout</string>
+    <string name="title_activity_person">Person</string>
+    <string name="title_activity_refresh">Refresh</string>
+    <string name="title_activity_settings">Settings</string>
+    <!-- ******************************************************** -->
+
+
+    <!-- Home screen -->
+    <string name="app_name">Metster</string>
+    <string name="SignUp">Sign Up</string> <!-- Button Sign Up -->
+    <string name="LogIn">Login In</string> <!-- Button Login -->
+    <!-- ******************************************************** -->
+
+
+    <!-- Sign Up -->
+
+    <string name="FirstName">First Name</string>
+    <string name="LastName">Last Name</string>
+    <string name="Email">Email</string>
+    <string name="email_hint">Email</string>
+    <string name="DateofBirthLable">Date of Birth</string>
+    <string name="Password">Password</string>
+    <string name="RetypePassword">Retype Password</string>
+    <string name="Password_hint">Password</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="dontdisclose">I wish not to tell</string>
+    <string name="terms">I agree to all terms and conditions of Metster.</string>
+    <!-- ******************************************************** -->
+
+
+    <!-- My Profile Home -->
+
+    <string name="Name">Name</string>
+    <string name="StudentType">Graduate</string>
+    <string name="Major">Major</string>
+    <string name="Gender">M</string>
+    <string name="Age">age</string>
+    <string name="Facebook">f</string>
+    <string name="Linkedin">in</string>
+    <string name="University">University</string>
+    <string name="MetsterUsers">Metster users around you</string>
+    <string name="MetsterUsersvalue">0</string>
+    <string name="YourLocation">Your Location</string>
+    <string name="InvisibleIn">Your profile will go invisible at</string>
+    <string name="CurrentLocation">Location</string>
+    <string name="CurrentCounty">County</string>
+    <string name="CurrentCountry">Country</string>
+    <string name="updateprofile">update profile</string>
+    <string name="MyStatus">Hello there!!</string>
+    <string name="MyStatusLabel">Set your status</string>
+    <string name="MeetSomeone">M</string> <!-- button meet someone -->
+    <string name="Rend">R</string> <!-- button rend someone -->
+    <string name="footer">Metster</string>
+    <!-- ******************************************************** -->
+
+
+    <!-- Update Profile -->
+
+    <string name="MyHomeTown">My Home Town</string>
+    <string name="MyCurrentCity">My Current City</string>
+    <string name="MyProfession">My Profession</string>
+    <string name="IWorkAt">I Work At</string>
+    <string name="Hobbies">Hobbies</string>
+    <string name="Music">Music</string>
+    <string name="Movies">Movies</string>
+    <string name="Books">Books</string>
+    <string name="MyPassion">My Passion in life</string>
+    <string name="AboutMe">About Me</string>
+    <string name="Update">Update</string> <!-- Button Update -->
+    <!-- ******************************************************** -->
+
+
+    <!-- View Students Profile -->
+
+    <string name="ViewProfile">View Profile</string>
+    <string name="Next">Next</string>
+    <string name="Previous">Previous</string>
+
+    <!-- ******************************************************** -->
+
+
+    <!-- Settings -->
+
+    <string name="AboutMetster">About Metster</string>
+    <string name="Support">Support</string>
+    <string name="Privacy">Privacy</string>
+    <string name="FAQ">FAQ</string>
+    <string name="Logout">Logout</string>
+    <string name="DeleteAccount">Delete Account</string>
+
+    <!-- ******************************************************** -->
+
+
+    <!-- Pofession info -->
+
+    <string name="question">Question ?</string>
+
+    <!-- ******************************************************** -->
+    <!-- Upload  image -->
+
+    <string name="update_image">Update your image</string>
+
+    <!-- ******************************************************** -->
+
+
+    <!-- Others -->
+    <string name="footnote">Metster alpha ver 1.0</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Metster</string>
+    <string name="desc">User Image</string>
+    <!-- ******************************************************** -->
+
+    <string name="title_activity_profiles">Profiles</string>
+    <string name="title_activity_load_home">LoadHome</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_profession_info">Profession_info</string>
+    <string name="title_activity_loading_screen">Loading_screen</string>
+    <string name="title_activity_upload__image">Upload_Image</string>
+    <string name="title_activity_rend">Rend</string>
+    <string name="title_activity_meet_up">MeetUp</string>
+
+</resources>
