@@ -1,0 +1,106 @@
+And	roadnot.txt@252+roadnot.txt@139+roadnot.txt@71+roadnot.txt@105+ roadnot.txt@402+roadnot.txt@723+ 
+Because	roadnot.txt@289+ 
+Frost	roadnot.txt@20+ 
+Had	roadnot.txt@365+ 
+I	roadnot.txt@548+roadnot.txt@586+roadnot.txt@690+roadnot.txt@473+roadnot.txt@548+ roadnot.txt@105+roadnot.txt@71+roadnot.txt@139+ 
+I-	roadnot.txt@653+ 
+In	roadnot.txt@436+ 
+NOT	roadnot.txt@0+ 
+Oh,	roadnot.txt@473+ 
+ROAD	roadnot.txt@0+ 
+Robert	roadnot.txt@20+ 
+Somewhere	roadnot.txt@622+ 
+TAKEN	roadnot.txt@0+ 
+THE	roadnot.txt@0+ 
+Then	roadnot.txt@214+ 
+Though	roadnot.txt@328+ 
+To	roadnot.txt@177+ 
+Two	roadnot.txt@34+ roadnot.txt@653+ 
+Yet	roadnot.txt@511+ 
+a	roadnot.txt@34+ roadnot.txt@653+roadnot.txt@586+ 
+about	roadnot.txt@365+ 
+ages	roadnot.txt@622+roadnot.txt@622+ 
+all	roadnot.txt@723+ 
+and	roadnot.txt@653+roadnot.txt@622+ roadnot.txt@289+ 
+another	roadnot.txt@473+ 
+as	roadnot.txt@214+roadnot.txt@139+roadnot.txt@328+roadnot.txt@139+roadnot.txt@214+ 
+back.	roadnot.txt@548+ 
+be	roadnot.txt@105+ roadnot.txt@586+ 
+bent	roadnot.txt@177+ 
+better	roadnot.txt@252+ 
+black.	roadnot.txt@436+ 
+both	roadnot.txt@71+ roadnot.txt@402+ 
+by,	roadnot.txt@690+ 
+claim,	roadnot.txt@252+ 
+come	roadnot.txt@548+ 
+could	roadnot.txt@71+roadnot.txt@139+ 
+day!	roadnot.txt@473+ 
+difference.	roadnot.txt@723+ 
+diverged	roadnot.txt@34+ roadnot.txt@653+ 
+doubted	roadnot.txt@548+ 
+down	roadnot.txt@139+ 
+equally	roadnot.txt@402+ 
+ever	roadnot.txt@548+ 
+fair,	roadnot.txt@214+ 
+far	roadnot.txt@139+ 
+first	roadnot.txt@473+ 
+for	roadnot.txt@473+ roadnot.txt@328+ 
+grassy	roadnot.txt@289+ 
+had	roadnot.txt@436+ 
+has	roadnot.txt@723+ 
+having	roadnot.txt@252+ 
+hence:	roadnot.txt@622+ 
+how	roadnot.txt@511+ 
+if	roadnot.txt@548+ 
+in	roadnot.txt@653+ roadnot.txt@177+roadnot.txt@34+ 
+it	roadnot.txt@177+roadnot.txt@289+ 
+just	roadnot.txt@214+ 
+kept	roadnot.txt@473+ 
+knowing	roadnot.txt@511+ 
+lay	roadnot.txt@402+ 
+leads	roadnot.txt@511+ 
+leaves	roadnot.txt@436+ 
+less	roadnot.txt@690+ 
+long	roadnot.txt@105+ 
+looked	roadnot.txt@139+ 
+made	roadnot.txt@723+ 
+morning	roadnot.txt@402+ 
+no	roadnot.txt@436+ 
+not	roadnot.txt@71+ 
+on	roadnot.txt@511+ 
+one	roadnot.txt@139+roadnot.txt@105+ roadnot.txt@690+ 
+other,	roadnot.txt@214+ 
+passing	roadnot.txt@328+ 
+perhaps	roadnot.txt@252+ 
+really	roadnot.txt@365+ 
+roads	roadnot.txt@34+ roadnot.txt@653+ 
+same,	roadnot.txt@365+ 
+shall	roadnot.txt@586+ 
+should	roadnot.txt@548+ 
+sigh	roadnot.txt@586+ 
+sorry	roadnot.txt@71+ 
+step	roadnot.txt@436+ 
+stood	roadnot.txt@105+ 
+telling	roadnot.txt@586+ 
+that	roadnot.txt@328+ roadnot.txt@402+roadnot.txt@723+ 
+the	roadnot.txt@252+roadnot.txt@177+roadnot.txt@214+roadnot.txt@328+roadnot.txt@365+ roadnot.txt@473+roadnot.txt@723+roadnot.txt@690+ 
+them	roadnot.txt@365+ 
+there	roadnot.txt@328+ 
+this	roadnot.txt@586+ 
+to	roadnot.txt@511+ 
+took	roadnot.txt@690+ roadnot.txt@214+ 
+travel	roadnot.txt@71+ 
+traveled	roadnot.txt@690+ 
+traveler,	roadnot.txt@105+ 
+trodden	roadnot.txt@436+ 
+undergrowth;	roadnot.txt@177+ 
+wanted	roadnot.txt@289+ 
+was	roadnot.txt@289+ 
+way	roadnot.txt@511+ 
+way,	roadnot.txt@511+ 
+wear;	roadnot.txt@289+ 
+where	roadnot.txt@177+ 
+with	roadnot.txt@586+ 
+wood,	roadnot.txt@34+ roadnot.txt@653+ 
+worn	roadnot.txt@365+ 
+yellow	roadnot.txt@34+ 
