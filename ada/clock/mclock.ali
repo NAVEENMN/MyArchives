@@ -1,0 +1,178 @@
+V "GNAT Lib v4.8"
+M P W=b
+P SS ZX
+
+RN
+RV NO_ALLOCATORS
+RV NO_CALENDAR
+RV NO_DELAY
+RV NO_EXCEPTION_HANDLERS
+RV NO_EXCEPTIONS
+RV NO_FIXED_POINT
+RV NO_IO
+RV NO_IMPLICIT_CONDITIONALS
+RV NO_LOCAL_ALLOCATORS
+RV NO_RELATIVE_DELAY
+RV NO_SECONDARY_STACK
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DEFAULT_INITIALIZATION
+RV NO_OBSOLESCENT_FEATURES
+RV SPARK
+
+U mclock%b		mclock.adb		0ffaa25d NE OO SU
+W ada%s			ada.ads			ada.ali
+W ada.calendar%s	a-calend.adb		a-calend.ali
+W ada.calendar.delays%s	a-caldel.adb		a-caldel.ali
+W ada.calendar.formatting%s  a-calfor.adb	a-calfor.ali
+W ada.calendar.time_zones%s  a-catizo.adb	a-catizo.ali
+W ada.exceptions%s	a-except.adb		a-except.ali
+W ada.tags%s		a-tags.adb		a-tags.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+Z ada.unchecked_deallocation%s
+W fifo%s		fifo.adb		fifo.ali
+W system%s		system.ads		system.ali
+W system.exception_table%s  s-exctab.adb	s-exctab.ali
+W system.img_int%s	s-imgint.adb		s-imgint.ali
+W system.secondary_stack%s  s-secsta.adb	s-secsta.ali
+W system.standard_library%s  s-stalib.adb	s-stalib.ali
+
+D ada.ads		20070406091342 3ffc8e18
+D a-calend.ads		20120515092648 d86d6c8c
+D a-caldel.ads		20090409150019 9f20b83d
+D a-calfor.ads		20090220152038 0a6f9afc
+D a-catizo.ads		20120123093331 409d7e5b
+D a-except.ads		20120716125141 10fcae55
+D a-finali.ads		20111121113555 52ecdc1b
+D a-ioexce.ads		20091130110856 8b9de6cd
+D a-stream.ads		20090409150019 2ca4ee37
+D a-tags.ads		20111212115430 6c0509d0
+D a-textio.ads		20130104124955 386df5d4
+D a-unccon.ads		20070406091342 f9eb8f06
+D a-uncdea.ads		20070406091342 f15a5ed1
+D fifo.ads		20141105194929 21637bc9
+D fifo.adb		20141107033504 e2c66441
+D interfac.ads		20110906094621 129923ea
+D i-cstrea.ads		20130102105938 3286f6aa
+D mclock.adb		20141124231322 94970a3e
+D system.ads		20140416144310 90249111
+D s-crtl.ads		20130102105938 1ea48bce
+D s-exctab.ads		20090417131547 66e51330
+D s-ficobl.ads		20120709130952 55a71d43
+D s-finmas.ads		20111024091915 b95bb341
+D s-finroo.ads		20120426095924 4ff27390
+D s-imgint.ads		20090409150019 02dbe0c2
+D s-parame.ads		20110830140625 b6e20cc0
+D s-pooglo.ads		20110804083314 542f33d0
+D s-secsta.ads		20110830140625 eea35a36
+D s-soflin.ads		20120515094619 24c8153c
+D s-stache.ads		20090417130712 596fc1b4
+D s-stalib.ads		20130104124955 f78bcf95
+D s-stoele.ads		20090417130712 facd7d98
+D s-stoele.adb		20100617152355 afc5dc80
+D s-stopoo.ads		20111013103733 7b8fbeee
+D s-traent.ads		20090417130712 5221ee41
+D s-unstyp.ads		20090409150019 6ae15c76
+D s-wchcon.ads		20090417130712 bfeb2e3d
+X 1 ada.ads
+16K9*Ada 19e8 18|1r6 2r6 2r24 3r6 3r35 4r6 4r35 6r6 6r23 219r17
+X 2 a-calend.ads
+36K13*Calendar 375e17 18|2w10 2r28 3r10 3r39 4r10 4r39
+38I9*Time 18|35r15
+52V13*Clock{38I9} 18|35s23
+X 4 a-calfor.ads
+24K22*Formatting 215e28 18|3w19 3r48
+176V13*Image{string} 18|241s26
+177i7 Date{2|38I9} 18|241r32
+179i7 Time_Zone{5|23I9} 18|241r45
+X 5 a-catizo.ads
+19K22*Time_Zones 32e28 18|4w19 4r48
+23I9*Time_Offset<short_integer>
+X 6 a-except.ads
+53K13*Exceptions 355e19 18|1w10
+X 11 a-textio.ads
+49K13*Text_IO 471e16 18|6w10 6r27 219r21
+166U14*New_Line 18|177s17 185s17 193s17 201s17 257s17
+242U14*Put 18|171s17 174s25 179s17 182s25 187s17 190s25 195s17 198s25 203s17
+. 206s25 212s33 219s29
+263U14*Put_Line 18|241s17
+X 14 fifo.ads
+3k9*Fifo 20e9 18|5w6 9r33
+4R9 Fifo_Type 18|13r24[9] 14r25[9] 15r28[9] 16r25[9] 17r26[9]
+5U14 Push 18|40s17[9] 49s17[9] 54s25[9] 64s17[9] 71s25[9] 78s25[9] 88s17[9]
+. 95s25[9] 103s25[9] 111s25[9] 124s25[9] 132s25[9] 140s25[9] 148s25[9] 160s25[9]
+. 175s25[9] 183s25[9] 191s25[9] 199s25[9] 207s25[9]
+6U14 Pop 18|39s17[9] 48s17[9] 53s25[9] 63s17[9] 70s25[9] 77s25[9] 87s17[9]
+. 94s25[9] 102s25[9] 110s25[9] 123s25[9] 131s25[9] 139s25[9] 147s25[9] 173s25[9]
+. 181s25[9] 189s25[9] 197s25[9] 205s25[9]
+X 18 mclock.adb
+8U11*Mclock 8b11 259l5 259t11
+9K17 Int_Fifo[14|3] 10r13
+13r9 Tray_one_min{14|4R9[9]} 40m22 40r22 53m29 53r29 77m29 77r29 94m29 94r29
+. 123m29 123r29 173m29 173r29 175m30 175r30
+14r9 Tray_five_min{14|4R9[9]} 49m22 49r22 70m29 70r29 102m29 102r29 131m29
+. 131r29 181m29 181r29 183m30 183r30
+15r9 Tray_fifteen_min{14|4R9[9]} 64m22 64r22 110m29 110r29 139m29 139r29
+. 189m29 189r29 191m30 191r30
+16r9 Tray_one_hour{14|4R9[9]} 88m22 88r22 147m29 147r29 197m29 197r29 199m30
+. 199r30
+17r9 Tray_collector{14|4R9[9]} 39m21 39r21 48m21 48r21 54m30 54r30 63m21
+. 63r21 71m30 71r30 78m30 78r30 87m21 87r21 95m30 95r30 103m30 103r30 111m30
+. 111r30 124m30 124r30 132m30 132r30 140m30 140r30 148m30 148r30 160m30 160r30
+. 205m29 205r29 207m30 207r30
+19i9 Val{integer} 39m37 40r35 48m37 49r37 53m43 54r46 63m37 64r40 70m44 71r46
+. 77m43 78r46 87m37 88r37 94m43 95r46 102m44 103r46 110m47 111r46 123m43
+. 124r46 131m44 132r46 139m47 140r46 147m44 148r46 181m44 182r43 183r45 189m47
+. 190r43 191r48 197m44 198r43 199r45 205m45 206r43 207r46
+20i9 ptemp{integer} 173m43 174r43 175r44
+21i9 H{integer} 224m9 238m9 242m17 244m17 247m25 249m33 251m41 253m49 255m57
+22i9 l{integer} 239m9
+24i9 size_of_one_min{integer} 41m17 41r36 55m25 55r44 79m25 79r44 96m25 96r44
+. 125m25 125r44 172r29 226m9 246r20
+25i9 size_of_five_min{integer} 51m17 51r37 72m25 72r45 104m25 104r45 133m25
+. 133r45 180r29 227m9 248r31
+26i9 size_of_fifteen_min{integer} 66m17 66r40 112m25 112r48 141m25 141r48
+. 188r29 228m9 250r39
+27i9 size_of_one_hour{integer} 90m17 90r37 149m25 149r45 196r29 229m9 252r47
+28i9 size_of_collector{integer} 42m17 42r38 50m17 50r38 56m25 56r46 65m17
+. 65r38 73m25 73r46 80m25 80r46 89m17 89r38 97m25 97r46 105m25 105r46 113m25
+. 113r46 126m25 126r46 134m25 134r46 142m25 142r46 150m25 150r46 204r29 230m9
+30i9 max_size_of_one_min{integer} 232m9 246r38
+31i9 max_size_of_five_min{integer} 233m9 248r50
+32i9 max_size_of_fifteen_min{integer} 234m9 250r61
+33i9 max_size_of_one_hour{integer} 235m9 252r66
+34i9 max_size_of_collector{integer} 236m9
+35i9 Now{2|38I9} 241r40
+37V18 push_to_one_min{integer} 37b18 37>34 44t12 247s30
+37i34 status{integer} 43r24
+46V18 push_to_five_min{integer} 46b18 46>35 59t12 249s38
+46i35 status{integer} 58r16
+52i21 I{integer}
+61V18 push_to_fifteen_min{integer} 61b18 61>38 83t12 251s46
+61i38 status{integer} 82r16
+69i21 I{integer}
+76i21 I{integer}
+85V18 push_to_one_hour{integer} 85b18 85>35 116t12 253s54
+85i35 status{integer} 115r16
+93i21 I{integer}
+101i21 I{integer}
+109i21 I{integer}
+118V18 resetAll{integer} 118b18 118>27 154t12 255s62
+118i27 status{integer} 153r16
+122i21 I{integer}
+130i21 I{integer}
+138i21 I{integer}
+146i21 I{integer}
+157V18 initial_tray_setup{integer} 157b18 157>37 163t12 224s14
+157i37 status{integer} 162r24
+159i21 I{integer}
+167V18 print_trays{integer} 167b18 167>30 214t12 242s22
+167i30 status{integer} 209r24 213r40
+172i21 X{integer}
+180i21 X{integer}
+188i21 X{integer}
+196i21 X{integer}
+204i21 X{integer}
+217V18 clear_screen{integer} 217b18 217>31 221t12 238s14 244s22
+217i31 status{integer} 220r24
+240i13 I{integer}
+

@@ -1,0 +1,147 @@
+V "GNAT Lib v2014"
+M P W=b
+A -gnatA
+P SS ZX
+
+RN
+RV NO_DELAY
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_EXCEPTIONS
+RV NO_FIXED_POINT
+RV NO_IO
+RV NO_RELATIVE_DELAY
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DEFAULT_INITIALIZATION
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_OBSOLESCENT_FEATURES
+RV SPARK_05
+
+U main%b		main.adb		5a2d0126 NE OO SU IL
+W ada%s			ada.ads			ada.ali
+W ada.calendar.delays%s	a-caldel.adb		a-caldel.ali
+W ada.integer_text_io%s	a-inteio.ads		a-inteio.ali
+W ada.numerics%s	a-numeri.ads		a-numeri.ali
+W ada.numerics.discrete_random%s
+W ada.tags%s		a-tags.adb		a-tags.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W interfaces%s		interfac.ads		interfac.ali
+Z system%s		system.ads		system.ali
+Z system.random_numbers%s  s-rannum.adb		s-rannum.ali
+
+D ada.ads		20140406181354 3ffc8e18 ada%s
+D a-calend.ads		20140406181358 d86d6c8c ada.calendar%s
+D a-caldel.ads		20140406181354 9f20b83d ada.calendar.delays%s
+D a-except.ads		20140406181356 43d57f8c ada.exceptions%s
+D a-finali.ads		20140406181358 69f99942 ada.finalization%s
+D a-inteio.ads		20140406181358 f64b89a4 ada.integer_text_io%s
+D a-ioexce.ads		20140406181358 e4a01f64 ada.io_exceptions%s
+D a-numeri.ads		20140406181358 bb51c45a ada.numerics%s
+D a-nudira.ads		20140406181356 2fef2912 ada.numerics.discrete_random%s
+D a-nudira.adb		20140406181358 e57ce22b ada.numerics.discrete_random%b
+D a-stream.ads		20140406181354 1a984740 ada.streams%s
+D a-tags.ads		20140406181356 dc4d0634 ada.tags%s
+D a-textio.ads		20140406181358 386df5d4 ada.text_io%s
+D a-tiinio.ads		20140406181358 aa04e5d6 ada.text_io.integer_io%s
+D a-unccon.ads		20140406181358 f9eb8f06 ada.unchecked_conversion%s
+D interfac.ads		20140406181358 69adb1b9 interfaces%s
+D i-cstrea.ads		20140406181356 febc86ed interfaces.c_streams%s
+D main.adb		20141125212748 bbe45444 main%b
+D system.ads		20140406181358 5fc8ae56 system%s
+D s-crtl.ads		20140406181356 2c012597 system.crtl%s
+D s-exctab.ads		20140406181354 54135002 system.exception_table%s
+D s-ficobl.ads		20140406181354 078245e4 system.file_control_block%s
+D s-finmas.ads		20140406181356 814daec4 system.finalization_masters%s
+D s-finroo.ads		20140406181358 4ff27390 system.finalization_root%s
+D s-imguns.ads		20140406181354 9ff43cf7 system.img_uns%s
+D s-parame.ads		20140406181358 06da98b2 system.parameters%s
+D s-pooglo.ads		20140406181356 542f33d0 system.pool_global%s
+D s-rannum.ads		20140406181354 5eb33f0a system.random_numbers%s
+D s-rannum.adb		20140406181354 34372cc7 system.random_numbers%b
+D s-ransee.ads		20140406181358 01a57b33 system.random_seed%s
+D s-secsta.ads		20140406181358 86a2856d system.secondary_stack%s
+D s-soflin.ads		20140406181358 aa763b52 system.soft_links%s
+D s-stache.ads		20140406181354 a37c21ec system.stack_checking%s
+D s-stalib.ads		20140406181354 fa0a3617 system.standard_library%s
+D s-stoele.ads		20140406181356 2dc34a04 system.storage_elements%s
+D s-stoele.adb		20140406181354 ed88f8fb system.storage_elements%b
+D s-stopoo.ads		20140406181356 b16154c2 system.storage_pools%s
+D s-traent.ads		20140406181354 b5116092 system.traceback_entries%s
+D s-unstyp.ads		20140406181356 510692af system.unsigned_types%s
+D s-valuns.ads		20140406181358 10a8ed3b system.val_uns%s
+D s-wchcon.ads		20140406181358 1b7d22d2 system.wch_con%s
+X 1 ada.ads
+16K9*Ada 19e8 18|1r6 1r19 2r5 2r18 3r6 21r28 176r4 226r7
+X 6 a-inteio.ads
+18K13*Integer_Text_IO[14|46] 18|1w23 2r22
+X 8 a-numeri.ads
+16K13*Numerics 32e17 18|3r10 21r32
+X 9 a-nudira.ads
+42E9 Result_Subtype 18|22r7
+44k22*Discrete_Random 73e33 18|3w19 21r41
+48R9 Generator<28|58R9> 18|23r16[21]
+50V13 Random{integer} 18|28s29[21] 181s25[21] 183s29[21] 187s28[21]
+50r21 Gen{48R9[18|21]} 18|28r36[21] 181r32[21] 183r36[21] 187r35[21]
+53U14 Reset<28|95p14> 18|156s13[21]
+53r21 Gen{48R9[18|21]} 18|156r20[21]
+X 10 a-nudira.adb
+51V16 Random[28|78]{integer} 29|390b13[18|21]
+X 13 a-textio.ads
+49K13*Text_IO 471e16 18|1w10 2r9 176r8 226r11
+73I12*Field{integer}
+166U14*New_Line 18|55s7 65s13 68s13 77s13 89s10 92s10 104s13
+242U14*Put 18|58s10 69s13 73s19 76s13 85s7 86s29 87s33 88s32 90s10 101s13
+. 103s13 123s22 176s16 226s19
+263U14*Put_Line 18|37s7 39s10 66s13 111s16 118s19 122s22 133s19 143s13
+X 14 a-tiinio.ads
+56U14*Get 18|40s10[6|18] 105s13[6|18] 112s16[6|18]
+66U14*Put 18|61s16[6|18] 72s19[6|18] 86s7[6|18] 87s10[6|18] 88s10[6|18] 91s10[6|18]
+. 102s13[6|18] 126s28[6|18]
+68i7 Width{13|73I12} 18|61r23[6|18] 72r26[6|18] 86r18[6|18] 87r22[6|18] 88r21[6|18]
+. 91r35[6|18] 102r30[6|18] 126r35[6|18]
+X 16 interfac.ads
+63M9*Unsigned_32
+66M9*Unsigned_64
+X 18 main.adb
+5U11*main 5b11 232l5 232t9
+6A9 criminal(integer)<integer> 7r18 8r14
+7a4 criminallist{6A9} 28m7 29r17 29r33 29r49 30r9 30r25 30r41 30r57 71r38
+. 117r19 125r28 153m4 190r10 193r10 196r10
+8a4 guessed{6A9} 56r10 56r23 56r36 56r49 56r62 57r12 57r25 60r16 71r19 110r19
+. 116m16 154m4
+9A9 player(integer)<integer> 10r16
+10a4 playerlist{9A9} 44m10 46m10 46m30 48m10 48m30 48m50 99r11 134m19 208r13
+. 213r13 218r13
+12i4 status{integer} 160m4 173m4 205m10 209m13 211m10 214m13 216m10 219m13
+. 221m10
+13i4 first{integer} 86r11 181m7 184r30 188r29 190r23
+13i11 second{integer} 87r14 183m10 184r20 188r48 193r23
+13i19 third{integer} 88r14 187m10 188r20 188r39 196r23
+14i4 trigger{integer} 130m22 138m22 155m4 179r10
+15i4 numberofplayer{integer} 40m14 41r20 41r42 41r64 43r10 45r13 136m19 136r37
+. 137r22
+16i4 numberofperpetrator{integer} 91r14 180m7 191m10 194m10 194r33 197m10
+. 197r33 204r10
+17i4 perpetratorleft{integer} 64r13 99r43 120m19 120r38 121r22 157m4
+18i4 guesstemp{integer} 105m17 106r23 106r41 108r13 110r27 112m20 113r26
+. 115r16 116r24 117r32
+20I12 RandomRange{positive} 22r25
+21K12 Random_7[9|44] 23r7 28r20 156r4 181r16 183r20 187r19
+23r4 G{9|48R9[21]} 28r43 156r27 181r39 183r43 187r42
+25V13 generaterandom{integer} 25b13 25>28 33t7 160s14
+25i28 status{integer} 32r14
+35V13 choosenumberofplayer{integer} 35b13 35>34 51t7 173s14
+35i34 status{integer} 50r14
+53V13 checkguessed{integer} 53b13 53>26 81t7 209s23 214s23 219s23
+53i26 status{integer} 80r14
+59i14 i{integer} 60r24 61r20
+70i17 i{integer} 71r27 71r51 72r23
+83V13 displayrandom{integer} 83b13 83>27 95t7 205s20
+83i27 status{integer} 94r14
+97V13 playerstatus{integer} 97b13 97>26 97>43 148t7 211s20 216s20 221s20
+97i26 status{integer} 147r14
+97i43 playerindex{integer} 99r22 102r17 134r30
+124i26 i{integer} 125r41 126r32
+X 28 s-rannum.ads
+70V13*Random{16|63M9} 29|219i21
+71V13*Random{16|66M9} 29|219i21
+
